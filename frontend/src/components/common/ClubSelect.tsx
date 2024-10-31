@@ -3,7 +3,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 
-import clubLogos from "../../util/clubLogos";
+import ClubLogos from "../../util/clubLogos.tsx";
 
 const clubs: {
   color: "doosan" | "hanhwa" | "kia" | "kiwoom" | "kt" | "lg" | "lotte" | "nc" | "samsung" | "ssg";
@@ -29,15 +29,16 @@ const ClubSelect = () => {
     slidesToShow: 3,
     speed: 500,
   };
+
   return (
     <div>
       <Slider {...settings}>
         {clubs.map((club, index) => (
           <div key={index}>
             <ClubSelectItem
-              logo={clubLogos[club.color]} // clubLogos 객체에서 로고 가져오기
+              logo={ClubLogos[club.color]} // clubLogos 객체에서 로고 가져오기
               clubColor={club.color}
-              width="w-32"
+              width="w-24"
             />
           </div>
         ))}
