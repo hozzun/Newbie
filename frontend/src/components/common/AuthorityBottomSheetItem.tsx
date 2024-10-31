@@ -5,11 +5,11 @@ export interface Authority {
   body: string;
 }
 
-type AuthorityCardItemProps = {
+type AuthorityBottomSheetItemProps = {
   authority: Authority;
 };
 
-const AuthorityCardItem = (props: AuthorityCardItemProps) => {
+const AuthorityBottomSheetItem = (props: AuthorityBottomSheetItemProps) => {
   const authorityImgClass = `w-4 h-4 my-1 me-3 ${props.authority.imgColor}`;
 
   return (
@@ -23,4 +23,4 @@ const AuthorityCardItem = (props: AuthorityCardItemProps) => {
   );
 };
 
-export default AuthorityCardItem;
+export default AuthorityBottomSheetItem;
