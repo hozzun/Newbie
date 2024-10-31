@@ -4,3 +4,8 @@ export enum BUTTON_VARIANTS {
   error = "bg-error-400 text-white hover:bg-error-500",
   primaryText = "text-green-900 hover:bg-green-50",
 }
+
+export enum FLOATING_BUTTON_VARIANTS {
+  primary = "bg-green-900 hover:bg-green-950",
+  white = "bg-white hover:bg-gray-50",
+}
