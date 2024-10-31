@@ -1,8 +1,7 @@
-import doosan from "../../assets/images/club/doosan_bears.svg";
 import { useState } from "react";
 
 interface ClubSelectProps {
-  clubColor?:
+  clubColor:
     | "doosan"
     | "hanhwa"
     | "kia"
@@ -13,9 +12,10 @@ interface ClubSelectProps {
     | "nc"
     | "samsung"
     | "ssg";
+  logo: string;
 }
 
-const ClubSelectItem = ({ clubColor = "doosan" }: ClubSelectProps) => {
+const ClubSelectItem = ({ logo, clubColor }: ClubSelectProps) => {
   const [isSelected, setIsSelected] = useState(false);
 
   const bgColorClass = {
@@ -43,7 +43,7 @@ const ClubSelectItem = ({ clubColor = "doosan" }: ClubSelectProps) => {
       onClick={handleButtonClick}
     >
       <div className="justify-center content-center">
-        <img src={doosan} alt="구단로고" className="w-16 h-16" />
+        <img src={logo} alt={`${clubColor} logo`} className="w-16 h-16" />
       </div>
     </div>
   );
