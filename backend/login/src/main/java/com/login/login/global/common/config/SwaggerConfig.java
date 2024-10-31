@@ -27,10 +27,10 @@ public class SwaggerConfig {
         // HTTPS Server 추가
         Server server1 = new Server()
                 .url("http://localhost:8080/api") // HTTPS 서버 URL
-                .description("newbie"); // 서버 설명
+                .description("server_login"); // 서버 설명
         Server server2 = new Server()
                 .url("http://localhost:8080/api") // HTTPS 서버 URL
-                .description("local"); // 서버 설명
+                .description("local_login"); // 서버 설명
         return new OpenAPI()
                 .components(new Components())
                 .info(apiInfo())
@@ -41,7 +41,7 @@ public class SwaggerConfig {
 
     private Info apiInfo() {
         return new Info()
-            .title("Yugwa service APIS") // API의 제목
+            .title("Newbie service APIS") // API의 제목
             .description("API 모음집입니다.") // API에 대한 설명
             .version("1.0.0"); // API의 버전
     }

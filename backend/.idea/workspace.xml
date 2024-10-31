@@ -4,87 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dfb46afc-8826-468a-b7c2-f2229854d857" name="변경" comment="">
-      <change beforePath="$PROJECT_DIR$/../.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/.gitattributes" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/.gradle/8.10.2/checksums/checksums.lock" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/.gradle/8.10.2/checksums/md5-checksums.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/.gradle/8.10.2/checksums/sha1-checksums.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/.gradle/8.10.2/dependencies-accessors/gc.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/.gradle/8.10.2/executionHistory/executionHistory.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/.gradle/8.10.2/executionHistory/executionHistory.lock" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/.gradle/8.10.2/fileChanges/last-build.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/.gradle/8.10.2/fileHashes/fileHashes.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/.gradle/8.10.2/fileHashes/fileHashes.lock" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/.gradle/8.10.2/fileHashes/resourceHashesCache.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/.gradle/8.10.2/gc.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/.gradle/buildOutputCleanup/cache.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/.gradle/file-system.probe" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/.gradle/vcs-1/gc.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/HELP.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/build.gradle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/build/generated/sources/annotationProcessor/java/main/com/Newbie/Newbie/domain/member/entity/QMember.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/build/generated/sources/annotationProcessor/java/main/com/Newbie/Newbie/global/token/entity/QAccessTokenBlackList.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/build/generated/sources/annotationProcessor/java/main/com/Newbie/Newbie/global/token/entity/QRefreshToken.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/build/generated/sources/annotationProcessor/java/main/com/Newbie/Newbie/global/token/entity/QRefreshTokenBlackList.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/build/reports/tests/test/classes/com.Newbie.Newbie.NewbieApplicationTests.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/build/reports/tests/test/css/base-style.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/build/reports/tests/test/css/style.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/build/reports/tests/test/index.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/build/reports/tests/test/js/report.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/build/reports/tests/test/packages/com.Newbie.Newbie.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/build/resolvedMainClassName" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/build/resources/main/application.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/build/test-results/test/TEST-com.Newbie.Newbie.NewbieApplicationTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/build/test-results/test/binary/output.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/build/test-results/test/binary/output.bin.idx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/build/test-results/test/binary/results.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/build/tmp/bootJar/MANIFEST.MF" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/build/tmp/compileJava/compileTransaction/stash-dir/SwaggerConfig.class.uniqueId0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/build/tmp/compileJava/previous-compilation-data.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/build/tmp/compileTestJava/previous-compilation-data.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/build/tmp/jar/MANIFEST.MF" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/gradle/wrapper/gradle-wrapper.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/gradlew" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/gradlew.bat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/settings.gradle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/src/main/java/com/Newbie/Newbie/NewbieApplication.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/src/main/java/com/Newbie/Newbie/domain/member/controller/MemberController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/src/main/java/com/Newbie/Newbie/domain/member/dto/MemberDto.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/src/main/java/com/Newbie/Newbie/domain/member/dto/request/MemberLoginRequestDto.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/src/main/java/com/Newbie/Newbie/domain/member/dto/request/MemberLogoutRequestDto.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/src/main/java/com/Newbie/Newbie/domain/member/dto/response/MemberLoginResponseDto.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/src/main/java/com/Newbie/Newbie/domain/member/entity/Member.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/src/main/java/com/Newbie/Newbie/domain/member/exception/MemberNotFoundException.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/src/main/java/com/Newbie/Newbie/domain/member/repository/MemberRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/src/main/java/com/Newbie/Newbie/domain/member/service/MemberService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/src/main/java/com/Newbie/Newbie/domain/member/service/MemberServiceImpl.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/src/main/java/com/Newbie/Newbie/global/common/config/ModelMapperConfig.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/src/main/java/com/Newbie/Newbie/global/common/config/QueryDSLConfig.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/src/main/java/com/Newbie/Newbie/global/common/config/SwaggerConfig.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/src/main/java/com/Newbie/Newbie/global/common/dto/ErrorResponseDto.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/src/main/java/com/Newbie/Newbie/global/common/util/MemberInfo.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/src/main/java/com/Newbie/Newbie/global/dto/SuccessResponse.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/src/main/java/com/Newbie/Newbie/global/security/CustomUserDetails.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/src/main/java/com/Newbie/Newbie/global/security/CustomUserDetailsService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/src/main/java/com/Newbie/Newbie/global/security/config/PasswordEncoderConfig.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/src/main/java/com/Newbie/Newbie/global/security/config/SecurityConfig.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/src/main/java/com/Newbie/Newbie/global/security/filter/JwtAuthFilter.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/src/main/java/com/Newbie/Newbie/global/security/handler/CustomAccessDeniedHandler.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/src/main/java/com/Newbie/Newbie/global/security/handler/CustomAuthenticationEntryPoint.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/src/main/java/com/Newbie/Newbie/global/security/util/JwtUtil.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/src/main/java/com/Newbie/Newbie/global/token/entity/AccessTokenBlackList.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/src/main/java/com/Newbie/Newbie/global/token/entity/RefreshToken.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/src/main/java/com/Newbie/Newbie/global/token/entity/RefreshTokenBlackList.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/src/main/java/com/Newbie/Newbie/global/token/repository/AccessTokenBlackListRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/src/main/java/com/Newbie/Newbie/global/token/repository/RefreshTokenBlackListRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/src/main/java/com/Newbie/Newbie/global/token/repository/RefreshTokenRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/src/main/resources/application.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Newbie/src/test/java/com/Newbie/Newbie/NewbieApplicationTests.java" beforeDir="false" />
-    </list>
+    <list default="true" id="dfb46afc-8826-468a-b7c2-f2229854d857" name="변경" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -118,6 +38,10 @@
     "git-widget-placeholder": "feature/login",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/SSAFY/Desktop/자율PJT/우리팀/gitlab/S11P31B304/backend/Newbie",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "project.structure.last.edited": "모듈",
     "project.structure.proportion": "0.0",
@@ -197,7 +121,7 @@
       <workItem from="1730335323974" duration="105000" />
       <workItem from="1730337888970" duration="16000" />
       <workItem from="1730337917455" duration="105000" />
-      <workItem from="1730338133104" duration="166000" />
+      <workItem from="1730338133104" duration="517000" />
     </task>
     <servers />
   </component>
