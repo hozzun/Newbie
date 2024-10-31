@@ -13,9 +13,10 @@ interface ClubSelectProps {
     | "samsung"
     | "ssg";
   logo: string;
+  width?: string;
 }
 
-const ClubSelectItem = ({ logo, clubColor }: ClubSelectProps) => {
+const ClubSelectItem = ({ logo, clubColor, width }: ClubSelectProps) => {
   const [isSelected, setIsSelected] = useState(false);
 
   const bgColorClass = {
@@ -37,9 +38,9 @@ const ClubSelectItem = ({ logo, clubColor }: ClubSelectProps) => {
 
   return (
     <div
-      className={`flex box-border hover:box-content w-24 py-2 content-center justify-center rounded-lg ${
+      className={`flex box-border hover:box-content py-2 content-center justify-center rounded-lg ${
         isSelected ? bgColorClass[clubColor] : "bg-white"
-      } transition-colors duration-300 shadow`}
+      } transition-colors duration-300 shadow ${width}`}
       onClick={handleButtonClick}
     >
       <div className="justify-center content-center">
