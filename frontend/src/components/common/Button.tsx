@@ -7,7 +7,7 @@ type ButtonProps = {
 };
 
 const Button = (props: ButtonProps) => {
-  const buttonClass = `${props.className || ""} ${props.variant} text-base font-semibold rounded-lg disabled:bg-gray-200 disabled:text-gray-400 font-kbogothicmedium`;
+  const buttonClass = `${props.className || ""} ${props.variant} px-6 py-2.5 text-base font-semibold rounded-lg disabled:bg-gray-200 disabled:text-gray-400 font-kbogothicmedium`;
 
   return <button className={buttonClass}>{props.children}</button>;
 };
