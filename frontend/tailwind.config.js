@@ -40,6 +40,18 @@ export default {
           200: '#FFAEC5',
           400: '#FF5168',
         },
+        club: {
+          doosan: '#00234B',
+          hanhwa: '#FF6600',
+          kia: '#333333',
+          kiwoom: '#6F263D',
+          kt: '#231F20',
+          lg: '#C60C30',
+          lotte: '#032C64',
+          nc: '#063E7D',
+          samsung: '#074CA1',
+          ssg: '#D2323F',
+        }
       },
     },
   },
