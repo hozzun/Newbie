@@ -30,11 +30,11 @@ const ClubChangeButton = ({ logo, clubColor, club }: ClubChangeProps) => {
 
   return (
     <div
-      className={`flex box-border hover:box-content w-80 px-2 py-6 justify-evenly rounded-lg
+      className={`flex box-border w-[100%] px-2 py-6 justify-evenly rounded-lg
        ${bgColorClass[clubColor]} transition-colors duration-300 shadow`}
     >
-      <div className="justify-center content-center">
-        <img src={logo} alt={`${clubColor} logo`} className="w-24 h-24" />
+      <div className="flex items-center justify-center">
+        <img src={logo} alt={`${clubColor} logo`} className="w-[80%] h-[80%]" />
       </div>
       <div className="flex flex-col justify-center items-center">
         <div className="text-white font-kbogothicbold text-2xl">{club}</div>

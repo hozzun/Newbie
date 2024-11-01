@@ -5,7 +5,7 @@ import FORWARD from "../../assets/icons/forward-solid.svg?react";
 
 const MusicController = () => {
   return (
-    <div className="flex flex-col p-4 bg-gray-400 text-white rounded-2xl shadow-md w-[80%]">
+    <div className="flex flex-col p-4 bg-gray-400 text-white rounded-2xl shadow-md w-[100%]">
       {/* 노래제목 및 컨트롤러 */}
       <div className="flex w-full">
         <div className="flex flex-col text-left px-2">
