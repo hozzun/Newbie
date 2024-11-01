@@ -9,30 +9,31 @@ export default defineConfig({
     registerType: 'autoUpdate',
     injectRegister: false,
 
-    pwaAssets: {
-      disabled: false,
-      config: true,
-    },
+      pwaAssets: {
+        disabled: false,
+        config: true,
+      },
 
-    manifest: {
-      name: 'frontend',
-      short_name: 'frontend',
-      description: 'frontend',
-      theme_color: '#ffffff',
-    },
+      manifest: {
+        name: "frontend",
+        short_name: "frontend",
+        description: "frontend",
+        theme_color: "#ffffff",
+      },
 
-    workbox: {
-      globPatterns: ['**/*.{js,css,html,svg,png,ico}'],
-      cleanupOutdatedCaches: true,
-      clientsClaim: true,
-    },
+      workbox: {
+        globPatterns: ["**/*.{js,css,html,svg,png,ico}"],
+        cleanupOutdatedCaches: true,
+        clientsClaim: true,
+      },
 
-    devOptions: {
-      enabled: true,
-      navigateFallback: 'index.html',
-      suppressWarnings: true,
-      type: 'module',
-    },
-  })],
-
-})
+      devOptions: {
+        enabled: true,
+        navigateFallback: "index.html",
+        suppressWarnings: true,
+        type: "module",
+      },
+    }),
+  ],
+  assetsInclude: ["**/*.svg"], // .svg 파일을 포함
+});
