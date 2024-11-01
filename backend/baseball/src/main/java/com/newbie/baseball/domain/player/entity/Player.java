@@ -2,7 +2,9 @@ package com.newbie.baseball.domain.player.entity;
 
 import com.newbie.baseball.domain.team.entity.Team;
 import jakarta.persistence.*;
+import lombok.Getter;
 
+@Getter
 @Entity
 @Table(name = "player")
 public class Player {

@@ -8,7 +8,5 @@ import java.util.List;
 public interface GameRepository extends JpaRepository<Game, Integer> {
 
     List<Game> findByDateStartingWith(String yearMonth);
-
     List<Game> findByDate(String date);
-
 }

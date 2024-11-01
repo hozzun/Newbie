@@ -2,7 +2,9 @@ package com.newbie.baseball.domain.game.entity;
 
 import com.newbie.baseball.domain.team.entity.Team;
 import jakarta.persistence.*;
+import lombok.Getter;
 
+@Getter
 @Entity
 @Table(name = "game")
 public class Game {
@@ -40,5 +42,4 @@ public class Game {
 
     @Column(name = "season", length = 10)
     private String season;
-
 }
