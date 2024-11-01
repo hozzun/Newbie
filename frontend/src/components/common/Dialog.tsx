@@ -16,10 +16,18 @@ const Dialog = (props: DialogProps) => {
           <p className="text-base font-kbogothicmedium text-gray-700">{props.title}</p>
           <div className="mt-8">{props.body}</div>
           <div className="flex flex-row mt-8 w-full gap-3">
-            <Button className="w-1/2" variant={props.yesButton.variant}>
+            <Button
+              className="w-1/2"
+              variant={props.yesButton.variant}
+              onClick={() => props.yesButton.onClick}
+            >
               {props.yesButton.children}
             </Button>
-            <Button className="w-1/2" variant={props.noButton.variant}>
+            <Button
+              className="w-1/2"
+              variant={props.noButton.variant}
+              onClick={() => props.noButton.onClick}
+            >
               {props.noButton.children}
             </Button>
           </div>

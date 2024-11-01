@@ -12,7 +12,7 @@ export interface CircleButtonProps {
   variant: CIRCLE_BUTTON_VARIANTS;
   item: CircleButtonItem;
   disabled?: boolean;
-  onClick: () => void;
+  onClick?: () => void;
 }
 
 const CircleButton = (props: CircleButtonProps) => {
