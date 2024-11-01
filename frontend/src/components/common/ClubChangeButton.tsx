@@ -1,3 +1,6 @@
+import { BUTTON_VARIANTS } from "./variants";
+import Button from "./Button";
+
 interface ClubChangeProps {
   clubColor:
     | "doosan"
@@ -30,15 +33,17 @@ const ClubChangeButton = ({ logo, clubColor, club }: ClubChangeProps) => {
 
   return (
     <div
-      className={`flex box-border hover:box-content w-80 px-2 py-6 justify-evenly rounded-lg
+      className={`flex box-border w-[100%] px-2 py-6 justify-evenly rounded-lg
        ${bgColorClass[clubColor]} transition-colors duration-300 shadow`}
     >
-      <div className="justify-center content-center">
-        <img src={logo} alt={`${clubColor} logo`} className="w-24 h-24" />
+      <div className="flex items-center justify-center">
+        <img src={logo} alt={`${clubColor} logo`} className="w-[80%] h-[80%]" />
       </div>
       <div className="flex flex-col justify-center items-center">
-        <div className="text-white font-kbogothicbold text-2xl">{club}</div>
-        <div>버튼컴포넌트 자리</div>
+        <div className="text-white font-kbogothicbold text-2xl mb-2">{club}</div>
+        <Button className="w-full px-12 whitespace-nowrap" variant={BUTTON_VARIANTS.white}>
+          구단 바꾸기
+        </Button>
       </div>
     </div>
   );
