@@ -1,21 +1,26 @@
+import REWIND from "../../assets/icons/rewind-solid.svg?react";
+import PAUSE from "../../assets/icons/pause-solid.svg?react";
+// import PLAY from "../../assets/icons/play-solid.svg?react";
+import FORWARD from "../../assets/icons/forward-solid.svg?react";
+
 const MusicController = () => {
   return (
-    <div className="flex flex-col p-4 bg-gray-400 text-white rounded-2xl shadow-md w-[340px]">
+    <div className="flex flex-col p-4 bg-gray-400 text-white rounded-2xl shadow-md w-[100%]">
       {/* 노래제목 및 컨트롤러 */}
       <div className="flex w-full">
         <div className="flex flex-col text-left px-2">
           <h2 className="font-kbogothicmedium text-lg">노래 제목</h2>
           <p className="font-kbogothiclight text-sm">가수 이름</p>
         </div>
-        <div className="flex justify-end ml-auto">
-          <button className="p-2 rounded-full">
-            <img src="src/assets/images/icons/prev-play.png" alt="Pause Icon" className="w-6 h-6" />
+        <div className="flex justify-end items-center ml-auto space-x-4">
+          <button className="p-2 rounded-full hover:bg-gray-400 focus:outline-none w-8 h-8">
+            <REWIND className="fill-current text-white w-full h-full" />
           </button>
-          <button className="p-3 rounded-full hover:bg-black focus:outline-none">
-            <img src="src/assets/images/icons/pause.png" alt="Pause Icon" className="w-6 h-6" />
+          <button className="p-2 rounded-full hover:bg-gray-400 focus:outline-none w-8 h-8">
+            <PAUSE className="fill-current text-white w-full h-full" />
           </button>
-          <button className="p-2 rounded-full">
-            <img src="src/assets/images/icons/next-play.png" alt="Pause Icon" className="w-6 h-6" />
+          <button className="p-2 rounded-full hover:bg-gray-400 focus:outline-none w-8 h-8">
+            <FORWARD className="fill-current text-white w-full h-full" /> {/* 여기서 색상을 설정 */}
           </button>
         </div>
       </div>
