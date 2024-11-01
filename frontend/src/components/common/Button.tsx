@@ -7,7 +7,7 @@ export interface ButtonProps {
 }
 
 const Button = (props: ButtonProps) => {
-  const buttonClass = `${props.className || ""} ${props.variant} px-6 py-4 text-base font-semibold rounded-lg disabled:bg-gray-200 disabled:text-gray-400 font-kbogothicmedium`;
+  const buttonClass = `${props.className || ""} ${props.variant} px-6 text-base font-semibold disabled:bg-gray-200 disabled:text-gray-400 font-kbogothicmedium`;
 
   return <button className={buttonClass}>{props.children}</button>;
 };
