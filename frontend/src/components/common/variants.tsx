@@ -6,6 +6,11 @@ export enum BUTTON_VARIANTS {
   white = "py-1 text-white border border-white rounded-2xl hover:bg-white/10",
 }
 
+export enum CIRCLE_BUTTON_VARIANTS {
+  solid = "bg-green-900 disabled:bg-gray-200 hover:bg-green-950",
+  line = "disabled:bg-transparent hover:bg-green-50",
+}
+
 export enum FLOATING_BUTTON_VARIANTS {
   primary = "bg-green-900 hover:bg-green-950",
   white = "bg-white hover:bg-gray-50",
