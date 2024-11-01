@@ -4,7 +4,6 @@ export interface CircleButtonItem {
   img: React.FC<React.SVGProps<SVGSVGElement>>;
   title?: string;
   titleSize?: number;
-  color: string;
 }
 
 export interface CircleButtonProps {
@@ -17,12 +16,8 @@ export interface CircleButtonProps {
 
 const CircleButton = (props: CircleButtonProps) => {
   const circleButtonClass = `${props.className || ""} ${props.variant} px-1 py-1 rounded-full items-center justify-center transition-colors`;
-  const itemImgClass = props.disabled
-    ? `w-[60%] h-[60%] text-gray-400`
-    : `w-[60%] h-[60%] text-${props.item.color}`;
-  const itemTitleClass = props.disabled
-    ? `mt-1 text-gray-400 font-kbogothiclight`
-    : `mt-1 text-${props.item.color} font-kbogothiclight`;
+  const itemImgClass = props.disabled ? `w-[60%] h-[60%] text-gray-400` : `w-[60%] h-[60%]`;
+  const itemTitleClass = props.disabled ? `mt-1 text-gray-400` : `mt-1`;
   const itemTitleStyle = { fontSize: `${props.item.titleSize}px` };
 
   return (
