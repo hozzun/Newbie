@@ -1,6 +1,6 @@
 type TextWithUnderlineButtonProps = {
   className?: string;
-  children: React.ReactNode;
+  children: React.ReactNode; // 버튼 텍스트
 };
 
 const TextWithUnderlineButton = (props: TextWithUnderlineButtonProps) => {

@@ -26,13 +26,12 @@ const BottomNavigationButton = (props: BottomNavigationButtonProps) => {
     img: isClicked ? props.item.clickedImg : props.item.nonClickedImg,
     title: props.item.title,
     titleSize: 8,
-    color: "green-900",
   };
 
   return (
     <CircleButton
       className="w-12 h-12"
-      variant={CIRCLE_BUTTON_VARIANTS.line}
+      variant={CIRCLE_BUTTON_VARIANTS.primaryLine}
       item={item}
       onClick={props.onClick}
     ></CircleButton>
