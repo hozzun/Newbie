@@ -1,4 +1,7 @@
 import { useState } from 'react';
+import ArrowSmallUp from "../../assets/icons/arrow-small-up.svg?react"
+import CircleButton, { CircleButtonItem } from "./CircleButton"
+import { CIRCLE_BUTTON_VARIANTS } from './variants'
 
 interface  TextChatProps {
   label?: string;
@@ -13,6 +16,11 @@ const TextChat = ({ label }: TextChatProps) => {
     }
   };
 
+  const item: CircleButtonItem = {
+    img: ArrowSmallUp,
+    color: 'white'
+  };
+
   return (
     <div
       className="flex items-center justify-center bg-white font-kbogothiclight rounded-t-2xl shadow-md w-full h-14">
@@ -24,10 +32,18 @@ const TextChat = ({ label }: TextChatProps) => {
         onChange={(e) => setComment(e.target.value)}
       />
       <button
-          className={`ml-3 rounded-full text-white w-10 h-10 ${comment ? 'bg-green-900' : 'bg-gray-100'}`}
+          className={"ml-3 rounded-full text-white w-10 h-10"}
           onClick={handleButtonClick}
           disabled={!comment}
-      ></button>
+      >
+        <CircleButton
+          className={"w-10 h-10"}
+          variant={CIRCLE_BUTTON_VARIANTS.solid}
+          item={item}
+          onClick={handleButtonClick}
+          disabled={comment ? false : true}
+        ></CircleButton>
+      </button>
     </div>
   );
 };
