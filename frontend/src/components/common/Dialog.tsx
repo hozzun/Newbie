@@ -1,10 +1,10 @@
 import Button, { ButtonProps } from "./Button";
 
 interface DialogProps {
-  title: string;
-  body: React.ReactNode;
-  yesButton: ButtonProps;
-  noButton: ButtonProps;
+  title: string; // 제목
+  body: React.ReactNode; // 본문
+  yesButton: ButtonProps; // 네 버튼
+  noButton: ButtonProps; // 아니오 버튼
 }
 
 const Dialog = (props: DialogProps) => {
@@ -19,14 +19,14 @@ const Dialog = (props: DialogProps) => {
             <Button
               className="w-1/2"
               variant={props.yesButton.variant}
-              onClick={() => props.yesButton.onClick}
+              onClick={props.yesButton.onClick}
             >
               {props.yesButton.children}
             </Button>
             <Button
               className="w-1/2"
               variant={props.noButton.variant}
-              onClick={() => props.noButton.onClick}
+              onClick={props.noButton.onClick}
             >
               {props.noButton.children}
             </Button>

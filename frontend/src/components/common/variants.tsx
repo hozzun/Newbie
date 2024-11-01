@@ -11,9 +11,6 @@ export enum CIRCLE_BUTTON_VARIANTS {
   primaryLine = "text-green-900 disabled:bg-transparent hover:bg-green-50 font-kbogothiclight",
   errorLine = "text-error-400 disabled:bg-transparent hover:bg-error-400/10 font-kbogothiclight",
   grayLine = "text-gray-600 disabled:bg-transparent hover:bg-gray-500 font-kbogothiclight",
-}
-
-export enum FLOATING_BUTTON_VARIANTS {
-  primary = "bg-green-900 hover:bg-green-950",
-  white = "bg-white hover:bg-gray-50",
+  primaryFAB = "bg-green-900 text-white hover:bg-green-950 font-kbogothiclight",
+  whiteFAB = "bg-white text-green-900 hover:bg-gray-50 font-kbogothiclight",
 }

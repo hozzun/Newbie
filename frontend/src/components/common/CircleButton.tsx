@@ -1,16 +1,16 @@
 import { CIRCLE_BUTTON_VARIANTS } from "./variants";
 
 export interface CircleButtonItem {
-  img: React.FC<React.SVGProps<SVGSVGElement>>;
-  title?: string;
-  titleSize?: number;
+  img: React.FC<React.SVGProps<SVGSVGElement>>; // 아이콘
+  title?: string; // 텍스트
+  titleSize?: number; // 텍스트 크기(px)
 }
 
 export interface CircleButtonProps {
   className?: string;
-  variant: CIRCLE_BUTTON_VARIANTS;
-  item: CircleButtonItem;
-  disabled?: boolean;
+  variant: CIRCLE_BUTTON_VARIANTS; // 버튼 종류
+  item: CircleButtonItem; // 아이콘 및 텍스트
+  disabled?: boolean; // 버튼 비활성화 여부
   onClick?: () => void;
 }
 

@@ -3,8 +3,8 @@ import { ButtonProps } from "./Button";
 import { BUTTON_VARIANTS } from "./variants";
 
 interface ReportDialogProps {
-  userNickname: string;
-  object: string;
+  userNickname: string; // 사용자 닉네임
+  object: string; // 신고 대상(ex. 게시글, 메세지)
 }
 
 const ReportDialog = (props: ReportDialogProps) => {

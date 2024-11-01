@@ -1,3 +1,5 @@
+// TODO: bottom navigation 버튼 기능 구현하기
+
 import { useState } from "react";
 import BottomNavigationButton, { BottomNavigationButtonItem } from "./BottomNavigationButton";
 import Flag from "../../assets/icons/flag.svg?react";
