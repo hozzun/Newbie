@@ -13,15 +13,10 @@ class GameRecord(Base):
     end_time = Column(String(20))
     run_time = Column(String(20))
 
-    # 팀 점수 (이닝별 점수 JSON 저장)
-    away_score = Column(JSON, nullable=True)  # 원정팀 점수
-    home_score = Column(JSON, nullable=True)  # 홈팀 점수
-
-    # 선발 투수
-    away_starting_pitcher = Column(String(50), nullable=True)  # 원정팀 선발 투수
-    home_starting_pitcher = Column(String(50), nullable=True)  # 홈팀 선발 투수
-
-    # 경기 세부 사항 (각 필드별 JSON 저장)
+    away_score = Column(JSON, nullable=True)
+    home_score = Column(JSON, nullable=True)
+    away_starting_pitcher = Column(String(50), nullable=True)
+    home_starting_pitcher = Column(String(50), nullable=True)
     winning_hit = Column(JSON, nullable=True)
     home_runs = Column(JSON, nullable=True)
     doubles = Column(JSON, nullable=True)

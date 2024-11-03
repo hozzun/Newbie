@@ -1,6 +1,7 @@
 package com.newbie.baseball.domain.team.entity;
 
 import com.newbie.baseball.domain.game.entity.Game;
+import com.newbie.baseball.domain.lineup.entity.LineUp;
 import com.newbie.baseball.domain.player.entity.Player;
 import com.newbie.baseball.domain.rank.entity.Rank;
 import com.newbie.baseball.domain.playerStats.entity.HitterStats;
@@ -52,4 +53,7 @@ public class Team {
 
     @OneToMany(mappedBy = "team")
     private List<PitcherStats> pitcherStats;
+
+    @OneToMany(mappedBy = "team")
+    private List<LineUp> lineUpList;
 }

@@ -1,8 +1,12 @@
 package com.newbie.baseball.domain.game.entity;
 
+import com.newbie.baseball.domain.lineup.entity.LineUp;
+import com.newbie.baseball.domain.record.entity.Record;
 import com.newbie.baseball.domain.team.entity.Team;
 import jakarta.persistence.*;
 import lombok.Getter;
+
+import java.util.List;
 
 @Getter
 @Entity
@@ -42,4 +46,10 @@ public class Game {
 
     @Column(name = "season", length = 10)
     private String season;
+
+    @OneToOne(mappedBy = "game", cascade = CascadeType.ALL)
+    private Record record;
+
+    @OneToMany(mappedBy = "game")
+    private List<LineUp> lineUp;
 }

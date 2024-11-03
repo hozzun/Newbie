@@ -1,8 +1,11 @@
 package com.newbie.baseball.domain.player.entity;
 
+import com.newbie.baseball.domain.lineup.entity.LineUp;
 import com.newbie.baseball.domain.team.entity.Team;
 import jakarta.persistence.*;
 import lombok.Getter;
+
+import java.util.List;
 
 @Getter
 @Entity
@@ -35,4 +38,7 @@ public class Player {
 
     @Column(name = "academic", length = 50)
     private String academic;
+
+    @OneToMany(mappedBy = "player")
+    private List<LineUp> lineUpList;
 }
