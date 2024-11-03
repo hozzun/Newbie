@@ -19,7 +19,7 @@ interface RankDifferenceProps {
 
 const RankDifference = (props: RankDifferenceProps) => {
   return (
-    <div className="flex flex-row items-center justify-center min-w-[50px] mr-2">
+    <div className="flex flex-row items-center justify-center min-w-[50px]">
       {props.rankDifference !== 0 ? (
         props.rankDifference > 0 ? (
           <>
@@ -43,20 +43,20 @@ const RankDifference = (props: RankDifferenceProps) => {
 
 const ClubRankItem = (props: ClubRankItemProps) => {
   return (
-    <div className="flex flex-row w-full h-8 py-7 rounded-lg bg-gray-100 items-center justify-between">
-      <p className="text-base font-kbogothicbold text-gray-700 min-w-[50px] text-center">
+    <div className="flex flex-row w-full h-8 px-2 py-7 rounded-lg bg-gray-100 items-center justify-between">
+      <p className="text-base font-kbogothicbold text-gray-700 min-w-[20px] text-center">
         {props.rank}
       </p>
-      <p className="text-base font-kbogothicbold text-gray-700 min-w-[150px] text-center">
+      <p className="text-base font-kbogothicbold text-gray-700 min-w-[100px] text-center">
         {clubs[props.id].name}
       </p>
-      <p className="text-base font-kbogothiclight text-gray-700 min-w-[50px] text-center">
+      <p className="text-base font-kbogothiclight text-gray-700 min-w-[30px] text-center">
         {props.gameCount}
       </p>
-      <p className="text-base font-kbogothiclight text-gray-700 min-w-[100px] text-center">
+      <p className="text-base font-kbogothiclight text-gray-700 min-w-[80px] text-center">
         {props.winCount}-{props.drawCount}-{props.loseCount}
       </p>
-      <p className="text-base font-kbogothiclight text-gray-700 min-w-[50px] text-center">
+      <p className="text-base font-kbogothiclight text-gray-700 min-w-[20px] text-center">
         {props.gameDifference}
       </p>
       <RankDifference rankDifference={props.rankDifference} />
