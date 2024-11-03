@@ -122,7 +122,7 @@ const GameAboutCheeringClub = (props: GameAboutCheeringClub) => {
     <>
       <p className="text-base font-kbogothicmedium text-gray-700">{props.game.time}</p>
       <p className="text-base font-kbogothicmedium text-gray-700">{props.game.place}</p>
-      <div className="flex flex-row justify-between item-center w-[70%]">
+      <div className="flex flex-row justify-around item-center w-full">
         <Club id={props.game.clubs[0].id} player={props.game.clubs[0].player} />
         <div className="flex flex-col justify-center items-center">
           <p className="text-base font-kbogothicmedium text-gray-700">☀ 맑음</p>
