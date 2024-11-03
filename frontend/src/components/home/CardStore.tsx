@@ -13,7 +13,7 @@ const CardStore = (props: CardStoreProps) => {
         <p className="text-2xl font-kbogothicbold text-gray-700">포토카드 TOP3</p>
         <TextButton onClick={props.goMore}>더보기</TextButton>
       </div>
-      <div className="flex justify-between space-x-4 w-[98%] mt-8">
+      <div className="flex justify-between space-x-4 w-[98%] mt-3">
         {props.cardStoreItems &&
           props.cardStoreItems.map(cardStoreItem => (
             <CardStoreItem key={cardStoreItem.id} {...cardStoreItem} />
