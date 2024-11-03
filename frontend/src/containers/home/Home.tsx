@@ -1,23 +1,25 @@
 import { useState, useEffect } from "react";
 import HomeComponent from "../../components/home/Home";
-import { Game, GameSituation, TodayGame, TodayGameProps } from "../../components/home/TodayGame";
+import {
+  Game,
+  GameSituation,
+  GameAboutCheeringClub,
+  TodayGameProps,
+} from "../../components/home/TodayGame";
 
 const Home = () => {
-  const [todayGame, setTodayGame] = useState<TodayGame>({
-    hasCheeringClub: false,
-  });
+  const [hasCheeringClub, setHasCheeringClub] = useState<boolean>(false);
+  const [todayGame, setTodayGame] = useState<GameAboutCheeringClub>();
 
   const fetchTodayGame = async () => {
     try {
       // TODO: GET - 응원 구단 여부
-      const hasCheeringClub: boolean = true;
-      const todayGameData: TodayGame = {
-        hasCheeringClub,
-      };
+      const hasCheeringClubData: boolean = true;
+      setHasCheeringClub(hasCheeringClubData);
 
-      if (hasCheeringClub) {
+      if (hasCheeringClubData) {
         // TODO: GET - 응원 구단에 맞는 오늘의 경기
-        const game: Game = {
+        const gameData: Game = {
           time: "17:00",
           place: "광주스타디움",
           clubs: [
@@ -31,20 +33,22 @@ const Home = () => {
             },
           ],
         };
-        todayGameData.game = game;
 
         // TODO: GET - 경기 진행 상황
-        const gameSituation: GameSituation = {
+        const gameSituationData: GameSituation = {
           isPlaying: true,
           scores: {
             samsung: 2,
             kia: 1,
           },
         };
-        todayGameData.gameSituation = gameSituation;
-      }
 
-      setTodayGame(todayGameData);
+        const todayGameData: GameAboutCheeringClub = {
+          game: gameData,
+          gameSituation: gameSituationData,
+        };
+        setTodayGame(todayGameData);
+      }
     } catch (e) {
       console.log(e);
     }
@@ -60,7 +64,8 @@ const Home = () => {
   };
 
   const todayGameProps: TodayGameProps = {
-    ...todayGame,
+    hasCheeringClub,
+    todayGame,
     goMore,
   };
 

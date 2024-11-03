@@ -25,18 +25,14 @@ export interface GameSituation {
   scores?: Record<string, number>;
 }
 
-interface GameAboutCheeringClub {
+export interface GameAboutCheeringClub {
   game: Game;
   gameSituation: GameSituation;
 }
 
-export interface TodayGame {
+export interface TodayGameProps {
   hasCheeringClub: boolean;
-  game?: Game;
-  gameSituation?: GameSituation;
-}
-
-export interface TodayGameProps extends TodayGame {
+  todayGame?: GameAboutCheeringClub;
   goMore: () => void;
 }
 
@@ -152,9 +148,12 @@ const TodayGame = (props: TodayGameProps) => {
         <p className="text-2xl font-kbogothicbold text-gray-700">오늘의 경기</p>
         <TextButton onClick={props.goMore}>더보기</TextButton>
       </div>
-      <div className="mt-3 flex flex-col justify-center items-center w-full rounded-lg bg-gray-100 p-4">
-        {props.hasCheeringClub && props.game && props.gameSituation ? (
-          <GameAboutCheeringClub game={props.game} gameSituation={props.gameSituation} />
+      <div className="mt-3 flex flex-col justify-center items-center w-full rounded-lg bg-gray-100 p-4 shadow-sm">
+        {props.hasCheeringClub && props.todayGame?.game && props.todayGame?.gameSituation ? (
+          <GameAboutCheeringClub
+            game={props.todayGame.game}
+            gameSituation={props.todayGame.gameSituation}
+          />
         ) : (
           <NoCheeringClub />
         )}
