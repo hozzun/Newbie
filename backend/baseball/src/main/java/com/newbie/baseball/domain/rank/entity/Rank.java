@@ -20,7 +20,7 @@ public class Rank {
     @Column(name = "rank")
     private Integer rank;
 
-    @OneToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "team_id")
     private Team team;
 

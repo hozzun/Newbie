@@ -1,12 +1,12 @@
-package com.newbie.baseball.domain.stats.service;
+package com.newbie.baseball.domain.playerStats.service;
 
-import com.newbie.baseball.domain.stats.dto.res.HitterStatsResponseDto;
-import com.newbie.baseball.domain.stats.dto.res.PitcherStatsResponseDto;
-import com.newbie.baseball.domain.stats.entity.HitterStats;
-import com.newbie.baseball.domain.stats.entity.PitcherStats;
-import com.newbie.baseball.domain.stats.exception.StatsNotFoundException;
-import com.newbie.baseball.domain.stats.repository.HitterStatsRepository;
-import com.newbie.baseball.domain.stats.repository.PitcherStatsRepository;
+import com.newbie.baseball.domain.playerStats.dto.res.HitterStatsResponseDto;
+import com.newbie.baseball.domain.playerStats.dto.res.PitcherStatsResponseDto;
+import com.newbie.baseball.domain.playerStats.entity.HitterStats;
+import com.newbie.baseball.domain.playerStats.entity.PitcherStats;
+import com.newbie.baseball.domain.playerStats.exception.StatsNotFoundException;
+import com.newbie.baseball.domain.playerStats.repository.HitterStatsRepository;
+import com.newbie.baseball.domain.playerStats.repository.PitcherStatsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

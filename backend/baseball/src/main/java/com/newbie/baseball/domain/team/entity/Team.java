@@ -3,6 +3,10 @@ package com.newbie.baseball.domain.team.entity;
 import com.newbie.baseball.domain.game.entity.Game;
 import com.newbie.baseball.domain.player.entity.Player;
 import com.newbie.baseball.domain.rank.entity.Rank;
+import com.newbie.baseball.domain.playerStats.entity.HitterStats;
+import com.newbie.baseball.domain.playerStats.entity.PitcherStats;
+import com.newbie.baseball.domain.teamStats.entity.TeamHitterStats;
+import com.newbie.baseball.domain.teamStats.entity.TeamPitcherStats;
 import jakarta.persistence.*;
 import lombok.Getter;
 
@@ -34,18 +38,18 @@ public class Team {
     @OneToMany(mappedBy = "team")
     private List<Player> players;
 
-    @OneToOne(mappedBy = "team")
-    private Rank rank;
+    @OneToMany(mappedBy = "team")
+    private List<Rank> ranks;
 
-//    @OneToMany(mappedBy = "team")
-//    private List<TeamHitterStats> teamHitterStats;
-//
-//    @OneToMany(mappedBy = "team")
-//    private List<TeamPitcherStats> teamPitcherStats;
-//
-//    @OneToMany(mappedBy = "team")
-//    private List<HitterStats> hitterStats;
-//
-//    @OneToMany(mappedBy = "team")
-//    private List<PitcherStats> pitcherStats;
+    @OneToMany(mappedBy = "team")
+    private List<TeamHitterStats> teamHitterStats;
+
+    @OneToMany(mappedBy = "team")
+    private List<TeamPitcherStats> teamPitcherStats;
+
+    @OneToMany(mappedBy = "team")
+    private List<HitterStats> hitterStats;
+
+    @OneToMany(mappedBy = "team")
+    private List<PitcherStats> pitcherStats;
 }

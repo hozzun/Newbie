@@ -1,8 +1,8 @@
-package com.newbie.baseball.domain.stats.controller;
+package com.newbie.baseball.domain.playerStats.controller;
 
-import com.newbie.baseball.domain.stats.dto.res.HitterStatsResponseDto;
-import com.newbie.baseball.domain.stats.dto.res.PitcherStatsResponseDto;
-import com.newbie.baseball.domain.stats.service.StatsService;
+import com.newbie.baseball.domain.playerStats.dto.res.HitterStatsResponseDto;
+import com.newbie.baseball.domain.playerStats.dto.res.PitcherStatsResponseDto;
+import com.newbie.baseball.domain.playerStats.service.StatsService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

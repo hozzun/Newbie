@@ -1,4 +1,4 @@
-package com.newbie.baseball.domain.stats.dto.res;
+package com.newbie.baseball.domain.playerStats.dto.res;
 
 import lombok.Builder;
 import lombok.Data;

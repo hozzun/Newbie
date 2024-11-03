@@ -1,4 +1,4 @@
-package com.newbie.baseball.domain.stats.entity;
+package com.newbie.baseball.domain.playerStats.entity;
 
 import com.newbie.baseball.domain.player.entity.Player;
 import com.newbie.baseball.domain.team.entity.Team;
@@ -14,7 +14,7 @@ public class PitcherStats {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "year")
+    @Column(name = "year", length = 10)
     private String year;
 
     @ManyToOne(fetch = FetchType.LAZY)

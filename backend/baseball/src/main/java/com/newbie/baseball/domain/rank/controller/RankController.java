@@ -20,13 +20,13 @@ public class RankController {
 
     private final RankService rankService;
 
-    @Operation(summary = "순위 전체 조회")
+    @Operation(summary = "전체 순위 및 성적 조회 (2021년 ~ 2024년)")
     @GetMapping
     public List<RankResponseDto> getAllRanks() {
         return rankService.getAllRanks();
     }
 
-    @Operation(summary = "년도로 순위 조회")
+    @Operation(summary = "년도로 순위 및 성적 조회")
     @GetMapping("/{year}")
     public List<RankResponseDto> getRanksByYear(@PathVariable("year") String year) {
         return rankService.getRanksByYear(year);

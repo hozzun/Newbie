@@ -1,26 +1,24 @@
-package com.newbie.baseball.domain.stats.entity;
+package com.newbie.baseball.domain.teamStats.entity;
 
-import com.newbie.baseball.domain.player.entity.Player;
 import com.newbie.baseball.domain.team.entity.Team;
 import jakarta.persistence.*;
 import lombok.Getter;
 
 @Getter
 @Entity
-@Table(name = "hitter_stats")
-public class HitterStats {
+@Table(name = "team_hitter_stats")
+public class TeamHitterStats {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
 
+    @Column(name = "rank")
+    private Integer rank;
+
     @Column(name = "year", length = 10)
     private String year;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "player_id")
-    private Player player;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "team_id")
@@ -64,4 +62,5 @@ public class HitterStats {
 
     @Column(name = "sf")
     private Integer sf;
+
 }

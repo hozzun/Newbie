@@ -1,4 +1,4 @@
-package com.newbie.baseball.domain.stats.exception;
+package com.newbie.baseball.domain.playerStats.exception;
 
 public class StatsNotFoundException extends RuntimeException {
 

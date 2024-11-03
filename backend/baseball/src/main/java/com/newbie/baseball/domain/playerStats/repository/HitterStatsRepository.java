@@ -1,6 +1,6 @@
-package com.newbie.baseball.domain.stats.repository;
+package com.newbie.baseball.domain.playerStats.repository;
 
-import com.newbie.baseball.domain.stats.entity.HitterStats;
+import com.newbie.baseball.domain.playerStats.entity.HitterStats;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

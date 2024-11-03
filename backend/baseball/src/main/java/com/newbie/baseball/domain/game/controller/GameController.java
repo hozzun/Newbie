@@ -26,13 +26,13 @@ public class GameController {
         return gameService.getGameById(id);
     }
 
-    @Operation(summary = "날짜(년-월)로 경기조회 (ex. 2024-09)")
+    @Operation(summary = "날짜(년-월)로 월별 경기목록 조회 (ex. 2024-09)")
     @GetMapping("/{year}/{month}")
     public List<GameResponseDto> getGameByYearAndMonth(@PathVariable String year, @PathVariable String month) {
         return gameService.getGameByYearAndMonth(year + "-" + month);
     }
 
-    @Operation(summary = "날짜로 경기조회 (ex. 2024-09-23)")
+    @Operation(summary = "날짜로 해당일자 경기목록 조회 (ex. 2024-09-23)")
     @GetMapping("/{year}/{month}/{day}")
     public List<GameResponseDto> getGameByDate(@PathVariable String year, @PathVariable String month, @PathVariable String day) {
         return gameService.getGameByDate(year + "-" + month + "-" + day);

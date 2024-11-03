@@ -1,17 +1,16 @@
-package com.newbie.baseball.domain.stats.dto.res;
+package com.newbie.baseball.domain.teamStats.dto.res;
 
 import lombok.Builder;
 import lombok.Data;
 
 @Builder
 @Data
-public class HitterStatsResponseDto {
+public class TeamHitterStatsResponseDto {
 
+    private Integer rank;
     private String year;
-    private String playerName;
-    private Integer playerId;
-    private String teamName;
     private Integer teamId;
+    private String teamName;
     private String avg;
     private Integer gameCount;
     private Integer pa;
