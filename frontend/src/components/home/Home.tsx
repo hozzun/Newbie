@@ -1,4 +1,5 @@
 import ClubRank, { ClubRankProps } from "./ClubRank";
+import Highlight, { HighlightProps } from "./Highlight";
 import ImageCard, { ImageCardProps } from "./ImageCard";
 import TodayGame, { TodayGameProps } from "./TodayGame";
 
@@ -6,6 +7,7 @@ interface HomeProps {
   todayGameProps: TodayGameProps;
   imageCardProps: ImageCardProps;
   clubRankProps: ClubRankProps;
+  highlightProps: HighlightProps;
 }
 
 const Home = (props: HomeProps) => {
@@ -14,6 +16,7 @@ const Home = (props: HomeProps) => {
       <TodayGame {...props.todayGameProps} />
       <ImageCard {...props.imageCardProps} />
       <ClubRank {...props.clubRankProps} />
+      <Highlight {...props.highlightProps} />
     </div>
   );
 };

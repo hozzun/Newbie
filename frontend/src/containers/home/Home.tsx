@@ -9,6 +9,7 @@ import {
 import { ImageCardProps } from "../../components/home/ImageCard";
 import { ClubRankProps } from "../../components/home/ClubRank";
 import { ClubRankItemProps } from "../../components/home/ClubRankItem";
+import { HighlightProps } from "../../components/home/Highlight";
 
 const Home = () => {
   const [hasCheeringClub, setHasCheeringClub] = useState<boolean>(false);
@@ -16,6 +17,7 @@ const Home = () => {
   const [photoCardImage, setPhotoCardImage] = useState<string | null>(null);
   const [watchedGameImage, setWatchedGameImage] = useState<string | null>(null);
   const [clubRanks, setClubRanks] = useState<Array<ClubRankItemProps> | null>(null);
+  const [highlightUrl, setHighlightUrl] = useState<string | null>(null);
 
   const fetchTodayGame = async () => {
     try {
@@ -186,10 +188,21 @@ const Home = () => {
     }
   };
 
+  const fetchHighlightUrl = async () => {
+    try {
+      const highlightUrlData: string = "highlight video url";
+
+      setHighlightUrl(highlightUrlData);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   useEffect(() => {
     fetchTodayGame();
     fetchImage();
     fetchClubRanks();
+    fetchHighlightUrl();
   }, []);
 
   const goGameScheduleMore = () => {
@@ -224,11 +237,16 @@ const Home = () => {
     clubRankItems: clubRanks,
   };
 
+  const highlightProps: HighlightProps = {
+    url: highlightUrl,
+  };
+
   return (
     <HomeComponent
       todayGameProps={todayGameProps}
       imageCardProps={imageCardProps}
       clubRankProps={clubRankProps}
+      highlightProps={highlightProps}
     />
   );
 };
