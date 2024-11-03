@@ -4,6 +4,7 @@ import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 
 import ClubLogos from "../../util/ClubLogos";
+import { useState } from "react";
 
 const clubs: {
   color: "doosan" | "hanhwa" | "kia" | "kiwoom" | "kt" | "lg" | "lotte" | "nc" | "samsung" | "ssg";
@@ -21,6 +22,12 @@ const clubs: {
 ];
 
 const ClubSelect = () => {
+  const [selectedClub, setselectedClub] = useState<string | null>(null);
+
+  const handleSelect = (clubColor: string) => {
+    setselectedClub(clubColor);
+  };
+
   const settings = {
     className: "center",
     centerMode: true,
@@ -39,6 +46,8 @@ const ClubSelect = () => {
               logo={ClubLogos[club.color]} // clubLogos 객체에서 로고 가져오기
               clubColor={club.color}
               width="w-24"
+              isSelected={selectedClub === club.color}
+              onSelect={() => handleSelect(club.color)}
             />
           </div>
         ))}
