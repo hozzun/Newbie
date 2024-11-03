@@ -6,7 +6,7 @@ import Button from "./Button";
 import { BUTTON_VARIANTS } from "./variants";
 import BellSolid from "../../assets/icons/bell-solid.svg?react";
 import PictureSolid from "../../assets/icons/picture-solid.svg?react";
-import TextWithUnderlineButton from "./TextWithUnderlineButton";
+import TextButton from "./TextButton";
 
 const authorities: Array<Authority> = [
   {
@@ -37,6 +37,11 @@ const AuthorityBottomSheet = () => {
     isVisible ? "translate-y-0" : "translate-y-full"
   }`;
 
+  const handleBottomSheet = () => {
+    // TODO: bottom sheet 닫기
+    console.log("bottom sheet 닫기");
+  };
+
   return (
     <>
       <div className="fixed inset-0 bg-gray-700 bg-opacity-50 z-10"></div>
@@ -53,7 +58,9 @@ const AuthorityBottomSheet = () => {
           <Button className="w-full" variant={BUTTON_VARIANTS.primary}>
             계속하기
           </Button>
-          <TextWithUnderlineButton className="mt-3">나중에 받을게요</TextWithUnderlineButton>
+          <TextButton className="mt-3 underline" onClick={handleBottomSheet}>
+            나중에 받을게요
+          </TextButton>
         </div>
       </div>
     </>
