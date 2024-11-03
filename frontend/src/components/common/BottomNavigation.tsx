@@ -49,7 +49,7 @@ const BottomNavigation = () => {
   };
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-white rounded-t-lg border-t border-gray-100">
+    <div className="w-full max-w-[600px] min-w-[320px] left-1/2 transform -translate-x-1/2 mx-auto justify-between items-center fixed bottom-0 bg-white rounded-t-lg border-t border-gray-100">
       <div className="flex justify-around p-3">
         {bottomNavigationButtonItems.map((bottomNavigationButtonItem, index) => (
           <BottomNavigationButton
