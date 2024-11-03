@@ -7,12 +7,15 @@ import {
   TodayGameProps,
 } from "../../components/home/TodayGame";
 import { ImageCardProps } from "../../components/home/ImageCard";
+import { ClubRankProps } from "../../components/home/ClubRank";
+import { ClubRankItemProps } from "../../components/home/ClubRankItem";
 
 const Home = () => {
   const [hasCheeringClub, setHasCheeringClub] = useState<boolean>(false);
   const [todayGame, setTodayGame] = useState<GameAboutCheeringClub>();
   const [photoCardImage, setPhotoCardImage] = useState<string | null>(null);
   const [watchedGameImage, setWatchedGameImage] = useState<string | null>(null);
+  const [clubRanks, setClubRanks] = useState<Array<ClubRankItemProps> | null>(null);
 
   const fetchTodayGame = async () => {
     try {
@@ -71,9 +74,122 @@ const Home = () => {
     }
   };
 
+  const fetchClubRanks = async () => {
+    try {
+      //TODO: GET - 구단 랭킹
+      const clubRanksData: Array<ClubRankItemProps> = [
+        {
+          id: "kia",
+          rank: 1,
+          gameCount: 144,
+          winCount: 87,
+          drawCount: 2,
+          loseCount: 55,
+          gameDifference: 0,
+          rankDifference: 0,
+        },
+        {
+          id: "samsung",
+          rank: 2,
+          gameCount: 144,
+          winCount: 78,
+          drawCount: 2,
+          loseCount: 64,
+          gameDifference: 9,
+          rankDifference: 1,
+        },
+        {
+          id: "lg",
+          rank: 3,
+          gameCount: 144,
+          winCount: 76,
+          drawCount: 2,
+          loseCount: 66,
+          gameDifference: 11,
+          rankDifference: -1,
+        },
+        {
+          id: "doosan",
+          rank: 4,
+          gameCount: 144,
+          winCount: 74,
+          drawCount: 2,
+          loseCount: 68,
+          gameDifference: 13,
+          rankDifference: 0,
+        },
+        {
+          id: "kt",
+          rank: 5,
+          gameCount: 144,
+          winCount: 72,
+          drawCount: 2,
+          loseCount: 70,
+          gameDifference: 15,
+          rankDifference: 0,
+        },
+        {
+          id: "ssg",
+          rank: 6,
+          gameCount: 144,
+          winCount: 72,
+          drawCount: 2,
+          loseCount: 70,
+          gameDifference: 15,
+          rankDifference: -1,
+        },
+        {
+          id: "lotte",
+          rank: 7,
+          gameCount: 144,
+          winCount: 66,
+          drawCount: 4,
+          loseCount: 74,
+          gameDifference: 20,
+          rankDifference: 0,
+        },
+        {
+          id: "hanhwa",
+          rank: 8,
+          gameCount: 144,
+          winCount: 66,
+          drawCount: 2,
+          loseCount: 76,
+          gameDifference: 21,
+          rankDifference: 1,
+        },
+        {
+          id: "nc",
+          rank: 9,
+          gameCount: 144,
+          winCount: 61,
+          drawCount: 2,
+          loseCount: 81,
+          gameDifference: 26,
+          rankDifference: -1,
+        },
+        {
+          id: "kiwoom",
+          rank: 10,
+          gameCount: 144,
+          winCount: 58,
+          drawCount: 0,
+          loseCount: 86,
+          gameDifference: 30,
+          rankDifference: 0,
+        },
+      ];
+
+      setClubRanks(clubRanksData);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   useEffect(() => {
     fetchTodayGame();
     fetchImage();
+    fetchClubRanks();
   }, []);
 
   const goGameScheduleMore = () => {
@@ -104,7 +220,17 @@ const Home = () => {
     goWatchedGameMore,
   };
 
-  return <HomeComponent todayGameProps={todayGameProps} imageCardProps={imageCardProps} />;
+  const clubRankProps: ClubRankProps = {
+    clubRankItems: clubRanks,
+  };
+
+  return (
+    <HomeComponent
+      todayGameProps={todayGameProps}
+      imageCardProps={imageCardProps}
+      clubRankProps={clubRankProps}
+    />
+  );
 };
 
 export default Home;

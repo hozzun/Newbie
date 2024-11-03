@@ -36,7 +36,7 @@ export interface TodayGameProps {
   goMore: () => void;
 }
 
-const clubs: Record<string, Club> = {
+export const clubs: Record<string, Club> = {
   kia: {
     id: "kia",
     name: "KIA 타이거즈",
