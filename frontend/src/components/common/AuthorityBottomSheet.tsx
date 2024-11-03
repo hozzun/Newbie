@@ -37,6 +37,11 @@ const AuthorityBottomSheet = () => {
     isVisible ? "translate-y-0" : "translate-y-full"
   }`;
 
+  const handleBottomSheet = () => {
+    // TODO: bottom sheet 닫기
+    console.log("bottom sheet 닫기");
+  };
+
   return (
     <>
       <div className="fixed inset-0 bg-gray-700 bg-opacity-50 z-10"></div>
@@ -53,7 +58,9 @@ const AuthorityBottomSheet = () => {
           <Button className="w-full" variant={BUTTON_VARIANTS.primary}>
             계속하기
           </Button>
-          <TextButton className="mt-3 underline">나중에 받을게요</TextButton>
+          <TextButton className="mt-3 underline" onClick={handleBottomSheet}>
+            나중에 받을게요
+          </TextButton>
         </div>
       </div>
     </>
