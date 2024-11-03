@@ -10,6 +10,8 @@ import { ImageCardProps } from "../../components/home/ImageCard";
 import { ClubRankProps } from "../../components/home/ClubRank";
 import { ClubRankItemProps } from "../../components/home/ClubRankItem";
 import { HighlightProps } from "../../components/home/Highlight";
+import { CardStoreItemProps } from "../../components/home/CardStoreItem";
+import { CardStoreProps } from "../../components/home/CardStore";
 
 const Home = () => {
   const [hasCheeringClub, setHasCheeringClub] = useState<boolean>(false);
@@ -18,6 +20,7 @@ const Home = () => {
   const [watchedGameImage, setWatchedGameImage] = useState<string | null>(null);
   const [clubRanks, setClubRanks] = useState<Array<ClubRankItemProps> | null>(null);
   const [highlightUrl, setHighlightUrl] = useState<string | null>(null);
+  const [cards, setCards] = useState<Array<CardStoreItemProps> | null>(null);
 
   const fetchTodayGame = async () => {
     try {
@@ -190,9 +193,38 @@ const Home = () => {
 
   const fetchHighlightUrl = async () => {
     try {
+      // TODO: GET - 하이라이트 영상 TOP 1
       const highlightUrlData: string = "highlight video url";
 
       setHighlightUrl(highlightUrlData);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const fetchCards = async () => {
+    try {
+      // TODO: GET - 선수 포토카드 TOP 3
+      // TODO: MOVE - 선수 포토카드마다 스토어 상세 페이지
+      const cardsData: Array<CardStoreItemProps> = [
+        {
+          id: 1,
+          url: "/src/assets/images/직관경기사진.jpeg",
+          goDetail: () => console.log("1 직관경기사진으로 이동"),
+        },
+        {
+          id: 2,
+          url: "/src/assets/images/직관경기사진.jpeg",
+          goDetail: () => console.log("2 직관경기사진으로 이동"),
+        },
+        {
+          id: 3,
+          url: "/src/assets/images/직관경기사진.jpeg",
+          goDetail: () => console.log("3 직관경기사진으로 이동"),
+        },
+      ];
+
+      setCards(cardsData);
     } catch (e) {
       console.log(e);
     }
@@ -203,6 +235,7 @@ const Home = () => {
     fetchImage();
     fetchClubRanks();
     fetchHighlightUrl();
+    fetchCards();
   }, []);
 
   const goGameScheduleMore = () => {
@@ -218,6 +251,11 @@ const Home = () => {
   const goWatchedGameMore = () => {
     // TODO: MOVE - 나의 직관경기 페이지
     console.log("나의 직관경기 페이지로 이동");
+  };
+
+  const goCardStoreMore = () => {
+    // TODO: MOVE - 스토어 페이지
+    console.log("스토어 페이지로 이동");
   };
 
   const todayGameProps: TodayGameProps = {
@@ -241,12 +279,18 @@ const Home = () => {
     url: highlightUrl,
   };
 
+  const cardStoreProps: CardStoreProps = {
+    cardStoreItems: cards,
+    goMore: goCardStoreMore,
+  };
+
   return (
     <HomeComponent
       todayGameProps={todayGameProps}
       imageCardProps={imageCardProps}
       clubRankProps={clubRankProps}
       highlightProps={highlightProps}
+      cardStoreProps={cardStoreProps}
     />
   );
 };
