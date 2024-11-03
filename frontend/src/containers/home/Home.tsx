@@ -6,10 +6,13 @@ import {
   GameAboutCheeringClub,
   TodayGameProps,
 } from "../../components/home/TodayGame";
+import { ImageCardProps } from "../../components/home/ImageCard";
 
 const Home = () => {
   const [hasCheeringClub, setHasCheeringClub] = useState<boolean>(false);
   const [todayGame, setTodayGame] = useState<GameAboutCheeringClub>();
+  const [photoCardImage, setPhotoCardImage] = useState<string | null>(null);
+  const [watchedGameImage, setWatchedGameImage] = useState<string | null>(null);
 
   const fetchTodayGame = async () => {
     try {
@@ -54,22 +57,54 @@ const Home = () => {
     }
   };
 
+  const fetchImage = async () => {
+    try {
+      // TODO: GET - 최신 나의 포토카드 이미지 url
+      const photoCardImageData: string | null = null;
+      setPhotoCardImage(photoCardImageData);
+
+      // TODO: GET - 최신 나의 직관경기 이미지 url
+      const watchedGameImageData: string | null = "/src/assets/images/직관경기사진.jpeg";
+      setWatchedGameImage(watchedGameImageData);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   useEffect(() => {
     fetchTodayGame();
+    fetchImage();
   }, []);
 
-  const goMore = () => {
+  const goGameScheduleMore = () => {
     // TODO: MOVE - 경기 일정 페이지
     console.log("경기 일정 페이지로 이동");
+  };
+
+  const goPhotoCardMore = () => {
+    // TODO: MOVE - 나의 포토카드 페이지
+    console.log("나의 포토카드 페이지로 이동");
+  };
+
+  const goWatchedGameMore = () => {
+    // TODO: MOVE - 나의 직관경기 페이지
+    console.log("나의 직관경기 페이지로 이동");
   };
 
   const todayGameProps: TodayGameProps = {
     hasCheeringClub,
     todayGame,
-    goMore,
+    goMore: goGameScheduleMore,
   };
 
-  return <HomeComponent todayGameProps={todayGameProps} />;
+  const imageCardProps: ImageCardProps = {
+    photoCardImage,
+    watchedGameImage,
+    goPhotoCardMore,
+    goWatchedGameMore,
+  };
+
+  return <HomeComponent todayGameProps={todayGameProps} imageCardProps={imageCardProps} />;
 };
 
 export default Home;
