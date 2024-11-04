@@ -1,9 +1,8 @@
-package com.newbie.cardstore.card.entity;
+package com.newbie.cardstore.storecard.entity;
 
 
 import lombok.Builder;
 import lombok.Data;
-import org.joda.time.DateTime;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 

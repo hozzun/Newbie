@@ -1,7 +1,7 @@
-package com.newbie.cardstore.card.controller;
+package com.newbie.cardstore.storecard.controller;
 
-import com.newbie.cardstore.card.dto.PlayerCardDto;
-import com.newbie.cardstore.card.service.CardService;
+import com.newbie.cardstore.storecard.dto.PlayerCardDto;
+import com.newbie.cardstore.storecard.service.CardService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;

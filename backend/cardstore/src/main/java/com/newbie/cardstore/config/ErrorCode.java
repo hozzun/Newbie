@@ -14,7 +14,8 @@ public enum ErrorCode {
     IO_EXCEPTION_ON_IMAGE_DELETE("S3-006", "I/O error occurred while deleting the image from S3."),
     INSUFFICIENT_MILEAGE("MILEAGE-001", "Insufficient mileage to complete the purchase."),
     MILEAGE_CHECK_FAILED("MILEAGE-002", "Failed to verify mileage."),
-    INVALID_CARD_ID("CARD-001", "Invalid card ID.");
+    INVALID_CARD_ID("CARD-001", "Invalid card ID."),
+    CARD_ALREADY_PURCHASED("CARD-002", "The card has already been purchased.");
 
     private final String code;
     private final String message;
