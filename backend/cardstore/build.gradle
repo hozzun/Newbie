@@ -53,3 +53,19 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+ext {
+    isProd = project.hasProperty('prod') && project.prod == 'true'
+}
+
+bootRun {
+    if (isProd) {
+        systemProperty 'spring.profiles.active', 'prod'
+    }
+}
+
+tasks.withType(Test) {
+    if (isProd) {
+        systemProperty 'spring.profiles.active', 'prod'
+    }
+}
