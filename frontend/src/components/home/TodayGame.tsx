@@ -11,7 +11,7 @@ export interface TodayGameProps {
 
 const NoCheeringClub = () => {
   return (
-    <>
+    <div className="mt-3 flex flex-col justify-center items-center w-full rounded-lg bg-gray-100 p-4 shadow-sm">
       <p className="text-base font-kbogothiclight text-gray-700">
         응원할 구단이 등록되어 있지 않습니다.
       </p>
@@ -21,7 +21,7 @@ const NoCheeringClub = () => {
       <Button className="mt-8" variant={BUTTON_VARIANTS.primary}>
         응원 구단 등록하기
       </Button>
-    </>
+    </div>
   );
 };
 
@@ -32,13 +32,11 @@ const TodayGame = (props: TodayGameProps) => {
         <p className="text-2xl font-kbogothicbold text-gray-700">오늘의 경기</p>
         <TextButton onClick={props.goMore}>더보기</TextButton>
       </div>
-      <div className="mt-3 flex flex-col justify-center items-center w-full rounded-lg bg-gray-100 p-4 shadow-sm">
-        {props.hasCheeringClub && props.todayGame?.gameInfo && props.todayGame?.gameSituation ? (
-          <Game gameInfo={props.todayGame.gameInfo} gameSituation={props.todayGame.gameSituation} />
-        ) : (
-          <NoCheeringClub />
-        )}
-      </div>
+      {props.hasCheeringClub && props.todayGame?.gameInfo && props.todayGame?.gameSituation ? (
+        <Game gameInfo={props.todayGame.gameInfo} gameSituation={props.todayGame.gameSituation} />
+      ) : (
+        <NoCheeringClub />
+      )}
     </div>
   );
 };

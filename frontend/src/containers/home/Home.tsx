@@ -26,7 +26,8 @@ const Home = () => {
 
       if (hasCheeringClubData) {
         // TODO: GET - 응원 구단에 맞는 오늘의 경기
-        const gameData: GameInfo = {
+        const gameInfoData: GameInfo = {
+          day: "2024-11-05",
           time: "17:00",
           place: "광주스타디움",
           clubs: [
@@ -41,6 +42,9 @@ const Home = () => {
           ],
         };
 
+        // TODO: GET - 날씨 정보
+        gameInfoData.weather = "☀ 맑음";
+
         // TODO: GET - 경기 진행 상황
         const gameSituationData: GameSituation = {
           isPlaying: true,
@@ -51,7 +55,7 @@ const Home = () => {
         };
 
         const todayGameData: GameProps = {
-          gameInfo: gameData,
+          gameInfo: gameInfoData,
           gameSituation: gameSituationData,
         };
         setTodayGame(todayGameData);
