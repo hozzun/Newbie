@@ -1,5 +1,3 @@
-import ClubSelect from "./components/common/ClubSelect";
-
 function App() {
   return (
     <>
