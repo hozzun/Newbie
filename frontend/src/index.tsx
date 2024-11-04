@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import ClubRecommendPage from './pages/clubrecommend/ClubRecommend'
+import ClubRecommendPage from './pages/cheerteam/ClubRecommend'
 
 
 const Index = () => {

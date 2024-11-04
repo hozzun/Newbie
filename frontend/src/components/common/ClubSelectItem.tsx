@@ -13,7 +13,7 @@ interface ClubSelectProps {
   logo: string;
   width?: string;
   isSelected: boolean;
-  onSelect: () => void;
+  onSelect?: () => void;
 }
 
 const ClubSelectItem = ({ logo, clubColor, width, isSelected, onSelect }: ClubSelectProps) => {

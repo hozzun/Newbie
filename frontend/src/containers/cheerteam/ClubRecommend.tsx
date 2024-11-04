@@ -1,5 +1,5 @@
 import { useState } from "react"
-import ClubRecommendComponent from "../../components/clubrecommend/ClubRecommend"
+import ClubRecommendComponent from "../../components/cheerteam/ClubRecommend"
 import questions from "../../util/ClubRecommendQuestion";
 
 const ClubRecommend = () => {

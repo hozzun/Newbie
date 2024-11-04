@@ -1,4 +1,4 @@
-import ClubRecommendContainer from "../../containers/clubrecommend/ClubRecommend";
+import ClubRecommendContainer from "../../containers/cheerteam/ClubRecommend";
 import SectionBox from "../../components/common/SectionBox";
 import Container from "../../components/common/Container";
 

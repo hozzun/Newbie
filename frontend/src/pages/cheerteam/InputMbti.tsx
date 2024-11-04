@@ -1,4 +1,4 @@
-import InputMbtiContainers from "../../containers/clubrecommend/InputMbti";
+import InputMbtiContainers from "../../containers/cheerteam/InputMbti";
 import Container from "../../components/common/Container";
 import SectionBox from "../../components/common/SectionBox";
 
