@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 public class SwaggerConfig {
 
 
-    @Value("{server.domain}")
+    @Value("${server.domain}")
     private String domain;
 
     @Bean
