@@ -5,6 +5,8 @@ import com.newbie.baseball.domain.team.service.TeamService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,13 +24,15 @@ public class TeamController {
 
     @Operation(summary = "전체 팀 조회")
     @GetMapping
-    public List<TeamResponseDto> getAllTeams() {
-        return teamService.getAllTeams();
+    public ResponseEntity<List<TeamResponseDto>> getAllTeams() {
+        List<TeamResponseDto> teams = teamService.getAllTeams();
+        return new ResponseEntity<>(teams, HttpStatus.OK);
     }
 
     @Operation(summary = "teamID로 팀 조회")
     @GetMapping("/{teamId}")
-    public TeamResponseDto getTeamById(@PathVariable("teamId") Integer teamId) {
-        return teamService.getTeamById(teamId);
+    public ResponseEntity<TeamResponseDto> getTeamById(@PathVariable("teamId") Integer teamId) {
+        TeamResponseDto team = teamService.getTeamById(teamId);
+        return new ResponseEntity<>(team, HttpStatus.OK);
     }
 }

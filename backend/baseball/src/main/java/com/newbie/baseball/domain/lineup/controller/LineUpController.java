@@ -5,6 +5,8 @@ import com.newbie.baseball.domain.lineup.service.LineUpService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,7 +24,8 @@ public class LineUpController {
 
     @Operation(summary = "gameId로 해당 게임 라인업 조회")
     @GetMapping("/{gameId}")
-    public List<LineUpResponseDto> getLineUp(@PathVariable Integer gameId) {
-        return lineUpService.getLineUpByGameId(gameId);
+    public ResponseEntity<List<LineUpResponseDto>> getLineUp(@PathVariable Integer gameId) {
+        List<LineUpResponseDto> lineUps = lineUpService.getLineUpByGameId(gameId);
+        return new ResponseEntity<>(lineUps, HttpStatus.OK);
     }
 }

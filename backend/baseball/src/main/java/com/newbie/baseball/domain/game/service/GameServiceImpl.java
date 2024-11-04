@@ -5,6 +5,7 @@ import com.newbie.baseball.domain.game.entity.Game;
 import com.newbie.baseball.domain.game.exception.GameNotFoundException;
 import com.newbie.baseball.domain.game.repository.GameRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,6 +24,7 @@ public class GameServiceImpl implements GameService {
         return convertToDto(game);
     }
 
+    @Cacheable(value = "gamesByYearAndMonth", key = "#yearMonth")
     @Override
     public List<GameResponseDto> getGameByYearAndMonth(String yearMonth) {
         List<Game> games = gameRepository.findByDateStartingWith(yearMonth);
