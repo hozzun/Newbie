@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 interface ClubSelectProps {
   clubColor:
     | "doosan"
@@ -14,11 +12,11 @@ interface ClubSelectProps {
     | "ssg";
   logo: string;
   width?: string;
+  isSelected: boolean;
+  onSelect: () => void;
 }
 
-const ClubSelectItem = ({ logo, clubColor, width }: ClubSelectProps) => {
-  const [isSelected, setIsSelected] = useState(false);
-
+const ClubSelectItem = ({ logo, clubColor, width, isSelected, onSelect }: ClubSelectProps) => {
   const bgColorClass = {
     doosan: "bg-club-doosan",
     hanhwa: "bg-club-hanhwa",
@@ -32,16 +30,12 @@ const ClubSelectItem = ({ logo, clubColor, width }: ClubSelectProps) => {
     ssg: "bg-club-ssg",
   };
 
-  const handleButtonClick = () => {
-    setIsSelected(!isSelected);
-  };
-
   return (
     <div
       className={`flex box-border hover:box-content py-2 content-center justify-center rounded-lg ${
         isSelected ? bgColorClass[clubColor] : "bg-white"
       } transition-colors duration-300 shadow ${width}`}
-      onClick={handleButtonClick}
+      onClick={onSelect} // 클릭 시 부모의 onSelect 호출
     >
       <div className="justify-center content-center">
         <img src={logo} alt={`${clubColor} logo`} className="w-16 h-16" />
