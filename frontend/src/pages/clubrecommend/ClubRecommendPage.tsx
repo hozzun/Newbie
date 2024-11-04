@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import ClubRecommend from "../../containers/clubrecommend/ClubRecommend";
 
+
 function ClubRecommendPage() {
 
   const [page, setPage] = useState(1);
