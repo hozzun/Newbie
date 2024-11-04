@@ -1,4 +1,4 @@
-import InputMbtiComponents from "../../components/clubrecommend/InputMbti";
+import InputMbtiComponents from "../../components/cheerteam/InputMbti";
 
 const InputMbti = () => {
 
