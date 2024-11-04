@@ -1,4 +1,5 @@
 interface ClubSelectProps {
+  className?: string;
   clubColor:
     | "doosan"
     | "hanhwa"
