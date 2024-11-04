@@ -4,6 +4,7 @@ export enum BUTTON_VARIANTS {
   error = "py-4 bg-error-400 text-white rounded-lg hover:bg-error-500",
   primaryText = "py-4 text-green-900 rounded-lg hover:bg-green-50",
   white = "py-1 text-white border border-white rounded-2xl hover:bg-white/10",
+  primaryWhite = "py-4 text-green-900 rounded-lg"
 }
 
 export enum CIRCLE_BUTTON_VARIANTS {
