@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { BUTTON_VARIANTS } from "../../components/common/variants";
 import Button from "../../components/common/Button";
-import SectionBox from "../../components/common/SectionBox";
 import { Subway } from "../../util/ClubRecommendQuestion";
 
 interface ClubRecommendProps {
