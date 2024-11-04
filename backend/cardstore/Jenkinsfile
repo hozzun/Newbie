@@ -51,7 +51,7 @@ pipeline {
             steps {
                 dir("backend/cardstore") {
                     sh "chmod +x ./gradlew"
-                    sh "./gradlew clean build --no-daemon -Dspring.profiles.active=prod"
+                    sh "./gradlew clean build --no-daemon -Pprod=true"
                 }
             }
             post {
