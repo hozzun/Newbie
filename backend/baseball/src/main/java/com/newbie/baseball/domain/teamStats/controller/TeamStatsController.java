@@ -6,6 +6,8 @@ import com.newbie.baseball.domain.teamStats.service.TeamStatsService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,25 +25,29 @@ public class TeamStatsController {
 
     @Operation(summary = "전체 팀 타자 성적 조회")
     @GetMapping("/hitter")
-    public List<TeamHitterStatsResponseDto> teamHitterStats() {
-        return teamStatsService.getAllTeamHitterStats();
+    public ResponseEntity<List<TeamHitterStatsResponseDto>> teamHitterStats() {
+        List<TeamHitterStatsResponseDto> teamStats = teamStatsService.getAllTeamHitterStats();
+        return new ResponseEntity<>(teamStats, HttpStatus.OK);
     }
 
     @Operation(summary = "teamId로 해당 팀 타자(전체) 성적 조회")
     @GetMapping("/hitter/{teamId}")
-    public TeamHitterStatsResponseDto getTeamHitterStats(@PathVariable Integer teamId) {
-        return teamStatsService.getTeamHitterStatsByTeamId(teamId);
+    public ResponseEntity<TeamHitterStatsResponseDto> getTeamHitterStats(@PathVariable("teamId") Integer teamId) {
+        TeamHitterStatsResponseDto teamStat = teamStatsService.getTeamHitterStatsByTeamId(teamId);
+        return new ResponseEntity<>(teamStat, HttpStatus.OK);
     }
 
     @Operation(summary = "전체 팀 투수 성적 조회")
     @GetMapping("/pitcher")
-    public List<TeamPitcherStatsResponseDto> getTeamPitcherStats() {
-        return teamStatsService.getAllTeamPitcherStats();
+    public ResponseEntity<List<TeamPitcherStatsResponseDto>> getTeamPitcherStats() {
+        List<TeamPitcherStatsResponseDto> teamStats = teamStatsService.getAllTeamPitcherStats();
+        return new ResponseEntity<>(teamStats, HttpStatus.OK);
     }
 
     @Operation(summary = "teamId로 해당 팀 투수(전체) 성적 조회")
     @GetMapping("/pitcher/{teamId}")
-    public TeamPitcherStatsResponseDto getTeamPitcherStats(@PathVariable Integer teamId) {
-        return teamStatsService.getTeamPitcherStatsByTeamId(teamId);
+    public ResponseEntity<TeamPitcherStatsResponseDto> getTeamPitcherStats(@PathVariable("teamId") Integer teamId) {
+        TeamPitcherStatsResponseDto teamStat = teamStatsService.getTeamPitcherStatsByTeamId(teamId);
+        return new ResponseEntity<>(teamStat, HttpStatus.OK);
     }
 }

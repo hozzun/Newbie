@@ -27,7 +27,7 @@ public class SwaggerConfig {
 
         // HTTPS Server 추가
         Server server1 = new Server()
-                .url("https://j11b304.p.ssafy.io/api/v1")
+                .url("https://k11b304.p.ssafy.io/api/v1")
                 .description("newbie");
         Server server2 = new Server()
                 .url("http://localhost:8080/api/v1")

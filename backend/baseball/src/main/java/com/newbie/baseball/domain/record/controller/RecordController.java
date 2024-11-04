@@ -5,6 +5,8 @@ import com.newbie.baseball.domain.record.service.RecordService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +22,8 @@ public class RecordController {
 
     @Operation(summary = "gameId로 경기결과 조회")
     @GetMapping("/{gameId}")
-    public RecordResponseDto getRecord(@PathVariable Integer gameId) {
-        return recordService.getRecordByGameId(gameId);
+    public ResponseEntity<RecordResponseDto> getRecord(@PathVariable("gameId") Integer gameId) {
+        RecordResponseDto record = recordService.getRecordByGameId(gameId);
+        return new ResponseEntity<>(record, HttpStatus.OK);
     }
 }

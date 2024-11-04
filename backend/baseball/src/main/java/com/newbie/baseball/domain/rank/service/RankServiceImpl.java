@@ -38,6 +38,24 @@ public class RankServiceImpl implements RankService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public List<RankResponseDto> getRanksByTeamId(Integer teamId) {
+        List<Rank> ranks = rankRepository.findByTeamId(teamId);
+        if (ranks.isEmpty()) {
+            throw new RankNotFoundException();
+        }
+        return ranks.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public RankResponseDto getRankByYearAndTeamId(String year, Integer teamId) {
+        Rank rank = rankRepository.findByYearAndTeamId(year, teamId)
+                .orElseThrow(RankNotFoundException::new);
+        return convertToDto(rank);
+    }
+
     private RankResponseDto convertToDto(Rank rank) {
         return RankResponseDto.builder()
                 .id(rank.getId())
