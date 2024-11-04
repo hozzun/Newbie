@@ -1,6 +1,6 @@
-package com.newbie.cardstore.card.repository;
+package com.newbie.cardstore.storecard.repository;
 
-import com.newbie.cardstore.card.entity.PlayerCard;
+import com.newbie.cardstore.storecard.entity.PlayerCard;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;

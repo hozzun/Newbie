@@ -1,4 +1,4 @@
-package com.newbie.cardstore.card.dto;
+package com.newbie.cardstore.storecard.dto;
 
 import lombok.Builder;
 import lombok.Data;
