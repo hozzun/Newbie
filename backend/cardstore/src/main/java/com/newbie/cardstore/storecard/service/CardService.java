@@ -1,8 +1,8 @@
-package com.newbie.cardstore.card.service;
+package com.newbie.cardstore.storecard.service;
 
-import com.newbie.cardstore.card.dto.PlayerCardDto;
-import com.newbie.cardstore.card.entity.PlayerCard;
-import com.newbie.cardstore.card.repository.PlayerCardRepository;
+import com.newbie.cardstore.storecard.dto.PlayerCardDto;
+import com.newbie.cardstore.storecard.entity.PlayerCard;
+import com.newbie.cardstore.storecard.repository.PlayerCardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -54,5 +54,4 @@ public class CardService {
                 .createdAt(playerCard.getCreatedAt())
                 .build();
     }
-
 }
