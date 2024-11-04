@@ -26,9 +26,9 @@ public class TeamController {
         return teamService.getAllTeams();
     }
 
-    @Operation(summary = "ID로 팀 조회")
-    @GetMapping("/{id}")
-    public TeamResponseDto getTeamById(@PathVariable Integer id) {
-        return teamService.getTeamById(id);
+    @Operation(summary = "teamID로 팀 조회")
+    @GetMapping("/{teamId}")
+    public TeamResponseDto getTeamById(@PathVariable("teamId") Integer teamId) {
+        return teamService.getTeamById(teamId);
     }
 }

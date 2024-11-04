@@ -27,8 +27,20 @@ public class RankController {
     }
 
     @Operation(summary = "년도로 순위 및 성적 조회")
-    @GetMapping("/{year}")
+    @GetMapping("/year/{year}")
     public List<RankResponseDto> getRanksByYear(@PathVariable("year") String year) {
         return rankService.getRanksByYear(year);
+    }
+
+    @Operation(summary = "teamId로 해당 팀 순위 및 성적 조회 (2021년 ~ 2024년)")
+    @GetMapping("/team/{teamId}")
+    public List<RankResponseDto> getRanksByTeamId(@PathVariable("teamId") Integer teamId) {
+        return rankService.getRanksByTeamId(teamId);
+    }
+
+    @Operation(summary = "year와 teamId로 년도 해당 팀 순위 및 성적 조회")
+    @GetMapping("/{year}/{teamId}")
+    public RankResponseDto getRankByYearAndTeamId(@PathVariable("year") String year, @PathVariable("teamId") Integer teamId) {
+        return rankService.getRankByYearAndTeamId(year, teamId);
     }
 }

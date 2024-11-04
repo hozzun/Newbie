@@ -20,10 +20,10 @@ public class GameController {
 
     private final GameService gameService;
 
-    @Operation(summary = "ID로 경기조회")
-    @GetMapping("/{id}")
-    public GameResponseDto getGameById(@PathVariable Integer id) {
-        return gameService.getGameById(id);
+    @Operation(summary = "gameID로 경기조회")
+    @GetMapping("/{gameId}")
+    public GameResponseDto getGameById(@PathVariable Integer gameId) {
+        return gameService.getGameById(gameId);
     }
 
     @Operation(summary = "날짜(년-월)로 월별 경기목록 조회 (ex. 2024-09)")

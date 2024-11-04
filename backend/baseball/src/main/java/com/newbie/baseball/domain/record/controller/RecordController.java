@@ -20,7 +20,7 @@ public class RecordController {
 
     @Operation(summary = "gameId로 경기결과 조회")
     @GetMapping("/{gameId}")
-    public RecordResponseDto getRecord(@PathVariable Integer gameId) {
+    public RecordResponseDto getRecord(@PathVariable("gameId") Integer gameId) {
         return recordService.getRecordByGameId(gameId);
     }
 }

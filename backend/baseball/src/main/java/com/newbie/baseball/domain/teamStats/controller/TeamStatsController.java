@@ -29,7 +29,7 @@ public class TeamStatsController {
 
     @Operation(summary = "teamId로 해당 팀 타자(전체) 성적 조회")
     @GetMapping("/hitter/{teamId}")
-    public TeamHitterStatsResponseDto getTeamHitterStats(@PathVariable Integer teamId) {
+    public TeamHitterStatsResponseDto getTeamHitterStats(@PathVariable("teamId") Integer teamId) {
         return teamStatsService.getTeamHitterStatsByTeamId(teamId);
     }
 
@@ -41,7 +41,7 @@ public class TeamStatsController {
 
     @Operation(summary = "teamId로 해당 팀 투수(전체) 성적 조회")
     @GetMapping("/pitcher/{teamId}")
-    public TeamPitcherStatsResponseDto getTeamPitcherStats(@PathVariable Integer teamId) {
+    public TeamPitcherStatsResponseDto getTeamPitcherStats(@PathVariable("teamId") Integer teamId) {
         return teamStatsService.getTeamPitcherStatsByTeamId(teamId);
     }
 }
