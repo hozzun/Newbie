@@ -33,8 +33,14 @@ public class PurchaseService {
     @Value("${rabbitmq.routing.key}")
     private String routingKey;
 
+    @Value("${mileage.server.domain}")
+    private String milesServerName;
+
+    @Value("${server.path}")
+    private String mileageServerPath;
+
     public boolean checkMileage(int userId, double price) {
-        String url = "http://localhost:8081/check-mileage?userId=" + userId + "&price=" + price;
+        String url = milesServerName + mileageServerPath + "/check-mileage?userId=" + userId + "&price=" + price;
         log.info("Sending request to check mileage for userId: {}, price: {}", userId, price);
 
         ResponseEntity<Boolean> response = restTemplate.getForEntity(url, Boolean.class);
@@ -48,7 +54,7 @@ public class PurchaseService {
         }
     }
 
-    public UserCard purchaseCard(PurchaseDto purchaseDto) {
+    public void purchaseCard(PurchaseDto purchaseDto) {
         log.info("Starting purchaseCard with PurchaseDto: {}", purchaseDto);
 
         ObjectId cardObjectId;
@@ -81,7 +87,6 @@ public class PurchaseService {
                 UserCard savedUserCard = userCardRepository.save(userCard);
                 log.info("UserCard saved successfully: {}", savedUserCard);
 
-                return savedUserCard;
             } else {
                 log.error("Failed to send mileage deduction request for userId: {}", purchaseDto.getUserId());
                 throw new CustomException(ErrorCode.MILEAGE_CHECK_FAILED);
