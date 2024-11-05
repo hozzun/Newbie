@@ -1,7 +1,7 @@
 interface ClubSelectProps {
   clubColor:
     | "doosan"
-    | "hanhwa"
+    | "hanwha"
     | "kia"
     | "kiwoom"
     | "kt"
@@ -19,7 +19,7 @@ interface ClubSelectProps {
 const ClubSelectItem = ({ logo, clubColor, width, isSelected, onSelect }: ClubSelectProps) => {
   const bgColorClass = {
     doosan: "bg-club-doosan",
-    hanhwa: "bg-club-hanhwa",
+    hanwha: "bg-club-hanhwa",
     kia: "bg-club-kia",
     kiwoom: "bg-club-kiwoom",
     kt: "bg-club-kt",

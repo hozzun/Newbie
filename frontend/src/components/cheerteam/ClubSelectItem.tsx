@@ -184,9 +184,9 @@ const ClubSelectItem = () => {
         onSelect={handleSelectDoosan}
       />
       <ClubSelectItemCommon
-        clubColor="hanhwa"
+        clubColor="hanwha"
         width="w-2/5"
-        logo={ClubLogos.hanhwa}
+        logo={ClubLogos.hanwha}
         isSelected={selectedHanwha}
         onSelect={handleSelectHanwha}
       />

@@ -1,10 +1,10 @@
-import ClubRecommend from './pages/cheerteam/ClubRecommend';
+import RecommendResult from "./pages/cheerteam/RecommendResult";
 
 function App() {
   return (
     <>
       {/* <p className="text-green-900 font-kbogothicbold">Hello World</p> */}
-      <ClubRecommend />
+      <RecommendResult />
     </>
   );
 }
