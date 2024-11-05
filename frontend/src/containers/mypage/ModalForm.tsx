@@ -1,20 +1,20 @@
 import ModalFormComponent from "../../components/mypage/ModalForm"
+import ModalImage from "../../components/mypage/ModalImage";
+import ModalInput from "../../components/mypage/ModalInput";
 import Button from "../../components/common/Button";
+import ticket from "../../assets/images/직관경기티켓.jpg"
 import { BUTTON_VARIANTS } from "../../components/common/variants";
 
-interface ModalFormProps {
-  date: string;
-  team1: string;
-  team2: string;
-  isOpen: boolean; // 모달 열림 상태
-}
 
-const ModalForm = (props: ModalFormProps) => {
+const ModalForm = () => {
 
   return (
-    <div className="flex flex-col justify-center items-center w-full h-3/4 bg-gray-100">
-      <ModalFormComponent date={props.date} team1={props.team1} team2={props.team2} isOpen={true} />
-      <Button className="w-4/5" variant={BUTTON_VARIANTS.primary} children="저장하기" />
+    <div className="flex flex-col rounded-t-2xl justify-center items-center w-full h-3/4 bg-gray-100">
+      <ModalFormComponent date="2024.08.03" team1="키움 히어로즈" team2="두산 베어스" isOpen={true} />
+      <ModalImage imageUrl={ticket} />
+      <ModalInput />
+      <Button className="w-4/5 mb-4" variant={BUTTON_VARIANTS.primary} children="저장하기" />
+      <Button className="w-4/5 mb-10" variant={BUTTON_VARIANTS.second} children="다시찍기" />
     </div>
   )
 }

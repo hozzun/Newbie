@@ -11,7 +11,9 @@ const ModalForm = (props: ModalFormProps) => {
   return (
     <div className="flex flex-col items-center justify-center font-kbogothicbold mt-10 mb-5">
       <label className="mb-4">{props.date}</label>
-      <label className="text-xl font-bold mb-4 text-2xl">{props.team1} VS {props.team2}</label>
+      <label className="text-xl mb-4 text-2xl">
+        {props.team1} VS {props.team2}
+      </label>
     </div>
   );
 };
