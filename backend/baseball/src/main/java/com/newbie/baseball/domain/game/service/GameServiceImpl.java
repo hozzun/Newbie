@@ -47,6 +47,17 @@ public class GameServiceImpl implements GameService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public List<GameResponseDto> getGameByDateAndTeamId(String date, Integer teamId) {
+        List<Game> games = gameRepository.findByDateAndHomeTeamIdOrDateAndAwayTeamId(date, teamId, date, teamId);
+        if (games.isEmpty()) {
+            throw new GameNotFoundException();
+        }
+        return games.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
     private GameResponseDto convertToDto(Game game) {
         return GameResponseDto.builder()
                 .id(game.getId())
