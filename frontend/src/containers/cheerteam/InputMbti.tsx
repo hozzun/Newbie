@@ -1,15 +1,14 @@
 import InputMbtiComponents from "../../components/cheerteam/InputMbti";
 
-const InputMbti = () => {
+interface InputMbtiProps {
+  onClick: () => void
+}
 
-  const goToNextPage = () => {
-    console.log('다음')
-    // TODO: ClubRecommend.tsx 페이지로 이동
-  };
+const InputMbti = (props: InputMbtiProps) => {
 
   return (
     <>
-      <InputMbtiComponents onOkClick={goToNextPage} />
+      <InputMbtiComponents onOkClick={props.onClick} />
     </>
   );
 }
