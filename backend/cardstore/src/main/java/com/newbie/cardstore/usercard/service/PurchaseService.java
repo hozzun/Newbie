@@ -33,7 +33,7 @@ public class PurchaseService {
     @Value("${rabbitmq.routing.key}")
     private String routingKey;
 
-    @Value("${server.name}")
+    @Value("${mileage.server.name}")
     private String milesServerName;
 
     @Value("${server.path}")
