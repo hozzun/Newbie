@@ -5,25 +5,44 @@ import { BUTTON_VARIANTS } from "../common/variants";
 
 interface SignupProps {
   buttonVariant: BUTTON_VARIANTS;
+  onNameChange: (name: string) => void;
+  onSelectionChange: (si: string, gun: string) => void;
+  onButtonClick: () => void;
+  signUpPath: string;
 }
 
-const Signup = ({ buttonVariant }: SignupProps) => {
+const Signup = ({
+  buttonVariant,
+  onNameChange,
+  onSelectionChange,
+  onButtonClick,
+  signUpPath,
+}: SignupProps) => {
   return (
     <div>
       <div>
-        <p className="font-kbogothicmedium m-3">닉네임</p>
-        <TextField />
+        <TextField label="닉네임" onNameChange={onNameChange} />
       </div>
 
       <div>
-        <p className="font-kbogothicmedium m-3">주소</p>
-        <SelectBox />
+        <SelectBox label="주소" onSelectionChange={onSelectionChange} />
       </div>
 
       <div className="mx-auto mt-8 w-full px-3">
-        <Button variant={buttonVariant} className="w-full">
+        <Button
+          variant={buttonVariant}
+          className="w-full"
+          onClick={buttonVariant === BUTTON_VARIANTS.primary ? onButtonClick : undefined}
+          disabled={buttonVariant !== BUTTON_VARIANTS.primary}
+        >
           회원가입
         </Button>
+        <p className="font-kbogothiclight mb-4">
+          이미 계정이 있으신가요?
+          <a href={signUpPath} className="text-green-900">
+            로그인
+          </a>
+        </p>
       </div>
     </div>
   );
