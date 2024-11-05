@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from "r
 import { useEffect } from "react";
 
 import Login from "./pages/auth/Login";
+import Signup from "./pages/auth/Signup";
 import Redirect from "./pages/auth/Redirect";
 import Home from "./pages/home/Home";
 
@@ -37,6 +38,14 @@ const AppRouter = () => {
           element={
             <AuthRoute>
               <Login />
+            </AuthRoute>
+          }
+        />
+        <Route
+          path="/signup"
+          element={
+            <AuthRoute>
+              <Signup />
             </AuthRoute>
           }
         />

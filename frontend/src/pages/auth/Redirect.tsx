@@ -36,10 +36,10 @@ const Redirect = () => {
 
         if (response.status === 200) {
           console.log("200 응답 수신: 회원가입으로 이동");
-          sessionStorage.setItem("token", response.data.token);
           nav("/auth/signup");
         } else if (response.status === 303) {
           console.log("303 응답 수신: 홈으로 이동");
+          sessionStorage.setItem("token", response.data.token);
           nav("/");
         } else {
           console.error("예상치 못한 응답 상태 코드:", response.status);
