@@ -1,10 +1,10 @@
-import WatchGame from './pages/mypage/WatchGame'
+import ClubRecommend from './pages/cheerteam/ClubRecommend';
 
 function App() {
   return (
     <>
       {/* <p className="text-green-900 font-kbogothicbold">Hello World</p> */}
-      <WatchGame />
+      <ClubRecommend />
     </>
   );
 }

@@ -21,7 +21,7 @@ function ClubRecommend(props: ClubRecommendProps) {
     setSecondButtonVariant(BUTTON_VARIANTS.second); // 두 번째 버튼은 second로 유지
     setOkButtonVariant(BUTTON_VARIANTS.primary);
     setIsOkButtonDisabled(false);
-    setSelectedChoice(1)
+    setSelectedChoice(0)
   };
 
   // 두 번째 선택지 클릭
@@ -30,7 +30,7 @@ function ClubRecommend(props: ClubRecommendProps) {
     setSecondButtonVariant(BUTTON_VARIANTS.primary); // 두 번째 버튼을 primary로 변경
     setOkButtonVariant(BUTTON_VARIANTS.primary);
     setIsOkButtonDisabled(false);
-    setSelectedChoice(2)
+    setSelectedChoice(1)
   };
 
   const handleOkButtonClick = () => {
