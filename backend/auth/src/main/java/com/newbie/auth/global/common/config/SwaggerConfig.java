@@ -6,6 +6,7 @@ import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.servers.Server;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -13,6 +14,12 @@ import java.util.List;
 
 @Configuration
 public class SwaggerConfig {
+
+    @Value("${server.domain}")
+    private String serverUrl;
+
+    @Value("${local.domain}")
+    private String localUrl;
 
     @Bean
     public OpenAPI openAPI() {
@@ -26,10 +33,10 @@ public class SwaggerConfig {
         );
         // HTTPS Server 추가
         Server server1 = new Server()
-                .url("https://k11b304.p.ssafy.io/api") // HTTPS 서버 URL
+                .url(serverUrl)
                 .description("server_login"); // 서버 설명
         Server server2 = new Server()
-                .url("http://localhost:8080/api") // HTTPS 서버 URL
+                .url(localUrl)
                 .description("local_login"); // 서버 설명
         return new OpenAPI()
                 .components(new Components())
