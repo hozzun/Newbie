@@ -18,9 +18,6 @@ public class SwaggerConfig {
     @Value("${server.domain}")
     private String serverUrl;
 
-    @Value("${local.domain}")
-    private String localUrl;
-
     @Bean
     public OpenAPI openAPI() {
         String jwt = "JWT";
@@ -34,16 +31,13 @@ public class SwaggerConfig {
         // HTTPS Server 추가
         Server server1 = new Server()
                 .url(serverUrl)
-                .description("server_login"); // 서버 설명
-        Server server2 = new Server()
-                .url(localUrl)
-                .description("local_login"); // 서버 설명
+                .description("NEWBIE"); // 서버 설명
         return new OpenAPI()
                 .components(new Components())
                 .info(apiInfo())
                 .addSecurityItem(securityRequirement)
                 .components(components)
-                .servers(List.of(server1,server2)); // 서버 리스트에 HTTPS 서버 추가
+                .servers(List.of(server1)); // 서버 리스트에 HTTPS 서버 추가
     }
 
     private Info apiInfo() {
