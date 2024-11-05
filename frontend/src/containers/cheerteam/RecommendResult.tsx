@@ -1,7 +1,12 @@
 import RecommendResultComponent from "../../components/cheerteam/RecommendResult"
 import ResultButton from "../../components/cheerteam/ResultButton"
 
-const RecommendResult = () => {
+interface RecommendResultProps {
+  club: string;
+  name: string;
+}
+
+const RecommendResult = (props: RecommendResultProps) => {
 
   const onCheerClick = () => {
     console.log('응원 구단 업데이트')
@@ -15,7 +20,7 @@ const RecommendResult = () => {
 
   return (
     <>
-      <RecommendResultComponent club="hanwha" name="김미량" />
+      <RecommendResultComponent club={props.club} name={props.name} />
       <ResultButton onCheerClick={onCheerClick} onReClick={onReClick}/>
     </>
   )
