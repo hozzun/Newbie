@@ -8,6 +8,7 @@ import { BUTTON_VARIANTS } from "../../components/common/variants";
 interface ModalFormProps {
   imgURL: string;
   isOpen: boolean;
+  onClose: () => void; // 모달 닫기 함수
 }
 
 const ModalForm = (props: ModalFormProps) => {
@@ -19,30 +20,33 @@ const ModalForm = (props: ModalFormProps) => {
 
   const onReClick = () => {
     console.log("다시 찍기 버튼 클릭");
+    props.onClose();
   };
 
   return (
     <>
     <Container>
       <div
-        className="fixed bottom-0 left-0 right-0 flex flex-col items-center bg-gray-100 rounded-t-2xl w-full h-3/4 shadow-lg"
+        className="fixed bottom-0 left-0 right-0 flex flex-col items-center bg-gray-100 w-full h-full shadow-lg"
         style={{ zIndex: 50 }}
       >
           <ModalFormComponent date="2024.08.03" team1="키움 히어로즈" team2="두산 베어스" />
           <ModalImage imageUrl={props.imgURL} />
           <ModalInput />
-          <Button
-            className="w-3/4 mb-4 flex justify-center"
-            variant={BUTTON_VARIANTS.primary}
-            children="저장하기"
-            onClick={onSaveClick}
-          />
-          <Button
-            className="w-3/4 mb-10 flex justify-center"
-            variant={BUTTON_VARIANTS.second}
-            children="다시찍기"
-            onClick={onReClick}
-          />
+          <div className="flex flex-row mb-10">
+            <Button
+              className="w-1/2 mr-4 flex justify-center"
+              variant={BUTTON_VARIANTS.primary}
+              children="저장하기"
+              onClick={onSaveClick}
+            />
+            <Button
+              className="w-1/2 flex justify-center"
+              variant={BUTTON_VARIANTS.second}
+              children="다시찍기"
+              onClick={onReClick}
+            />
+          </div>
     </div>
     </Container>
     </>

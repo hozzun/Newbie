@@ -14,12 +14,16 @@ const CameraCapture = () => {
     setIsModalOpen(true);
   };
 
+  const closeModal = () => {
+    setIsModalOpen(false)
+  }
+
   return (
     <div>
       <Container>
         <CameraCaptureComponent onCapture={handleCapture} />
         <div>
-          <ModalForm imgURL={capturedImage} isOpen={isModalOpen} />
+          <ModalForm imgURL={capturedImage} isOpen={isModalOpen} onClose={closeModal} />
         </div>
       </Container>
     </div>
