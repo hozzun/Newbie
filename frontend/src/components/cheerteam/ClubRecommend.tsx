@@ -5,7 +5,7 @@ import { Subway } from "../../util/ClubRecommendQuestion";
 
 interface ClubRecommendProps {
   subway: Subway;
-  onOkClick: () => void;
+  onOkClick: (selectedChoice: number) => void;
 }
 
 function ClubRecommend(props: ClubRecommendProps) {
@@ -13,6 +13,7 @@ function ClubRecommend(props: ClubRecommendProps) {
   const [secondButtonVariant, setSecondButtonVariant] = useState(BUTTON_VARIANTS.second);
   const [okButtonVariant, setOkButtonVariant] = useState(BUTTON_VARIANTS.second);
   const [isOkButtonDisabled, setIsOkButtonDisabled] = useState(true);
+  const [selectedChoice, setSelectedChoice] = useState<number | null>(null);
 
   // 첫 번째 선택지 클릭
   const handleFirstButtonClick = () => {
@@ -20,6 +21,7 @@ function ClubRecommend(props: ClubRecommendProps) {
     setSecondButtonVariant(BUTTON_VARIANTS.second); // 두 번째 버튼은 second로 유지
     setOkButtonVariant(BUTTON_VARIANTS.primary);
     setIsOkButtonDisabled(false);
+    setSelectedChoice(1)
   };
 
   // 두 번째 선택지 클릭
@@ -28,15 +30,19 @@ function ClubRecommend(props: ClubRecommendProps) {
     setSecondButtonVariant(BUTTON_VARIANTS.primary); // 두 번째 버튼을 primary로 변경
     setOkButtonVariant(BUTTON_VARIANTS.primary);
     setIsOkButtonDisabled(false);
+    setSelectedChoice(2)
   };
 
   const handleOkButtonClick = () => {
+    if (selectedChoice !== null) {
+      props.onOkClick(selectedChoice);
+    }
     // 버튼 초기화
     setFirstButtonVariant(BUTTON_VARIANTS.second);
     setSecondButtonVariant(BUTTON_VARIANTS.second);
     setOkButtonVariant(BUTTON_VARIANTS.second);
     setIsOkButtonDisabled(false);
-    props.onOkClick();
+    setSelectedChoice(null);
   };
 
   return (
