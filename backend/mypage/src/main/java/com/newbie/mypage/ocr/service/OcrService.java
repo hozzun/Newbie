@@ -1,72 +1,94 @@
 package com.newbie.mypage.ocr.service;
 
+import com.newbie.mypage.util.MultipartFileResource;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.*;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class OcrService {
 
+    @Value("${naver.ocr.api.url}")
+    private String apiURL;
+
+    @Value("${naver.ocr.api.key}")
+    private String secretKey;
+
     private final RestTemplate restTemplate = new RestTemplate();
+    private final TicketParser ticketParser = new TicketParser();
 
-    @Value("${ocr.api.url}")
-    private String ocrApiUrl;
+    public Map<String, Object> callApiAndProcessTicket(MultipartFile image) throws IOException, java.text.ParseException, ParseException {
+        // OCR API 호출
+        List<String> extractedTexts = callApi(image);
 
-    @Value("${ocr.api.key}")
-    private String ocrApiKey;
+        // OCR 결과를 JSON 배열로 변환 후 티켓 정보 파싱
+        JSONArray jsonArray = new JSONArray();
+        jsonArray.addAll(extractedTexts);
+        return ticketParser.parseTicketInfo(jsonArray);
+    }
 
-    public List<String> checkImage(MultipartFile image) {
+    private List<String> callApi(MultipartFile image) throws IOException, ParseException {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+        headers.set("X-OCR-SECRET", secretKey);
 
-        try {
-            // 1. 헤더 설정
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_JSON);
-            headers.set("X-OCR-SECRET", ocrApiKey);
+        JSONObject messageJson = new JSONObject();
+        messageJson.put("version", "V1");
+        messageJson.put("requestId", UUID.randomUUID().toString());
+        messageJson.put("timestamp", System.currentTimeMillis());
 
-            // 2. 요청 본문 설정 (이미지 파일 포함)
-            Map<String, Object> requestBody = new HashMap<>();
-            requestBody.put("version", "V2");
-            requestBody.put("requestId", "sample-id"); // 요청 ID, 고유값으로 설정 가능
-            requestBody.put("timestamp", System.currentTimeMillis());
-            requestBody.put("images", Collections.singletonList(
-                    Map.of(
-                            "format", "jpg",
-                            "name", "sample_image",
-                            "data", encodeImageToBase64(image)
-                    )
-            ));
+        JSONObject imageObject = new JSONObject();
+        imageObject.put("format", "jpg");
+        imageObject.put("name", "hello");
 
-            HttpEntity<Map<String, Object>> requestEntity = new HttpEntity<>(requestBody, headers);
+        JSONArray imagesArray = new JSONArray();
+        imagesArray.add(imageObject);
+        messageJson.put("images", imagesArray);
 
-            // 3. OCR API 호출
-            ResponseEntity<Map> response = restTemplate.exchange(ocrApiUrl, HttpMethod.POST, requestEntity, Map.class);
+        MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+        body.add("message", messageJson.toJSONString());
+        body.add("file", new MultipartFileResource(image));
 
-            // 4. 응답 결과 처리
-            if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
-                return parseOcrResult(response.getBody());
-            } else {
-                throw new RuntimeException("OCR 요청 실패: " + response.getStatusCode());
-            }
-        } catch (Exception e) {
-            throw new RuntimeException("OCR API 호출 중 오류 발생", e);
+        HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
+
+        ResponseEntity<String> response = restTemplate.exchange(apiURL, HttpMethod.POST, requestEntity, String.class);
+        log.info("OCR API 호출 결과: {}", response.getBody());
+        if (response.getStatusCode() == HttpStatus.OK) {
+            return parseOcrResult(response.getBody());
+        } else {
+            throw new RuntimeException("OCR 요청 실패: " + response.getBody());
         }
     }
 
-    // Base64 인코딩을 위한 메서드
-    private String encodeImageToBase64(MultipartFile image) throws Exception {
-        return java.util.Base64.getEncoder().encodeToString(image.getBytes());
-    }
+    private List<String> parseOcrResult(String responseBody) throws ParseException {
+        List<String> resultTexts = new ArrayList<>();
+        JSONParser parser = new JSONParser();
+        JSONObject jsonResponse = (JSONObject) parser.parse(responseBody);
+        JSONArray imagesArray = (JSONArray) jsonResponse.get("images");
 
-    // OCR 응답 결과에서 텍스트 추출
-    private ArrayList<String> parseOcrResult(Map<String, Object> responseBody) {
-        // OCR 결과에서 텍스트를 추출하여 ArrayList<String>으로 반환 (구체적인 파싱은 API 응답 구조에 따라 다름)
-        // responseBody를 파싱하여 필요한 텍스트 데이터를 추출합니다.
-        return new ArrayList<>();
+        if (imagesArray != null && !imagesArray.isEmpty()) {
+            JSONObject firstImage = (JSONObject) imagesArray.get(0);
+            JSONArray fields = (JSONArray) firstImage.get("fields");
+            for (Object fieldObj : fields) {
+                JSONObject field = (JSONObject) fieldObj;
+                resultTexts.add((String) field.get("inferText"));
+            }
+        }
+        return resultTexts;
     }
 }
