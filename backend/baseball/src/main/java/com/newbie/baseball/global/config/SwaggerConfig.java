@@ -15,7 +15,7 @@ import java.util.List;
 @Configuration
 public class SwaggerConfig {
 
-    @Value("${server_url}")
+    @Value("${server.domain}")
     private String serverUrl;
 
     @Bean
