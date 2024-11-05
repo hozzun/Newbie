@@ -7,10 +7,10 @@ import ClubLogos from "../../util/ClubLogos";
 import { useState } from "react";
 
 const clubs: {
-  color: "doosan" | "hanhwa" | "kia" | "kiwoom" | "kt" | "lg" | "lotte" | "nc" | "samsung" | "ssg";
+  color: "doosan" | "hanwha" | "kia" | "kiwoom" | "kt" | "lg" | "lotte" | "nc" | "samsung" | "ssg";
 }[] = [
   { color: "doosan" },
-  { color: "hanhwa" },
+  { color: "hanwha" },
   { color: "kia" },
   { color: "kiwoom" },
   { color: "kt" },
