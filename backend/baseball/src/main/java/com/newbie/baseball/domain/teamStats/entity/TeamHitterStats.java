@@ -14,7 +14,7 @@ public class TeamHitterStats {
     @Column(name = "id")
     private Integer id;
 
-    @Column(name = "rank")
+    @Column(name = "`rank`")
     private Integer rank;
 
     @Column(name = "year", length = 10)
