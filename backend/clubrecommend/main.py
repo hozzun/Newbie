@@ -1,25 +1,12 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from recommend import recommend_team
-app = FastAPI()
-
-from fastapi.middleware.cors import CORSMiddleware
+from middleware import add_cors_middleware
 
 app = FastAPI()
 
-# CORS 미들웨어 추가
-origins = [
-    "http://localhost:5173",
-]
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,  # 허용할 출처
-    allow_credentials=True,
-    allow_methods=["*"],  # 허용할 HTTP 메서드
-    allow_headers=["*"],  # 허용할 헤더
-)
-
+# CORS 미들웨어 설정 적용
+add_cors_middleware(app)
 
 class UserData(BaseModel):
     mbti: str
