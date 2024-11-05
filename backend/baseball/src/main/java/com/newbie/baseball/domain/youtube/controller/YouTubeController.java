@@ -1,6 +1,5 @@
 package com.newbie.baseball.domain.youtube.controller;
 
-import com.newbie.baseball.domain.youtube.dto.res.YouTubeResponseDto;
 import com.newbie.baseball.domain.youtube.service.YouTubeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -29,7 +28,7 @@ public class YouTubeController {
     @Operation(summary = "playerName 으로 해당 선수 하이라이트 조회")
     @GetMapping("/highlights/player")
     public List<String> getPlayerHighlights(@RequestParam String playerName) {
-        String query = playerName + " 야구 하이라이트";
+        String query = playerName + " KBO 야구 하이라이트";
         return fetchHighlights(query);
     }
 
