@@ -4,7 +4,7 @@ import Button from "./Button";
 interface ClubChangeProps {
   clubColor:
     | "doosan"
-    | "hanhwa"
+    | "hanwha"
     | "kia"
     | "kiwoom"
     | "kt"
@@ -20,7 +20,7 @@ interface ClubChangeProps {
 const ClubChangeButton = ({ logo, clubColor, club }: ClubChangeProps) => {
   const bgColorClass = {
     doosan: "bg-club-doosan",
-    hanhwa: "bg-club-hanhwa",
+    hanwha: "bg-club-hanwha",
     kia: "bg-club-kia",
     kiwoom: "bg-club-kiwoom",
     kt: "bg-club-kt",
