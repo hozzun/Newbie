@@ -1,17 +1,14 @@
-import { useState } from 'react';
-import { BUTTON_VARIANTS } from '../../components/common/variants'
+import { useState } from "react";
+import { BUTTON_VARIANTS } from "../../components/common/variants";
 import Button from "../../components/common/Button";
-import SectionBox from "../../components/common/SectionBox";
+import { Subway } from "../../util/ClubRecommendQuestion";
 
 interface ClubRecommendProps {
-  question?: string;
-  select1?: string;
-  select2?: string;
+  subway: Subway;
   onOkClick: () => void;
 }
 
 function ClubRecommend(props: ClubRecommendProps) {
-
   const [firstButtonVariant, setFirstButtonVariant] = useState(BUTTON_VARIANTS.second);
   const [secondButtonVariant, setSecondButtonVariant] = useState(BUTTON_VARIANTS.second);
   const [okButtonVariant, setOkButtonVariant] = useState(BUTTON_VARIANTS.second);
@@ -39,19 +36,34 @@ function ClubRecommend(props: ClubRecommendProps) {
     setSecondButtonVariant(BUTTON_VARIANTS.second);
     setOkButtonVariant(BUTTON_VARIANTS.second);
     setIsOkButtonDisabled(false);
-    props.onOkClick()
+    props.onOkClick();
   };
 
   return (
     <>
-      <SectionBox label="구단 추천" />
       <label className="flex justify-center items-center font-kbogothicbold w-full text-2xl mt-10 mb-10">
-        {props.question}
+        {props.subway.question}
       </label>
       <div className="flex flex-col justify-center items-center">
-        <Button className="w-80 h-14 m-3" variant={firstButtonVariant} children={props.select1} onClick={handleFirstButtonClick} />
-        <Button className="w-80 h-14 m-3" variant={secondButtonVariant} children={props.select2} onClick={handleSecondButtonClick} />
-        <Button className="flex justify-center items-center w-40 h-10 fixed bottom-10" variant={okButtonVariant} children="확인" onClick={handleOkButtonClick} disabled={isOkButtonDisabled} />
+        <Button
+          className="w-80 h-14 m-3"
+          variant={firstButtonVariant}
+          children={props.subway.select1}
+          onClick={handleFirstButtonClick}
+        />
+        <Button
+          className="w-80 h-14 m-3"
+          variant={secondButtonVariant}
+          children={props.subway.select2}
+          onClick={handleSecondButtonClick}
+        />
+        <Button
+          className="flex justify-center items-center w-40 h-10 fixed bottom-10"
+          variant={okButtonVariant}
+          children="확인"
+          onClick={handleOkButtonClick}
+          disabled={isOkButtonDisabled}
+        />
       </div>
     </>
   );

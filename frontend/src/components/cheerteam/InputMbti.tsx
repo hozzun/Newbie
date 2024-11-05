@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { BUTTON_VARIANTS } from '../../components/common/variants'
 import Button from "../../components/common/Button";
-import SectionBox from "../../components/common/SectionBox";
 
 interface InputMbtiProps {
   onOkClick: () => void;
@@ -29,7 +28,6 @@ function InputMbti(props: InputMbtiProps) {
 
   return (
     <>
-      <SectionBox label="구단 추천" />
       <div className="flex justify-center items-center">
         <div className="flex-col">
           <div className="flex-row mt-10 mb-10">

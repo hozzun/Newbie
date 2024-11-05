@@ -13,7 +13,7 @@ interface ClubSelectProps {
   logo: string;
   width?: string;
   isSelected: boolean;
-  onSelect: () => void;
+  onSelect?: () => void;
 }
 
 const ClubSelectItem = ({ logo, clubColor, width, isSelected, onSelect }: ClubSelectProps) => {
@@ -33,7 +33,7 @@ const ClubSelectItem = ({ logo, clubColor, width, isSelected, onSelect }: ClubSe
   return (
     <div
       className={`flex box-border hover:box-content py-2 content-center justify-center rounded-lg ${
-        isSelected ? bgColorClass[clubColor] : "bg-white"
+        isSelected ? bgColorClass[clubColor] : "bg-gray-100"
       } transition-colors duration-300 shadow ${width}`}
       onClick={onSelect} // 클릭 시 부모의 onSelect 호출
     >
