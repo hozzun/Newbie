@@ -1,4 +1,4 @@
-package com.newbie.mypage.ocr.service;
+package com.newbie.mypage.watch_game.service;
 
 import org.json.simple.JSONArray;
 import java.text.ParseException;
@@ -23,7 +23,6 @@ public class TicketParser {
             Map.entry("DOOSAN", "두산 베어스")
     );
 
-    // 영문명 원본과 표기된 형태를 매핑
     private static final Map<String, String> teamEnglishNameMap = Map.ofEntries(
             Map.entry("K", "kiwoom"),
             Map.entry("KIWOOM", "kiwoom"),
@@ -54,9 +53,16 @@ public class TicketParser {
 
             // 구단명 추출
             if (teamMapping.containsKey(text)) {
-                teamEnglishList.add(teamEnglishNameMap.get(text)); // 영문명을 소문자로 변환하여 추가
+                teamEnglishList.add(teamEnglishNameMap.get(text));
                 teamKoreanList.add(teamMapping.get(text));
             }
+        }
+
+        if (ticketDate == null) {
+            throw new IllegalArgumentException("날짜 정보가 누락되었습니다.");
+        }
+        if (teamEnglishList.size() < 2 || teamKoreanList.size() < 2) {
+            throw new IllegalArgumentException("팀 이름 정보가 누락되었거나 부족합니다.");
         }
 
         Map<String, Object> response = new HashMap<>();

@@ -1,5 +1,6 @@
-package com.newbie.mypage.ocr.service;
+package com.newbie.mypage.watch_game.service;
 
+import com.newbie.mypage.s3.S3Service;
 import com.newbie.mypage.util.MultipartFileResource;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -10,13 +11,17 @@ import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -31,15 +36,42 @@ public class OcrService {
 
     private final RestTemplate restTemplate = new RestTemplate();
     private final TicketParser ticketParser = new TicketParser();
+    private final S3Service s3Service;
 
-    public Map<String, Object> callApiAndProcessTicket(MultipartFile image) throws IOException, java.text.ParseException, ParseException {
-        // OCR API 호출
+
+    /**
+     * 티켓을 받아 OCR 분석 후, 사용자 정보 저장 및 OCR 해석 결과 반환
+     * @param image
+     * @param userId
+     * @return
+     * @throws IOException
+     * @throws java.text.ParseException
+     * @throws ParseException
+     */
+    @Transactional
+    public Map<String, Object> processAndSaveTicket(MultipartFile image, int userId) throws IOException, java.text.ParseException, ParseException {
+        // OCR API 호출 및 결과 처리
         List<String> extractedTexts = callApi(image);
 
         // OCR 결과를 JSON 배열로 변환 후 티켓 정보 파싱
         JSONArray jsonArray = new JSONArray();
         jsonArray.addAll(extractedTexts);
-        return ticketParser.parseTicketInfo(jsonArray);
+        Map<String, Object> ticketInfo = ticketParser.parseTicketInfo(jsonArray);
+
+        // 파싱된 정보에서 필요한 데이터를 추출
+        String date = (String) ticketInfo.get("date");
+        String team1English = ((List<String>) ticketInfo.get("teamEnglish")).get(0);
+        String team2English = ((List<String>) ticketInfo.get("teamEnglish")).get(1);
+        String team1Korean = ((List<String>) ticketInfo.get("teamKorean")).get(0);
+        String team2Korean = ((List<String>) ticketInfo.get("teamKorean")).get(1);
+
+        // S3에 이미지 업로드 및 URL 반환
+        String imageUrl = s3Service.saveFile(image, userId, date, team1English, team2English, team1Korean, team2Korean);
+
+        // 이미지 URL을 포함한 티켓 정보를 반환
+        ticketInfo.put("imageUrl", imageUrl);
+
+        return ticketInfo;
     }
 
     private List<String> callApi(MultipartFile image) throws IOException, ParseException {
