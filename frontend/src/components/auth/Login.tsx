@@ -38,12 +38,12 @@ const Login = ({
         onClick={onGoogleLoginClick}
       />
 
-      <p className="font-kbogothiclight mb-4">
-        아직 회원이 아니신가요?{" "}
+      <div className="font-kbogothiclight mb-4 text-center">
+        아직 회원이 아니신가요?
         <a href={signUpPath} className="text-green-900">
           회원가입
         </a>
-      </p>
+      </div>
     </div>
   );
 };
