@@ -1,6 +1,6 @@
 package com.newbie.auth.global.security;
 
-import com.newbie.auth.domain.member.dto.MemberDto;
+import com.newbie.auth.member.dto.MemberDto;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,7 +14,7 @@ public record CustomUserDetails(MemberDto member) implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<String> roles = new ArrayList<>();
-        roles.add("ROLE_" + member.getRole());
+//        roles.add("ROLE_" + member.getRole());
         return roles.stream()
             .map(SimpleGrantedAuthority::new)
             .toList();
@@ -51,7 +51,5 @@ public record CustomUserDetails(MemberDto member) implements UserDetails {
         return true;
     }
 
-    public Long getUserId() {
-        return member.getId();
-    }
+    public Long getUserId() { return member.getMemberId(); }
 }

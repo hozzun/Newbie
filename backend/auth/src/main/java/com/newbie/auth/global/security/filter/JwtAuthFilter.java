@@ -1,7 +1,7 @@
 package com.newbie.auth.global.security.filter;
 
 
-import com.newbie.auth.domain.member.dto.MemberDto;
+import com.newbie.auth.member.dto.MemberDto;
 import com.newbie.auth.global.security.CustomUserDetailsService;
 import com.newbie.auth.global.security.util.JwtUtil;
 import io.jsonwebtoken.ExpiredJwtException;

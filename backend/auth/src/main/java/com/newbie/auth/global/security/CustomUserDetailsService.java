@@ -1,8 +1,8 @@
 package com.newbie.auth.global.security;
 
-import com.newbie.auth.domain.member.dto.MemberDto;
-import com.newbie.auth.domain.member.entity.Member;
-import com.newbie.auth.domain.member.repository.MemberRepository;
+import com.newbie.auth.member.dto.MemberDto;
+import com.newbie.auth.member.domain.Member;
+import com.newbie.auth.member.repository.MemberRepository;
 import com.newbie.auth.global.token.entity.RefreshToken;
 import com.newbie.auth.global.token.repository.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;

@@ -1,6 +1,6 @@
 package com.newbie.auth.global.security.util;
 
-import com.newbie.auth.domain.member.dto.MemberDto;
+import com.newbie.auth.member.dto.MemberDto;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -67,10 +67,10 @@ public class JwtUtil {
      */
     private String createToken(MemberDto member, long expirationTime) {
         Claims claims = Jwts.claims();
-        claims.put("id", member.getId());
+        claims.put("memberId", member.getMemberId());
         claims.put("email", member.getEmail());
         claims.put("nickname", member.getNickname());
-        claims.put("role", member.getRole());
+        claims.put("role", member.getAddress());
 
         ZonedDateTime nowTime = ZonedDateTime.now();
         ZonedDateTime tokenValidityTime = nowTime.plusSeconds(expirationTime);
