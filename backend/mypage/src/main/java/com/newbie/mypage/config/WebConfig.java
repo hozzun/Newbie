@@ -16,11 +16,12 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOriginPatterns("http://localhost:5173", "https://k11b304.p.ssafy.io") // 허용할 출처
-                .allowedMethods("GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS") // 허용할 HTTP 메서드
-                .allowedHeaders("*") // 모든 헤더 허용
-                .allowCredentials(true) // 자격 증명 허용
-                .maxAge(3600); // 캐시 시간 설정
+                .allowedOrigins("http://localhost:5173", "https://k11b304.p.ssafy.io")
+                .allowedMethods("GET", "POST", "PUT", "DELETE")
+                .allowedHeaders("Authorization", "Content-Type")
+                .exposedHeaders("Custom-Header")
+                .allowCredentials(true)
+                .maxAge(3600);
     }
 
 }
