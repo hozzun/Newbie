@@ -41,7 +41,7 @@
 </td>
 <td>
 <div class="infoBox" id="duration">
-<div class="counter">0.469s</div>
+<div class="counter">0.393s</div>
 <p>duration</p>
 </div>
 </td>
@@ -79,7 +79,7 @@
 </thead>
 <tr>
 <td class="success">contextLoads()</td>
-<td class="success">0.469s</td>
+<td class="success">0.393s</td>
 <td class="success">passed</td>
 </tr>
 </table>
@@ -87,8 +87,8 @@
 <div id="tab1" class="tab">
 <h2>Standard output</h2>
 <span class="code">
-<pre>13:21:19.644 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.newbie.auth.AuthApplicationTests]: AuthApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-13:21:19.735 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.newbie.auth.AuthApplication for test class com.newbie.auth.AuthApplicationTests
+<pre>15:00:32.279 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.newbie.auth.AuthApplicationTests]: AuthApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+15:00:32.377 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.newbie.auth.AuthApplication for test class com.newbie.auth.AuthApplicationTests
 
   .   ____          _            __ _ _
  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
@@ -99,7 +99,7 @@
 
  :: Spring Boot ::                (v3.3.4)
 
-2024-11-05T13:21:20.026+09:00  WARN 18204 --- [Back-end] [    Test worker] ory$DuplicateJsonObjectContextCustomizer : 
+2024-11-06T15:00:32.691+09:00  WARN 10828 --- [Back-end] [    Test worker] ory$DuplicateJsonObjectContextCustomizer : 
 
 Found multiple occurrences of org.json.JSONObject on the class path:
 
@@ -108,25 +108,25 @@ Found multiple occurrences of org.json.JSONObject on the class path:
 
 You may wish to exclude one of them to ensure predictable runtime behavior
 
-2024-11-05T13:21:20.037+09:00  INFO 18204 --- [Back-end] [    Test worker] com.newbie.auth.AuthApplicationTests     : Starting AuthApplicationTests using Java 17.0.12 with PID 18204 (started by SSAFY in C:\Users\SSAFY\Desktop\자율PJT\우리팀\gitlab\S11P31B304\backend\auth)
-2024-11-05T13:21:20.037+09:00  INFO 18204 --- [Back-end] [    Test worker] com.newbie.auth.AuthApplicationTests     : The following 1 profile is active: &quot;key&quot;
-2024-11-05T13:21:20.674+09:00  INFO 18204 --- [Back-end] [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2024-11-05T13:21:20.752+09:00  INFO 18204 --- [Back-end] [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 62 ms. Found 5 JPA repository interfaces.
-2024-11-05T13:21:21.004+09:00  WARN 18204 --- [Back-end] [    Test worker] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.ws.config.annotation.DelegatingWsConfiguration' of type [org.springframework.ws.config.annotation.DelegatingWsConfiguration$$SpringCGLIB$$0] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). The currently created BeanPostProcessor [annotationActionEndpointMapping] is declared through a non-static factory method on that class; consider declaring it as static instead.
-2024-11-05T13:21:21.034+09:00  INFO 18204 --- [Back-end] [    Test worker] .w.s.a.s.AnnotationActionEndpointMapping : Supporting [WS-Addressing August 2004, WS-Addressing 1.0]
-2024-11-05T13:21:21.214+09:00  INFO 18204 --- [Back-end] [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2024-11-05T13:21:21.275+09:00  INFO 18204 --- [Back-end] [    Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.3.Final
-2024-11-05T13:21:21.304+09:00  INFO 18204 --- [Back-end] [    Test worker] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
-2024-11-05T13:21:21.395+09:00  INFO 18204 --- [Back-end] [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2024-11-05T13:21:21.537+09:00  INFO 18204 --- [Back-end] [    Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@16b7e04a
-2024-11-05T13:21:21.538+09:00  INFO 18204 --- [Back-end] [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2024-11-05T13:21:21.574+09:00  WARN 18204 --- [Back-end] [    Test worker] org.hibernate.orm.deprecation            : HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
-2024-11-05T13:21:21.774+09:00  INFO 18204 --- [Back-end] [    Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
-2024-11-05T13:21:22.395+09:00  INFO 18204 --- [Back-end] [    Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2024-11-05T13:21:22.448+09:00  INFO 18204 --- [Back-end] [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2024-11-05T13:21:22.955+09:00  INFO 18204 --- [Back-end] [    Test worker] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
-2024-11-05T13:21:23.964+09:00  WARN 18204 --- [Back-end] [    Test worker] ion$DefaultTemplateResolverConfiguration : Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
-2024-11-05T13:21:24.129+09:00  INFO 18204 --- [Back-end] [    Test worker] com.newbie.auth.AuthApplicationTests     : Started AuthApplicationTests in 4.271 seconds (process running for 5.18)
+2024-11-06T15:00:32.702+09:00  INFO 10828 --- [Back-end] [    Test worker] com.newbie.auth.AuthApplicationTests     : Starting AuthApplicationTests using Java 17.0.12 with PID 10828 (started by SSAFY in C:\Users\SSAFY\Desktop\자율PJT\우리팀\gitlab\S11P31B304\S11P31B304\backend\auth)
+2024-11-06T15:00:32.702+09:00  INFO 10828 --- [Back-end] [    Test worker] com.newbie.auth.AuthApplicationTests     : The following 1 profile is active: &quot;key&quot;
+2024-11-06T15:00:33.469+09:00  INFO 10828 --- [Back-end] [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-11-06T15:00:33.555+09:00  INFO 10828 --- [Back-end] [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 78 ms. Found 5 JPA repository interfaces.
+2024-11-06T15:00:33.873+09:00  WARN 10828 --- [Back-end] [    Test worker] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.ws.config.annotation.DelegatingWsConfiguration' of type [org.springframework.ws.config.annotation.DelegatingWsConfiguration$$SpringCGLIB$$0] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). The currently created BeanPostProcessor [annotationActionEndpointMapping] is declared through a non-static factory method on that class; consider declaring it as static instead.
+2024-11-06T15:00:33.901+09:00  INFO 10828 --- [Back-end] [    Test worker] .w.s.a.s.AnnotationActionEndpointMapping : Supporting [WS-Addressing August 2004, WS-Addressing 1.0]
+2024-11-06T15:00:34.110+09:00  INFO 10828 --- [Back-end] [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-11-06T15:00:34.175+09:00  INFO 10828 --- [Back-end] [    Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.3.Final
+2024-11-06T15:00:34.211+09:00  INFO 10828 --- [Back-end] [    Test worker] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-11-06T15:00:34.334+09:00  INFO 10828 --- [Back-end] [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-11-06T15:00:34.484+09:00  INFO 10828 --- [Back-end] [    Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@1a3b1f7e
+2024-11-06T15:00:34.486+09:00  INFO 10828 --- [Back-end] [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-11-06T15:00:34.529+09:00  WARN 10828 --- [Back-end] [    Test worker] org.hibernate.orm.deprecation            : HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2024-11-06T15:00:34.770+09:00  INFO 10828 --- [Back-end] [    Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-11-06T15:00:35.438+09:00  INFO 10828 --- [Back-end] [    Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-11-06T15:00:35.486+09:00  INFO 10828 --- [Back-end] [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-11-06T15:00:36.046+09:00  INFO 10828 --- [Back-end] [    Test worker] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2024-11-06T15:00:37.367+09:00  WARN 10828 --- [Back-end] [    Test worker] ion$DefaultTemplateResolverConfiguration : Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+2024-11-06T15:00:37.543+09:00  INFO 10828 --- [Back-end] [    Test worker] com.newbie.auth.AuthApplicationTests     : Started AuthApplicationTests in 5.026 seconds (process running for 6.006)
 </pre>
 </span>
 </div>
@@ -138,7 +138,7 @@ You may wish to exclude one of them to ensure predictable runtime behavior
 <input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
 </label>
 </div>Generated by 
-<a href="http://www.gradle.org">Gradle 8.10.2</a> at 2024. 11. 5. 오후 1:21:24</p>
+<a href="http://www.gradle.org">Gradle 8.10.2</a> at 2024. 11. 6. 오후 3:00:38</p>
 </div>
 </div>
 </body>
