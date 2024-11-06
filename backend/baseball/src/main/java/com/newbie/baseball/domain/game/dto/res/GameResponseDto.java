@@ -1,5 +1,6 @@
 package com.newbie.baseball.domain.game.dto.res;
 
+import jakarta.persistence.Column;
 import lombok.Builder;
 import lombok.Data;
 
@@ -25,4 +26,6 @@ public class GameResponseDto implements Serializable {
     private String gameResult;
     private String stadium;
     private String season;
+    private String awayStartingPitcher;
+    private String homeStartingPitcher;
 }

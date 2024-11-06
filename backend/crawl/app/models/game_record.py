@@ -28,7 +28,7 @@ class GameRecord(Base):
     
     away_starting_pitcher = Column(String(50), nullable=True)
     home_starting_pitcher = Column(String(50), nullable=True)
-    winning_hit = Column(JSON, nullable=True)
+    winning_hit = Column(String(100), nullable=True)
     home_runs = Column(JSON, nullable=True)
     doubles = Column(JSON, nullable=True)
     triples = Column(JSON, nullable=True)

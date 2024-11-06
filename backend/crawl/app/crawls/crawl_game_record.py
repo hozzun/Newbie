@@ -45,6 +45,22 @@ def crawl_game_record():
                     stadium = game.get_attribute("s_nm")
                     away_team_name = game.get_attribute("away_nm")
                     home_team_name = game.get_attribute("home_nm")
+                    
+                    # 선발 투수 이름에서 "승", "패" 등의 정보 제거
+                    def get_pitcher_name(game_element, team_selector):
+                        try:
+                            pitcher_element = game_element.find_element(By.CSS_SELECTOR, f"{team_selector} .today-pitcher p")
+                            pitcher_text = pitcher_element.text
+                            # "승", "패" 텍스트를 제거
+                            for unwanted_text in ["승", "패", "세"]:
+                                pitcher_text = pitcher_text.replace(unwanted_text, "").strip()
+                            return pitcher_text
+                        except NoSuchElementException:
+                            return None
+
+                    # away와 home 팀의 선발 투수를 각 경기에 맞게 가져오기
+                    away_starting_pitcher = get_pitcher_name(game, ".team.away")
+                    home_starting_pitcher = get_pitcher_name(game, ".team.home")
 
                     game.click()
                     time.sleep(2)
@@ -54,43 +70,14 @@ def crawl_game_record():
                         review_tab[0].click()
                         time.sleep(2)
 
-                        # 필수 요소들을 각 try-except 블록으로 감싸서 없는 경우 None으로 할당하고 계속 진행
                         try:
                             stadium = driver.find_element(By.ID, "txtStadium").text.replace("구장 : ", "").strip()
-                        except NoSuchElementException:
-                            stadium = None
-
-                        try:
                             crowd = driver.find_element(By.ID, "txtCrowd").text.replace("관중 : ", "").strip()
-                        except NoSuchElementException:
-                            crowd = None
-
-                        try:
                             start_time = driver.find_element(By.ID, "txtStartTime").text.replace("개시 : ", "").strip()
-                        except NoSuchElementException:
-                            start_time = None
-
-                        try:
                             end_time = driver.find_element(By.ID, "txtEndTime").text.replace("종료 : ", "").strip()
-                        except NoSuchElementException:
-                            end_time = None
-
-                        try:
                             run_time = driver.find_element(By.ID, "txtRunTime").text.replace("경기시간 : ", "").strip()
-                        except NoSuchElementException:
-                            run_time = None
-
-                        # 선발 투수 이름에서 "승", "패" 등의 정보 제거
-                        def get_pitcher_name(selector):
-                            try:
-                                pitcher_element = driver.find_element(By.CSS_SELECTOR, selector)
-                                span = pitcher_element.find_element(By.TAG_NAME, "span")
-                                return pitcher_element.text.replace(span.text, "").strip()
-                            except NoSuchElementException:
-                                return None
-
-                        away_starting_pitcher = get_pitcher_name(".team.away .today-pitcher p")
-                        home_starting_pitcher = get_pitcher_name(".team.home .today-pitcher p")
+                        except:
+                            pass
 
                         # 실제 경기 진행된 이닝 수 계산
                         innings = driver.find_elements(By.CSS_SELECTOR, "#tblScordboard2 tbody tr")
