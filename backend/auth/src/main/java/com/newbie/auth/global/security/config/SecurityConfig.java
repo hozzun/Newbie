@@ -42,11 +42,10 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("*")); // 모든 출처 허용
-        configuration.setAllowedMethods(
-            Arrays.asList("GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS")); // 허용할 HTTP 메서드 설정
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173", "https://k11b304.p.ssafy.io")); // 허용할 출처 설정
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS")); // 허용할 HTTP 메서드 설정
         configuration.setAllowedHeaders(Arrays.asList("*")); // 모든 헤더 허용
-        configuration.setAllowCredentials(true);
+        configuration.setAllowCredentials(true); // 자격 증명 허용 (JWT 포함)
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
