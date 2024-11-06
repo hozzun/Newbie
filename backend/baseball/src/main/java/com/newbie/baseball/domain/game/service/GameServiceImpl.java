@@ -72,6 +72,12 @@ public class GameServiceImpl implements GameService {
                 .gameResult(game.getGameResult())
                 .stadium(game.getStadium())
                 .season(game.getSeason())
+                .awayStartingPitcher(
+                        game.getRecord() != null ? game.getRecord().getAwayStartingPitcher() : "미정"
+                )
+                .homeStartingPitcher(
+                        game.getRecord() != null ? game.getRecord().getHomeStartingPitcher() : "미정"
+                )
                 .build();
     }
 }

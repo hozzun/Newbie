@@ -77,8 +77,6 @@ public class Record {
     @Column(name = "home_starting_pitcher", length = 50)
     private String homeStartingPitcher;
 
-//    @Convert(converter = JsonToListConverter.class)
-//    @Column(name = "winning_hit", columnDefinition = "json")
     @Column(name = "winning_hit", length = 50)
     private String winningHit;
 
