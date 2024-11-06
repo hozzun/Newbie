@@ -15,9 +15,10 @@ interface ClubChangeProps {
     | "ssg";
   logo: string;
   club: string;
+  onClick?: () => void;
 }
 
-const ClubChangeButton = ({ logo, clubColor, club }: ClubChangeProps) => {
+const ClubChangeButton = ({ logo, clubColor, club, onClick }: ClubChangeProps) => {
   const bgColorClass = {
     doosan: "bg-club-doosan",
     hanwha: "bg-club-hanwha",
@@ -41,7 +42,7 @@ const ClubChangeButton = ({ logo, clubColor, club }: ClubChangeProps) => {
       </div>
       <div className="flex flex-col justify-center items-center">
         <div className="text-white font-kbogothicbold text-2xl mb-2">{club}</div>
-        <Button className="w-full px-12 whitespace-nowrap" variant={BUTTON_VARIANTS.white}>
+        <Button className="w-full px-12 whitespace-nowrap" variant={BUTTON_VARIANTS.white} onClick={onClick}>
           구단 바꾸기
         </Button>
       </div>
