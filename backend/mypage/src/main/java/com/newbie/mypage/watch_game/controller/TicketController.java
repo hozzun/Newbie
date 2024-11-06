@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.json.simple.parser.ParseException;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -36,8 +37,8 @@ public class TicketController {
      * @return 경기 날짜, 경기 팀1, 경기 팀2
      */
     @Operation(summary = "티켓 OCR 분석", description = "사용자가 티켓 이미지 등록 시 OCR 분석을 실시합니다.")
-    @PostMapping(value = "/naverOcr", consumes = "multipart/form-data")
-    public ResponseEntity<?> ocr(@RequestParam("image") @Parameter(description = "이미지") MultipartFile image , @RequestParam int userId) {
+    @PostMapping(value = "/naverOcr", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> ocr(@RequestParam("image") MultipartFile image, @RequestParam int userId) {
         try {
             Map<String, Object> result = ocrService.processAndSaveTicket(image, userId);
             return ResponseEntity.ok(result);
