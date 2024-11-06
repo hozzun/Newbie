@@ -44,7 +44,7 @@ export default {
         },
         club: {
           doosan: '#00234B',
-          hanhwa: '#FF6600',
+          hanwha: '#FF6600',
           kia: '#333333',
           kiwoom: '#6F263D',
           kt: '#231F20',

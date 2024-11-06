@@ -154,7 +154,7 @@ const Home = () => {
           rankDifference: 0,
         },
         {
-          id: "hanhwa",
+          id: "hanwha",
           rank: 8,
           gameCount: 144,
           winCount: 66,

@@ -1,5 +1,5 @@
 import doosan from "../assets/images/club/doosan_bears.svg";
-import hanhwa from "../assets/images/club/hanwha_eagles.svg";
+import hanwha from "../assets/images/club/hanwha_eagles.svg";
 import kia from "../assets/images/club/kia_tigers.svg";
 import kiwoom from "../assets/images/club/kiwoom_heroes.svg";
 import kt from "../assets/images/club/kt_wiz.svg";
@@ -11,7 +11,7 @@ import ssg from "../assets/images/club/ssg_landers.svg";
 
 const ClubLogos: { [key: string]: string } = {
   doosan,
-  hanhwa,
+  hanwha,
   kia,
   kiwoom,
   kt,
