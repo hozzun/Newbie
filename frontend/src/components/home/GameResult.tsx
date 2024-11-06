@@ -1,5 +1,6 @@
 import { GameResultData } from "../../containers/home/GameResult";
 import Game, { GameProps } from "./Game";
+import GameResultDetails from "./GameResultDetails";
 import GameScores from "./GameScores";
 
 interface GameResultProps {
@@ -12,10 +13,13 @@ const GameResult = (props: GameResultProps) => {
     <div className="flex flex-col items-center justify-center">
       <Game {...props.game} isVisibleDay={true} />
       {props.gameResult && (
-        <GameScores
-          inningCount={props.gameResult.inningCount}
-          teamScoreDetails={props.gameResult.teamScoreDetails}
-        />
+        <>
+          <GameScores
+            inningCount={props.gameResult.inningCount}
+            teamScoreDetails={props.gameResult.teamScoreDetails}
+          />
+          <GameResultDetails gameResultDetails={props.gameResult.gameResultDetails} />
+        </>
       )}
     </div>
   );

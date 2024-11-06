@@ -32,15 +32,15 @@ export interface TeamScoreDetail {
 }
 
 export interface GameResultDetailsData {
-  winningHit: string;
-  homeRuns: string;
-  doubles: string;
-  errors: string;
-  stolenBases: string;
-  caughtStealing: string;
-  doublePlays: string;
-  wildPitches: string;
-  umpires: string;
+  winningHit: string | null;
+  homeRuns: string | null;
+  doubles: string | null;
+  errors: string | null;
+  stolenBases: string | null;
+  caughtStealing: string | null;
+  doublePlays: string | null;
+  wildPitches: string | null;
+  umpires: string | null;
 }
 
 export interface GameResultData {
