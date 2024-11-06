@@ -1,6 +1,7 @@
 package com.newbie.auth.member.controller;
 
 import com.newbie.auth.global.dto.SuccessResponse;
+import com.newbie.auth.member.dto.request.MemberFavoriteTeamUpdateRequestDto;
 import com.newbie.auth.member.dto.request.MemberSignUpRequestDto;
 import com.newbie.auth.member.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -19,4 +20,12 @@ public class MemberController {
     public SuccessResponse<?> signUp(@RequestBody MemberSignUpRequestDto memberSignUpRequestDto) {
         return SuccessResponse.created(memberService.signUp(memberSignUpRequestDto));
     }
+
+    @PatchMapping("/favorite-team")
+    @Operation(summary = "favorite team 설정")
+    public SuccessResponse<?> favoriteTeam(@RequestBody MemberFavoriteTeamUpdateRequestDto requestDto) {
+        memberService.saveFavoriteTeam(requestDto);
+        return SuccessResponse.update();
+    }
+
 }

@@ -1,9 +1,11 @@
 package com.newbie.auth.member.service;
 
+import com.newbie.auth.global.common.util.MemberInfo;
 import com.newbie.auth.global.security.util.JwtUtil;
 import com.newbie.auth.member.domain.Member;
 import com.newbie.auth.member.domain.MemberImage;
 import com.newbie.auth.member.dto.MemberDto;
+import com.newbie.auth.member.dto.request.MemberFavoriteTeamUpdateRequestDto;
 import com.newbie.auth.member.dto.request.MemberSignUpRequestDto;
 import com.newbie.auth.member.exception.MemberDuplicateException;
 import com.newbie.auth.member.repository.MemberImageRepository;
@@ -47,6 +49,16 @@ public class MemberServiceImpl implements MemberService{
         saveMemberImage(signUpMemberDto, savedMember);
 
         return jwtUtil.createAccessToken(mapper.map(savedMember, MemberDto.class));
+    }
+
+    @Override
+    public void saveFavoriteTeam(MemberFavoriteTeamUpdateRequestDto dto) {
+        Optional<Member> member = memberRepository.findByEmail(MemberInfo.getEmail());
+        log.info("member: {}", MemberInfo.getEmail());
+        if (member.isPresent()) {
+            member.get().updateFavoriteTeamId(dto.getFavoriteTeamId());
+            memberRepository.save(member.get());
+        }
     }
 
     private void saveMemberImage(MemberSignUpRequestDto signUpMemberDto, Member savedMember) {
