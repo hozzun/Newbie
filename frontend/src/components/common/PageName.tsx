@@ -7,7 +7,7 @@ const PageName = (props: PageNameProps) => {
   return (
     <>
       <div className="flex flex-start items-center w-full">
-        <p className="text-2xl font-kbogothicbold text-gray-700">{props.label}</p>
+        <p className="text-2xl font-kbogothicbold text-gray-700 mb-3">{props.label}</p>
       </div>
     </>
   )
