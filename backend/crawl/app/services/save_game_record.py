@@ -26,7 +26,6 @@ def save_game_record_to_db(game_record_list):
             # 게임 정보 가져오기
             game = db.query(Game).filter_by(
                 date=game_date,
-                # stadium=stadium,
                 away_team_id=away_team.id,
                 home_team_id=home_team.id
             ).first()
@@ -49,15 +48,23 @@ def save_game_record_to_db(game_record_list):
                 start_time=record['start_time'],
                 end_time=record['end_time'],
                 run_time=record['run_time'],
+                inning_count=record['inning_count'],
                 away_score=record['away_score'],
                 home_score=record['home_score'],
-                # away_starting_pitcher=record.get('away_starting_pitcher'),
+                away_run=record['away_run'],
+                away_hit=record['away_hit'],
+                away_error=record['away_error'],
+                away_base_on_balls=record['away_base_on_balls'],
+                home_run=record['home_run'],
+                home_hit=record['home_hit'],
+                home_error=record['home_error'],
+                home_base_on_balls=record['home_base_on_balls'],
                 away_starting_pitcher=record['away_starting_pitcher'],
-                # home_starting_pitcher=record.get('home_starting_pitcher'),
                 home_starting_pitcher=record['home_starting_pitcher'],
                 winning_hit=record['winning_hit'],
                 home_runs=record['home_runs'],
                 doubles=record['doubles'],
+                triples=record['triples'],
                 errors=record['errors'],
                 stolen_bases=record['stolen_bases'],
                 caught_stealing=record['caught_stealing'],
