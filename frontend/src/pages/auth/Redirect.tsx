@@ -32,9 +32,10 @@ const Redirect = () => {
 
         if (platform === "kakao" && code) {
           const kakaoRedirectUri = import.meta.env.VITE_KAKAO_REDIRECT_URI as string;
-          response = await axiosInstance.post<AuthResponse>(`/api/v1/login/kakao?code=${code}`, {
+          response = await axiosInstance.post<AuthResponse>(`/api/v1/login/kakao/${code}`, {
             redirectUri: kakaoRedirectUri,
           });
+          console.log(response, "redirectUri", kakaoRedirectUri);
         } else if (platform === "google" && accessToken) {
           const googleRedirectUri = import.meta.env.VITE_GOOGLE_REDIRECT_URI as string;
           response = await axiosInstance.post<AuthResponse>(
