@@ -1,21 +1,17 @@
 import { useState, useEffect } from "react";
 import HomeComponent from "../../components/home/Home";
-import {
-  Game,
-  GameSituation,
-  GameAboutCheeringClub,
-  TodayGameProps,
-} from "../../components/home/TodayGame";
+import { TodayGameProps } from "../../components/home/TodayGame";
 import { ImageCardProps } from "../../components/home/ImageCard";
 import { ClubRankProps } from "../../components/home/ClubRank";
 import { ClubRankItemProps } from "../../components/home/ClubRankItem";
 import { HighlightProps } from "../../components/home/Highlight";
 import { CardStoreItemProps } from "../../components/home/CardStoreItem";
 import { CardStoreProps } from "../../components/home/CardStore";
+import { GameInfo, GameProps, GameSituation } from "../../components/home/Game";
 
 const Home = () => {
   const [hasCheeringClub, setHasCheeringClub] = useState<boolean>(false);
-  const [todayGame, setTodayGame] = useState<GameAboutCheeringClub>();
+  const [todayGame, setTodayGame] = useState<GameProps>();
   const [photoCardImage, setPhotoCardImage] = useState<string | null>(null);
   const [watchedGameImage, setWatchedGameImage] = useState<string | null>(null);
   const [clubRanks, setClubRanks] = useState<Array<ClubRankItemProps> | null>(null);
@@ -30,7 +26,8 @@ const Home = () => {
 
       if (hasCheeringClubData) {
         // TODO: GET - 응원 구단에 맞는 오늘의 경기
-        const gameData: Game = {
+        const gameInfoData: GameInfo = {
+          day: "2024-11-05",
           time: "17:00",
           place: "광주스타디움",
           clubs: [
@@ -45,6 +42,9 @@ const Home = () => {
           ],
         };
 
+        // TODO: GET - 날씨 정보
+        gameInfoData.weather = "☀ 맑음";
+
         // TODO: GET - 경기 진행 상황
         const gameSituationData: GameSituation = {
           isPlaying: true,
@@ -54,8 +54,8 @@ const Home = () => {
           },
         };
 
-        const todayGameData: GameAboutCheeringClub = {
-          game: gameData,
+        const todayGameData: GameProps = {
+          gameInfo: gameInfoData,
           gameSituation: gameSituationData,
         };
         setTodayGame(todayGameData);

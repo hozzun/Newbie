@@ -1,14 +1,12 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios, { AxiosError, AxiosResponse } from "axios";
-import axiosInstance from "../../util/axiosInstance"; // util 폴더에서 axiosInstance import
+import axiosInstance from "../../util/axiosInstance";
 
-// 서버에서 반환하는 응답 데이터 타입
 interface AuthResponse {
   token: string;
 }
 
-// 에러 타입을 정의 (서버에서 반환하는 에러 구조에 맞게 정의)
 interface ApiError {
   message: string;
   status: number;
@@ -18,25 +16,40 @@ const Redirect = () => {
   const nav = useNavigate();
 
   useEffect(() => {
-    const handleAuth = async () => {
+    const socialLogin = async () => {
       try {
-        const redirectUri = import.meta.env.VITE_KAKAO_REDIRECT_URI as string;
-        console.log("Redirect URI:", redirectUri);
+        const urlParams = new URL(window.location.href).searchParams;
+        const platform = urlParams.get("platform"); // "kakao", "google" 또는 "naver"
+        const code = urlParams.get("code");
+        const accessToken = new URLSearchParams(window.location.hash.slice(1)).get("access_token");
 
-        const code: string | null = new URL(window.location.href).searchParams.get("code");
-        if (!code) {
-          console.error("인증 코드를 찾지 못했습니다");
+        if (!platform || (!code && !accessToken)) {
+          console.error("필요한 정보가 부족합니다.");
           return;
         }
 
-        const response: AxiosResponse<AuthResponse> = await axiosInstance.post<AuthResponse>(
-          "/oauth/kakao",
-          { code, redirectUri },
-        );
+        let response: AxiosResponse<AuthResponse>;
+
+        if (platform === "kakao" && code) {
+          const kakaoRedirectUri = import.meta.env.VITE_KAKAO_REDIRECT_URI as string;
+          response = await axiosInstance.post<AuthResponse>(`/api/v1/login/kakao/${code}`, {
+            redirectUri: "/signup",
+          });
+          console.log(response, "redirectUri", kakaoRedirectUri);
+        } else if (platform === "google" && accessToken) {
+          const googleRedirectUri = import.meta.env.VITE_GOOGLE_REDIRECT_URI as string;
+          response = await axiosInstance.post<AuthResponse>(
+            `/api/v1/login/google/access-token?${accessToken}`,
+            { redirectUri: googleRedirectUri },
+          );
+        } else {
+          console.error("유효하지 않은 로그인 요청입니다.");
+          return;
+        }
 
         if (response.status === 200) {
           console.log("200 응답 수신: 회원가입으로 이동");
-          nav("/auth/signup");
+          nav("/signup");
         } else if (response.status === 303) {
           console.log("303 응답 수신: 홈으로 이동");
           sessionStorage.setItem("token", response.data.token);
@@ -54,7 +67,7 @@ const Redirect = () => {
       }
     };
 
-    handleAuth();
+    socialLogin();
   }, [nav]);
 
   return <div>Redirecting...</div>;

@@ -1,13 +1,10 @@
 import { useState } from "react";
 import LoginComponent from "../../components/auth/Login";
-import { KAKAO_AUTH_URL, GOOGLE_AUTH_URL, NAVER_AUTH_URL } from "../../api/Oauth";
+import { KAKAO_AUTH_URL, GOOGLE_AUTH_URL } from "../../api/Oauth";
 import AuthorityBottomSheet from "../../components/common/AuthorityBottomSheet";
 
 const Login = () => {
   const [showBottomSheet, setShowBottomSheet] = useState(true);
-  const handleNaverLoginClick = () => {
-    window.location.href = NAVER_AUTH_URL;
-  };
 
   const handleKakaoLoginClick = () => {
     window.location.href = KAKAO_AUTH_URL;
@@ -39,7 +36,6 @@ const Login = () => {
     <>
       <div>
         <LoginComponent
-          onNaverLoginClick={handleNaverLoginClick}
           onKakaoLoginClick={handleKakaoLoginClick}
           onGoogleLoginClick={handleGoogleLoginClick}
           signUpPath="/signup"
