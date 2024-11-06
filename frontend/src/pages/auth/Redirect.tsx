@@ -33,13 +33,13 @@ const Redirect = () => {
         if (platform === "kakao" && code) {
           const kakaoRedirectUri = import.meta.env.VITE_KAKAO_REDIRECT_URI as string;
           response = await axiosInstance.post<AuthResponse>(`/api/v1/login/kakao/${code}`, {
-            redirectUri: kakaoRedirectUri,
+            redirectUri: "/signup",
           });
           console.log(response, "redirectUri", kakaoRedirectUri);
         } else if (platform === "google" && accessToken) {
           const googleRedirectUri = import.meta.env.VITE_GOOGLE_REDIRECT_URI as string;
           response = await axiosInstance.post<AuthResponse>(
-            `/api/v1/login/google/access-token?access_token=${accessToken}`,
+            `/api/v1/login/google/access-token?${accessToken}`,
             { redirectUri: googleRedirectUri },
           );
         } else {
