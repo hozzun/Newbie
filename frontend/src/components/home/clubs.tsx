@@ -43,9 +43,9 @@ const clubs: Record<string, Club> = {
     imgSrc: ClubLogos["ssg"],
   },
   hanhwa: {
-    id: "hanhwa",
+    id: "hanwha",
     name: "한화 이글스",
-    imgSrc: ClubLogos["hanhwa"],
+    imgSrc: ClubLogos["hanwha"],
   },
   nc: {
     id: "nc",
