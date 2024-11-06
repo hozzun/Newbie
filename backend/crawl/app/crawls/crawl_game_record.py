@@ -28,23 +28,17 @@ def crawl_game_record():
         driver = webdriver.Chrome(service=service, options=chrome_options)
         wait = WebDriverWait(driver, 10)
         driver.get("https://www.koreabaseball.com/Schedule/GameCenter/Main.aspx")
-        # print("페이지 로드 완료")
 
         current_date_str = driver.find_element(By.ID, "nowDate").get_attribute("value")
         current_date = datetime.strptime(current_date_str, "%Y%m%d")
-        end_date = current_date - timedelta(days=30)
-        # print(f"현재 날짜: {current_date}, 종료 날짜: {end_date}")
+        end_date = current_date - timedelta(days=100)
 
         while current_date >= end_date:
-            # print(f"날짜 확인 중: {current_date.strftime('%Y-%m-%d')}")
             games = driver.find_elements(By.CSS_SELECTOR, ".game-cont")
 
             if not games:
-                # print(f"{current_date.strftime('%Y-%m-%d')} 날짜에 경기가 없습니다.")
                 return []
             else:
-                # print(f"{len(games)}개의 경기 발견")
-
                 for game in games:
                     game_date_raw = game.get_attribute("g_dt")
                     game_date = datetime.strptime(game_date_raw, '%Y%m%d').strftime('%Y-%m-%d')
@@ -59,15 +53,33 @@ def crawl_game_record():
                     if review_tab:
                         review_tab[0].click()
                         time.sleep(2)
-                        # print("리뷰 탭 클릭 완료")
-                        
-                        stadium = driver.find_element(By.ID, "txtStadium").text.replace("구장 : ", "").strip()
-                        crowd = driver.find_element(By.ID, "txtCrowd").text.replace("관중 : ", "").strip()
-                        start_time = driver.find_element(By.ID, "txtStartTime").text.replace("개시 : ", "").strip()
-                        end_time = driver.find_element(By.ID, "txtEndTime").text.replace("종료 : ", "").strip()
-                        run_time = driver.find_element(By.ID, "txtRunTime").text.replace("경기시간 : ", "").strip()
-                        # print(f"기본 경기 정보 수집: 경기장={stadium}, 관중={crowd}, 개시={start_time}, 종료={end_time}, 시간={run_time}")
-                        
+
+                        # 필수 요소들을 각 try-except 블록으로 감싸서 없는 경우 None으로 할당하고 계속 진행
+                        try:
+                            stadium = driver.find_element(By.ID, "txtStadium").text.replace("구장 : ", "").strip()
+                        except NoSuchElementException:
+                            stadium = None
+
+                        try:
+                            crowd = driver.find_element(By.ID, "txtCrowd").text.replace("관중 : ", "").strip()
+                        except NoSuchElementException:
+                            crowd = None
+
+                        try:
+                            start_time = driver.find_element(By.ID, "txtStartTime").text.replace("개시 : ", "").strip()
+                        except NoSuchElementException:
+                            start_time = None
+
+                        try:
+                            end_time = driver.find_element(By.ID, "txtEndTime").text.replace("종료 : ", "").strip()
+                        except NoSuchElementException:
+                            end_time = None
+
+                        try:
+                            run_time = driver.find_element(By.ID, "txtRunTime").text.replace("경기시간 : ", "").strip()
+                        except NoSuchElementException:
+                            run_time = None
+
                         # 선발 투수 이름에서 "승", "패" 등의 정보 제거
                         def get_pitcher_name(selector):
                             try:
@@ -79,29 +91,60 @@ def crawl_game_record():
 
                         away_starting_pitcher = get_pitcher_name(".team.away .today-pitcher p")
                         home_starting_pitcher = get_pitcher_name(".team.home .today-pitcher p")
-                        
+
+                        # 실제 경기 진행된 이닝 수 계산
                         innings = driver.find_elements(By.CSS_SELECTOR, "#tblScordboard2 tbody tr")
-                        if len(innings) >= 2:  # away_score와 home_score 확인
+                        if len(innings) >= 2:
                             away_score = [td.text for td in innings[0].find_elements(By.TAG_NAME, "td")]
                             home_score = [td.text for td in innings[1].find_elements(By.TAG_NAME, "td")]
-                        # print(f"점수보드 수집 완료: away_score={away_score}, home_score={home_score}")
+                            inning_count = len([score for score in away_score if score != "-"])
+
+                        # 팀별 기록 가져오기
+                        try:
+                            away_team_data = driver.find_elements(By.CSS_SELECTOR, "#tblScordboard3 tbody tr")[0].find_elements(By.TAG_NAME, "td")
+                            home_team_data = driver.find_elements(By.CSS_SELECTOR, "#tblScordboard3 tbody tr")[1].find_elements(By.TAG_NAME, "td")
+
+                            # 데이터가 예상대로 4개일 때만 값 할당
+                            if len(away_team_data) == 4:
+                                away_run, away_hit, away_error, away_base_on_balls = [int(td.text) for td in away_team_data]
+                            else:
+                                away_run, away_hit, away_error, away_base_on_balls = 0, 0, 0, 0
+
+                            if len(home_team_data) == 4:
+                                home_run, home_hit, home_error, home_base_on_balls = [int(td.text) for td in home_team_data]
+                            else:
+                                home_run, home_hit, home_error, home_base_on_balls = 0, 0, 0, 0
+                        except (NoSuchElementException, IndexError):
+                            print("팀 데이터 요소를 찾을 수 없습니다.")
+                            away_run, away_hit, away_error, away_base_on_balls = 0, 0, 0, 0
+                            home_run, home_hit, home_error, home_base_on_balls = 0, 0, 0, 0
 
                         game_details = {
                             'game_date': game_date,
                             'stadium': stadium,
                             'away_team_name': away_team_name,
                             'home_team_name': home_team_name,
+                            'inning_count': inning_count,
                             'away_score': away_score,
                             'home_score': home_score,
                             'crowd': crowd,
                             'start_time': start_time,
                             'end_time': end_time,
                             'run_time': run_time,
+                            'away_run': away_run,
+                            'away_hit': away_hit,
+                            'away_error': away_error,
+                            'away_base_on_balls': away_base_on_balls,
+                            'home_run': home_run,
+                            'home_hit': home_hit,
+                            'home_error': home_error,
+                            'home_base_on_balls': home_base_on_balls,
                             'away_starting_pitcher': away_starting_pitcher,
                             'home_starting_pitcher': home_starting_pitcher,
                             'winning_hit': None,
                             'home_runs': [],
                             'doubles': [],
+                            'triples': [],
                             'errors': [],
                             'stolen_bases': [],
                             'caught_stealing': [],
@@ -120,6 +163,8 @@ def crawl_game_record():
                                 game_details['home_runs'].extend(detail.split())
                             elif category == "2루타":
                                 game_details['doubles'].extend(detail.split())
+                            elif category == "3루타":
+                                game_details['triples'].extend(detail.split())
                             elif category == "실책":
                                 game_details['errors'].append(detail)
                             elif category == "도루":
@@ -132,7 +177,6 @@ def crawl_game_record():
                                 game_details['wild_pitches'].append(detail)
                             elif category == "심판":
                                 game_details['umpires'].extend(detail.split())
-                        # print(f"경기 세부 기록 수집 완료: {game_details}")
 
                         game_record_list.append(game_details)
 
@@ -143,27 +187,16 @@ def crawl_game_record():
                 prev_button = wait.until(EC.element_to_be_clickable((By.ID, "lnkPrev")))
                 prev_button.click()
                 time.sleep(3)
-                # print("이전 날짜로 이동 완료")
             except TimeoutException:
                 print("이전 버튼이 더 이상 존재하지 않거나 클릭할 수 없습니다. 크롤링 종료.")
                 break
 
             current_date_str = driver.find_element(By.ID, "nowDate").get_attribute("value")
             current_date = datetime.strptime(current_date_str, "%Y%m%d")
-            # print(f"새로운 현재 날짜: {current_date}")
 
     except Exception as e:
         print(f"크롤링 중 오류 발생: {e}")
     finally:
         driver.quit()
-        # print("드라이버 종료 완료")
-
-    # print("최종 수집된 경기 기록 목록:")
-    # for record in game_record_list:
-    #     print(record)
     
     return game_record_list
-
-# 함수 실행 시 최종 결과 출력
-# results = crawl_game_record()
-# print("최종 크롤링 결과:", results)
