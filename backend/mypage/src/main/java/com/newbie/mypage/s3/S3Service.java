@@ -26,7 +26,7 @@ public class S3Service {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
-    public String saveFile(MultipartFile multipartFile, int userId, String date, String team1English, String team2English,
+    public Ticket saveFile(MultipartFile multipartFile, int userId, String date, String team1English, String team2English,
                            String team1Korean, String team2Korean) throws IOException {
         String originalFilename = multipartFile.getOriginalFilename();
 
@@ -48,9 +48,9 @@ public class S3Service {
                 .team1Korean(team1Korean)
                 .team2Korean(team2Korean)
                 .imageUrl(fileUrl)
+                .createdAt(createdAt)
                 .build();
 
-        ticketRepository.save(ticket);
-        return fileUrl;
+        return ticketRepository.save(ticket);
     }
 }
