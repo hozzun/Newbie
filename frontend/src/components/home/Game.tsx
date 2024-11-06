@@ -21,6 +21,7 @@ export interface GameSituation {
 export interface GameProps {
   gameInfo: GameInfo;
   gameSituation: GameSituation;
+  isVisibleDay?: boolean;
   goDetail?: () => void;
 }
 
@@ -43,6 +44,9 @@ const Game = (props: GameProps) => {
 
   return (
     <div className={boxClass} onClick={props.goDetail}>
+      {props.isVisibleDay && (
+        <p className="text-base font-kbogothicmedium text-gray-700">{props.gameInfo.day}</p>
+      )}
       <p className="text-base font-kbogothicmedium text-gray-700">{props.gameInfo.time}</p>
       <p className="text-base font-kbogothicmedium text-gray-700">{props.gameInfo.place}</p>
       <div className="flex flex-row justify-around item-center w-full">
