@@ -17,7 +17,7 @@ public class Rank {
     @Column(name = "year", length = 10)
     private String year;
 
-    @Column(name = "rank")
+    @Column(name = "`rank`")
     private Integer rank;
 
     @ManyToOne(fetch = FetchType.LAZY)

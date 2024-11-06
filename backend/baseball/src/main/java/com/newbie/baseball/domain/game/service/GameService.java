@@ -10,4 +10,5 @@ public interface GameService {
     GameResponseDto getGameById(Integer id);
     List<GameResponseDto> getGameByYearAndMonth(String yearMonth);
     List<GameResponseDto> getGameByDate(String date);
+    List<GameResponseDto> getGameByDateAndTeamId(String date, Integer teamId);
 }

@@ -42,4 +42,11 @@ public class GameController {
         List<GameResponseDto> games = gameService.getGameByDate(year + "-" + month + "-" + day);
         return new ResponseEntity<>(games, HttpStatus.OK);
     }
+
+    @Operation(summary = "날짜와 팀ID로 해당 날짜에 해당 팀 경기 조회")
+    @GetMapping("/{year}/{month}/{day}/{teamId}")
+    public ResponseEntity<List<GameResponseDto>> getGameByDateAndTeamId(@PathVariable String year, @PathVariable String month, @PathVariable String day, @PathVariable Integer teamId) {
+        List<GameResponseDto> games = gameService.getGameByDateAndTeamId(year + "-" + month + "-" + day, teamId);
+        return new ResponseEntity<>(games, HttpStatus.OK);
+    }
 }

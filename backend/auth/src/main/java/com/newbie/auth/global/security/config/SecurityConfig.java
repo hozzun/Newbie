@@ -36,7 +36,7 @@ public class SecurityConfig {
 
 
     private static final String[] AUTH_PERMIT_PATH_LIST = {
-        "/", "/api/members"
+        "/", "/api/v1/members"
     };
 
     @Bean
@@ -46,6 +46,7 @@ public class SecurityConfig {
         configuration.setAllowedMethods(
             Arrays.asList("GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS")); // 허용할 HTTP 메서드 설정
         configuration.setAllowedHeaders(Arrays.asList("*")); // 모든 헤더 허용
+        configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
