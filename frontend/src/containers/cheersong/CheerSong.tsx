@@ -1,13 +1,16 @@
-import ClubChangeButton from "../../components/common/ClubChangeButton"
+import ClubChangeButton from "../../components/cheersong/ClubChangeButton"
 import PageName from "../../components/common/PageName"
-import ClubLogos from "../../util/ClubLogos"
 
 const CheerSong = () => {
+
+  const goClubSelect = () => {
+    console.log('구단 선택 페이지로 이동')
+  }
 
   return (
     <>
       <PageName label="응원가" />
-      <ClubChangeButton clubColor="ssg" logo={ClubLogos["ssg"]} club="ssg" />
+      <ClubChangeButton onClick={goClubSelect} />
     </>
   )
 }
