@@ -2,6 +2,7 @@ package com.newbie.mypage.watch_game.service;
 
 import com.newbie.mypage.s3.S3Service;
 import com.newbie.mypage.util.MultipartFileResource;
+import com.newbie.mypage.watch_game.entity.Ticket;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONArray;
@@ -66,10 +67,14 @@ public class OcrService {
         String team2Korean = ((List<String>) ticketInfo.get("teamKorean")).get(1);
 
         // S3에 이미지 업로드 및 URL 반환
-        String imageUrl = s3Service.saveFile(image, userId, date, team1English, team2English, team1Korean, team2Korean);
+        Ticket ticket = s3Service.saveFile(image, userId, date, team1English, team2English, team1Korean, team2Korean);
 
         // 이미지 URL을 포함한 티켓 정보를 반환
-        ticketInfo.put("imageUrl", imageUrl);
+        ticketInfo.put("ticketId", ticket.getId());
+        ticketInfo.put("imageUrl", ticket.getImageUrl());
+        ticketInfo.put("userId", ticket.getUserId());
+        ticketInfo.put("createdAt", ticket.getCreatedAt());
+        log.info(ticketInfo.toString());
 
         return ticketInfo;
     }
