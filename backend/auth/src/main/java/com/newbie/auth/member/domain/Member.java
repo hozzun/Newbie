@@ -38,6 +38,10 @@ public class Member {
     @Column(name = "address")
     private String address;
 
+    @Column(name = "favorite_team_id")
+    @ColumnDefault("0")
+    private Integer favoriteTeamId;
+
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "platform")
@@ -59,6 +63,10 @@ public class Member {
 
     public void updateMember(MemberUpdateRequestDto memberUpdateRequestDto) {
         this.nickname = memberUpdateRequestDto.getNickname();
+    }
+
+    public void updateFavoriteTeamId(Integer favoriteTeamId) {
+        this.favoriteTeamId = favoriteTeamId;
     }
 
     public void resign() {

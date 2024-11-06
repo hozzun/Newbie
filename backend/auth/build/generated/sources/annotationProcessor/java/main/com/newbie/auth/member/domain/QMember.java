@@ -28,6 +28,8 @@ public class QMember extends EntityPathBase<Member> {
 
     public final StringPath email = createString("email");
 
+    public final NumberPath<Integer> favoriteTeamId = createNumber("favoriteTeamId", Integer.class);
+
     public final BooleanPath isResigned = createBoolean("isResigned");
 
     public final NumberPath<Long> memberId = createNumber("memberId", Long.class);
