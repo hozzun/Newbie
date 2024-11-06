@@ -4,7 +4,7 @@ import clubs from "../home/clubs";
 
 const ClubOverview = () => {
   return (
-    <div className="flex flex-col w-full justify-center items-start">
+    <div className="flex flex-col w-full justify-center items-start px-4">
       <div className="flex flex-row w-full justify-between items-center">
         <div className="flex flex-col">
           <p className="text-2xl font-kbogothicbold text-white">SSG 랜더스</p>
