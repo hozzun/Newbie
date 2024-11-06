@@ -1,5 +1,6 @@
 import Container from "../../components/common/Container"
 import CheerSongContainer from "../../containers/cheersong/CheerSong"
+import BottomNavigation from "../../components/common/BottomNavigation"
 
 const CheerSong = () => {
 
@@ -8,6 +9,7 @@ const CheerSong = () => {
       <Container>
         <CheerSongContainer />
       </Container>
+      <BottomNavigation />
     </>
   )
 }
