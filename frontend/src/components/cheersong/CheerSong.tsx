@@ -1,4 +1,3 @@
-import { useState } from "react";
 import ClubSelectItem from "../common/ClubSelectItem";
 import ClubLogos from "../../util/ClubLogos";
 import MusicLyrics from "../../assets/icons/music-lyrics.svg?react";
@@ -11,17 +10,10 @@ interface CheerSongProps {
 }
 
 const CheerSong = (props: CheerSongProps) => {
-  const [isFocused, setIsFocused] = useState(false);
-
-  const handleFocus = () => setIsFocused(true);
-  const handleBlur = () => setIsFocused(false);
 
   return (
     <div
-      className={`flex flex-row justify-between font-kbogothicmedium border ${isFocused ? "boder-green-100" : ""}`}
-      tabIndex={0}
-      onFocus={handleFocus}
-      onBlur={handleBlur}
+      className="flex flex-row justify-between font-kbogothicmedium mb-3"
     >
       <div className="flex flex-row">
         <ClubSelectItem
