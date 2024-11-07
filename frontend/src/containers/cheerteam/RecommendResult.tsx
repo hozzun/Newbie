@@ -1,21 +1,51 @@
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import RecommendResultComponent from "../../components/cheerteam/RecommendResult"
 import ResultButton from "../../components/cheerteam/ResultButton"
+import ClubId from "../../util/ClubId";
 
 interface RecommendResultProps {
-  club: string;
+  club: 
+  | "doosan"
+  | "hanwha"
+  | "kia"
+  | "kiwoom"
+  | "kt"
+  | "lg"
+  | "lotte"
+  | "nc"
+  | "samsung"
+  | "ssg";
   name: string;
 }
 
 const RecommendResult = (props: RecommendResultProps) => {
 
+  const nav = useNavigate()
+
+  const updateFavoriteTeam = async (favoriteTeamId: number) => {
+
+    const api_url = import.meta.env.VITE_CHEER_TEAM
+
+    try {
+      const response = await axios.patch(api_url, {
+        favoriteTeamId: favoriteTeamId,
+      });
+  
+      console.log("응답 결과:", response.data);
+    } catch (error) {
+      console.error("에러 발생:", error);
+      throw error;
+    }
+  };
+
   const onCheerClick = () => {
-    console.log('응원 구단 업데이트')
-    // TODO: 응원 구단 업데이트 API 연결
+    updateFavoriteTeam(ClubId[props.club])
+    nav(-2)
   }
 
   const onReClick = () => {
-    console.log('응원 구단 다시 추천 받기')
-    // TODO: 추천 페이지로 이동
+    nav(-1)
   }
 
   return (
