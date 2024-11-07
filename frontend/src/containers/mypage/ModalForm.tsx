@@ -10,7 +10,9 @@ interface ModalFormProps {
   imgURL: string;
   isOpen: boolean;
   onClose: () => void; // 모달 닫기 함수
-  ocrResult: string;
+  date: string;
+  teamKorea: Array<string>;
+  ticketId: string;
 }
 
 const ModalForm = (props: ModalFormProps) => {
@@ -19,18 +21,16 @@ const ModalForm = (props: ModalFormProps) => {
   const [memo, setMemo] = useState<string>("");
 
   const handleMemoChange = (newMemo: string) => {
-    setMemo(newMemo); // 메모 상태 업데이트
+    setMemo(newMemo);
   };
 
-
-  console.log(props.ocrResult); // 일단 그냥 써둠
-
+  // 메모 저장 API 호출
   const TextSaveAPI = async () => {
 
     const api_url = import.meta.env.VITE_TICKET_TEXT
 
     const TextData = {
-      id: "672b18692d22ab456ed56763",
+      id: props.ticketId,
       text: memo
     };
 
@@ -40,7 +40,7 @@ const ModalForm = (props: ModalFormProps) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(TextData), // JSON 형태로 데이터 변환
+        body: JSON.stringify(TextData),
       });
 
       if (!response.ok) {
@@ -55,7 +55,7 @@ const ModalForm = (props: ModalFormProps) => {
   };
 
   const onSaveClick = () => {
-    console.log("저장하기 버튼 클릭");
+    // TODO: 메모 저장 후 마이페이지 화면으로 이동
     TextSaveAPI();
   };
 
@@ -70,7 +70,7 @@ const ModalForm = (props: ModalFormProps) => {
           className="fixed bottom-0 left-0 right-0 flex flex-col items-center bg-gray-100 w-full h-full shadow-lg"
           style={{ zIndex: 50 }}
         >
-          <ModalFormComponent date="2024.08.03" team1="키움 히어로즈" team2="두산 베어스" />
+          <ModalFormComponent date={props.date} team1={props.teamKorea[0]} team2={props.teamKorea[1]} />
           <ModalImage imageUrl={props.imgURL} />
           <ModalInput memo={memo} onChange={handleMemoChange} />
           <div className="flex flex-row mb-10">
