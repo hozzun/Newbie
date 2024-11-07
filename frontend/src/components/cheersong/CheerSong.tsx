@@ -6,7 +6,8 @@ interface CheerSongProps {
   club: "doosan" | "hanwha" | "kia" | "kiwoom" | "kt" | "lg" | "lotte" | "nc" | "samsung" | "ssg";
   title: string;
   singer: string;
-  onClick: () => void;
+  showIcon: boolean
+  onClick?: () => void;
 }
 
 const CheerSong = (props: CheerSongProps) => {
@@ -19,7 +20,7 @@ const CheerSong = (props: CheerSongProps) => {
         <ClubSelectItem
           logo={ClubLogos[props.club]}
           clubColor={props.club}
-          width="w-16"
+          width="w-16 h-16 mt-3"
           isSelected={false}
         />
         <div className="flex flex-col m-5">
@@ -27,7 +28,9 @@ const CheerSong = (props: CheerSongProps) => {
           <p className="text-gray-200 text-xs">{props.singer}</p>
         </div>
       </div>
-      <MusicLyrics className="mt-5 w-6 h-6 mr-3" onClick={props.onClick} />
+      {props.showIcon && (
+        <MusicLyrics className="mt-5 w-6 h-6 mr-3" onClick={props.onClick} />
+      )}
     </div>
   );
 };

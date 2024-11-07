@@ -13,6 +13,7 @@ import GameSchedule from "./pages/home/GameSchedule";
 import CheerSong from "./pages/cheersong/CheerSong";
 import CheerTeam from "./pages/cheerteam/CheerTeam";
 import ClubRecommend from "./pages/cheerteam/ClubRecommend";
+import CheerLyris from "./pages/cheersong/CheerLyris";
 
 // 로그인 하지 않은 사용자의 접근 방지
 // function ProtectedRoute({ children }: { children: JSX.Element }) {
@@ -85,18 +86,18 @@ const AppRouter = () => {
           }
         />
         <Route
-          path="/cheersong"
-          element={
-            // <ProtectedRoute>
-            <CheerSong />
-            // </ProtectedRoute>
-          }
-        />
-        <Route
           path="/cheerteam"
           element={
             // <ProtectedRoute>
             <CheerTeam />
+            // </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/cheersong/cheerlyris"
+          element={
+            // <ProtectedRoute>
+            <CheerLyris />
             // </ProtectedRoute>
           }
         />
