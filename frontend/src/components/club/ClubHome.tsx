@@ -1,5 +1,6 @@
 import ClubOverview from "./ClubOverview";
 import ClubRecord from "./ClubRecord";
+import PlayerList from "./PlayerList";
 import UpcomingGame from "./UpcomingGame";
 
 const ClubHome = () => {
@@ -9,6 +10,7 @@ const ClubHome = () => {
       <div className="bg-white w-full rounded-t-2xl pt-6 px-4 mt-6 pb-32">
         <ClubRecord />
         <UpcomingGame />
+        <PlayerList />
       </div>
     </div>
   );
