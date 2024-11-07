@@ -20,7 +20,7 @@ const CheerSong = () => {
       <PageName label="응원가" />
       <ClubChangeButton club="ssg" onClick={goClubSelect} />
       <CountSong count={30} />
-      <CheerSongComponent club="ssg" title="랜더스여" singer="We are 랜더스 파이팅" onClick={goLyris}/>
+      <CheerSongComponent club="ssg" title="랜더스여" singer="We are 랜더스 파이팅" onClick={goLyris} showIcon={true} />
       <MusicController />
     </>
   )
