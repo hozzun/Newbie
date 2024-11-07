@@ -1,5 +1,6 @@
 import ClubOverview from "./ClubOverview";
 import ClubRecord from "./ClubRecord";
+import OtherClubs from "./OtherClubs";
 import PlayerList from "./PlayerList";
 import UpcomingGame from "./UpcomingGame";
 
@@ -11,6 +12,7 @@ const ClubHome = () => {
         <ClubRecord />
         <UpcomingGame />
         <PlayerList />
+        <OtherClubs />
       </div>
     </div>
   );
