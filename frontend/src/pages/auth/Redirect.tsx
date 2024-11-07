@@ -42,13 +42,19 @@ const Redirect = () => {
             setUserInfo({
               email: response.data.email,
               platform: "kakao",
+              isAuthenticated: true,
             }),
           );
         } else if (platform === "google" && accessToken) {
-          const googleRedirectUri = import.meta.env.VITE_GOOGLE_REDIRECT_URI as string;
           response = await axiosInstance.post<AuthResponse>(
-            `/api-auth/login/google/access-token?${accessToken}`,
-            { redirectUri: googleRedirectUri },
+            `/api-auth/login/google/${accessToken}`,
+          );
+          dispatch(
+            setUserInfo({
+              email: response.data.email,
+              platform: "google",
+              isAuthenticated: true,
+            }),
           );
         } else {
           console.error("유효하지 않은 로그인 요청입니다.");
@@ -57,7 +63,7 @@ const Redirect = () => {
 
         if (response.status === 200) {
           console.log("200 응답 수신: 회원가입으로 이동");
-          // console.log(response.data); // 디코딩 코드 (삭제해야함)
+          console.log(response.data); // 디코딩 코드 (삭제해야함)
           nav("/signup");
         } else {
           console.error("예상치 못한 응답 상태 코드:", response.status);

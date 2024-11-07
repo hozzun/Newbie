@@ -16,12 +16,13 @@ const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    setUserInfo: (state, action: PayloadAction<{ email: string; platform: string }>) => {
+    setUserInfo: (
+      state,
+      action: PayloadAction<{ email: string; platform: string; isAuthenticated: boolean }>,
+    ) => {
       state.email = action.payload.email;
       state.platform = action.payload.platform;
-    },
-    setAuthenticated: (state, action: PayloadAction<boolean>) => {
-      state.isAuthenticated = action.payload;
+      state.isAuthenticated = action.payload.isAuthenticated;
     },
     clearUserInfo: () => {
       return initialState;
@@ -29,5 +30,5 @@ const userSlice = createSlice({
   },
 });
 
-export const { setUserInfo, setAuthenticated, clearUserInfo } = userSlice.actions;
+export const { setUserInfo, clearUserInfo } = userSlice.actions;
 export default userSlice.reducer;
