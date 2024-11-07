@@ -1,13 +1,42 @@
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useState } from 'react'
 import CheerTeamComponents from "../../components/cheerteam/CheerTeam";
 import ClubSelectItemComponents from "../../components/cheerteam/ClubSelectItem";
+import ClubId from "../../util/ClubId";
 
 const CheerTeam = () => {
-  // TODO: 응원 팀 선정 후 저장 로직 -> ClubId 넘겨서 보내기
+  const [selectedClub, setSelectedClub] = useState<number>(0);
+
+  const nav = useNavigate()
+
+  const updateFavoriteTeam = async (favoriteTeamId: number) => {
+
+    const api_url = import.meta.env.VITE_CHEER_TEAM
+
+    try {
+      const response = await axios.patch(api_url, {
+        favoriteTeamId: favoriteTeamId,
+      });
+  
+      console.log("응답 결과:", response.data);
+    } catch (error) {
+      console.error("에러 발생:", error);
+      throw error;
+    }
+  };
+
+  const handleClubSelect = (club: string) => {
+    setSelectedClub(ClubId[club]);
+    updateFavoriteTeam(selectedClub)
+    nav(-1)
+  };
+
 
   return (
     <>
       <CheerTeamComponents />
-      <ClubSelectItemComponents />
+      <ClubSelectItemComponents onClick={handleClubSelect} />
     </>
   );
 };

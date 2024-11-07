@@ -4,172 +4,17 @@ import ClubSelectItemCommon from "../common/ClubSelectItem";
 import Button from "../../components/common/Button";
 import { BUTTON_VARIANTS } from "../../components/common/variants";
 
-const ClubSelectItem = () => {
-  const [selectedDoosan, setSelectedDoosan] = useState<boolean>(false);
-  const [selectedHanwha, setSelectedHanwha] = useState<boolean>(false);
-  const [selectedSamsung, setSelectedSamsung] = useState<boolean>(false);
-  const [selectedLotte, setSelectedLotte] = useState<boolean>(false);
-  const [selectedLg, setSelectedLg] = useState<boolean>(false);
-  const [selectedSsg, setSelectedSsg] = useState<boolean>(false);
-  const [selectedKt, setSelectedKt] = useState<boolean>(false);
-  const [selectedNc, setSelectedNc] = useState<boolean>(false);
-  const [selectedKiwoom, setSelectedKiwoom] = useState<boolean>(false);
-  const [selectedKia, setSelectedKia] = useState<boolean>(false);
+interface ClubSelectItemProps {
+  onClick: (selectedClub: string) => void;
+}
 
+const ClubSelectItem = (props: ClubSelectItemProps) => {
+  const [selectedClub, setSelectedClub] = useState<string>('');
   const [isDisabled, setIsDisabled] = useState<boolean>(true);
   const [isCheerButton, setIsCheerButton] = useState(BUTTON_VARIANTS.second);
 
-  const onClick = () => {
-    console.log("클릭");
-    // TODO: 홈으로 이동
-  };
-
-  const handleSelectDoosan = () => {
-    setSelectedDoosan(true);
-    setSelectedHanwha(false);
-    setSelectedSamsung(false);
-    setSelectedLotte(false);
-    setSelectedLg(false);
-    setSelectedSsg(false);
-    setSelectedKt(false);
-    setSelectedNc(false);
-    setSelectedKiwoom(false);
-    setSelectedKia(false);
-    setIsDisabled(false);
-    setIsCheerButton(BUTTON_VARIANTS.primary);
-  };
-
-  const handleSelectHanwha = () => {
-    setSelectedDoosan(false);
-    setSelectedHanwha(true);
-    setSelectedSamsung(false);
-    setSelectedLotte(false);
-    setSelectedLg(false);
-    setSelectedSsg(false);
-    setSelectedKt(false);
-    setSelectedNc(false);
-    setSelectedKiwoom(false);
-    setSelectedKia(false);
-    setIsDisabled(false);
-    setIsCheerButton(BUTTON_VARIANTS.primary);
-  };
-
-  const handleSelectSamsung = () => {
-    setSelectedDoosan(false);
-    setSelectedHanwha(false);
-    setSelectedSamsung(true);
-    setSelectedLotte(false);
-    setSelectedLg(false);
-    setSelectedSsg(false);
-    setSelectedKt(false);
-    setSelectedNc(false);
-    setSelectedKiwoom(false);
-    setSelectedKia(false);
-    setIsDisabled(false);
-    setIsCheerButton(BUTTON_VARIANTS.primary);
-  };
-
-  const handleSelectLotte = () => {
-    setSelectedDoosan(false);
-    setSelectedHanwha(false);
-    setSelectedSamsung(false);
-    setSelectedLotte(true);
-    setSelectedLg(false);
-    setSelectedSsg(false);
-    setSelectedKt(false);
-    setSelectedNc(false);
-    setSelectedKiwoom(false);
-    setSelectedKia(false);
-    setIsDisabled(false);
-    setIsCheerButton(BUTTON_VARIANTS.primary);
-  };
-
-  const handleSelectLg = () => {
-    setSelectedDoosan(false);
-    setSelectedHanwha(false);
-    setSelectedSamsung(false);
-    setSelectedLotte(false);
-    setSelectedLg(true);
-    setSelectedSsg(false);
-    setSelectedKt(false);
-    setSelectedNc(false);
-    setSelectedKiwoom(false);
-    setSelectedKia(false);
-    setIsDisabled(false);
-    setIsCheerButton(BUTTON_VARIANTS.primary);
-  };
-
-  const handleSelectSsg = () => {
-    setSelectedDoosan(false);
-    setSelectedHanwha(false);
-    setSelectedSamsung(false);
-    setSelectedLotte(false);
-    setSelectedLg(false);
-    setSelectedSsg(true);
-    setSelectedKt(false);
-    setSelectedNc(false);
-    setSelectedKiwoom(false);
-    setSelectedKia(false);
-    setIsDisabled(false);
-    setIsCheerButton(BUTTON_VARIANTS.primary);
-  };
-
-  const handleSelectKt = () => {
-    setSelectedDoosan(false);
-    setSelectedHanwha(false);
-    setSelectedSamsung(false);
-    setSelectedLotte(false);
-    setSelectedLg(false);
-    setSelectedSsg(false);
-    setSelectedKt(true);
-    setSelectedNc(false);
-    setSelectedKiwoom(false);
-    setSelectedKia(false);
-    setIsDisabled(false);
-    setIsCheerButton(BUTTON_VARIANTS.primary);
-  };
-
-  const handleSelectNc = () => {
-    setSelectedDoosan(false);
-    setSelectedHanwha(false);
-    setSelectedSamsung(false);
-    setSelectedLotte(false);
-    setSelectedLg(false);
-    setSelectedSsg(false);
-    setSelectedKt(false);
-    setSelectedNc(true);
-    setSelectedKiwoom(false);
-    setSelectedKia(false);
-    setIsDisabled(false);
-    setIsCheerButton(BUTTON_VARIANTS.primary);
-  };
-
-  const handleSelectKiwoom = () => {
-    setSelectedDoosan(false);
-    setSelectedHanwha(false);
-    setSelectedSamsung(false);
-    setSelectedLotte(false);
-    setSelectedLg(false);
-    setSelectedSsg(false);
-    setSelectedKt(false);
-    setSelectedNc(false);
-    setSelectedKiwoom(true);
-    setSelectedKia(false);
-    setIsDisabled(false);
-    setIsCheerButton(BUTTON_VARIANTS.primary);
-  };
-
-  const handleSelectKia = () => {
-    setSelectedDoosan(false);
-    setSelectedHanwha(false);
-    setSelectedSamsung(false);
-    setSelectedLotte(false);
-    setSelectedLg(false);
-    setSelectedSsg(false);
-    setSelectedKt(false);
-    setSelectedNc(false);
-    setSelectedKiwoom(false);
-    setSelectedKia(true);
+  const handleSelectClub = (club: string) => {
+    setSelectedClub(club);
     setIsDisabled(false);
     setIsCheerButton(BUTTON_VARIANTS.primary);
   };
@@ -180,78 +25,78 @@ const ClubSelectItem = () => {
         clubColor="doosan"
         width="w-2/5"
         logo={ClubLogos.doosan}
-        isSelected={selectedDoosan}
-        onSelect={handleSelectDoosan}
+        isSelected={selectedClub === "doosan"}
+        onSelect={() => handleSelectClub("doosan")}
       />
       <ClubSelectItemCommon
         clubColor="hanwha"
         width="w-2/5"
         logo={ClubLogos.hanwha}
-        isSelected={selectedHanwha}
-        onSelect={handleSelectHanwha}
+        isSelected={selectedClub === "hanwha"}
+        onSelect={() => handleSelectClub("hanwha")}
       />
       <ClubSelectItemCommon
         clubColor="samsung"
         width="w-2/5"
         logo={ClubLogos.samsung}
-        isSelected={selectedSamsung}
-        onSelect={handleSelectSamsung}
+        isSelected={selectedClub === "samsung"}
+        onSelect={() => handleSelectClub("samsung")}
       />
       <ClubSelectItemCommon
         clubColor="lotte"
         width="w-2/5"
         logo={ClubLogos.lotte}
-        isSelected={selectedLotte}
-        onSelect={handleSelectLotte}
+        isSelected={selectedClub === "lotte"}
+        onSelect={() => handleSelectClub("lotte")}
       />
       <ClubSelectItemCommon
         clubColor="lg"
         width="w-2/5"
         logo={ClubLogos.lg}
-        isSelected={selectedLg}
-        onSelect={handleSelectLg}
+        isSelected={selectedClub === "lg"}
+        onSelect={() => handleSelectClub("lg")}
       />
       <ClubSelectItemCommon
         clubColor="ssg"
         width="w-2/5"
         logo={ClubLogos.ssg}
-        isSelected={selectedSsg}
-        onSelect={handleSelectSsg}
+        isSelected={selectedClub === "ssg"}
+        onSelect={() => handleSelectClub("ssg")}
       />
       <ClubSelectItemCommon
         clubColor="kt"
         width="w-2/5"
         logo={ClubLogos.kt}
-        isSelected={selectedKt}
-        onSelect={handleSelectKt}
+        isSelected={selectedClub === "kt"}
+        onSelect={() => handleSelectClub("kt")}
       />
       <ClubSelectItemCommon
         clubColor="nc"
         width="w-2/5"
         logo={ClubLogos.nc}
-        isSelected={selectedNc}
-        onSelect={handleSelectNc}
+        isSelected={selectedClub === "nc"}
+        onSelect={() => handleSelectClub("nc")}
       />
       <ClubSelectItemCommon
         clubColor="kiwoom"
         width="w-2/5"
         logo={ClubLogos.kiwoom}
-        isSelected={selectedKiwoom}
-        onSelect={handleSelectKiwoom}
+        isSelected={selectedClub === "kiwoom"}
+        onSelect={() => handleSelectClub("kiwoom")}
       />
       <ClubSelectItemCommon
         clubColor="kia"
         width="w-2/5"
         logo={ClubLogos.kia}
-        isSelected={selectedKia}
-        onSelect={handleSelectKia}
+        isSelected={selectedClub === "kia"}
+        onSelect={() => handleSelectClub("kia")}
       />
       <Button
         className="flex justify-center items-center w-4/5 h-14 mt-5"
         variant={isCheerButton}
         children="응원하러 가기"
         disabled={isDisabled}
-        onClick={onClick}
+        onClick={() => props.onClick(selectedClub)}
       />
     </div>
   );
