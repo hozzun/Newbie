@@ -32,14 +32,12 @@ const Redirect = () => {
 
         if (platform === "kakao" && code) {
           const kakaoRedirectUri = import.meta.env.VITE_KAKAO_REDIRECT_URI as string;
-          response = await axiosInstance.post<AuthResponse>(`/api/v1/login/kakao/${code}`, {
-            redirectUri: "/signup",
-          });
+          response = await axiosInstance.post<AuthResponse>(`/api-auth/login/kakao/${code}`);
           console.log(response, "redirectUri", kakaoRedirectUri);
         } else if (platform === "google" && accessToken) {
           const googleRedirectUri = import.meta.env.VITE_GOOGLE_REDIRECT_URI as string;
           response = await axiosInstance.post<AuthResponse>(
-            `/api/v1/login/google/access-token?${accessToken}`,
+            `/api-auth/login/google/access-token?${accessToken}`,
             { redirectUri: googleRedirectUri },
           );
         } else {
@@ -49,6 +47,7 @@ const Redirect = () => {
 
         if (response.status === 200) {
           console.log("200 응답 수신: 회원가입으로 이동");
+          console.log(response.data);
           nav("/signup");
         } else if (response.status === 303) {
           console.log("303 응답 수신: 홈으로 이동");
