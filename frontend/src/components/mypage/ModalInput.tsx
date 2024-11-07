@@ -2,6 +2,7 @@ import { useState } from 'react';
 
 interface ModalInputProps {
   memo?: string;
+  onChange: (value: string) => void;
 }
 
 const ModalInput = (props: ModalInputProps) => {
@@ -12,6 +13,7 @@ const ModalInput = (props: ModalInputProps) => {
     const inputText = e.target.value;
     if (inputText.length <= maxChars) {
       setWrite(inputText);
+      props.onChange(inputText);
     }
   };
 

@@ -16,11 +16,12 @@ interface ModalFormProps {
 const ModalForm = (props: ModalFormProps) => {
   if (!props.isOpen) return null;
 
-  const [memoText, setMemoText] = useState<string>("");
+  const [memo, setMemo] = useState<string>("");
 
-  const handleMemoChange = (newText: string) => {
-    setMemoText(newText);
+  const handleMemoChange = (newMemo: string) => {
+    setMemo(newMemo); // 메모 상태 업데이트
   };
+
 
   console.log(props.ocrResult); // 일단 그냥 써둠
 
@@ -30,7 +31,7 @@ const ModalForm = (props: ModalFormProps) => {
 
     const TextData = {
       id: "672b18692d22ab456ed56763",
-      text: memoText
+      text: memo
     };
 
     try {
@@ -71,7 +72,7 @@ const ModalForm = (props: ModalFormProps) => {
         >
           <ModalFormComponent date="2024.08.03" team1="키움 히어로즈" team2="두산 베어스" />
           <ModalImage imageUrl={props.imgURL} />
-          <ModalInput onMemoChange={handleMemoChange} />
+          <ModalInput memo={memo} onChange={handleMemoChange} />
           <div className="flex flex-row mb-10">
             <Button
               className="w-1/2 mr-4 flex justify-center"
