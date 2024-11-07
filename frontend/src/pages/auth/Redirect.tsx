@@ -63,7 +63,6 @@ const Redirect = () => {
 
         if (response.status === 200) {
           console.log("200 응답 수신: 회원가입으로 이동");
-          console.log(response.data); // 디코딩 코드 (삭제해야함)
           nav("/signup");
         } else {
           console.error("예상치 못한 응답 상태 코드:", response.status);
@@ -81,7 +80,6 @@ const Redirect = () => {
             if (token) {
               sessionStorage.setItem("access_token", token); // sessionStorage에 저장
             }
-
             nav("/"); // 홈으로 이동
           } else {
             console.error("인증 에러:", axiosError.response?.data.message || error.message);
