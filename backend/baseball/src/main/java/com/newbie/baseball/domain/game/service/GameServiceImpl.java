@@ -5,12 +5,14 @@ import com.newbie.baseball.domain.game.entity.Game;
 import com.newbie.baseball.domain.game.exception.GameNotFoundException;
 import com.newbie.baseball.domain.game.repository.GameRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class GameServiceImpl implements GameService {
@@ -19,6 +21,7 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public GameResponseDto getGameById(Integer id) {
+        log.info("Searching for Game with ID: {}", id);
         Game game = gameRepository.findById(id)
                 .orElseThrow(GameNotFoundException::new);
         return convertToDto(game);

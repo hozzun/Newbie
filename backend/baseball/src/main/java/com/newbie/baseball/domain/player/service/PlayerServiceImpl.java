@@ -1,7 +1,5 @@
 package com.newbie.baseball.domain.player.service;
 
-import com.newbie.baseball.domain.game.dto.res.GameResponseDto;
-import com.newbie.baseball.domain.game.entity.Game;
 import com.newbie.baseball.domain.player.dto.res.PlayerResponseDto;
 import com.newbie.baseball.domain.player.entity.Player;
 import com.newbie.baseball.domain.player.exception.PlayerNotFoundException;

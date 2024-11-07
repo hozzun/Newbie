@@ -30,6 +30,8 @@ public class QMember extends EntityPathBase<Member> {
 
     public final BooleanPath isResigned = createBoolean("isResigned");
 
+    public final ListPath<MemberPlayerLike, QMemberPlayerLike> likedPlayers = this.<MemberPlayerLike, QMemberPlayerLike>createList("likedPlayers", MemberPlayerLike.class, QMemberPlayerLike.class, PathInits.DIRECT2);
+
     public final NumberPath<Long> memberId = createNumber("memberId", Long.class);
 
     public final QMemberImage memberImage;
