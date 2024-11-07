@@ -6,7 +6,6 @@ import WatchButton from "../../components/mypage/WatchButton";
 import GameResult from "../../components/mypage/GameResult";
 import GameLabel from "../../components/mypage/GameLabel";
 import ClubId from "../../util/ClubId";
-import ClubFullName from "../../util/ClubFullName";
 
 interface WatchGameProps {
   // TODO: 마이페이지 구현 후 필수 인자로 수정
@@ -16,6 +15,18 @@ interface WatchGameProps {
   day?: string;
   teamId?: number;
 }
+
+type TeamName = 
+  | "doosan"
+  | "hanwha"
+  | "kia"
+  | "kiwoom"
+  | "kt"
+  | "lg"
+  | "lotte"
+  | "nc"
+  | "samsung"
+  | "ssg";
 
 const WatchGame = (props: WatchGameProps) => {
   const [date, setDate] = useState<string>('')
@@ -90,25 +101,26 @@ const WatchGame = (props: WatchGameProps) => {
 
   const deleteGame = () => {
     deleteGameAPI();
+    // TODO: 마이페이지 화면으로 이동
   };
 
-  const getFullNameById = (teamId: number): string => {
-    const teamEnglishName = Object.keys(ClubId).find(key => ClubId[key] === teamId);
+  // null 값을 허용하지 않아서 그냥 "doosan"으로 처리(물론 null 값이 나올 일은 없음)
+  const teamEnglish = (teamId: number): TeamName | "doosan" => {
+    const teamName = Object.keys(ClubId).find((key) => ClubId[key] === teamId);
   
-    if (teamEnglishName) {
-      return ClubFullName[teamEnglishName];
+    if (teamName) {
+      return teamName as TeamName;
     }
-  
-    return "팀 ID에 해당하는 팀을 찾을 수 없습니다.";
-  };
 
+    return "doosan"
+  };
 
   return (
     <>
       <LabelImage date={date} imageUrl={img} />
       <MemoInput memo={text} />
       <GameLabel time={time} loc={stadium} state={state} />
-      <GameResult team1={getFullNameById(homeId)} team2={getFullNameById(awayId)} score1={homeScore} score2={awayScore} />
+      <GameResult team1={teamEnglish(homeId)} team2={teamEnglish(awayId)} score1={homeScore} score2={awayScore} />
       <WatchButton onClick={deleteGame} />
     </>
   );
