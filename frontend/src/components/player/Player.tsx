@@ -4,6 +4,7 @@ import Karina from "../../assets/images/karina.jpg";
 import PlayerProfile from "./PlayerProfile";
 import { PlayerRecordItemProps } from "./PlayerRecordItem";
 import PlayerRecord from "./PlayerRecord";
+import PlayerMusicController from "./PlayerMusicController";
 
 const playerRecordItems: Array<PlayerRecordItemProps> = [
   {
@@ -72,6 +73,7 @@ const Player = () => {
           </div>
           <PlayerRecord label={`${currentYear} 기록`} items={playerRecordItems} />
           <PlayerRecord label="통산 기록" items={playerRecordItems} />
+          <PlayerMusicController />
         </div>
       </Container>
     </>

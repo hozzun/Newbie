@@ -2,19 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import registDragEvent from "../../util/registDragEvent";
 import PlayerRecordItem, { PlayerRecordItemProps } from "./PlayerRecordItem";
 
-const imageList = [
-  "https://blog.kakaocdn.net/dn/dpxiAT/btqUBv6Fvpn/E8xUMncq7AVuDeOim0LrMk/img.jpg",
-  "https://blog.kakaocdn.net/dn/BGT7X/btqUzvTqi5h/flp39GdJH0GU6mo7cTbbhk/img.jpg",
-  "https://blog.kakaocdn.net/dn/bWnmfv/btqUBwqZvwA/3CiXGt3SR0TXoOveRJxV91/img.jpg",
-  "https://blog.kakaocdn.net/dn/XsLCO/btqUL8PQLwp/NZWCU2jAYKkKSXwcohBKTK/img.jpg",
-  "https://blog.kakaocdn.net/dn/bG3iVL/btqUvCZPaRL/ofIjkNWJP1mj2bOG9fie51/img.jpg",
-  "https://blog.kakaocdn.net/dn/dpxiAT/btqUBv6Fvpn/E8xUMncq7AVuDeOim0LrMk/img.jpg",
-  "https://blog.kakaocdn.net/dn/BGT7X/btqUzvTqi5h/flp39GdJH0GU6mo7cTbbhk/img.jpg",
-  "https://blog.kakaocdn.net/dn/bWnmfv/btqUBwqZvwA/3CiXGt3SR0TXoOveRJxV91/img.jpg",
-  "https://blog.kakaocdn.net/dn/XsLCO/btqUL8PQLwp/NZWCU2jAYKkKSXwcohBKTK/img.jpg",
-  "https://blog.kakaocdn.net/dn/bG3iVL/btqUvCZPaRL/ofIjkNWJP1mj2bOG9fie51/img.jpg",
-];
-
 interface useCarouselSizeProps {
   aspectRadio?: number;
 }
@@ -82,7 +69,7 @@ const PlayerCarousel = (props: CarouselProps) => {
             setTransX(inrange(deltaX, -itemWidth, itemWidth));
           },
           onDragEnd: deltaX => {
-            const maxIndex = Math.max(0, imageList.length - (props.itemCount - 2));
+            const maxIndex = Math.max(0, props.items.length - props.itemCount);
             const count = Math.min(props.itemCount, Math.trunc(Math.abs(deltaX) / 100));
 
             if (deltaX < -100) setCurrentIndex(inrange(currentIndex + count, 0, maxIndex));
