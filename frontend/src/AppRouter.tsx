@@ -94,7 +94,7 @@ const AppRouter = () => {
           }
         />
         <Route
-          path="/cheerlyris"
+          path="/cheersong/cheerlyris"
           element={
             // <ProtectedRoute>
             <CheerLyris />
