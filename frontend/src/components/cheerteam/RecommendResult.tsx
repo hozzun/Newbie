@@ -2,7 +2,17 @@ import ClubLogos from "../../util/ClubLogos";
 import ClubFullName from "../../util/ClubFullName";
 
 interface RecommendResultProps {
-  club: string;
+  club:
+  | "doosan"
+  | "hanwha"
+  | "kia"
+  | "kiwoom"
+  | "kt"
+  | "lg"
+  | "lotte"
+  | "nc"
+  | "samsung"
+  | "ssg";
   name: string;
 }
 

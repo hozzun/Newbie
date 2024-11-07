@@ -1,5 +1,5 @@
 import TextButton from "../common/TextButton";
-import PlayerItem from "./PlayerItem";
+import PlayerItem from "../common/PlayerItem";
 
 const PlayerList = () => {
   return (
