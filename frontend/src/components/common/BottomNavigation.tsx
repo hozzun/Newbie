@@ -1,6 +1,5 @@
-// TODO: bottom navigation 버튼 기능 구현하기
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import BottomNavigationButton, { BottomNavigationButtonItem } from "./BottomNavigationButton";
 import Flag from "../../assets/icons/flag.svg?react";
 import FlagSolid from "../../assets/icons/flag-solid.svg?react";
@@ -41,11 +40,34 @@ const bottomNavigationButtonItems: Array<BottomNavigationButtonItem> = [
   },
 ];
 
-const BottomNavigation = () => {
-  const [clickedButtonIndex, setClickedButtonIndex] = useState<number>(2);
+const pathToIndexMap = {
+  "/clubhome": 0,
+  "/cheersong": 1,
+  "/": 2,
+  "/communication": 3,
+  "/mypage": 4,
+};
+
+interface BottomNavigationProps {
+  onButtonClick: (index: number) => void;
+}
+
+const BottomNavigation = ({ onButtonClick }: BottomNavigationProps) => {
+  const location = useLocation();
+  const [clickedButtonIndex, setClickedButtonIndex] = useState<number>(
+    pathToIndexMap[location.pathname as keyof typeof pathToIndexMap] ?? 2,
+  );
+
+  useEffect(() => {
+    const newIndex = pathToIndexMap[location.pathname as keyof typeof pathToIndexMap];
+    if (newIndex !== undefined) {
+      setClickedButtonIndex(newIndex);
+    }
+  }, [location.pathname]);
 
   const handleButtonClick = (index: number) => {
     setClickedButtonIndex(index);
+    onButtonClick(index);
   };
 
   return (
@@ -57,7 +79,7 @@ const BottomNavigation = () => {
             isClicked={index === clickedButtonIndex}
             onClick={() => handleButtonClick(index)}
             key={index}
-          ></BottomNavigationButton>
+          />
         ))}
       </div>
     </div>

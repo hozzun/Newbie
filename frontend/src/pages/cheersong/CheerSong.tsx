@@ -1,17 +1,25 @@
-import Container from "../../components/common/Container"
-import CheerSongContainer from "../../containers/cheersong/CheerSong"
-import BottomNavigation from "../../components/common/BottomNavigation"
+import { useNavigate } from "react-router-dom";
+
+import Container from "../../components/common/Container";
+import CheerSongContainer from "../../containers/cheersong/CheerSong";
+import BottomNavigation from "../../components/common/BottomNavigation";
 
 const CheerSong = () => {
+  const navigate = useNavigate();
+
+  const handleBottomNavigationClick = (index: number) => {
+    const routes = ["/clubhome", "/cheersong", "/", "/communication", "/mypage"];
+    navigate(routes[index]);
+  };
 
   return (
     <>
       <Container>
         <CheerSongContainer />
       </Container>
-      <BottomNavigation />
+      <BottomNavigation onButtonClick={handleBottomNavigationClick} />
     </>
-  )
-}
+  );
+};
 
-export default CheerSong
+export default CheerSong;

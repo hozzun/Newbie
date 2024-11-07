@@ -1,12 +1,9 @@
 import { useNavigate } from "react-router-dom";
 
-import AppBar from "../../components/common/AppBar";
-import Container from "../../components/common/Container";
-import HomeContainer from "../../containers/home/Home";
+import ClubHomeComponent from "../../components/club/ClubHome";
 import BottomNavigation from "../../components/common/BottomNavigation";
-import BaseballDictionaryFAB from "../../containers/home/BaseballDictionaryFAB";
 
-const Home = () => {
+const ClubHome = () => {
   const navigate = useNavigate();
 
   const handleBottomNavigationClick = (index: number) => {
@@ -15,14 +12,10 @@ const Home = () => {
   };
   return (
     <>
-      <AppBar />
-      <Container>
-        <HomeContainer />
-      </Container>
-      <BaseballDictionaryFAB />
+      <ClubHomeComponent />
       <BottomNavigation onButtonClick={handleBottomNavigationClick} />
     </>
   );
 };
 
-export default Home;
+export default ClubHome;
