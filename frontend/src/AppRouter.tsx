@@ -1,6 +1,6 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-// import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from "react-router-dom";
-// import { useEffect } from "react";
+// import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 import Login from "./pages/auth/Login";
 import Signup from "./pages/auth/Signup";
@@ -15,18 +15,18 @@ import CheerTeam from "./pages/cheerteam/CheerTeam";
 import ClubRecommend from "./pages/cheerteam/ClubRecommend";
 
 // 로그인 하지 않은 사용자의 접근 방지
-// function ProtectedRoute({ children }: { children: JSX.Element }) {
-//   const navigate = useNavigate();
-//   const token = sessionStorage.getItem("access_token");
+function ProtectedRoute({ children }: { children: JSX.Element }) {
+  const navigate = useNavigate();
+  const token = sessionStorage.getItem("access_token");
 
-//   useEffect(() => {
-//     if (!token) {
-//       navigate("/login");
-//     }
-//   }, [token, navigate]);
+  useEffect(() => {
+    if (!token) {
+      navigate("/login");
+    }
+  }, [token, navigate]);
 
-//   return children;
-// }
+  return children;
+}
 
 // 로그인된 사용자가 로그인 페이지에 접근하지 못하게
 function AuthRoute({ children }: { children: JSX.Element }) {
@@ -63,65 +63,65 @@ const AppRouter = () => {
         <Route
           path="/clubhome"
           element={
-            // <ProtectedRoute>
-            <ClubHome />
-            // </ProtectedRoute>
+            <ProtectedRoute>
+              <ClubHome />
+            </ProtectedRoute>
           }
         />
         <Route
           path="/"
           element={
-            // <ProtectedRoute>
-            <Home />
-            // </ProtectedRoute>
+            <ProtectedRoute>
+              <Home />
+            </ProtectedRoute>
           }
         />
         <Route
           path="/cheersong"
           element={
-            // <ProtectedRoute>
-            <CheerSong />
-            // </ProtectedRoute>
+            <ProtectedRoute>
+              <CheerSong />
+            </ProtectedRoute>
           }
         />
         <Route
           path="/cheersong"
           element={
-            // <ProtectedRoute>
-            <CheerSong />
-            // </ProtectedRoute>
+            <ProtectedRoute>
+              <CheerSong />
+            </ProtectedRoute>
           }
         />
         <Route
           path="/cheerteam"
           element={
-            // <ProtectedRoute>
-            <CheerTeam />
-            // </ProtectedRoute>
+            <ProtectedRoute>
+              <CheerTeam />
+            </ProtectedRoute>
           }
         />
         <Route
           path="/clubrecommend"
           element={
-            // <ProtectedRoute>
-            <ClubRecommend />
-            // </ProtectedRoute>
+            <ProtectedRoute>
+              <ClubRecommend />
+            </ProtectedRoute>
           }
         />
         <Route
           path="/gameschedule"
           element={
-            // <ProtectedRoute>
-            <GameSchedule />
-            // </ProtectedRoute>
+            <ProtectedRoute>
+              <GameSchedule />
+            </ProtectedRoute>
           }
         />
         <Route
           path="/gameschedule/gameresult"
           element={
-            // <ProtectedRoute>
-            <GameResult />
-            // </ProtectedRoute>
+            <ProtectedRoute>
+              <GameResult />
+            </ProtectedRoute>
           }
         />
 

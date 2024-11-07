@@ -1,19 +1,24 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import axiosInstance from "../../util/axiosInstance";
+import { setUserInfo } from "../../redux/userSlice";
 
 interface AuthResponse {
+  email: string;
   token: string;
 }
 
 interface ApiError {
   message: string;
   status: number;
+  token?: string;
 }
 
 const Redirect = () => {
   const nav = useNavigate();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const socialLogin = async () => {
@@ -31,9 +36,14 @@ const Redirect = () => {
         let response: AxiosResponse<AuthResponse>;
 
         if (platform === "kakao" && code) {
-          const kakaoRedirectUri = import.meta.env.VITE_KAKAO_REDIRECT_URI as string;
-          response = await axiosInstance.post<AuthResponse>(`/api-auth/login/kakao/${code}`);
-          console.log(response, "redirectUri", kakaoRedirectUri);
+          response = await axiosInstance.post(`/api-auth/login/kakao/${code}`);
+          // Redux store에 사용자 정보 저장
+          dispatch(
+            setUserInfo({
+              email: response.data.email,
+              platform: "kakao",
+            }),
+          );
         } else if (platform === "google" && accessToken) {
           const googleRedirectUri = import.meta.env.VITE_GOOGLE_REDIRECT_URI as string;
           response = await axiosInstance.post<AuthResponse>(
@@ -47,19 +57,29 @@ const Redirect = () => {
 
         if (response.status === 200) {
           console.log("200 응답 수신: 회원가입으로 이동");
-          console.log(response.data);
+          // console.log(response.data); // 디코딩 코드 (삭제해야함)
           nav("/signup");
-        } else if (response.status === 303) {
-          console.log("303 응답 수신: 홈으로 이동");
-          sessionStorage.setItem("token", response.data.token);
-          nav("/");
         } else {
           console.error("예상치 못한 응답 상태 코드:", response.status);
         }
       } catch (error) {
         if (axios.isAxiosError(error)) {
           const axiosError = error as AxiosError<ApiError>;
-          console.error("인증 에러:", axiosError.response?.data.message || error.message);
+
+          // 상태 코드가 303인지 확인
+          if (axiosError.response?.status === 303) {
+            console.log("303 응답 수신: 홈으로 이동");
+
+            // 서버에서 전달된 토큰 추출 (토큰이 존재하는 경우에만)
+            const token = axiosError.response.data.token;
+            if (token) {
+              sessionStorage.setItem("access_token", token); // sessionStorage에 저장
+            }
+
+            nav("/"); // 홈으로 이동
+          } else {
+            console.error("인증 에러:", axiosError.response?.data.message || error.message);
+          }
         } else {
           console.error("예기치 않은 에러:", error);
         }
@@ -67,7 +87,7 @@ const Redirect = () => {
     };
 
     socialLogin();
-  }, [nav]);
+  }, [nav, dispatch]);
 
   return <div>Redirecting...</div>;
 };

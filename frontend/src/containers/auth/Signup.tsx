@@ -1,10 +1,31 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import SignupComponent from "../../components/auth/Signup";
 import { BUTTON_VARIANTS } from "../../components/common/variants";
-import { useNavigate } from "react-router-dom";
+import axiosInstance from "../../util/axiosInstance";
+
+interface RootState {
+  user: {
+    email: string;
+    platform: string;
+  };
+}
+
+interface MemberData {
+  nickname: string;
+  email: string;
+  address: string;
+  platform: string;
+  memberImage: {
+    memberId: number;
+    memberImage: string;
+  };
+}
 
 const Signup = () => {
   const nav = useNavigate();
+  const userInfo = useSelector((state: RootState) => state.user);
   const [buttonVariant, setButtonVariant] = useState<BUTTON_VARIANTS>(BUTTON_VARIANTS.second);
   const [formData, setFormData] = useState({
     name: "",
@@ -30,11 +51,28 @@ const Signup = () => {
     }
   };
 
-  const handleButtonClick = () => {
+  const handleButtonClick = async () => {
     if (buttonVariant === BUTTON_VARIANTS.primary) {
-      // 모든 정보가 채워지고 버튼이 활성화된 상태에서만 실행되는 로직
-      console.log("회원가입이 완료되었습니다!");
-      nav("/");
+      try {
+        const address = `${formData.si} ${formData.gun}`.trim();
+
+        const memberData: Partial<MemberData> = {
+          nickname: formData.name,
+          email: userInfo.email, // Redux store에서 가져온 이메일
+          address: address,
+          platform: userInfo.platform, // Redux store에서 가져온 플랫폼
+        };
+
+        const response = await axiosInstance.post<MemberData>(
+          "/api-auth/members/signup",
+          memberData,
+        );
+
+        console.log("회원가입 완료:", response.data);
+        nav("/");
+      } catch (error) {
+        console.error("회원가입 실패:", error);
+      }
     }
   };
 
