@@ -5,6 +5,7 @@ import CircleButton from "./CircleButton";
 import { CIRCLE_BUTTON_VARIANTS } from "./variants";
 
 interface DropdownProps {
+  minWidth: number;
   options: Array<string>;
   selected: string;
   onSelect: (value: string) => void;
@@ -12,6 +13,7 @@ interface DropdownProps {
 
 interface SortSelectBoxProps {
   options: Array<string>;
+  minWidth: number;
 }
 
 const Dropdown = (props: DropdownProps) => {
@@ -25,7 +27,7 @@ const Dropdown = (props: DropdownProps) => {
 
   return (
     <div className="relative inline-block">
-      <div className="flex flex-row">
+      <div className="flex flex-row items-center">
         <p className="pr-1 py-2 text-sm font-kbogothiclight text-gray-700">
           {props.selected || props.options[0]}
         </p>
@@ -46,7 +48,9 @@ const Dropdown = (props: DropdownProps) => {
         )}
       </div>
       {isOpen && (
-        <div className="absolute right-2 z-10 min-w-[90px] mt-0.5 bg-white border border-gray-200 rounded-lg shadow-xl">
+        <div
+          className={`absolute right-2 z-10 min-w-[${props.minWidth}px] mt-0.5 bg-white border border-gray-200 rounded-lg shadow-xl`}
+        >
           {props.options.map((option, index) => (
             <div
               key={index}
@@ -67,7 +71,14 @@ const SortSelectBox = (props: SortSelectBoxProps) => {
 
   const handleSelect = (value: string) => setSelectedOption(value);
 
-  return <Dropdown options={props.options} selected={selectedOption} onSelect={handleSelect} />;
+  return (
+    <Dropdown
+      minWidth={props.minWidth}
+      options={props.options}
+      selected={selectedOption}
+      onSelect={handleSelect}
+    />
+  );
 };
 
 export default SortSelectBox;

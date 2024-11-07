@@ -7,7 +7,7 @@ const PlayerList = () => {
   return (
     <div className="flex flex-col w-full">
       <div className="flex justify-end">
-        <SortSelectBox options={options} />
+        <SortSelectBox options={options} minWidth={90} />
       </div>
       <div className="grid grid-cols-3 gap-4">
         <PlayerItem />
