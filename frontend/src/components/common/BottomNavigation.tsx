@@ -41,11 +41,16 @@ const bottomNavigationButtonItems: Array<BottomNavigationButtonItem> = [
   },
 ];
 
-const BottomNavigation = () => {
+interface BottomNavigationProps {
+  onButtonClick: (index: number) => void;
+}
+
+const BottomNavigation = ({ onButtonClick }: BottomNavigationProps) => {
   const [clickedButtonIndex, setClickedButtonIndex] = useState<number>(2);
 
   const handleButtonClick = (index: number) => {
     setClickedButtonIndex(index);
+    onButtonClick(index);
   };
 
   return (

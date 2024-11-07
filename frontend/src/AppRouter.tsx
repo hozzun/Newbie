@@ -5,6 +5,8 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 import Login from "./pages/auth/Login";
 import Signup from "./pages/auth/Signup";
 import Redirect from "./pages/auth/Redirect";
+
+import ClubHome from "./pages/club/ClubHome";
 import Home from "./pages/home/Home";
 import GameResult from "./pages/home/GameResult";
 import GameSchedule from "./pages/home/GameSchedule";
@@ -59,6 +61,14 @@ const AppRouter = () => {
 
         {/* 로그인 안된 사용자 접근금지 */}
         <Route
+          path="/clubhome"
+          element={
+            // <ProtectedRoute>
+            <ClubHome />
+            // </ProtectedRoute>
+          }
+        />
+        <Route
           path="/"
           element={
             // <ProtectedRoute>
@@ -99,18 +109,18 @@ const AppRouter = () => {
           }
         />
         <Route
-          path="/gameresult"
-          element={
-            // <ProtectedRoute>
-            <GameResult />
-            // </ProtectedRoute>
-          }
-        />
-        <Route
           path="/gameschedule"
           element={
             // <ProtectedRoute>
             <GameSchedule />
+            // </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/gameschedule/gameresult"
+          element={
+            // <ProtectedRoute>
+            <GameResult />
             // </ProtectedRoute>
           }
         />
