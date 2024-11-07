@@ -1,44 +1,75 @@
 import axios from "axios";
-// import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import LabelImage from "../../components/mypage/LabelImage";
-import ticket from "../../assets/images/직관경기티켓.jpg";
 import MemoInput from "../../components/mypage/MemoInput";
 import WatchButton from "../../components/mypage/WatchButton";
 import GameResult from "../../components/mypage/GameResult";
 import GameLabel from "../../components/mypage/GameLabel";
+import ClubId from "../../util/ClubId";
+import ClubFullName from "../../util/ClubFullName";
 
-const WatchGame = () => {
-  // TODO: 메모 API 연결
+interface WatchGameProps {
+  // TODO: 마이페이지 구현 후 필수 인자로 수정
+  ticketId?: string;
+  year?: string;
+  month?: string;
+  day?: string;
+  teamId?: number;
+}
 
-  // const getGameData = async () => {
+const WatchGame = (props: WatchGameProps) => {
+  const [date, setDate] = useState<string>('')
+  const [text, setText] = useState<string>('')
+  const [img, setImg] = useState<string>('')
+  const [time, setTime] = useState<string>('')
+  const [stadium, setStadium] = useState<string>('')
+  const [state, setState] = useState<string>('')
+  const [homeId, setHomeId] = useState<number>(0)
+  const [awayId, setAwayId] = useState<number>(0)
+  const [homeScore, setHomeScore] = useState<number>(0)
+  const [awayScore, setAwayScore] = useState<number>(0)
 
-  //   // TODO: 직관 경기 정보 실제 데이터 연동
-  //   const params = {
-  //     year: '2024',
-  //     month: '8',
-  //     day: '3',
-  //     teamId: 2
-  //   };
 
-  //   try {
-  //     const response = await axios.get('api주소', {
-  //       params: params,
-  //     });
-  //     console.log(response.data);
-  //     return response.data;
-  //   } catch (error) {
-  //     console.error('API 요청 중 오류 발생:', error);
-  //     throw error;
-  //   }
-  // };
+  const getGameData = async () => {
+    const api_url = import.meta.env.VITE_WATCH_GAME;
 
-  // useEffect(() => {
-  //   getGameData();
-  // }, []);
+    try {
+      const response = await axios.get(`${api_url}/${props.year}/${props.month}/${props.day}/${props.teamId}`);
+      console.log(response.data);
+      setTime(response.data.time)
+      setStadium(response.data.stadium)
+      setState(response.data.gameResult)
+      setHomeId(response.data.homTeamId)
+      setAwayId(response.data.awayTeamId)
+      setHomeScore(response.data.homeScore)
+      setAwayScore(response.data.awayScore)
+    } catch (error) {
+      console.error('API 요청 중 오류 발생:', error);
+      throw error;
+    }
+  };
+
+  const getInfoAPI = async () => {
+    const api_url = import.meta.env.VITE_TICKET_INFO;
+    const id = props.ticketId
+  
+    try {
+      const response = await axios.get(api_url, {
+        params: { id },
+      });
+      console.log(response.data);
+      setDate(response.data.date)
+      setImg(response.data.imageUrl)
+      setText(response.data.text)
+    } catch (error) {
+      console.error("API 요청 중 오류 발생:", error);
+      throw error;
+    }
+  };
 
   const deleteGameAPI = async () => {
     const api_url = import.meta.env.VITE_TICKET_DELETE;
-    const id = "672b18692d22ab456ed56763"; // TODO: 데이터 수정
+    const id = props.ticketId
   
     try {
       const response = await axios.delete(api_url, {
@@ -52,16 +83,32 @@ const WatchGame = () => {
     }
   };
 
+  useEffect(() => {
+    getGameData();
+    getInfoAPI();
+  }, []);
+
   const deleteGame = () => {
     deleteGameAPI();
   };
 
+  const getFullNameById = (teamId: number): string => {
+    const teamEnglishName = Object.keys(ClubId).find(key => ClubId[key] === teamId);
+  
+    if (teamEnglishName) {
+      return ClubFullName[teamEnglishName];
+    }
+  
+    return "팀 ID에 해당하는 팀을 찾을 수 없습니다.";
+  };
+
+
   return (
     <>
-      <LabelImage date="2024.08.03" imageUrl={ticket} />
-      <MemoInput memo="나는야 패배요정" />
-      <GameLabel time="18:00" loc="대구" state="경기전" />
-      <GameResult team1="삼성 라이온즈" team2="SSG 랜더스" score1={0} score2={0} />
+      <LabelImage date={date} imageUrl={img} />
+      <MemoInput memo={text} />
+      <GameLabel time={time} loc={stadium} state={state} />
+      <GameResult team1={getFullNameById(homeId)} team2={getFullNameById(awayId)} score1={homeScore} score2={awayScore} />
       <WatchButton onClick={deleteGame} />
     </>
   );
