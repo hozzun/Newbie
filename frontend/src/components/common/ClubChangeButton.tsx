@@ -34,13 +34,13 @@ const ClubChangeButton = ({ logo, clubColor, club, onClick }: ClubChangeProps) =
 
   return (
     <div
-      className={`flex box-border w-[100%] px-2 py-6 justify-evenly rounded-lg
+      className={`flex box-border w-[100%] px-2 py-6 justify-between rounded-lg
        ${bgColorClass[clubColor]} transition-colors duration-300 shadow`}
     >
       <div className="flex items-center justify-center">
-        <img src={logo} alt={`${clubColor} logo`} className="w-[80%] h-[80%]" />
+        <img src={logo} alt={`${clubColor} logo`} className="w-[70%] h-[70%]" />
       </div>
-      <div className="flex flex-col justify-center items-center">
+      <div className="flex flex-col justify-center items-center mr-16">
         <div className="text-white font-kbogothicbold text-2xl mb-2">{club}</div>
         <Button className="w-full px-12 whitespace-nowrap" variant={BUTTON_VARIANTS.white} onClick={onClick}>
           구단 바꾸기

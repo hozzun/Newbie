@@ -38,7 +38,7 @@ const ClubSelectItem = ({ logo, clubColor, width, isSelected, onSelect }: ClubSe
       onClick={onSelect} // 클릭 시 부모의 onSelect 호출
     >
       <div className="justify-center content-center">
-        <img src={logo} alt={`${clubColor} logo`} className="w-16 h-16" />
+        <img src={logo} alt={`${clubColor} logo`} className="w-12 h-12" />
       </div>
     </div>
   );
