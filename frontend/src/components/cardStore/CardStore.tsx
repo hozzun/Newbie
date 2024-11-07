@@ -1,4 +1,5 @@
 import Coin from "../../assets/icons/copyright-solid.svg?react";
+import TabBar from "./TabBar";
 
 const CardStore = () => {
   return (
@@ -10,6 +11,7 @@ const CardStore = () => {
           <p className="text-base font-kbogothicmedium text-gray-700">3,000</p>
         </div>
       </div>
+      <TabBar />
     </div>
   );
 };
