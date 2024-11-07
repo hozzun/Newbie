@@ -2,8 +2,63 @@ import Container from "../common/Container";
 import PlayerSectionBox from "./PlayerSectionBox";
 import Karina from "../../assets/images/karina.jpg";
 import PlayerProfile from "./PlayerProfile";
+import { PlayerRecordItemProps } from "./PlayerRecordItem";
+import PlayerRecord from "./PlayerRecord";
+
+const playerRecordItems: Array<PlayerRecordItemProps> = [
+  {
+    label: "타율1",
+    value: "0.322",
+  },
+  {
+    label: "타율2",
+    value: "0.322",
+  },
+  {
+    label: "타율3",
+    value: "0.322",
+  },
+  {
+    label: "타율4",
+    value: "0.322",
+  },
+  {
+    label: "타율5",
+    value: "0.322",
+  },
+  {
+    label: "타율6",
+    value: "0.322",
+  },
+  {
+    label: "타율7",
+    value: "0.322",
+  },
+  {
+    label: "타율8",
+    value: "0.322",
+  },
+  {
+    label: "타율9",
+    value: "0.322",
+  },
+  {
+    label: "타율10",
+    value: "0.322",
+  },
+  {
+    label: "타율11",
+    value: "0.322",
+  },
+  {
+    label: "타율12",
+    value: "0.322",
+  },
+];
 
 const Player = () => {
+  const currentYear = new Date().getFullYear();
+
   return (
     <>
       <PlayerSectionBox label="투수" />
@@ -15,6 +70,8 @@ const Player = () => {
             </div>
             <PlayerProfile />
           </div>
+          <PlayerRecord label={`${currentYear} 기록`} items={playerRecordItems} />
+          <PlayerRecord label="통산 기록" items={playerRecordItems} />
         </div>
       </Container>
     </>
