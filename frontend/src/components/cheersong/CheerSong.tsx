@@ -20,7 +20,7 @@ const CheerSong = (props: CheerSongProps) => {
         <ClubSelectItem
           logo={ClubLogos[props.club]}
           clubColor={props.club}
-          width="w-16"
+          width="w-16 h-16 mt-3"
           isSelected={false}
         />
         <div className="flex flex-col m-5">
