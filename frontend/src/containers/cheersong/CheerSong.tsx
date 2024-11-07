@@ -10,7 +10,7 @@ const CheerSong = () => {
   const navigate = useNavigate()
 
   const goClubSelect = () => {
-    console.log('구단 선택 페이지로 이동')
+    navigate('/cheerteam')
   }
 
   const goLyris = () => {

@@ -1,10 +1,13 @@
+import { useNavigate } from "react-router-dom";
 import Button from "../../components/common/Button";
 import { BUTTON_VARIANTS } from "../../components/common/variants";
 
 const CheerTeam = () => {
+
+  const nav = useNavigate()
+
   const onClick = () => {
-    console.log("클릭");
-    // TODO: 구단 추천 페이지로 이동
+    nav('/clubrecommend')
   };
 
   return (
