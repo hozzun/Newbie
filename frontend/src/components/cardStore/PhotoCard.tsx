@@ -25,7 +25,9 @@ const PhotoCard = (props: PhotoCardProps) => {
       </div>
       <div className="flex flex-row mt-1.5 items-center justify-center">
         <Coin className="text-warning w-3 h-3 mr-1" />
-        <p className="text-sm font-kbogothiclight text-gray-700">{props.photoCard.price}</p>
+        <p className="text-xs font-kbogothiclight text-gray-700">
+          {props.photoCard.price.toLocaleString("ko-KR")}
+        </p>
       </div>
     </div>
   );
