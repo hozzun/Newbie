@@ -4,9 +4,10 @@ import UserSolid from "../../assets/icons/user-solid.svg?react";
 interface TextFleidProps {
   label?: string;
   onNameChange: (name: string) => void;
+  placeholder?: string;
 }
 
-const TextFleid = ({ label, onNameChange }: TextFleidProps) => {
+const TextFleid = ({ label, onNameChange, placeholder }: TextFleidProps) => {
   const [name, setName] = useState("");
   const [isFocused, setIsFocused] = useState(false);
 
@@ -32,7 +33,7 @@ const TextFleid = ({ label, onNameChange }: TextFleidProps) => {
           onChange={handleNameChange}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
-          placeholder="이름을 입력해주세요"
+          placeholder={placeholder}
         />
       </div>
     </div>

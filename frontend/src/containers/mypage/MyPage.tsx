@@ -14,11 +14,10 @@ import OutButton from "../../components/mypage/OutButton"
 const MyPage = () => {
 
   const nav = useNavigate()
-  // TODO: 회원 정보 가져오기(image, name, email, favorite-team)
+  // TODO: 회원 정보 가져오기(image, name, email, favorite-team), navigate 설정
 
   const goRevise = () => {
-    // TODO: navigate 설정
-    console.log('회원 정보 수정 페이지로 이동')
+    nav('/mypage/revise')
   }
 
   const goRecommend = () => {
