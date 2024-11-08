@@ -1,19 +1,18 @@
 import CalenderIcon from "../../assets/icons/calender.svg?react"
 import { useState } from 'react';
+import ClubLogos from "../../util/ClubLogos";
 
 const Calendar = () => {
 
+  // TODO: 경기 정보 가져오기
   const [currentDate, setCurrentDate] = useState(new Date());
   
-  // 현재 연도와 월 가져오기
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
 
-  // 첫째 날과 마지막 날
   const firstDay = new Date(year, month, 1);
   const lastDay = new Date(year, month + 1, 0);
 
-  // 요일 배열
   const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
   // 날짜 배열 만들기
@@ -29,10 +28,15 @@ const Calendar = () => {
         <p className="font-kbogothicbold text-gray-600 ml-3">경기 일정</p>
       </div>
       <div className="m-5 p-5 bg-gray-100 rounded-2xl">
-        {/* 달과 연도 */}
-        <h2 className="font-kbogothicbold text-lg mb-5">
-          {year}년 {month + 1}월
-        </h2>
+        <div className="flex flex-row">
+          <p className="font-kbogothicbold text-lg mb-5">
+            {year}년 {month + 1}월
+          </p>
+          <>
+            <p className="font-kbogothicmedium text-xs">홈 경기</p>
+            <p className="font-kbogothicmedium text-xs">원정 경기</p>
+          </>
+        </div>
   
         {/* 요일 표시 */}
         <div className="grid grid-cols-7 text-center mb-5 font-kbogothicbold">
@@ -42,7 +46,7 @@ const Calendar = () => {
         </div>
   
         {/* 날짜 표시 */}
-        <div className="grid grid-cols-7 text-center font-kbogothicmedium">
+        <div className="grid grid-cols-7 text-center font-kbogothicmedium text-gray-200">
           {/* 첫 주 앞쪽 공백 채우기 */}
           {Array.from({ length: firstDay.getDay() }).map((_, i) => (
             <div key={i}></div>
@@ -50,8 +54,13 @@ const Calendar = () => {
   
           {/* 날짜 표시 */}
           {dates.map((date) => (
-            <div key={date.getDate()} className="p-2 border border-gray-300">
-              {date.getDate()}
+            <div className="flex flex-col p-2 m-1 bg-white rounded-2xl text-xs">
+              <div className="flex justify-end" key={date.getDate()}>
+                {date.getDate()}
+              </div>
+              {/* 이 부분은 경기 정보가 있을 경우에만! */}
+              <img className="flex justify-center items-center mb-1 h-5" src={ClubLogos["doosan"]}></img>
+              <p>인천</p>
             </div>
           ))}
         </div>
