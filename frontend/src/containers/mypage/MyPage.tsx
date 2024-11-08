@@ -25,7 +25,7 @@ const MyPage = () => {
   }
 
   const goPhotoCard = () => {
-    console.log('포토카트 페이지로 이동')
+    nav('/mypage/photocard')
   }
 
   const goWrite = () => {
