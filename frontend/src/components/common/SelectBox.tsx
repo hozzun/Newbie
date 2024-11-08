@@ -3,9 +3,11 @@ import React, { useState } from "react";
 interface SelectBoxProps {
   label?: string;
   onSelectionChange: (si: string, gun: string) => void;
+  placeholder1?: string;
+  placeholder2?: string;
 }
 
-const SelectBox = ({ label, onSelectionChange }: SelectBoxProps) => {
+const SelectBox = ({ label, onSelectionChange, placeholder1, placeholder2 }: SelectBoxProps) => {
   const [selectedSi, setSelectedSi] = useState("");
   const [selectedGun, setSelectedGun] = useState("");
   const [siActive, setSiActive] = useState(false);
@@ -45,7 +47,7 @@ const SelectBox = ({ label, onSelectionChange }: SelectBoxProps) => {
           className={`border border-gray-200 p-2 rounded-lg outline-none w-1/2 h-10 ${siActive ? "text-gray-700" : "text-gray-300"}`}
         >
           <option value="" disabled>
-            시
+            {placeholder1}
           </option>
           {options.map(option => (
             <option key={option.value} value={option.value} className="text-gray-700">
@@ -60,7 +62,7 @@ const SelectBox = ({ label, onSelectionChange }: SelectBoxProps) => {
           disabled={!selectedSi}
         >
           <option value="" disabled>
-            구
+            {placeholder2}
           </option>
           {options.map(option => (
             <option key={option.value} value={option.value} className="text-gray-700">
