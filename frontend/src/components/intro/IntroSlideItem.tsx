@@ -13,7 +13,7 @@ const IntroSlideItem = ({ imgSrc, text1, text2 }: SlideItemProps) => {
         className="w-full max-w-[80%] h-auto object-contain rounded-lg"
       />
       <div className="text-4xl font-kbogothicbold mt-[10%]">{text1}</div>
-      <div className="text-2lg text-gray-600 font-kbogothicmedium mb-[30%]">{text2}</div>{" "}
+      <div className="text-2lg text-gray-500 font-kbogothicmedium mb-[30%]">{text2}</div>{" "}
       {/* 텍스트 크기 증가 */}
     </div>
   );
