@@ -69,7 +69,7 @@ const AppRouter = () => {
 
         {/* 로그인 안된 사용자 접근금지 */}
         <Route
-          path="/clubhome"
+          path="/club/:id"
           element={
             <ProtectedRoute>
               <ClubHome />
