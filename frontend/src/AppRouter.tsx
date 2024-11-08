@@ -20,6 +20,8 @@ import MyPage from "./pages/mypage/MyPage";
 import CameraCapture from "./pages/mypage/CameraCapture";
 import CardDetail from "./pages/cardStore/CardDetail";
 import ReviseInfo from "./pages/mypage/ReviseInfo";
+import Player from "./pages/player/Player";
+import PlayerList from "./pages/player/PlayerList";
 import PhotoCard from "./pages/mypage/PhotoCard";
 import PhotoCardDetail from "./pages/mypage/PhotoCardDetail";
 
@@ -73,10 +75,26 @@ const AppRouter = () => {
 
         {/* 로그인 안된 사용자 접근금지 */}
         <Route
-          path="/clubhome"
+          path="/club/:id"
           element={
             <ProtectedRoute>
               <ClubHome />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/club/player"
+          element={
+            <ProtectedRoute>
+              <PlayerList />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/club/player/:id"
+          element={
+            <ProtectedRoute>
+              <Player />
             </ProtectedRoute>
           }
         />

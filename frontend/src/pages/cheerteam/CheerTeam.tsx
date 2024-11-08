@@ -1,19 +1,11 @@
-import { useNavigate } from "react-router-dom";
-import SectionBox from "../../components/common/SectionBox";
+import SectionBox from "../../containers/common/SectionBox";
 import Container from "../../components/common/Container";
 import CheerTeamContainers from "../../containers/cheerteam/CheerTeam";
 
 const CheerTeam = () => {
-
-  const nav = useNavigate()
-
-  const handleNav =  () => {
-    nav(-1)
-  }
-
   return (
     <>
-      <SectionBox label="구단 선택" onClick={handleNav} />
+      <SectionBox label="구단 선택" />
       <Container>
         <CheerTeamContainers />
       </Container>

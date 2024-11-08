@@ -1,24 +1,16 @@
-import { useNavigate } from "react-router-dom"
-import Container from "../../components/common/Container"
-import SectionBox from "../../components/common/SectionBox"
-import CheerLyrisContainer from "../../containers/cheersong/CheerLyris"
+import Container from "../../components/common/Container";
+import CheerLyrisContainer from "../../containers/cheersong/CheerLyris";
+import SectionBox from "../../containers/common/SectionBox";
 
 const CheerLyris = () => {
-
-  const navigate = useNavigate()
-
-  const handleNav = () => {
-    navigate('/cheersong')
-  }
-
   return (
     <>
-      <SectionBox label="응원가" onClick={handleNav} />
+      <SectionBox label="응원가" />
       <Container>
         <CheerLyrisContainer />
       </Container>
     </>
-  )
-}
+  );
+};
 
-export default CheerLyris
+export default CheerLyris;

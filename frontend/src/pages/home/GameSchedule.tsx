@@ -1,5 +1,5 @@
 import Container from "../../components/common/Container";
-import SectionBox from "../../components/common/SectionBox";
+import SectionBox from "../../containers/common/SectionBox";
 import GameScheduleContainer from "../../containers/home/GameSchedule";
 
 const GameSchedule = () => {

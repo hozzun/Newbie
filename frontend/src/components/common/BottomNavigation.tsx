@@ -1,5 +1,3 @@
-import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
 import BottomNavigationButton, { BottomNavigationButtonItem } from "./BottomNavigationButton";
 import Flag from "../../assets/icons/flag.svg?react";
 import FlagSolid from "../../assets/icons/flag-solid.svg?react";
@@ -40,44 +38,20 @@ const bottomNavigationButtonItems: Array<BottomNavigationButtonItem> = [
   },
 ];
 
-const pathToIndexMap = {
-  "/clubhome": 0,
-  "/cheersong": 1,
-  "/": 2,
-  "/communication": 3,
-  "/mypage": 4,
-};
-
 interface BottomNavigationProps {
+  clickedButtonIndex: number;
   onButtonClick: (index: number) => void;
 }
 
-const BottomNavigation = ({ onButtonClick }: BottomNavigationProps) => {
-  const location = useLocation();
-  const [clickedButtonIndex, setClickedButtonIndex] = useState<number>(
-    pathToIndexMap[location.pathname as keyof typeof pathToIndexMap] ?? 2,
-  );
-
-  useEffect(() => {
-    const newIndex = pathToIndexMap[location.pathname as keyof typeof pathToIndexMap];
-    if (newIndex !== undefined) {
-      setClickedButtonIndex(newIndex);
-    }
-  }, [location.pathname]);
-
-  const handleButtonClick = (index: number) => {
-    setClickedButtonIndex(index);
-    onButtonClick(index);
-  };
-
+const BottomNavigation = (props: BottomNavigationProps) => {
   return (
     <div className="w-full max-w-[600px] min-w-[320px] left-1/2 transform -translate-x-1/2 mx-auto justify-between items-center fixed bottom-0 bg-white rounded-t-2xl border-t border-gray-200/50">
       <div className="flex justify-around p-1.5">
         {bottomNavigationButtonItems.map((bottomNavigationButtonItem, index) => (
           <BottomNavigationButton
             item={bottomNavigationButtonItem}
-            isClicked={index === clickedButtonIndex}
-            onClick={() => handleButtonClick(index)}
+            isClicked={index === props.clickedButtonIndex}
+            onClick={() => props.onButtonClick(index)}
             key={index}
           />
         ))}

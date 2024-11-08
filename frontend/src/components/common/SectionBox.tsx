@@ -1,15 +1,24 @@
 import AngleLeft from "../../assets/icons/angle-left.svg?react";
+import CircleButton, { CircleButtonProps } from "./CircleButton";
+import { CIRCLE_BUTTON_VARIANTS } from "./variants";
 
 interface SectionBoxProps {
   label?: string;
-  onClick?: () => void;
+  onBackClick?: () => void;
+  rightButton?: CircleButtonProps;
 }
 
-const SectionBox = ({ label, onClick }: SectionBoxProps) => {
+const SectionBox = (props: SectionBoxProps) => {
   return (
-    <div className="max-w-[600px] min-w-[320px] mx-auto flex items-center bg-white text-gray-700 font-kbogothicmedium w-full h-14">
-      <AngleLeft className="w-5 h-5 text-gray-700 ml-3" onClick={onClick} />
-      <label className="flex-grow text-center mr-3">{label}</label>
+    <div className="max-w-[600px] min-w-[320px] mx-auto flex flex-row justify-between items-center bg-white text-gray-700 font-kbogothicmedium w-full h-14">
+      <CircleButton
+        className="w-9 h-9"
+        variant={CIRCLE_BUTTON_VARIANTS.grayLine}
+        item={{ img: AngleLeft }}
+        onClick={props.onBackClick}
+      />
+      <label className="text-center">{props.label}</label>
+      {props.rightButton ? <CircleButton {...props.rightButton} /> : <div className="w-9 h-9" />}
     </div>
   );
 };
