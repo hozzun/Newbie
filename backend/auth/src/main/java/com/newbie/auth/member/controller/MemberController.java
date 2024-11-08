@@ -27,5 +27,4 @@ public class MemberController {
         memberService.saveFavoriteTeam(requestDto);
         return SuccessResponse.update();
     }
-
 }
