@@ -6,7 +6,7 @@ import ClubChangeButton from "../../components/common/ClubChangeButton"
 import ClubLogos from "../../util/ClubLogos"
 import ClubFullName from "../../util/ClubFullName"
 import MainButton from "../../components/mypage/MainButton"
-import GameSchedule from "../../components/mypage/GameSchedule"
+import Calendar from "../../components/mypage/Calendar"
 
 const MyPage = () => {
 
@@ -30,7 +30,7 @@ const MyPage = () => {
       <Profile img={Image} name="미량" email="miryang1016@gmail.com" />
       <ClubChangeButton logo={ClubLogos["ssg"]} clubColor="ssg" club={ClubFullName["ssg"]} onClick={goRecommend} />
       <MainButton />
-      <GameSchedule />
+      <Calendar />
     </>
   )
 }
