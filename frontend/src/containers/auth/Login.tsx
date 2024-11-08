@@ -22,13 +22,13 @@ const Login = () => {
     if ("Notification" in window) {
       const permission = await Notification.requestPermission();
       if (permission === "granted") {
-        console.log("알림 권한이 허용되었습니다.");
         setShowBottomSheet(false);
-      } else {
-        console.log("알림 권한이 거부되었습니다.");
+      } else if (permission === "denied") {
+        alert("알림 권한이 거부되었습니다. 브라우저 설정에서 알림 권한을 허용해주세요.");
+        setShowBottomSheet(false);
       }
     } else {
-      console.log("이 브라우저는 알림 기능을 지원하지 않습니다.");
+      alert("이 브라우저는 알림 기능을 지원하지 않습니다.");
     }
   };
 
