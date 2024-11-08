@@ -9,7 +9,7 @@ import ClubFullName from "../../util/ClubFullName"
 import MainButton from "../../components/mypage/MainButton"
 import Calendar from "../../components/mypage/Calendar"
 import WatchGame from "../../components/mypage/WatchGame"
-
+import OutButton from "../../components/mypage/OutButton"
 
 const MyPage = () => {
 
@@ -25,6 +25,30 @@ const MyPage = () => {
     nav('/clubrecommend')
   }
 
+  const goPhotoCard = () => {
+    console.log('포토카트 페이지로 이동')
+  }
+
+  const goWrite = () => {
+    console.log('나의 게시글 페이지로 이동')
+  }
+
+  const goActive = () => {
+    console.log('나의 활동 페이지로 이동')
+  }
+
+  const goScrap = () => {
+    console.log('나의 스크랩 페이지로 이동')
+  }
+
+  const goLogout = () => {
+    console.log('로그아웃 모달')
+  }
+
+  const goDelete = () => {
+    console.log('회원탈퇴 모달')
+  }
+
   return (
     <>
       <div className="flex justify-between items-center">
@@ -33,9 +57,10 @@ const MyPage = () => {
       </div>
       <Profile img={Image} name="미량" email="miryang1016@gmail.com" />
       <ClubChangeButton logo={ClubLogos["ssg"]} clubColor="ssg" club={ClubFullName["ssg"]} onClick={goRecommend} />
-      <MainButton />
+      <MainButton photoClick={goPhotoCard} writeClick={goWrite} activeClick={goActive} scrapClick={goScrap} />
       <Calendar />
       <WatchGame />
+      <OutButton logoutClick={goLogout} deleteClick={goDelete} />
     </>
   )
 }

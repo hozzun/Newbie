@@ -56,7 +56,7 @@ const Calendar = () => {
   
           {/* 날짜 표시 */}
           {dates.map((date) => (
-            <div className="flex flex-col p-2 m-1 bg-white rounded-2xl text-xs">
+            <div className="flex flex-col p-2 m-1 bg-white rounded-2xl text-[7px]">
               <div className="flex justify-end" key={date.getDate()}>
                 {date.getDate()}
               </div>
