@@ -8,6 +8,7 @@ app = FastAPI()
 add_cors_middleware(app)
 
 class UserData(BaseModel):
+    userId: int
     mbti: str
     responses: list[int]
     region: str = None
