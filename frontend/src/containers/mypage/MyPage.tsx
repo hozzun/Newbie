@@ -6,7 +6,7 @@ import ClubChangeButton from "../../components/common/ClubChangeButton"
 import ClubLogos from "../../util/ClubLogos"
 import ClubFullName from "../../util/ClubFullName"
 import MainButton from "../../components/mypage/MainButton"
-import GameSchedule from "../home/GameSchedule"
+import GameSchedule from "../../components/mypage/GameSchedule"
 
 const MyPage = () => {
 
