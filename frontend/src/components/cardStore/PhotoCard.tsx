@@ -1,7 +1,7 @@
 import Coin from "../../assets/icons/copyright-solid.svg?react";
 import Karina from "../../assets/images/karina.jpg";
 
-interface PhotoCardData {
+export interface PhotoCardData {
   id: string;
   title: string;
   imgSrc: string;

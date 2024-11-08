@@ -21,11 +21,11 @@ const Signup = ({
   return (
     <div>
       <div>
-        <TextField label="닉네임" onNameChange={onNameChange} />
+        <TextField label="닉네임" onNameChange={onNameChange} placeholder="이름을 입력해주세요" />
       </div>
 
       <div>
-        <SelectBox label="주소" onSelectionChange={onSelectionChange} />
+        <SelectBox label="주소" onSelectionChange={onSelectionChange} placeholder1="시" placeholder2="구" />
       </div>
 
       <div className="mx-auto mt-8 w-full px-3">
