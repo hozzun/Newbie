@@ -16,6 +16,7 @@ import CheerTeam from "./pages/cheerteam/CheerTeam";
 import ClubRecommend from "./pages/cheerteam/ClubRecommend";
 import CheerLyris from "./pages/cheersong/CheerLyris";
 import CardStore from "./pages/cardStore/CardStore";
+import MyPage from "./pages/mypage/MyPage";
 
 // 로그인 하지 않은 사용자의 접근 방지
 function ProtectedRoute({ children }: { children: JSX.Element }) {
@@ -140,6 +141,14 @@ const AppRouter = () => {
           element={
             <ProtectedRoute>
               <CardStore />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/mypage"
+          element={
+            <ProtectedRoute>
+              <MyPage />
             </ProtectedRoute>
           }
         />

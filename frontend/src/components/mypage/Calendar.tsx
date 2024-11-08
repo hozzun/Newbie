@@ -1,14 +1,14 @@
 import CalenderIcon from "../../assets/icons/calender.svg?react"
-import { useState } from 'react';
+// import { useState } from 'react';
 import ClubLogos from "../../util/ClubLogos";
 
 const Calendar = () => {
 
-  // TODO: 경기 정보 가져오기
-  const [currentDate, setCurrentDate] = useState(new Date());
+  // TODO: 경기 정보 가져오기, 경기 일정에 따른 캘린더 표기
+  // const [currentDate, setCurrentDate] = useState(new Date());
   
-  const year = currentDate.getFullYear();
-  const month = currentDate.getMonth();
+  const year = new Date().getFullYear();
+  const month = new Date().getMonth();
 
   const firstDay = new Date(year, month, 1);
   const lastDay = new Date(year, month + 1, 0);

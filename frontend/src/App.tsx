@@ -1,12 +1,9 @@
-// import AppRouter from "./AppRouter";
-
-import MyPage from "./pages/mypage/MyPage";
+import AppRouter from "./AppRouter";
 
 function App() {
   return (
     <>
-      {/* <AppRouter /> */}
-      <MyPage />
+      <AppRouter />
     </>
   );
 }

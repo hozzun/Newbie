@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom"
 import PageName from "../../components/common/PageName"
 import Pencil from "../../assets/icons/pencil-solid.svg?react"
 import Profile from "../../components/mypage/Profile"
@@ -7,9 +8,12 @@ import ClubLogos from "../../util/ClubLogos"
 import ClubFullName from "../../util/ClubFullName"
 import MainButton from "../../components/mypage/MainButton"
 import Calendar from "../../components/mypage/Calendar"
+import WatchGame from "../../components/mypage/WatchGame"
+
 
 const MyPage = () => {
 
+  const nav = useNavigate()
   // TODO: 회원 정보 가져오기(image, name, email, favorite-team)
 
   const goRevise = () => {
@@ -18,7 +22,7 @@ const MyPage = () => {
   }
 
   const goRecommend = () => {
-    console.log('구단 추천 페이지로 이동')
+    nav('/clubrecommend')
   }
 
   return (
@@ -31,6 +35,7 @@ const MyPage = () => {
       <ClubChangeButton logo={ClubLogos["ssg"]} clubColor="ssg" club={ClubFullName["ssg"]} onClick={goRecommend} />
       <MainButton />
       <Calendar />
+      <WatchGame />
     </>
   )
 }
