@@ -1,9 +1,12 @@
 import IntroComponent from "../../components/intro/Intro";
+import { useNavigate } from "react-router-dom";
 
 const Intro = () => {
+  const nav = useNavigate();
+
   const goNext = () => {
-    // TODO: MOVE - 시작 페이지
-    console.log("시작 페이지 이동");
+    localStorage.setItem("hasSeenIntro", "true");
+    nav("/login", { replace: true });
   };
 
   return <IntroComponent goNext={goNext} />;
