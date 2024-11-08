@@ -35,54 +35,17 @@ function ProtectedRoute({ children }: { children: JSX.Element }) {
 function AuthRoute({ children }: { children: JSX.Element }) {
   const token = sessionStorage.getItem("access_token");
   if (token) {
-    return <Navigate to="/home" />;
+    return <Navigate to="/" />;
   }
   return children;
-}
-
-function IntroRoute({ children }: { children: JSX.Element }) {
-  const hasSeenIntro = localStorage.getItem("hasSeenIntro");
-  const token = sessionStorage.getItem("access_token");
-
-  // Intro를 본 적이 있으면
-  if (hasSeenIntro === "true") {
-    // 토큰이 있으면 홈으로, 없으면 로그인으로
-    return token ? <Navigate to="/home" /> : <Navigate to="/login" />;
-  }
-
-  return children;
-}
-
-function RootRoute() {
-  const hasSeenIntro = localStorage.getItem("hasSeenIntro");
-  const token = sessionStorage.getItem("access_token");
-
-  if (!hasSeenIntro) {
-    return <Navigate to="/intro" />;
-  }
-
-  if (!token) {
-    return <Navigate to="/login" />;
-  }
-
-  return <Navigate to="/home" />;
 }
 
 const AppRouter = () => {
   return (
     <Router>
       <Routes>
-        {/* 루트 경로 처리 */}
-        <Route path="/" element={<RootRoute />} />
         {/* Intro 페이지 라우트 추가 */}
-        <Route
-          path="/intro"
-          element={
-            <IntroRoute>
-              <Intro />
-            </IntroRoute>
-          }
-        />
+        <Route path="/intro" element={<Intro />} />
 
         {/* 로그인 된 사용자 접근 금지 */}
         <Route
@@ -112,7 +75,7 @@ const AppRouter = () => {
           }
         />
         <Route
-          path="/home"
+          path="/"
           element={
             <ProtectedRoute>
               <Home />

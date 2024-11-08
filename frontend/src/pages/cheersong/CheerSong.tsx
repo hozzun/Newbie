@@ -8,7 +8,7 @@ const CheerSong = () => {
   const navigate = useNavigate();
 
   const handleBottomNavigationClick = (index: number) => {
-    const routes = ["/clubhome", "/cheersong", "/home", "/communication", "/mypage"];
+    const routes = ["/clubhome", "/cheersong", "/", "/communication", "/mypage"];
     navigate(routes[index]);
   };
 

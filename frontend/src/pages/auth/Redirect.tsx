@@ -78,9 +78,9 @@ const Redirect = () => {
             // 서버에서 전달된 토큰 추출 (토큰이 존재하는 경우에만)
             const token = axiosError.response.data.token;
             if (token) {
-              sessionStorage.setItem("access_token", token); // sessionStorage에 저장
+              sessionStorage.setItem("access_token", token); // 토큰 저장
             }
-            nav("/home"); // 홈으로 이동
+            nav("/"); // 홈으로 이동
           } else {
             console.error("인증 에러:", axiosError.response?.data.message || error.message);
           }
