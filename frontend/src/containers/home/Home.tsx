@@ -8,8 +8,11 @@ import { HighlightProps } from "../../components/home/Highlight";
 import { CardStoreItemProps } from "../../components/home/CardStoreItem";
 import { CardStoreProps } from "../../components/home/CardStore";
 import { GameInfo, GameProps, GameSituation } from "../../components/home/Game";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
+  const nav = useNavigate();
+
   const [hasCheeringClub, setHasCheeringClub] = useState<boolean>(false);
   const [todayGame, setTodayGame] = useState<GameProps>();
   const [photoCardImage, setPhotoCardImage] = useState<string | null>(null);
@@ -239,8 +242,7 @@ const Home = () => {
   }, []);
 
   const goGameScheduleMore = () => {
-    // TODO: MOVE - 경기 일정 페이지
-    console.log("경기 일정 페이지로 이동");
+    nav("/game/schedule");
   };
 
   const goPhotoCardMore = () => {
@@ -254,8 +256,7 @@ const Home = () => {
   };
 
   const goCardStoreMore = () => {
-    // TODO: MOVE - 스토어 페이지
-    console.log("스토어 페이지로 이동");
+    nav("/cardstore");
   };
 
   const todayGameProps: TodayGameProps = {
