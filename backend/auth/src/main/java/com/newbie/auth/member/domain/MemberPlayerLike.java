@@ -24,8 +24,16 @@ public class MemberPlayerLike {
     @Column(name = "player_id", nullable = false)
     private Integer playerId;
 
+    @Column(name = "is_liked", nullable = false)
+    private Boolean isLiked = false;
+
     public MemberPlayerLike(Member member, Integer playerId) {
         this.member = member;
         this.playerId = playerId;
+        this.isLiked = true;
+    }
+
+    public void toggleLike() {
+        this.isLiked = !this.isLiked;
     }
 }

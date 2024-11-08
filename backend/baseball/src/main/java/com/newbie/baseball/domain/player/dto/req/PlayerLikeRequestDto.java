@@ -7,4 +7,5 @@ public class PlayerLikeRequestDto {
 
     private Long memberId;
     private Integer playerId;
+    private Boolean isLiked;
 }

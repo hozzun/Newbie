@@ -5,9 +5,7 @@ import com.newbie.baseball.domain.team.entity.Team;
 import jakarta.persistence.*;
 import lombok.Getter;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Getter
 @Entity
@@ -46,9 +44,6 @@ public class Player {
 
     @Column(name = "like_count", nullable = false, columnDefinition = "INT DEFAULT 0")
     private Integer likeCount = 0;
-
-    @ElementCollection
-    private Set<Long> likers = new HashSet<>();
 
     public void incrementLikeCount() {
         this.likeCount += 1;

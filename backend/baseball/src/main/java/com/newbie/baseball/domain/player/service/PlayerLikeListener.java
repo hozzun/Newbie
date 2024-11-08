@@ -34,19 +34,14 @@ public class PlayerLikeListener {
         }
 
         Player player = playerOpt.get();
-        Long memberId = eventDto.getMemberId();
 
-        // 좋아요 상태에 따라 좋아요 수를 토글
-        if (player.getLikers().contains(memberId)) {
-            player.getLikers().remove(memberId);
-            player.decrementLikeCount();
-        } else {
-            player.getLikers().add(memberId);
+        if (eventDto.getIsLiked()) {
             player.incrementLikeCount();
+        } else {
+            player.decrementLikeCount();
         }
 
         playerRepository.save(player);
-
         log.info("Updated like count for player ID {}: {}", player.getId(), player.getLikeCount());
     }
 }

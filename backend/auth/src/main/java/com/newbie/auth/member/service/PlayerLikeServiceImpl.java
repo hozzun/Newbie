@@ -24,21 +24,26 @@ public class PlayerLikeServiceImpl implements PlayerLikeService {
     private final MemberRepository memberRepository;
     private final RabbitTemplate rabbitTemplate;
 
-    @Value("${rabbitmq.queue.likePlayerQueue}")
-    private String likePlayerQueue;
+    @Value("${rabbitmq.exchange.checkExchange}")
+    private String checkExchange;
 
-    @Value("${rabbitmq.queue.checkPlayerQueue}")
-    private String checkPlayerQueue;
+    @Value("${rabbitmq.exchange.likeExchange}")
+    private String likeExchange;
+
+    @Value("${rabbitmq.routing.key.check}")
+    private String checkPlayerRoutingKey;
+
+    @Value("${rabbitmq.routing.key.like}")
+    private String likePlayerRoutingKey;
 
     @Override
     public void toggleLike(Long memberId, Integer playerId) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 사용자 ID입니다."));
 
-        // 비동기로 baseball 서버에 player 존재 여부 확인
         CompletableFuture<Boolean> playerExistsFuture = CompletableFuture.supplyAsync(() -> {
             try {
-                return (Boolean) rabbitTemplate.convertSendAndReceive(checkPlayerQueue, playerId);
+                return (Boolean) rabbitTemplate.convertSendAndReceive(checkExchange, checkPlayerRoutingKey, playerId);
             } catch (Exception e) {
                 log.error("Error occurred while sending player existence check request to RabbitMQ", e);
                 return false;
@@ -47,7 +52,7 @@ public class PlayerLikeServiceImpl implements PlayerLikeService {
 
         Boolean playerExists;
         try {
-            playerExists = playerExistsFuture.get(5, TimeUnit.SECONDS); // 최대 5초 대기
+            playerExists = playerExistsFuture.get(5, TimeUnit.SECONDS);
         } catch (Exception e) {
             log.error("Timeout or interruption occurred while checking player existence", e);
             throw new RuntimeException("선수 존재 여부 확인 중 오류 발생", e);
@@ -57,18 +62,19 @@ public class PlayerLikeServiceImpl implements PlayerLikeService {
             throw new IllegalArgumentException("유효하지 않은 선수 ID입니다.");
         }
 
-        // 좋아요 상태 토글
         Optional<MemberPlayerLike> existingLike = likeRepository.findByMemberAndPlayerId(member, playerId);
-        boolean isLiked = existingLike.isPresent();
-        PlayerLikeEventDto eventDto = new PlayerLikeEventDto(memberId, playerId);
+        MemberPlayerLike like;
 
-        if (isLiked) {
-            likeRepository.delete(existingLike.get());
+        if (existingLike.isPresent()) {
+            like = existingLike.get();
+            like.toggleLike();
         } else {
-            likeRepository.save(new MemberPlayerLike(member, playerId));
+            like = new MemberPlayerLike(member, playerId);
         }
 
-        // 좋아요 이벤트 발행
-        rabbitTemplate.convertAndSend(likePlayerQueue, eventDto);
+        likeRepository.save(like);
+
+        PlayerLikeEventDto eventDto = new PlayerLikeEventDto(memberId, playerId, like.getIsLiked());
+        rabbitTemplate.convertAndSend(likeExchange, likePlayerRoutingKey, eventDto);
     }
 }

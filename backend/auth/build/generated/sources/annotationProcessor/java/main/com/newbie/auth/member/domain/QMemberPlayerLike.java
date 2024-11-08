@@ -24,6 +24,8 @@ public class QMemberPlayerLike extends EntityPathBase<MemberPlayerLike> {
 
     public final NumberPath<Integer> id = createNumber("id", Integer.class);
 
+    public final BooleanPath isLiked = createBoolean("isLiked");
+
     public final QMember member;
 
     public final NumberPath<Integer> playerId = createNumber("playerId", Integer.class);
