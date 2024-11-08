@@ -21,6 +21,7 @@ interface MemberData {
     memberId: number;
     memberImage: string;
   };
+  data?: string; // 토큰이 담길 수 있는 위치로 설정
 }
 
 const Signup = () => {
@@ -63,13 +64,21 @@ const Signup = () => {
           platform: userInfo.platform, // Redux store에서 가져온 플랫폼
         };
 
+        // 액세스 토큰을 Signup API에 보내서 memberData로 갈아끼우고 토큰 받기
         const response = await axiosInstance.post<MemberData>(
           "/api-auth/members/signup",
           memberData,
         );
 
-        console.log("회원가입 완료:", response.data);
-        nav("/");
+        // 액세스 토큰을 sessionStorage에 저장
+        const accessToken = response.data.data;
+        if (accessToken) {
+          sessionStorage.setItem("access_token", accessToken); // 토큰을 저장
+          console.log("액세스 토큰 저장 완료:", accessToken);
+          nav("/"); // 홈으로 이동
+        } else {
+          console.error("액세스 토큰이 응답에 없습니다.");
+        }
       } catch (error) {
         console.error("회원가입 실패:", error);
       }

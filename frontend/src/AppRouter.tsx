@@ -2,6 +2,7 @@
 import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 
+import Intro from "./pages/intro/Intro";
 import Login from "./pages/auth/Login";
 import Signup from "./pages/auth/Signup";
 import Redirect from "./pages/auth/Redirect";
@@ -44,6 +45,14 @@ const AppRouter = () => {
     <Router>
       <Routes>
         {/* 로그인 된 사용자 접근 금지 */}
+        <Route
+          path="/intro"
+          element={
+            <AuthRoute>
+              <Intro />
+            </AuthRoute>
+          }
+        />
         <Route
           path="/login"
           element={

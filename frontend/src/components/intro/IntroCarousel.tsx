@@ -3,7 +3,7 @@ import "slick-carousel/slick/slick-theme.css";
 import { forwardRef } from "react";
 import Slider from "react-slick";
 import IntroSlideItem from "./IntroSlideItem";
-import LOGO from "../../assets/images/minji.jpg";
+import LOGO from "../../assets/images/karina.jpg";
 
 interface SlideData {
   imgSrc: string;
