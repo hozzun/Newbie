@@ -1,6 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-from recommend import recommend_team
+from app.recommend import recommend_team
 from middleware import add_cors_middleware
 
 app = FastAPI()
