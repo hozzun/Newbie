@@ -87,7 +87,7 @@ const cardDetailProps: CardDetailProps = {
   },
 };
 
-const CardDetail = (props: CardDetailProps) => {
+const CardDetail = () => {
   const [isFlipped, setIsFlipped] = useState<boolean>(false);
   const [isOpenedDialog, setIsOpenedDialog] = useState<boolean>(false);
 

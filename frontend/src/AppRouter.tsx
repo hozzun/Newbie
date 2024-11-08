@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import Login from "./pages/auth/Login";
 import Signup from "./pages/auth/Signup";
 import Redirect from "./pages/auth/Redirect";
+import Intro from "./pages/intro/Intro";
 
 import ClubHome from "./pages/club/ClubHome";
 import Home from "./pages/home/Home";
@@ -15,9 +16,11 @@ import CheerTeam from "./pages/cheerteam/CheerTeam";
 import ClubRecommend from "./pages/cheerteam/ClubRecommend";
 import CheerLyris from "./pages/cheersong/CheerLyris";
 import CardStore from "./pages/cardStore/CardStore";
+import MyPage from "./pages/mypage/MyPage";
+import CameraCapture from "./pages/mypage/CameraCapture";
 import CardDetail from "./pages/cardStore/CardDetail";
 
-// 로그인 하지 않은 사용자의 접근 방지
+// 로그인 하지 않은 사용자는 로그인으로
 function ProtectedRoute({ children }: { children: JSX.Element }) {
   const navigate = useNavigate();
   const token = sessionStorage.getItem("access_token");
@@ -44,6 +47,9 @@ const AppRouter = () => {
   return (
     <Router>
       <Routes>
+        {/* Intro 페이지 라우트 추가 */}
+        <Route path="/intro" element={<Intro />} />
+
         {/* 로그인 된 사용자 접근 금지 */}
         <Route
           path="/login"
@@ -140,6 +146,22 @@ const AppRouter = () => {
           element={
             <ProtectedRoute>
               <CardDetail />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/mypage"
+          element={
+            <ProtectedRoute>
+              <MyPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/camera"
+          element={
+            <ProtectedRoute>
+              <CameraCapture />
             </ProtectedRoute>
           }
         />

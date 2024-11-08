@@ -3,7 +3,7 @@ import "slick-carousel/slick/slick-theme.css";
 import { forwardRef } from "react";
 import Slider from "react-slick";
 import IntroSlideItem from "./IntroSlideItem";
-import LOGO from "../../assets/images/minji.jpg";
+import LOGO from "../../assets/images/karina.jpg";
 
 interface SlideData {
   imgSrc: string;
@@ -21,8 +21,16 @@ const slides: SlideData[] = [
     text1: "야구 어렵지 않아요",
     text2: "야구라 하면 너무 어렵게 생각하는데 누구나 쉽게 야구를 즐기실 수 있습니다",
   },
-  { imgSrc: "/images/slide2.jpg", text1: "Slide 2", text2: "Description 2" },
-  { imgSrc: "/images/slide3.jpg", text1: "Slide 3", text2: "Description 3" },
+  {
+    imgSrc: LOGO,
+    text1: "야구 어렵지 않아요",
+    text2: "야구라 하면 너무 어렵게 생각하는데 누구나 쉽게 야구를 즐기실 수 있습니다",
+  },
+  {
+    imgSrc: LOGO,
+    text1: "야구 어렵지 않아요",
+    text2: "야구라 하면 너무 어렵게 생각하는데 누구나 쉽게 야구를 즐기실 수 있습니다",
+  },
 ];
 
 const IntroCarousel = forwardRef<Slider, IntroCarouselProps>(({ onSlideChange }, ref) => {
