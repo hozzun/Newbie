@@ -1,11 +1,14 @@
 import Container from "../common/Container";
-import PlayerSectionBox from "./PlayerSectionBox";
-import Karina from "../../assets/images/karina.jpg";
 import PlayerProfile from "./PlayerProfile";
 import { PlayerRecordItemProps } from "./PlayerRecordItem";
 import PlayerRecord from "./PlayerRecord";
 import PlayerMusicController from "./PlayerMusicController";
 import PlayerHighlight from "./PlayerHighlight";
+import SectionBox from "../../containers/common/SectionBox";
+import { CircleButtonProps } from "../common/CircleButton";
+import { CIRCLE_BUTTON_VARIANTS } from "../common/variants";
+import Heart from "../../assets/icons/heart-solid.svg?react";
+import Karina from "../../assets/images/karina.jpg";
 
 const playerRecordItems: Array<PlayerRecordItemProps> = [
   {
@@ -58,12 +61,18 @@ const playerRecordItems: Array<PlayerRecordItemProps> = [
   },
 ];
 
+const rightButtonProps: CircleButtonProps = {
+  className: "w-9 h-9",
+  variant: CIRCLE_BUTTON_VARIANTS.errorLine,
+  item: { img: Heart },
+};
+
 const Player = () => {
   const currentYear = new Date().getFullYear();
 
   return (
     <>
-      <PlayerSectionBox label="투수" />
+      <SectionBox label="스토어" rightButton={rightButtonProps} />
       <Container>
         <div className="flex flex-col justify-center items-center">
           <div className="flex flex-row justify-between items-center">

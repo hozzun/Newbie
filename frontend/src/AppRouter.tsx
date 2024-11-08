@@ -20,6 +20,8 @@ import MyPage from "./pages/mypage/MyPage";
 import CameraCapture from "./pages/mypage/CameraCapture";
 import CardDetail from "./pages/cardStore/CardDetail";
 import ReviseInfo from "./pages/mypage/ReviseInfo";
+import Player from "./pages/player/Player";
+import PlayerList from "./pages/player/PlayerList";
 
 // 로그인 하지 않은 사용자는 로그인으로
 function ProtectedRoute({ children }: { children: JSX.Element }) {
@@ -75,6 +77,22 @@ const AppRouter = () => {
           element={
             <ProtectedRoute>
               <ClubHome />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/club/player"
+          element={
+            <ProtectedRoute>
+              <PlayerList />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/club/player/:id"
+          element={
+            <ProtectedRoute>
+              <Player />
             </ProtectedRoute>
           }
         />

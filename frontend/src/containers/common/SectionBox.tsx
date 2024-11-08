@@ -1,8 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import SectionBoxComponent from "../../components/common/SectionBox";
+import { CircleButtonProps } from "../../components/common/CircleButton";
 
 interface SectionBoxProps {
   label?: string;
+  rightButton: CircleButtonProps;
 }
 
 const SectionBox = (props: SectionBoxProps) => {
@@ -10,7 +12,9 @@ const SectionBox = (props: SectionBoxProps) => {
 
   const goBack = () => nav(-1);
 
-  return <SectionBoxComponent label={props.label} onClick={goBack} />;
+  return (
+    <SectionBoxComponent label={props.label} onBackClick={goBack} rightButton={props.rightButton} />
+  );
 };
 
 export default SectionBox;
