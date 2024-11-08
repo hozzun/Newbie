@@ -4,7 +4,7 @@ import { CircleButtonProps } from "../../components/common/CircleButton";
 
 interface SectionBoxProps {
   label?: string;
-  rightButton: CircleButtonProps;
+  rightButton?: CircleButtonProps;
 }
 
 const SectionBox = (props: SectionBoxProps) => {

@@ -1,19 +1,11 @@
-import { useNavigate } from "react-router-dom";
 import ClubRecommendContainer from "../../containers/cheerteam/ClubRecommend";
-import SectionBox from "../../components/common/SectionBox";
 import Container from "../../components/common/Container";
+import SectionBox from "../../containers/common/SectionBox";
 
 const ClubRecommend = () => {
-
-  const nav = useNavigate()
-
-  const handleNav = () => {
-    nav(-1)
-  }
-
   return (
     <>
-      <SectionBox label="구단 추천" onClick={handleNav} />
+      <SectionBox label="구단 추천" />
       <Container>
         <ClubRecommendContainer />
       </Container>

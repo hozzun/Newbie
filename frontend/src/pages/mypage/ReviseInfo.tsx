@@ -1,23 +1,16 @@
-import { useNavigate } from "react-router-dom"
-import Container from "../../components/common/Container"
-import SectionBox from "../../components/common/SectionBox"
-import ReviseInfoContainer from "../../containers/mypage/ReviseInfo"
+import Container from "../../components/common/Container";
+import SectionBox from "../../containers/common/SectionBox";
+import ReviseInfoContainer from "../../containers/mypage/ReviseInfo";
 
 const ReviseInfo = () => {
-
-  const nav = useNavigate()
-  const goMyPage = () => {
-    nav("/mypage")
-  }
-
   return (
     <>
-      <SectionBox label="마이페이지" onClick={goMyPage}/>
+      <SectionBox label="마이페이지" />
       <Container>
         <ReviseInfoContainer />
       </Container>
     </>
-  )
-}
+  );
+};
 
-export default ReviseInfo
+export default ReviseInfo;

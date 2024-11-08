@@ -1,11 +1,11 @@
 import Container from "../../components/common/Container";
-import SectionBox from "../../components/common/SectionBox";
 import CardDetailComponent from "../../components/cardStore/CardDetail";
+import SectionBox from "../../containers/common/SectionBox";
 
 const CardDetail = () => {
   return (
     <>
-      <SectionBox label="스토어" />
+      <SectionBox />
       <Container>
         <CardDetailComponent />
       </Container>
