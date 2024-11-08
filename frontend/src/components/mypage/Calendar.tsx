@@ -28,14 +28,16 @@ const Calendar = () => {
         <p className="font-kbogothicbold text-gray-600 ml-3">경기 일정</p>
       </div>
       <div className="m-5 p-5 bg-gray-100 rounded-2xl">
-        <div className="flex flex-row">
+        <div className="flex flex-row justify-between">
           <p className="font-kbogothicbold text-lg mb-5">
             {year}년 {month + 1}월
           </p>
-          <>
-            <p className="font-kbogothicmedium text-xs">홈 경기</p>
-            <p className="font-kbogothicmedium text-xs">원정 경기</p>
-          </>
+          <div className="flex flex-row items-center">
+            <div className="w-2.5 h-2.5 bg-green-900 rounded-full mr-2"></div>
+            <p className="font-kbogothicmedium text-xs mr-2">홈 경기</p>
+            <div className="w-2.5 h-2.5 bg-gray-300 rounded-full mr-2"></div>
+            <p className="font-kbogothicmedium text-xs mr-2">원정 경기</p>
+          </div>
         </div>
   
         {/* 요일 표시 */}
