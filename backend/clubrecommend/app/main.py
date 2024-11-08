@@ -5,7 +5,6 @@ from middleware import add_cors_middleware
 
 app = FastAPI()
 
-# CORS 미들웨어 설정 적용
 add_cors_middleware(app)
 
 class UserData(BaseModel):
