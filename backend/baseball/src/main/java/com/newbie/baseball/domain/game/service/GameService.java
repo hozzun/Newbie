@@ -8,7 +8,5 @@ import java.util.List;
 public interface GameService {
 
     GameResponseDto getGameById(Integer id);
-    List<GameResponseDto> getGameByYearAndMonth(String yearMonth);
-    List<GameResponseDto> getGameByDate(String date);
-    List<GameResponseDto> getGameByDateAndTeamId(String date, Integer teamId);
+    List<GameResponseDto> getGamesByDateAndOptionalTeam(String year, String month, String day, Integer teamId);
 }

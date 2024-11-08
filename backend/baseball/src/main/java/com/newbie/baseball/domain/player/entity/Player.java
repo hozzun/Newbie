@@ -41,4 +41,17 @@ public class Player {
 
     @OneToMany(mappedBy = "player")
     private List<LineUp> lineUpList;
+
+    @Column(name = "like_count", nullable = false, columnDefinition = "INT DEFAULT 0")
+    private Integer likeCount = 0;
+
+    public void incrementLikeCount() {
+        this.likeCount += 1;
+    }
+
+    public void decrementLikeCount() {
+        if (this.likeCount > 0) {
+            this.likeCount -= 1;
+        }
+    }
 }
