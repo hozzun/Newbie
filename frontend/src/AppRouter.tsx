@@ -22,6 +22,8 @@ import CardDetail from "./pages/cardStore/CardDetail";
 import ReviseInfo from "./pages/mypage/ReviseInfo";
 import Player from "./pages/player/Player";
 import PlayerList from "./pages/player/PlayerList";
+import PhotoCard from "./pages/mypage/PhotoCard";
+import PhotoCardDetail from "./pages/mypage/PhotoCardDetail";
 
 // 로그인 하지 않은 사용자는 로그인으로
 function ProtectedRoute({ children }: { children: JSX.Element }) {
@@ -181,6 +183,22 @@ const AppRouter = () => {
           element={
             <ProtectedRoute>
               <ReviseInfo />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/mypage/photocard"
+          element={
+            <ProtectedRoute>
+              <PhotoCard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/mypage/photocard/:id"
+          element={
+            <ProtectedRoute>
+              <PhotoCardDetail />
             </ProtectedRoute>
           }
         />
