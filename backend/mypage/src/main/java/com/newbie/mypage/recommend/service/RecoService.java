@@ -21,7 +21,7 @@ public class RecoService {
     private final RestTemplate restTemplate = new RestTemplate();
     private final RabbitTemplate rabbitTemplate;
 
-    @Value("${python.server.domain}")
+    @Value("${club.recommend.server.domain}")
     private String fastApiUrl;
 
     @Value("${rabbitmq.exchange.name}")
