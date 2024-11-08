@@ -1,6 +1,6 @@
 import Button, { ButtonProps } from "./Button";
 
-interface DialogProps {
+export interface DialogProps {
   title: string; // 제목
   body: React.ReactNode; // 본문
   yesButton: ButtonProps; // 네 버튼

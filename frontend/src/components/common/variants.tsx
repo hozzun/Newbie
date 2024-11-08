@@ -2,6 +2,7 @@ export enum BUTTON_VARIANTS {
   primary = "px-6 py-4 bg-green-900 text-white rounded-lg hover:bg-green-950",
   second = "px-6 py-4 bg-gray-300 text-white rounded-lg hover:bg-gray-400",
   error = "px-6 py-4 bg-error-400 text-white rounded-lg hover:bg-error-500",
+  success = "px-6 py-4 bg-success-400 text-white rounded-lg hover:bg-success-500",
   primaryText = "px-6 py-4 text-green-900 rounded-lg hover:bg-green-50",
   white = "px-6 py-1 text-white border border-white rounded-2xl hover:bg-white/10",
   primaryWhite = "px-6 py-4 text-green-900 rounded-lg",
