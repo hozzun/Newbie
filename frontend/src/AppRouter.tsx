@@ -65,7 +65,7 @@ function RootRoute() {
     return <Navigate to="/login" />;
   }
 
-  return <Home />;
+  return <Navigate to="/" />;
 }
 
 const AppRouter = () => {
