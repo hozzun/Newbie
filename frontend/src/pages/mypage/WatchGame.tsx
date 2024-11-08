@@ -1,4 +1,4 @@
-import SectionBox from "../../components/common/SectionBox";
+import SectionBox from "../../containers/common/SectionBox";
 import WatchGameContainers from "../../containers/mypage/WatchGame";
 import Container from "../../components/common/Container";
 

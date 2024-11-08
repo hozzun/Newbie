@@ -1,5 +1,5 @@
+import SectionBox from "../../containers/common/SectionBox";
 import Container from "../../components/common/Container";
-import SectionBox from "../../components/common/SectionBox";
 import GameResultContianer from "../../containers/home/GameResult";
 
 const GameResult = () => {

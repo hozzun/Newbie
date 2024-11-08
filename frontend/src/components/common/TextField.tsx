@@ -28,7 +28,7 @@ const TextFleid = ({ label, onNameChange, placeholder }: TextFleidProps) => {
         <UserSolid className={`w-6 h-6 ${isFocused ? "text-green-900" : "text-gray-300"} ml-3`} />
         <input
           type="text"
-          className="text-gray-700 font-kbogothiclight text-sm pl-3 outline-none w-full h-full"
+          className="text-gray-700 font-kbogothiclight text-sm pl-3 outline-none w-full h-full rounded-lg"
           value={name}
           onChange={handleNameChange}
           onFocus={() => setIsFocused(true)}
