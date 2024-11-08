@@ -80,7 +80,7 @@ const Redirect = () => {
             if (token) {
               sessionStorage.setItem("access_token", token); // sessionStorage에 저장
             }
-            nav("/"); // 홈으로 이동
+            nav("/home"); // 홈으로 이동
           } else {
             console.error("인증 에러:", axiosError.response?.data.message || error.message);
           }

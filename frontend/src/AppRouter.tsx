@@ -35,7 +35,7 @@ function ProtectedRoute({ children }: { children: JSX.Element }) {
 function AuthRoute({ children }: { children: JSX.Element }) {
   const token = sessionStorage.getItem("access_token");
   if (token) {
-    return <Navigate to="/" />;
+    return <Navigate to="/home" />;
   }
   return children;
 }
@@ -47,7 +47,7 @@ function IntroRoute({ children }: { children: JSX.Element }) {
   // Intro를 본 적이 있으면
   if (hasSeenIntro === "true") {
     // 토큰이 있으면 홈으로, 없으면 로그인으로
-    return token ? <Navigate to="/" /> : <Navigate to="/login" />;
+    return token ? <Navigate to="/home" /> : <Navigate to="/login" />;
   }
 
   return children;
@@ -65,7 +65,7 @@ function RootRoute() {
     return <Navigate to="/login" />;
   }
 
-  return <Navigate to="/" />;
+  return <Navigate to="/home" />;
 }
 
 const AppRouter = () => {
@@ -112,7 +112,7 @@ const AppRouter = () => {
           }
         />
         <Route
-          path="/"
+          path="/home"
           element={
             <ProtectedRoute>
               <Home />

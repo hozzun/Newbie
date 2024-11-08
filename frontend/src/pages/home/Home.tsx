@@ -10,7 +10,7 @@ const Home = () => {
   const navigate = useNavigate();
 
   const handleBottomNavigationClick = (index: number) => {
-    const routes = ["/clubhome", "/cheersong", "/", "/communication", "/mypage"];
+    const routes = ["/clubhome", "/cheersong", "/home", "/communication", "/mypage"];
     navigate(routes[index]);
   };
   return (
