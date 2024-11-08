@@ -5,10 +5,9 @@ import com.newbie.baseball.domain.player.entity.Player;
 import com.newbie.baseball.domain.player.exception.PlayerNotFoundException;
 import com.newbie.baseball.domain.player.repository.PlayerRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -24,25 +23,27 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public List<PlayerResponseDto> getPlayersByTeamId(Integer teamId) {
-        List<Player> players = playerRepository.findByTeamId(teamId);
-        if (players.isEmpty()) {
-            throw new PlayerNotFoundException();
-        }
-        return players.stream()
-                .map(this::convertToDto)
-                .collect(Collectors.toList());
-    }
+    public Page<PlayerResponseDto> getPlayersByTeam(Integer teamId, String position, String sortBy, Pageable pageable) {
+        Page<Player> players;
 
-    @Override
-    public List<PlayerResponseDto> getPlayersByTeamIdAndPosition(Integer teamId, String position) {
-        List<Player> players = playerRepository.findByTeamIdAndPosition(teamId, position);
-        if (players.isEmpty()) {
-            throw new PlayerNotFoundException();
+        if (position != null && !position.isEmpty()) {
+            // 포지션별 조회
+            if ("likeCount".equalsIgnoreCase(sortBy)) {
+                players = playerRepository.findByTeamIdAndPositionOrderByLikeCountDesc(teamId, position, pageable);
+            } else {
+                players = playerRepository.findByTeamIdAndPosition(teamId, position, pageable); // 기본 id 순
+            }
+        } else {
+            // 포지션 필터 없이 전체 팀 조회
+            if ("likeCount".equalsIgnoreCase(sortBy)) {
+                players = playerRepository.findByTeamIdOrderByLikeCountDesc(teamId, pageable);
+            } else if ("backNumber".equalsIgnoreCase(sortBy)) {
+                players = playerRepository.findByTeamIdOrderByBackNumberDesc(teamId, pageable);
+            } else {
+                players = playerRepository.findByTeamId(teamId, pageable); // 기본 id 순
+            }
         }
-        return players.stream()
-                .map(this::convertToDto)
-                .collect(Collectors.toList());
+        return players.map(this::convertToDto);
     }
 
     @Override
@@ -63,6 +64,7 @@ public class PlayerServiceImpl implements PlayerService {
                 .birth(player.getBirth())
                 .physical(player.getPhysical())
                 .academic(player.getAcademic())
+                .likeCount(player.getLikeCount())
                 .build();
     }
 }

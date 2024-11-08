@@ -4,6 +4,7 @@ import com.newbie.baseball.domain.teamStats.dto.res.TeamHitterStatsResponseDto;
 import com.newbie.baseball.domain.teamStats.dto.res.TeamPitcherStatsResponseDto;
 import com.newbie.baseball.domain.teamStats.service.TeamStatsService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -32,7 +33,8 @@ public class TeamStatsController {
 
     @Operation(summary = "teamId로 해당 팀 타자(전체) 성적 조회")
     @GetMapping("/hitter/{teamId}")
-    public ResponseEntity<TeamHitterStatsResponseDto> getTeamHitterStats(@PathVariable("teamId") Integer teamId) {
+    public ResponseEntity<TeamHitterStatsResponseDto> getTeamHitterStats(
+            @Parameter(description = "팀 ID [ 1 ~ 10 ]", example = "1") @PathVariable("teamId") Integer teamId) {
         TeamHitterStatsResponseDto teamStat = teamStatsService.getTeamHitterStatsByTeamId(teamId);
         return new ResponseEntity<>(teamStat, HttpStatus.OK);
     }
@@ -46,7 +48,8 @@ public class TeamStatsController {
 
     @Operation(summary = "teamId로 해당 팀 투수(전체) 성적 조회")
     @GetMapping("/pitcher/{teamId}")
-    public ResponseEntity<TeamPitcherStatsResponseDto> getTeamPitcherStats(@PathVariable("teamId") Integer teamId) {
+    public ResponseEntity<TeamPitcherStatsResponseDto> getTeamPitcherStats(
+            @Parameter(description = "팀 ID [ 1 ~ 10 ]", example = "1") @PathVariable("teamId") Integer teamId) {
         TeamPitcherStatsResponseDto teamStat = teamStatsService.getTeamPitcherStatsByTeamId(teamId);
         return new ResponseEntity<>(teamStat, HttpStatus.OK);
     }
