@@ -1,6 +1,6 @@
 import CardStoreComponent from "../../components/cardStore/CardStore";
-import BottomNavigation from "../../components/common/BottomNavigation";
 import Container from "../../components/common/Container";
+import BottomNavigation from "../../containers/common/BottomNavigation";
 
 const CardStore = () => {
   return (
@@ -8,7 +8,7 @@ const CardStore = () => {
       <Container>
         <CardStoreComponent />
       </Container>
-      <BottomNavigation onButtonClick={() => console.log("click")} />
+      <BottomNavigation />
     </>
   );
 };
