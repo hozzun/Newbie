@@ -70,11 +70,11 @@ const Signup = () => {
           memberData,
         );
 
-        // 액세스 토큰을 sessionStorage에 저장
+        // 액세스 토큰을 sessionStorage 저장
         const accessToken = response.data.data;
         if (accessToken) {
           sessionStorage.setItem("access_token", accessToken); // 토큰을 저장
-          nav("/home"); // 홈으로 이동
+          nav("/"); // 홈으로 이동
         } else {
           console.error("액세스 토큰이 응답에 없습니다.");
         }

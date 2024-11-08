@@ -18,9 +18,9 @@ export default defineConfig({
       },
 
       manifest: {
-        name: "frontend",
-        short_name: "frontend",
-        description: "frontend",
+        name: "newbie",
+        short_name: "newB",
+        description: "초보자를 위한 야구 앱",
         theme_color: "#ffffff",
       },
 

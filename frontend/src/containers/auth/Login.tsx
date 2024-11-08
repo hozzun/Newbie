@@ -1,19 +1,29 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import LoginComponent from "../../components/auth/Login";
 import { KAKAO_AUTH_URL, GOOGLE_AUTH_URL } from "../../api/Oauth";
 import AuthorityBottomSheet from "../../components/common/AuthorityBottomSheet";
 
 const Login = () => {
   const [showBottomSheet, setShowBottomSheet] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
+    // 인트로 체크 로직 추가
+    const hasSeenIntro = localStorage.getItem("hasSeenIntro");
+    if (!hasSeenIntro) {
+      navigate("/intro");
+      return;
+    }
+
+    // 기존의 알림 권한 체크 로직
     const permission = Notification.permission;
     if (permission === "default") {
       setShowBottomSheet(true);
     } else {
       setShowBottomSheet(false);
     }
-  }, []);
+  }, [navigate]);
 
   const handleKakaoLoginClick = () => {
     window.location.href = KAKAO_AUTH_URL;
@@ -24,7 +34,7 @@ const Login = () => {
   };
 
   const handleBottomSheetClose = () => {
-    setShowBottomSheet(false); // 시트를 닫음
+    setShowBottomSheet(false);
   };
 
   const requestNotificationPermission = async () => {
