@@ -1,10 +1,19 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import LoginComponent from "../../components/auth/Login";
 import { KAKAO_AUTH_URL, GOOGLE_AUTH_URL } from "../../api/Oauth";
 import AuthorityBottomSheet from "../../components/common/AuthorityBottomSheet";
 
 const Login = () => {
   const [showBottomSheet, setShowBottomSheet] = useState(true);
+
+  useEffect(() => {
+    const permission = Notification.permission;
+    if (permission === "default") {
+      setShowBottomSheet(true);
+    } else {
+      setShowBottomSheet(false);
+    }
+  }, []);
 
   const handleKakaoLoginClick = () => {
     window.location.href = KAKAO_AUTH_URL;
