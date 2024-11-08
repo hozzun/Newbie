@@ -43,7 +43,7 @@ const bottomNavigationButtonItems: Array<BottomNavigationButtonItem> = [
 const pathToIndexMap = {
   "/clubhome": 0,
   "/cheersong": 1,
-  "/": 2,
+  "/home": 2,
   "/communication": 3,
   "/mypage": 4,
 };
