@@ -42,7 +42,7 @@ public class SongServiceImpl implements SongService {
     @Override
     public SongResponseDto getPlayerCheeringSong(String teamName, String playerName) {
         String key = "player_song/" + teamName + "_" + playerName + ".mp3";
-        String title = teamName + " - " + playerName + " 응원가";
+        String title = playerName + " 응원가";
         String url = getObjectUrl(key);
 
         return SongResponseDto.builder()
