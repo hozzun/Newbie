@@ -5,7 +5,7 @@ import MusicLyrics from "../../assets/icons/music-lyrics.svg?react";
 interface CheerSongProps {
   club: "doosan" | "hanwha" | "kia" | "kiwoom" | "kt" | "lg" | "lotte" | "nc" | "samsung" | "ssg";
   title: string;
-  singer: string;
+  singer?: string;
   showIcon: boolean
   onClick?: () => void;
 }

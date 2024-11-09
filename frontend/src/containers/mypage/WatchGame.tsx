@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from 'react';
 import LabelImage from "../../components/mypage/LabelImage";
 import MemoInput from "../../components/mypage/MemoInput";
@@ -40,6 +41,7 @@ const WatchGame = (props: WatchGameProps) => {
   const [homeScore, setHomeScore] = useState<number>(0)
   const [awayScore, setAwayScore] = useState<number>(0)
 
+  const nav = useNavigate()
 
   const getGameData = async () => {
     const api_url = import.meta.env.VITE_WATCH_GAME;
@@ -101,7 +103,7 @@ const WatchGame = (props: WatchGameProps) => {
 
   const deleteGame = () => {
     deleteGameAPI();
-    // TODO: 마이페이지 화면으로 이동
+    nav('/mypage')
   };
 
   // null 값을 허용하지 않아서 그냥 "doosan"으로 처리(물론 null 값이 나올 일은 없음)
