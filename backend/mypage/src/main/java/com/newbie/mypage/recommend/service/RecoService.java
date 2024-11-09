@@ -30,17 +30,15 @@ public class RecoService {
     @Value("${rabbitmq.routing.key}")
     private String routingKey;
 
-    public RecoResponseDto recommendTeam(RecoRequestDto requestDto) {
+    public ResponseEntity<RecoResponseDto> recommendTeam(RecoRequestDto requestDto) {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Type", "application/json");
 
         HttpEntity<RecoRequestDto> requestEntity = new HttpEntity<>(requestDto, headers);
 
         try {
-            ResponseEntity<RecoResponseDto> response = restTemplate.exchange(
+            return restTemplate.exchange(
                     fastApiUrl, HttpMethod.POST, requestEntity, RecoResponseDto.class);
-
-            return response.getBody();
         } catch (Exception e) {
             throw new RuntimeException("추천 요청 실패: " + e.getMessage());
         }

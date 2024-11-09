@@ -7,5 +7,5 @@ import java.util.List;
 @Data
 public class RecoResponseDto {
 
-    private List<String> recommendTeam;
+    private List<String> recommended_team;
 }
