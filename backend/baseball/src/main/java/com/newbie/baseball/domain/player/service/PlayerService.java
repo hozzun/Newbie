@@ -8,5 +8,5 @@ public interface PlayerService {
 
     PlayerResponseDto getPlayerById(Integer id);
     Page<PlayerResponseDto> getPlayersByTeam(Integer teamId, String position, String sortBy, Pageable pageable);
-    PlayerResponseDto getPlayerByTeamIdAndBackNumberAndPlayerName(Integer teamId, String backNumber, String playerName);
+    PlayerResponseDto getPlayerByTeamIdAndBackNumber(Integer teamId, String backNumber);
 }

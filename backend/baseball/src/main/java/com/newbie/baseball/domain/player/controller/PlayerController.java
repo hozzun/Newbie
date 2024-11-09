@@ -45,13 +45,12 @@ public class PlayerController {
         return new ResponseEntity<>(players, HttpStatus.OK);
     }
 
-    @Operation(summary = "teamId, backNumber, playerName 으로 팀, 등번호, 선수이름으로 해당 선수조회")
-    @GetMapping("/photos/{teamId}/{backNumber}/{playerName}")
-    public ResponseEntity<PlayerResponseDto> getPlayerByTeamIdAndBackNumberAndPlayerName(
+    @Operation(summary = "팀 ID, 등번호로 해당 선수조회")
+    @GetMapping("/photos/{teamId}/{backNumber}")
+    public ResponseEntity<PlayerResponseDto> getPlayerByTeamIdAndBackNumber(
             @Parameter(description = "조회할 팀의 ID [1 ~ 10]", example = "1") @PathVariable("teamId") Integer teamId,
-            @Parameter(description = "조회할 선수의 등번호", example = "5") @PathVariable("backNumber") String backNumber,
-            @Parameter(description = "조회할 선수의 이름", example = "김도영") @PathVariable("playerName") String playerName) {
-        PlayerResponseDto player = playerService.getPlayerByTeamIdAndBackNumberAndPlayerName(teamId, backNumber, playerName);
+            @Parameter(description = "조회할 선수의 등번호", example = "5") @PathVariable("backNumber") String backNumber) {
+        PlayerResponseDto player = playerService.getPlayerByTeamIdAndBackNumber(teamId, backNumber);
         return new ResponseEntity<>(player, HttpStatus.OK);
     }
 }

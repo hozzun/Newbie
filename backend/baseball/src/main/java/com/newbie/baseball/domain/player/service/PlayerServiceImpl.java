@@ -47,8 +47,8 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public PlayerResponseDto getPlayerByTeamIdAndBackNumberAndPlayerName(Integer teamId, String backNumber, String playerName) {
-        Player player = playerRepository.findByTeamIdAndBackNumberAndName(teamId, backNumber, playerName)
+    public PlayerResponseDto getPlayerByTeamIdAndBackNumber(Integer teamId, String backNumber) {
+        Player player = playerRepository.findByTeamIdAndBackNumber(teamId, backNumber)
                 .orElseThrow(PlayerNotFoundException::new);
         return convertToDto(player);
     }
