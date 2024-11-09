@@ -1,7 +1,6 @@
-import SectionBox from "../../components/common/SectionBox";
 import Container from "../../components/common/Container";
+import SectionBox from "../../components/common/SectionBox";
 import BaseballDictContainer from "../../containers/baseballdict/BaseballDict";
-import TextChatContainer from "../../containers/common/TextChatContainer";
 
 const BaseballDict = () => {
   return (
@@ -10,8 +9,6 @@ const BaseballDict = () => {
       <Container>
         <BaseballDictContainer />
       </Container>
-
-      <TextChatContainer />
     </>
   );
 };

@@ -1,8 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import SockJS from "sockjs-client";
 import { Client } from "@stomp/stompjs";
 import axiosInstance from "../../util/axiosInstance";
-import TextChat from "../../components/common/TextChat";
+import ChatMessages from "../../components/baseballdict/ChatMessages";
+import ChatInput from "../../components/baseballdict/ChatInput";
 
 interface Message {
   userId: number;
@@ -11,7 +12,7 @@ interface Message {
   timestamp: number;
 }
 
-const TextChatContainer = () => {
+const BaseballDict = () => {
   const [stompClient, setStompClient] = useState<Client | null>(null);
   const [connected, setConnected] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -21,32 +22,32 @@ const TextChatContainer = () => {
   const [error, setError] = useState<string | null>(null);
   const userId = 1;
 
-  useEffect(() => {
-    const fetchRoomAndHistory = async () => {
-      try {
-        setIsLoading(true);
-        setError(null);
+  const fetchRoomAndHistory = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
 
-        const { data: fetchedRoomId } = await axiosInstance.post("/api-chatbot/create-room", null, {
-          params: { userId },
-        });
+      const { data: fetchedRoomId } = await axiosInstance.post("/api-chatbot/create-room", null, {
+        params: { userId },
+      });
 
-        setRoomId(fetchedRoomId);
+      setRoomId(fetchedRoomId);
 
-        const { data: chatHistory } = await axiosInstance.get(
-          `/api-chatbot/chat/${fetchedRoomId}/history`,
-        );
-        setMessages(chatHistory);
-      } catch (error) {
-        console.error("Error fetching room or chat history:", error);
-        setError("Failed to load chat room. Please try again.");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchRoomAndHistory();
+      const { data: chatHistory } = await axiosInstance.get(
+        `/api-chatbot/chat/${fetchedRoomId}/history`,
+      );
+      setMessages(chatHistory);
+    } catch (error) {
+      console.error("Error fetching room or chat history:", error);
+      setError("Failed to load chat room. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
   }, [userId]);
+
+  useEffect(() => {
+    fetchRoomAndHistory();
+  }, [fetchRoomAndHistory]);
 
   useEffect(() => {
     if (roomId) {
@@ -55,12 +56,18 @@ const TextChatContainer = () => {
         onConnect: () => {
           setConnected(true);
           setError(null);
-          console.log("Connected to WebSocket");
 
           client.subscribe(`/topic/chat/${roomId}`, message => {
             try {
               const receivedMessage = JSON.parse(message.body);
-              setMessages(prevMessages => [...prevMessages, receivedMessage]);
+              if (receivedMessage.content) {
+                // AI 응답을 messages 배열에 추가하여 실시간으로 UI에 반영
+                setMessages(prevMessages => [
+                  ...prevMessages,
+                  { ...receivedMessage, message: receivedMessage.content },
+                ]);
+                console.log("Received AI response:", receivedMessage.content);
+              }
             } catch (error) {
               console.error("Error parsing message:", error);
             }
@@ -81,16 +88,14 @@ const TextChatContainer = () => {
       setStompClient(client);
 
       return () => {
-        if (client) {
-          client.deactivate();
-        }
+        client.deactivate();
       };
     }
   }, [roomId]);
 
-  const handleSendMessage = () => {
+  const handleSendMessage = useCallback(() => {
     if (stompClient && connected && comment.trim()) {
-      const message = {
+      const newMessage = {
         userId,
         message: comment.trim(),
         roomId,
@@ -98,9 +103,11 @@ const TextChatContainer = () => {
       };
 
       try {
+        setMessages(prevMessages => [...prevMessages, newMessage]);
+
         stompClient.publish({
           destination: `/app/chat/${roomId}`,
-          body: JSON.stringify(message),
+          body: JSON.stringify(newMessage),
         });
 
         setComment("");
@@ -109,29 +116,31 @@ const TextChatContainer = () => {
         setError("Failed to send message. Please try again.");
       }
     }
-  };
-
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      handleSendMessage();
-    }
-  };
+  }, [stompClient, connected, comment, roomId, userId]);
 
   return (
-    <TextChat
-      label="Type your message..."
-      onSendMessage={handleSendMessage}
-      onKeyPress={handleKeyPress}
-      comment={comment}
-      setComment={setComment}
-      messages={messages}
-      currentUserId={userId}
-      isLoading={isLoading}
-      error={error}
-      connected={connected}
-    />
+    <>
+      {isLoading && <div className="flex justify-center items-center h-full">Loading...</div>}
+      {error && <div className="flex justify-center items-center h-full text-red-500">{error}</div>}
+      {!isLoading && !error && (
+        <>
+          <ChatMessages
+            messages={messages}
+            currentUserId={userId}
+            userImage="/path/to/user-image.png"
+            aiImage="/path/to/ai-image.png"
+          />
+          <ChatInput
+            onSendMessage={handleSendMessage}
+            comment={comment}
+            setComment={setComment}
+            placeholder="메시지를 입력하세요..."
+            disabled={!connected}
+          />
+        </>
+      )}
+    </>
   );
 };
 
-export default TextChatContainer;
+export default BaseballDict;
