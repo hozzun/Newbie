@@ -1,25 +1,22 @@
-package com.newbie.auth.member.domain;
+package com.newbie.baseball.domain.player.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
 @NoArgsConstructor
-@AllArgsConstructor
-@Table(name = "member_player_like")
-public class MemberPlayerLike {
+@Table(name = "player_like")
+public class PlayerLike {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "like_id")
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id", nullable = false)
-    private Member member;
+    @Column(name = "member_id", nullable = false)
+    private Long memberId;
 
     @Column(name = "player_id", nullable = false)
     private Integer playerId;
@@ -27,8 +24,8 @@ public class MemberPlayerLike {
     @Column(name = "is_liked", nullable = false)
     private Boolean isLiked = false;
 
-    public MemberPlayerLike(Member member, Integer playerId) {
-        this.member = member;
+    public PlayerLike(Long memberId, Integer playerId) {
+        this.memberId = memberId;
         this.playerId = playerId;
         this.isLiked = true;
     }
