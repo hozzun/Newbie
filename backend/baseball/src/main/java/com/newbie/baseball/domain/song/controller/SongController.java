@@ -26,7 +26,7 @@ public class SongController {
     @Operation(summary = "팀 이름으로 해당 팀 응원송 조회")
     @GetMapping("/teams")
     public ResponseEntity<List<SongResponseDto>> getTeamSongs(
-            @Parameter(description = "팀 이름 [ KIA, 삼성, LG, 두산, KT, SSG, 롯데, 한화, NC, 키움 ]", example = "KIA") @RequestParam String teamName) {
+            @Parameter(description = "팀 이름 [ kia, , lg, doosan, kt, ssg, lotte, hanwha, nc, kiwoom ]", example = "kia") @RequestParam String teamName) {
         List<SongResponseDto> songs = songService.getTeamCheeringSongs(teamName);
         return new ResponseEntity<>(songs, HttpStatus.OK);
     }
@@ -34,7 +34,7 @@ public class SongController {
     @Operation(summary = "팀, 선수이름으로 해당 선수 응원송 조회")
     @GetMapping("/players")
     public ResponseEntity<SongResponseDto> getPlayerSong(
-            @Parameter(description = "팀 이름 [ KIA, 삼성, LG, 두산, KT, SSG, 롯데, 한화, NC, 키움 ]", example = "KIA") @RequestParam String teamName,
+            @Parameter(description = "팀 이름 [ kia, , lg, doosan, kt, ssg, lotte, hanwha, nc, kiwoom ]", example = "kia") @RequestParam String teamName,
             @Parameter(description = "선수 이름", example = "김도영") @RequestParam String playerName) {
         SongResponseDto song = songService.getPlayerCheeringSong(teamName, playerName);
         return new ResponseEntity<>(song, HttpStatus.OK);
