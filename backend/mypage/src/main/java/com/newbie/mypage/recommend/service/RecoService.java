@@ -39,14 +39,8 @@ public class RecoService {
         try {
             ResponseEntity<RecoResponseDto> response = restTemplate.exchange(
                     fastApiUrl, HttpMethod.POST, requestEntity, RecoResponseDto.class);
-            RecoResponseDto recoResponse = response.getBody();
 
-            if (recoResponse != null) {
-                rabbitTemplate.convertAndSend(exchangeName, routingKey, recoResponse);
-                log.info("RabbitMQ로 추천 결과 전송: {}", recoResponse);
-            }
-
-            return recoResponse;
+            return response.getBody();
         } catch (Exception e) {
             throw new RuntimeException("추천 요청 실패: " + e.getMessage());
         }
