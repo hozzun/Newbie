@@ -17,16 +17,18 @@ const ClubRecommend = () => {
 
   // 추천 알고리즘 연결
   const ClubRecommendAPI = async () => {
+
+    const api_url = import.meta.env.VITE_CLUB_RECOMMEND
     const UserData = {
-      userId: 1,
-      mbti: mbti,
-      responses: selectedChoices,
-      region: region,
+      "userId": 1,
+      "mbti": mbti,
+      "responses": selectedChoices,
+      "region": region
     };
+    console.log('입력 데이터', UserData)
 
     try {
-      // TODO: 실제 API 주소 입력하기
-      const response = await fetch("http://localhost:8000/recommend/", {
+      const response = await fetch(api_url, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

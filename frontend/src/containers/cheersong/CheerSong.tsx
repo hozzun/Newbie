@@ -1,3 +1,5 @@
+import axios from "axios"
+import { useState, useEffect } from "react"
 import ClubChangeButton from "../../components/cheersong/ClubChangeButton"
 import PageName from "../../components/common/PageName"
 import CountSong from "../../components/cheersong/CountSong"
@@ -6,8 +8,11 @@ import MusicController from "../../components/common/MusicController"
 import { useNavigate } from "react-router-dom"
 
 const CheerSong = () => {
-  // TODO: Navigate 설정, 음악 데이터 받아오기(개수, 제목, 가수 등), 음악 컨트롤러 설정
+  // TODO: 나의 팀 정보 받아오기, 음악 컨트롤러 설정
   const navigate = useNavigate()
+
+  const [count, setCount] = useState<number>(0)
+  const [cheerSongs, setCheerSongs] = useState<{ title: string; url: string }[]>([]);
 
   const goClubSelect = () => {
     navigate('/cheerteam')
@@ -17,12 +22,41 @@ const CheerSong = () => {
     navigate('/cheersong/cheerlyris')
   }
 
+  const getCheerSong =  async () => {
+
+    const api_url = import.meta.env.VITE_CHEER_SONG
+    const teamName = "KIA"
+
+    try {
+      const response = await axios.get(api_url, {
+        params: { teamName: teamName },
+      });
+      console.log(response.data);
+      setCheerSongs(response.data)
+      setCount(response.data.length)
+    } catch (error) {
+      console.error("Error fetching cheer song:", error);
+    }
+  };
+
+  useEffect(() => {
+    getCheerSong()
+  }, []);
+
   return (
     <>
       <PageName label="응원가" />
       <ClubChangeButton club="ssg" onClick={goClubSelect} />
-      <CountSong count={30} />
-      <CheerSongComponent club="ssg" title="랜더스여" singer="We are 랜더스 파이팅" onClick={goLyris} showIcon={true} />
+      <CountSong count={count} />
+      {cheerSongs.map((song, index) => (
+        <CheerSongComponent
+          key={index}
+          club="kia" 
+          title={song.title}
+          onClick={goLyris} 
+          showIcon={true}
+        />
+      ))}
       <MusicController />
     </>
   )
