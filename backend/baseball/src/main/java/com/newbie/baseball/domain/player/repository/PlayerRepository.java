@@ -13,7 +13,7 @@ public interface PlayerRepository extends JpaRepository<Player, Integer> {
 
     Page<Player> findByTeamId(Integer teamId, Pageable pageable);
     Page<Player> findByTeamIdAndPosition(Integer teamId, String position, Pageable pageable);
-    Optional<Player> findByTeamIdAndBackNumberAndName(Integer teamId, String backNumber, String name);
+    Optional<Player> findByTeamIdAndBackNumber(Integer teamId, String backNumber);
 
     @Query("SELECT p FROM Player p WHERE p.team.id = :teamId ORDER BY CAST(p.backNumber AS int) ASC")
     Page<Player> findByTeamIdOrderByBackNumberDesc(Integer teamId, Pageable pageable);
