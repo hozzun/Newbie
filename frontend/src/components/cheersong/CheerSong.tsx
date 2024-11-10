@@ -6,7 +6,7 @@ import ClubFullName from "../../util/ClubFullName";
 interface CheerSongProps {
   club: "doosan" | "hanwha" | "kia" | "kiwoom" | "kt" | "lg" | "lotte" | "nc" | "samsung" | "ssg";
   title: string;
-  url: string;
+  url?: string;
   showIcon: boolean
   onIconClick?: () => void;
   onSingClick?: () => void;
@@ -17,9 +17,8 @@ const CheerSong = (props: CheerSongProps) => {
   return (
     <div
       className="flex flex-row justify-between font-kbogothicmedium mb-3"
-      onClick={props.onSingClick}
     >
-      <div className="flex flex-row">
+      <div className="flex flex-row" onClick={props.onSingClick}>
         <ClubSelectItem
           logo={ClubLogos[props.club]}
           clubColor={props.club}

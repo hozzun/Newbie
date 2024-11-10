@@ -1,5 +1,5 @@
 import axios from "axios"
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef, useCallback } from "react"
 import ClubChangeButton from "../../components/cheersong/ClubChangeButton"
 import PageName from "../../components/common/PageName"
 import CountSong from "../../components/cheersong/CountSong"
@@ -14,7 +14,7 @@ const CheerSong = () => {
   const club = "ssg"   // TODO: 나의 팀 정보 받아오기
   const [count, setCount] = useState<number>(0)
   const [cheerSongs, setCheerSongs] = useState<{ title: string; url: string }[]>([]);
-  const [currentSong, setCurrentSong] = useState<{ title: string; url: string } | null>(null);
+  const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [progress, setProgress] = useState<number>(0);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
@@ -46,22 +46,44 @@ const CheerSong = () => {
     getCheerSong()
   }, []);
 
-  const handleSongClick = (song: { title: string; url: string }) => {
+  const playSong = useCallback((index: number) => {
+    const song = cheerSongs[index];
     if (audioRef.current) {
       audioRef.current.pause();
+      audioRef.current.currentTime = 0;
     }
 
     const audio = new Audio(song.url);
     audioRef.current = audio;
-    setCurrentSong(song);
-    setProgress(0);
+    setProgress(0); // 새로운 노래를 선택할 때 progress도 초기화
 
     audio.play();
-    audio.addEventListener("ended", () => setCurrentSong(null));
+    audio.addEventListener("ended", () => setCurrentIndex((index + 1) % cheerSongs.length));
     audio.addEventListener("timeupdate", () => {
       setProgress((audio.currentTime / audio.duration) * 100);
     });
+  }, [cheerSongs]);
+
+  // 이전 노래 재생 함수
+  const handlePrevious = () => {
+    const prevIndex = (currentIndex - 1 + cheerSongs.length) % cheerSongs.length;
+    setCurrentIndex(prevIndex);
+    playSong(prevIndex);
   };
+
+  // 다음 노래 재생 함수
+  const handleNext = () => {
+    const nextIndex = (currentIndex + 1) % cheerSongs.length;
+    setCurrentIndex(nextIndex);
+    playSong(nextIndex);
+  };
+
+  // 인덱스가 변경될 때마다 노래 재생
+  useEffect(() => {
+    if (cheerSongs.length > 0) {
+      playSong(currentIndex);
+    }
+  }, [currentIndex, cheerSongs, playSong]);
 
   return (
     <>
@@ -74,13 +96,13 @@ const CheerSong = () => {
           club={club}
           title={song.title}
           url={song.url}
-          onSingClick={() => handleSongClick(song)}
+          onSingClick={() => setCurrentIndex(index)}
           onIconClick={goLyris} 
           showIcon={true}
         />
       ))}
 
-      {currentSong && <MusicController title={currentSong.title} club={club} audioRef={audioRef} progress={progress} />} 
+      {cheerSongs[currentIndex] && <MusicController title={cheerSongs[currentIndex].title} club={club} audioRef={audioRef} progress={progress} onPrevious={handlePrevious} onNext={handleNext}/>} 
     </>
   )
 }

@@ -11,18 +11,18 @@ const CheerLyris = () => {
   }
 
   const onClickPause = () => {
-    console.log('왼쪽 버튼 클릭')
+    console.log('정지 버튼 클릭')
   }
 
   const onClickRight = () => {
-    console.log('왼쪽 버튼 클릭')
+    console.log('오른쪽 버튼 클릭')
   }
 
 
   return (
     <>
       <div className="m-5">
-        <CheerSong club="ssg" title="랜더스여" singer="We are 랜더스 파이팅" showIcon={false} />
+        <CheerSong club="ssg" title="랜더스여" showIcon={false} />
         <CheerLyrisComponent lyris="가사" />
         <div className="w-full bg-gray-200 rounded-full h-1 mt-10">
           <div className="bg-gray-400 h-1 rounded-full w-1/3"></div>
