@@ -2,6 +2,7 @@ package com.newbie.baseball.domain.player.service;
 
 import com.newbie.baseball.domain.player.entity.Player;
 import com.newbie.baseball.domain.player.entity.PlayerLike;
+import com.newbie.baseball.domain.player.exception.PlayerNotFoundException;
 import com.newbie.baseball.domain.player.repository.PlayerLikeRepository;
 import com.newbie.baseball.domain.player.repository.PlayerRepository;
 import jakarta.transaction.Transactional;
@@ -21,13 +22,8 @@ public class PlayerLikeServiceImpl implements PlayerLikeService {
 
     @Transactional
     public void toggleLike(Long memberId, Integer playerId) {
-        Optional<Player> playerOpt = playerRepository.findById(playerId);
-
-        if (playerOpt.isEmpty()) {
-            throw new IllegalArgumentException("유효하지 않은 선수 ID입니다.");
-        }
-
-        Player player = playerOpt.get();
+        Player player = playerRepository.findById(playerId)
+                .orElseThrow(PlayerNotFoundException::new);
 
         Optional<PlayerLike> likeRecordOpt = playerLikeRepository.findByMemberIdAndPlayerId(memberId, playerId);
 

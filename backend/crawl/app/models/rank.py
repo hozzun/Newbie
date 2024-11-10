@@ -19,5 +19,6 @@ class Rank(Base):
     recent_10 = Column(String(20))
     streak = Column(String(10))
     rank_change = Column(Integer)
+    rank_change_amount = Column(Integer)
     
     team = relationship("Team", back_populates="rank")

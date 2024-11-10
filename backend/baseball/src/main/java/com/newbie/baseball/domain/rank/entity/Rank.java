@@ -49,5 +49,8 @@ public class Rank {
     private String streak;
 
     @Column(name = "rank_change")
-    private Integer rankChange;
+    private Integer rankChange = 0;
+
+    @Column(name = "rank_change_amount")
+    private Integer rankChangeAmount = 0;
 }
