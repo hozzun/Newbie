@@ -1,13 +1,14 @@
 package com.newbie.cardstore.storecard.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
 
-@Getter
 @Data
+@AllArgsConstructor
 @Builder
-public class PlayerCardDto {
+public class PlayerDetailDto {
+
     private String id;
     private String name;
     private String no;
@@ -16,4 +17,7 @@ public class PlayerCardDto {
     private String imageUrl;
     private String position;
     private String createdAt;
+    private String birthday;
+    private String physical;
+    private String career;
 }

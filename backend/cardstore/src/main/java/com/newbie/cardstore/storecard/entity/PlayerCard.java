@@ -15,11 +15,12 @@ public class PlayerCard {
     private String id;
     private String name;
     private String no;
-    private String team;
+    private int team;
     private double price;
     private String imageUrl;
     private String position;
     private String createdAt;  // 생성일 필드 추가
+    private String cardType;
     private int salesCount;
 
 }
