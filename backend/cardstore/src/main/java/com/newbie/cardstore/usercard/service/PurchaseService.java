@@ -17,6 +17,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashSet;
 
 @Service
 @RequiredArgsConstructor
@@ -30,7 +31,7 @@ public class PurchaseService {
     @Value("${rabbitmq.exchange.name}")
     private String exchangeName;
 
-    @Value("${rabbitmq.routing.key}")
+    @Value("${rabbitmq.routing.key.mileage}")
     private String routingKey;
 
     @Value("${mileage.server.domain}")
@@ -58,7 +59,6 @@ public class PurchaseService {
         log.info("Starting purchaseCard with PurchaseDto: {}", purchaseDto);
 
         ObjectId cardObjectId;
-
         try {
             cardObjectId = new ObjectId(purchaseDto.getCardId());
             log.info("Converted cardId to ObjectId: {}", cardObjectId);
@@ -67,22 +67,30 @@ public class PurchaseService {
             throw new CustomException(ErrorCode.INVALID_CARD_ID);
         }
 
-        boolean isCardAlreadyPurchased = userCardRepository.existsByUserIdAndCardId(purchaseDto.getUserId(), cardObjectId);
+        // 사용자가 이미 해당 카드를 보유하고 있는지 체크
+        boolean isCardAlreadyPurchased = userCardRepository.existsByUserIdAndCardIdsContains(purchaseDto.getUserId(), cardObjectId);
         if (isCardAlreadyPurchased) {
             log.error("User {} has already purchased the card {}", purchaseDto.getUserId(), cardObjectId);
             throw new CustomException(ErrorCode.CARD_ALREADY_PURCHASED);
         }
 
+        // 마일리지 확인 후 구매 처리
         if (checkMileage(purchaseDto.getUserId(), purchaseDto.getPrice())) {
             if (sendMileageDeductionRequest(purchaseDto.getUserId(), purchaseDto.getPrice())) {
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 String createdAt = dateFormat.format(new Date());
 
-                UserCard userCard = UserCard.builder()
-                        .userId(purchaseDto.getUserId())
-                        .cardId(cardObjectId)
-                        .createdAt(createdAt)
-                        .build();
+                // UserCard 가져오기 또는 새로 생성
+                UserCard userCard = userCardRepository.findByUserId(purchaseDto.getUserId()).stream()
+                        .findFirst()
+                        .orElse(UserCard.builder()
+                                .userId(purchaseDto.getUserId())
+                                .cardIds(new HashSet<>())
+                                .createdAt(createdAt)
+                                .build());
+
+                // 새로운 cardId 추가
+                userCard.getCardIds().add(cardObjectId);
 
                 UserCard savedUserCard = userCardRepository.save(userCard);
                 log.info("UserCard saved successfully: {}", savedUserCard);
@@ -96,6 +104,7 @@ public class PurchaseService {
             throw new CustomException(ErrorCode.INSUFFICIENT_MILEAGE);
         }
     }
+
 
     /**
      * 마일리지 차감 요청 메시지를 RabbitMQ로 전송
