@@ -17,16 +17,16 @@ const ClubRecommend = () => {
 
   // 추천 알고리즘 연결
   const ClubRecommendAPI = async () => {
-
-    const api_url = import.meta.env.VITE_CLUB_RECOMMEND
+    const api_url = import.meta.env.VITE_CLUB_RECOMMEND;
     const UserData = {
       "userId": 1,
       "mbti": mbti,
       "responses": selectedChoices,
-      "region": region
+      "region": region,
     };
-    console.log('입력 데이터', UserData)
-
+  
+    console.log("입력 데이터", UserData);
+  
     try {
       const response = await fetch(api_url, {
         method: "POST",
@@ -35,18 +35,25 @@ const ClubRecommend = () => {
         },
         body: JSON.stringify(UserData), // JSON 형태로 데이터 변환
       });
-
+  
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-
-      const data = await response.json();
-      console.log("Recommended team:", data.recommended_team);
-      setMyClub(data.recommended_team);
+  
+      // 응답이 비어있지 않은 경우에만 JSON 파싱 시도
+      const textData = await response.text();
+      if (textData) {
+        const data = JSON.parse(textData);
+        console.log("Recommended team:", data.recommended_team);
+        setMyClub(data.recommended_team);
+      } else {
+        console.warn("Response is empty or not JSON.");
+      }
     } catch (error) {
       console.error("Error sending data to API:", error);
     }
   };
+  
 
   const handleMbtiSubmit = (writeMbti: string) => {
     setMbti(writeMbti);
