@@ -21,4 +21,5 @@ public class RankResponseDto {
     private String recent10;
     private String streak;
     private Integer rankChange;
+    private Integer rankChangeAmount;
 }
