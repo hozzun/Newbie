@@ -1,17 +1,5 @@
+import { ClubProps, GameInfo } from "../../containers/home/Home";
 import clubs from "./clubs";
-
-interface ClubProps {
-  id: string;
-  player?: string;
-}
-
-export interface GameInfo {
-  day: string;
-  time: string;
-  place: string;
-  clubs: Array<ClubProps>;
-  weather?: string;
-}
 
 export interface GameSituation {
   isPlaying: boolean;

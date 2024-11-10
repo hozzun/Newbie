@@ -1,17 +1,7 @@
 import AngleSmallUp from "../../assets/icons/angle-small-up.svg?react";
 import AngleSmallDown from "../../assets/icons/angle-small-down.svg?react";
 import clubs from "./clubs";
-
-export interface ClubRankItemProps {
-  id: string;
-  rank: number;
-  gameCount: number;
-  winCount: number;
-  drawCount: number;
-  loseCount: number;
-  gameDifference: number;
-  rankDifference: number;
-}
+import { ClubRankItemProps } from "../../containers/home/Home";
 
 interface RankDifferenceProps {
   rankDifference: number;

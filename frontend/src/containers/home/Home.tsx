@@ -3,15 +3,61 @@ import HomeComponent from "../../components/home/Home";
 import { TodayGameProps } from "../../components/home/TodayGame";
 import { ImageCardProps } from "../../components/home/ImageCard";
 import { ClubRankProps } from "../../components/home/ClubRank";
-import { ClubRankItemProps } from "../../components/home/ClubRankItem";
 import { HighlightProps } from "../../components/home/Highlight";
 import { CardStoreItemProps } from "../../components/home/CardStoreItem";
 import { CardStoreProps } from "../../components/home/CardStore";
-import { GameInfo, GameProps, GameSituation } from "../../components/home/Game";
+import { GameProps, GameSituation } from "../../components/home/Game";
 import { useNavigate } from "react-router-dom";
+import { GetGamesRequest, getClubRanks, getGames } from "../../api/baseballApi";
+import { getClubIdByNum } from "../../util/ClubId";
+import CustomError from "../../util/CustomError";
+
+export interface ClubProps {
+  id: string;
+  player?: string;
+}
+
+export interface GameInfo {
+  day: string;
+  time: string;
+  place: string;
+  clubs: Array<ClubProps>;
+  weather?: string;
+}
+
+export interface ClubRankItemProps {
+  id: string;
+  rank: number;
+  gameCount: number;
+  winCount: number;
+  drawCount: number;
+  loseCount: number;
+  gameDifference: number;
+  rankDifference: number;
+}
+
+const validateTeamId = (teamId: string | undefined) => {
+  if (!teamId) {
+    throw new CustomError("[ERROR] 구단 ID 변환 과정 by HOME");
+  }
+
+  return teamId;
+};
+
+// 더미 데이터
+// const gameSituationData: GameSituation = {
+//   isPlaying: true,
+//   scores: {
+//     samsung: 2,
+//     kia: 1,
+//   },
+// };
+// ---
 
 const Home = () => {
   const nav = useNavigate();
+
+  const today = new Date();
 
   const [hasCheeringClub, setHasCheeringClub] = useState<boolean>(false);
   const [todayGame, setTodayGame] = useState<GameProps>();
@@ -29,18 +75,28 @@ const Home = () => {
 
       if (hasCheeringClubData) {
         // TODO: GET - 응원 구단에 맞는 오늘의 경기
+        const getGamesRequest: GetGamesRequest = {
+          year: today.getFullYear().toString(),
+          month: today.getMonth().toString() + 1,
+          day: today.getDate().toString(),
+          teamId: 1, // TODO: 나의 응원 구단 ID 구하기
+        };
+
+        const response = await getGames(getGamesRequest);
+        const homeTeamId = validateTeamId(getClubIdByNum(response.data.homeTeamId));
+        const awayTeamId = validateTeamId(getClubIdByNum(response.data.awayTeamId));
         const gameInfoData: GameInfo = {
-          day: "2024-11-05",
-          time: "17:00",
-          place: "광주스타디움",
+          day: response.data.date,
+          time: response.data.time,
+          place: response.data.stadium,
           clubs: [
             {
-              id: "samsung",
-              player: "이재익",
+              id: homeTeamId,
+              player: response.data.homeStartingPitcher,
             },
             {
-              id: "kia",
-              player: "곽도규",
+              id: awayTeamId,
+              player: response.data.awayStartingPitcher,
             },
           ],
         };
@@ -84,109 +140,17 @@ const Home = () => {
 
   const fetchClubRanks = async () => {
     try {
-      //TODO: GET - 구단 랭킹
-      const clubRanksData: Array<ClubRankItemProps> = [
-        {
-          id: "kia",
-          rank: 1,
-          gameCount: 144,
-          winCount: 87,
-          drawCount: 2,
-          loseCount: 55,
-          gameDifference: 0,
-          rankDifference: 0,
-        },
-        {
-          id: "samsung",
-          rank: 2,
-          gameCount: 144,
-          winCount: 78,
-          drawCount: 2,
-          loseCount: 64,
-          gameDifference: 9,
-          rankDifference: 1,
-        },
-        {
-          id: "lg",
-          rank: 3,
-          gameCount: 144,
-          winCount: 76,
-          drawCount: 2,
-          loseCount: 66,
-          gameDifference: 11,
-          rankDifference: -1,
-        },
-        {
-          id: "doosan",
-          rank: 4,
-          gameCount: 144,
-          winCount: 74,
-          drawCount: 2,
-          loseCount: 68,
-          gameDifference: 13,
-          rankDifference: 0,
-        },
-        {
-          id: "kt",
-          rank: 5,
-          gameCount: 144,
-          winCount: 72,
-          drawCount: 2,
-          loseCount: 70,
-          gameDifference: 15,
-          rankDifference: 0,
-        },
-        {
-          id: "ssg",
-          rank: 6,
-          gameCount: 144,
-          winCount: 72,
-          drawCount: 2,
-          loseCount: 70,
-          gameDifference: 15,
-          rankDifference: -1,
-        },
-        {
-          id: "lotte",
-          rank: 7,
-          gameCount: 144,
-          winCount: 66,
-          drawCount: 4,
-          loseCount: 74,
-          gameDifference: 20,
-          rankDifference: 0,
-        },
-        {
-          id: "hanwha",
-          rank: 8,
-          gameCount: 144,
-          winCount: 66,
-          drawCount: 2,
-          loseCount: 76,
-          gameDifference: 21,
-          rankDifference: 1,
-        },
-        {
-          id: "nc",
-          rank: 9,
-          gameCount: 144,
-          winCount: 61,
-          drawCount: 2,
-          loseCount: 81,
-          gameDifference: 26,
-          rankDifference: -1,
-        },
-        {
-          id: "kiwoom",
-          rank: 10,
-          gameCount: 144,
-          winCount: 58,
-          drawCount: 0,
-          loseCount: 86,
-          gameDifference: 30,
-          rankDifference: 0,
-        },
-      ];
+      const response = await getClubRanks({ year: today.getFullYear().toString() });
+      const clubRanksData: Array<ClubRankItemProps> = response.data.map(d => ({
+        id: validateTeamId(getClubIdByNum(d.teamId)),
+        rank: d.rank,
+        gameCount: d.gameCount,
+        winCount: d.winCount,
+        drawCount: d.drawCount,
+        loseCount: d.loseCount,
+        gameDifference: Number(d.gameDiff),
+        rankDifference: d.rankChange,
+      }));
 
       setClubRanks(clubRanksData);
     } catch (e) {

@@ -1,9 +1,10 @@
 import { useState } from "react";
-import ClubRankItem, { ClubRankItemProps } from "./ClubRankItem";
+import ClubRankItem from "./ClubRankItem";
 import CircleButton from "../common/CircleButton";
 import { CIRCLE_BUTTON_VARIANTS } from "../common/variants";
 import AngleSmallUp from "../../assets/icons/angle-small-up.svg?react";
 import AngleSmallDown from "../../assets/icons/angle-small-down.svg?react";
+import { ClubRankItemProps } from "../../containers/home/Home";
 
 export interface ClubRankProps {
   clubRankItems: Array<ClubRankItemProps> | null;
