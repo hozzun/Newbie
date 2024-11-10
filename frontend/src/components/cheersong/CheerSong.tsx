@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import ClubSelectItem from "../common/ClubSelectItem";
 import ClubLogos from "../../util/ClubLogos";
 import MusicLyrics from "../../assets/icons/music-lyrics.svg?react";
@@ -8,11 +9,16 @@ interface CheerSongProps {
   title: string;
   url?: string;
   showIcon: boolean
-  onIconClick?: () => void;
   onSingClick?: () => void;
+  all?: { title: string; url: string; }[];
 }
 
 const CheerSong = (props: CheerSongProps) => {
+
+  const nav = useNavigate()
+  const goLyris = () => {
+    nav('/cheersong/lyris', { state: { club: props.club, title: props.title, all: props.all } })
+  }
 
   return (
     <div
@@ -31,7 +37,7 @@ const CheerSong = (props: CheerSongProps) => {
         </div>
       </div>
       {props.showIcon && (
-        <MusicLyrics className="mt-5 w-6 h-6 mr-3" onClick={props.onIconClick} />
+        <MusicLyrics className="mt-5 w-6 h-6 mr-3" onClick={goLyris} />
       )}
     </div>
   );

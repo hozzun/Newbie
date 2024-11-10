@@ -6,7 +6,7 @@ const PlayerMusicController = () => {
       <div className="flex justify-start w-full mb-3">
         <p className="text-2xl font-kbogothicbold text-gray-700">응원가</p>
       </div>
-      <MusicController />
+      <MusicController club="" />
     </div>
   );
 };
