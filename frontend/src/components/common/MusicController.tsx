@@ -10,8 +10,8 @@ interface MusicControllerProps {
   club: string;
   audioRef: React.MutableRefObject<HTMLAudioElement | null>
   progress: number
-  onPrevious: () => void;
-  onNext: () => void;
+  onPrevious?: () => void;
+  onNext?: () => void;
 }
 
 const MusicController = ({ title, club, audioRef, progress, onPrevious, onNext }: MusicControllerProps) => {
