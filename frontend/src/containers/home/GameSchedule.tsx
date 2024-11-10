@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import GameScheduleComponent from "../../components/home/GameSchedule";
-import { GameInfo, GameProps, GameSituation } from "../../components/home/Game";
+import { GameProps, GameSituation } from "../../components/home/Game";
+import { GameInfo } from "./Home";
 
 const GameSchedule = () => {
   const today = new Date();

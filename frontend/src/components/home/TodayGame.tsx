@@ -25,6 +25,16 @@ const NoCheeringClub = () => {
   );
 };
 
+const NoTodayGame = () => {
+  return (
+    <div className="mt-3 py-12 flex flex-col justify-center items-center w-full rounded-lg bg-gray-100 p-4 shadow-sm">
+      <p className="text-base font-kbogothiclight text-gray-700">
+        오늘 진행 예정인 경기가 없습니다.
+      </p>
+    </div>
+  );
+};
+
 const TodayGame = (props: TodayGameProps) => {
   return (
     <div className="flex flex-col justify-center items-center w-full">
@@ -32,8 +42,12 @@ const TodayGame = (props: TodayGameProps) => {
         <p className="text-2xl font-kbogothicbold text-gray-700">오늘의 경기</p>
         <TextButton onClick={props.goMore}>더보기</TextButton>
       </div>
-      {props.hasCheeringClub && props.todayGame?.gameInfo && props.todayGame?.gameSituation ? (
-        <Game gameInfo={props.todayGame.gameInfo} gameSituation={props.todayGame.gameSituation} />
+      {props.hasCheeringClub ? (
+        props.todayGame?.gameInfo && props.todayGame?.gameSituation ? (
+          <Game gameInfo={props.todayGame.gameInfo} gameSituation={props.todayGame.gameSituation} />
+        ) : (
+          <NoTodayGame />
+        )
       ) : (
         <NoCheeringClub />
       )}

@@ -3,13 +3,164 @@ import HomeComponent from "../../components/home/Home";
 import { TodayGameProps } from "../../components/home/TodayGame";
 import { ImageCardProps } from "../../components/home/ImageCard";
 import { ClubRankProps } from "../../components/home/ClubRank";
-import { ClubRankItemProps } from "../../components/home/ClubRankItem";
 import { HighlightProps } from "../../components/home/Highlight";
 import { CardStoreItemProps } from "../../components/home/CardStoreItem";
 import { CardStoreProps } from "../../components/home/CardStore";
-import { GameInfo, GameProps, GameSituation } from "../../components/home/Game";
+import { GameProps, GameSituation } from "../../components/home/Game";
+import { useNavigate } from "react-router-dom";
+import { GetGamesRequest, getClubRanks, getGames } from "../../api/baseballApi";
+import { getClubIdByNum } from "../../util/ClubId";
+import CustomError from "../../util/CustomError";
+import { GetWeatherRequest, GetWeatherResponse, getWeather } from "../../api/weatherApi";
+
+export interface ClubProps {
+  id: string;
+  player?: string;
+}
+
+export interface GameInfo {
+  day: string;
+  time: string;
+  place: string;
+  clubs: Array<ClubProps>;
+  weather?: string;
+}
+
+export interface ClubRankItemProps {
+  id: string;
+  rank: number;
+  gameCount: number;
+  winCount: number;
+  drawCount: number;
+  loseCount: number;
+  gameDifference: number;
+  rankDifference: number;
+}
+
+interface GeoPoint {
+  logitude: number;
+  latitude: number;
+}
+
+const stadiums: Record<string, GeoPoint> = {
+  잠실: {
+    logitude: 37.512011,
+    latitude: 127.071619,
+  },
+  고척: {
+    logitude: 37.498229,
+    latitude: 126.866836,
+  },
+  문학: {
+    logitude: 37.436962,
+    latitude: 126.693254,
+  },
+  수원: {
+    logitude: 37.299585,
+    latitude: 127.009526,
+  },
+  청주: {
+    logitude: 36.638676,
+    latitude: 127.470008,
+  },
+  대전: {
+    logitude: 36.316982,
+    latitude: 127.429025,
+  },
+  광주: {
+    logitude: 35.168194,
+    latitude: 126.889385,
+  },
+  대구: {
+    logitude: 35.84104,
+    latitude: 128.681774,
+  },
+  포항: {
+    logitude: 36.007952,
+    latitude: 129.359549,
+  },
+  울산: {
+    logitude: 35.532037,
+    latitude: 129.265693,
+  },
+  창원: {
+    logitude: 35.222439,
+    latitude: 128.582573,
+  },
+  사직: {
+    logitude: 35.193742,
+    latitude: 129.061572,
+  },
+};
+
+const pty: Record<number, string> = {
+  1: "🌧 비",
+  2: "🌨 비/눈",
+  3: "🌨 눈",
+  4: "⛈ 소나기",
+};
+
+const sky: Record<number, string> = {
+  1: "☀ 맑음",
+  2: "🌥 구름많음",
+  3: "☁ 흐림",
+};
+
+const validateTeamId = (teamId: string | undefined) => {
+  if (!teamId) {
+    throw new CustomError("[ERROR] 구단 ID 변환 과정 by HOME");
+  }
+
+  return teamId;
+};
+
+const getFcstTime = (): string => {
+  const today = new Date();
+
+  const hours = today.getHours() + 1;
+
+  return `${hours.toString().padStart(2, "0")}00`;
+};
+
+const calculateWeather = (items: Array<GetWeatherResponse>): string => {
+  let ptyItem = null;
+  let skyItem = null;
+
+  const targetTime = getFcstTime();
+  for (const item of items) {
+    if (item.fcstTime === targetTime) {
+      if (item.category === "PTY") {
+        ptyItem = item;
+      } else if (item.category === "SKY") {
+        skyItem = item;
+      }
+    }
+  }
+
+  if (ptyItem && parseInt(ptyItem.fcstValue) > 0) {
+    return pty[parseInt(ptyItem.fcstValue)];
+  } else if (skyItem) {
+    return sky[parseInt(skyItem.fcstValue)];
+  } else {
+    throw new CustomError("[ERROR] 날씨 데이터 토대로 계산 by HOME");
+  }
+};
+
+// 더미 데이터
+// const gameSituationData: GameSituation = {
+//   isPlaying: true,
+//   scores: {
+//     samsung: 2,
+//     kia: 1,
+//   },
+// };
+// ---
 
 const Home = () => {
+  const nav = useNavigate();
+
+  const today = new Date();
+
   const [hasCheeringClub, setHasCheeringClub] = useState<boolean>(false);
   const [todayGame, setTodayGame] = useState<GameProps>();
   const [photoCardImage, setPhotoCardImage] = useState<string | null>(null);
@@ -26,24 +177,38 @@ const Home = () => {
 
       if (hasCheeringClubData) {
         // TODO: GET - 응원 구단에 맞는 오늘의 경기
+        const getGamesRequest: GetGamesRequest = {
+          year: today.getFullYear().toString(),
+          month: (today.getMonth() + 1).toString().padStart(2, "0"),
+          day: today.getDate().toString().padStart(2, "0"),
+          teamId: 1, // TODO: 나의 응원 구단 ID 구하기
+        };
+        const responseAbotGetGames = await getGames(getGamesRequest);
+        const homeTeamId = validateTeamId(getClubIdByNum(responseAbotGetGames.data.homeTeamId));
+        const awayTeamId = validateTeamId(getClubIdByNum(responseAbotGetGames.data.awayTeamId));
         const gameInfoData: GameInfo = {
-          day: "2024-11-05",
-          time: "17:00",
-          place: "광주스타디움",
+          day: responseAbotGetGames.data.date,
+          time: responseAbotGetGames.data.time,
+          place: responseAbotGetGames.data.stadium,
           clubs: [
             {
-              id: "samsung",
-              player: "이재익",
+              id: homeTeamId,
+              player: responseAbotGetGames.data.homeStartingPitcher,
             },
             {
-              id: "kia",
-              player: "곽도규",
+              id: awayTeamId,
+              player: responseAbotGetGames.data.awayStartingPitcher,
             },
           ],
         };
 
-        // TODO: GET - 날씨 정보
-        gameInfoData.weather = "☀ 맑음";
+        const getWeatherRequest: GetWeatherRequest = {
+          nx: stadiums[gameInfoData.place].logitude,
+          ny: stadiums[gameInfoData.place].latitude,
+        };
+        const responseAboutWeather = await getWeather(getWeatherRequest);
+        const items = responseAboutWeather.data.response.body.items.item;
+        gameInfoData.weather = calculateWeather(items);
 
         // TODO: GET - 경기 진행 상황
         const gameSituationData: GameSituation = {
@@ -81,109 +246,17 @@ const Home = () => {
 
   const fetchClubRanks = async () => {
     try {
-      //TODO: GET - 구단 랭킹
-      const clubRanksData: Array<ClubRankItemProps> = [
-        {
-          id: "kia",
-          rank: 1,
-          gameCount: 144,
-          winCount: 87,
-          drawCount: 2,
-          loseCount: 55,
-          gameDifference: 0,
-          rankDifference: 0,
-        },
-        {
-          id: "samsung",
-          rank: 2,
-          gameCount: 144,
-          winCount: 78,
-          drawCount: 2,
-          loseCount: 64,
-          gameDifference: 9,
-          rankDifference: 1,
-        },
-        {
-          id: "lg",
-          rank: 3,
-          gameCount: 144,
-          winCount: 76,
-          drawCount: 2,
-          loseCount: 66,
-          gameDifference: 11,
-          rankDifference: -1,
-        },
-        {
-          id: "doosan",
-          rank: 4,
-          gameCount: 144,
-          winCount: 74,
-          drawCount: 2,
-          loseCount: 68,
-          gameDifference: 13,
-          rankDifference: 0,
-        },
-        {
-          id: "kt",
-          rank: 5,
-          gameCount: 144,
-          winCount: 72,
-          drawCount: 2,
-          loseCount: 70,
-          gameDifference: 15,
-          rankDifference: 0,
-        },
-        {
-          id: "ssg",
-          rank: 6,
-          gameCount: 144,
-          winCount: 72,
-          drawCount: 2,
-          loseCount: 70,
-          gameDifference: 15,
-          rankDifference: -1,
-        },
-        {
-          id: "lotte",
-          rank: 7,
-          gameCount: 144,
-          winCount: 66,
-          drawCount: 4,
-          loseCount: 74,
-          gameDifference: 20,
-          rankDifference: 0,
-        },
-        {
-          id: "hanwha",
-          rank: 8,
-          gameCount: 144,
-          winCount: 66,
-          drawCount: 2,
-          loseCount: 76,
-          gameDifference: 21,
-          rankDifference: 1,
-        },
-        {
-          id: "nc",
-          rank: 9,
-          gameCount: 144,
-          winCount: 61,
-          drawCount: 2,
-          loseCount: 81,
-          gameDifference: 26,
-          rankDifference: -1,
-        },
-        {
-          id: "kiwoom",
-          rank: 10,
-          gameCount: 144,
-          winCount: 58,
-          drawCount: 0,
-          loseCount: 86,
-          gameDifference: 30,
-          rankDifference: 0,
-        },
-      ];
+      const response = await getClubRanks({ year: today.getFullYear().toString() });
+      const clubRanksData: Array<ClubRankItemProps> = response.data.map(d => ({
+        id: validateTeamId(getClubIdByNum(d.teamId)),
+        rank: d.rank,
+        gameCount: d.gameCount,
+        winCount: d.winCount,
+        drawCount: d.drawCount,
+        loseCount: d.loseCount,
+        gameDifference: Number(d.gameDiff),
+        rankDifference: d.rankChange,
+      }));
 
       setClubRanks(clubRanksData);
     } catch (e) {
@@ -239,8 +312,7 @@ const Home = () => {
   }, []);
 
   const goGameScheduleMore = () => {
-    // TODO: MOVE - 경기 일정 페이지
-    console.log("경기 일정 페이지로 이동");
+    nav("/game/schedule");
   };
 
   const goPhotoCardMore = () => {
@@ -254,8 +326,7 @@ const Home = () => {
   };
 
   const goCardStoreMore = () => {
-    // TODO: MOVE - 스토어 페이지
-    console.log("스토어 페이지로 이동");
+    nav("/cardstore");
   };
 
   const todayGameProps: TodayGameProps = {
