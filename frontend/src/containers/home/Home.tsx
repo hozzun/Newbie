@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { GetGamesRequest, getClubRanks, getGames } from "../../api/baseballApi";
 import { getClubIdByNum } from "../../util/ClubId";
 import CustomError from "../../util/CustomError";
+import { GetWeatherRequest, GetWeatherResponse, getWeather } from "../../api/weatherApi";
 
 export interface ClubProps {
   id: string;
@@ -36,12 +37,113 @@ export interface ClubRankItemProps {
   rankDifference: number;
 }
 
+interface GeoPoint {
+  logitude: number;
+  latitude: number;
+}
+
+const stadiums: Record<string, GeoPoint> = {
+  잠실: {
+    logitude: 37.512011,
+    latitude: 127.071619,
+  },
+  고척: {
+    logitude: 37.498229,
+    latitude: 126.866836,
+  },
+  문학: {
+    logitude: 37.436962,
+    latitude: 126.693254,
+  },
+  수원: {
+    logitude: 37.299585,
+    latitude: 127.009526,
+  },
+  청주: {
+    logitude: 36.638676,
+    latitude: 127.470008,
+  },
+  대전: {
+    logitude: 36.316982,
+    latitude: 127.429025,
+  },
+  광주: {
+    logitude: 35.168194,
+    latitude: 126.889385,
+  },
+  대구: {
+    logitude: 35.84104,
+    latitude: 128.681774,
+  },
+  포항: {
+    logitude: 36.007952,
+    latitude: 129.359549,
+  },
+  울산: {
+    logitude: 35.532037,
+    latitude: 129.265693,
+  },
+  창원: {
+    logitude: 35.222439,
+    latitude: 128.582573,
+  },
+  사직: {
+    logitude: 35.193742,
+    latitude: 129.061572,
+  },
+};
+
+const pty: Record<number, string> = {
+  1: "🌧 비",
+  2: "🌨 비/눈",
+  3: "🌨 눈",
+  4: "⛈ 소나기",
+};
+
+const sky: Record<number, string> = {
+  1: "☀ 맑음",
+  2: "🌥 구름많음",
+  3: "☁ 흐림",
+};
+
 const validateTeamId = (teamId: string | undefined) => {
   if (!teamId) {
     throw new CustomError("[ERROR] 구단 ID 변환 과정 by HOME");
   }
 
   return teamId;
+};
+
+const getFcstTime = (): string => {
+  const today = new Date();
+
+  const hours = today.getHours() + 1;
+
+  return `${hours.toString().padStart(2, "0")}00`;
+};
+
+const calculateWeather = (items: Array<GetWeatherResponse>): string => {
+  let ptyItem = null;
+  let skyItem = null;
+
+  const targetTime = getFcstTime();
+  for (const item of items) {
+    if (item.fcstTime === targetTime) {
+      if (item.category === "PTY") {
+        ptyItem = item;
+      } else if (item.category === "SKY") {
+        skyItem = item;
+      }
+    }
+  }
+
+  if (ptyItem && parseInt(ptyItem.fcstValue) > 0) {
+    return pty[parseInt(ptyItem.fcstValue)];
+  } else if (skyItem) {
+    return sky[parseInt(skyItem.fcstValue)];
+  } else {
+    throw new CustomError("[ERROR] 날씨 데이터 토대로 계산 by HOME");
+  }
 };
 
 // 더미 데이터
@@ -77,32 +179,36 @@ const Home = () => {
         // TODO: GET - 응원 구단에 맞는 오늘의 경기
         const getGamesRequest: GetGamesRequest = {
           year: today.getFullYear().toString(),
-          month: today.getMonth().toString() + 1,
-          day: today.getDate().toString(),
+          month: (today.getMonth() + 1).toString().padStart(2, "0"),
+          day: today.getDate().toString().padStart(2, "0"),
           teamId: 1, // TODO: 나의 응원 구단 ID 구하기
         };
-
-        const response = await getGames(getGamesRequest);
-        const homeTeamId = validateTeamId(getClubIdByNum(response.data.homeTeamId));
-        const awayTeamId = validateTeamId(getClubIdByNum(response.data.awayTeamId));
+        const responseAbotGetGames = await getGames(getGamesRequest);
+        const homeTeamId = validateTeamId(getClubIdByNum(responseAbotGetGames.data.homeTeamId));
+        const awayTeamId = validateTeamId(getClubIdByNum(responseAbotGetGames.data.awayTeamId));
         const gameInfoData: GameInfo = {
-          day: response.data.date,
-          time: response.data.time,
-          place: response.data.stadium,
+          day: responseAbotGetGames.data.date,
+          time: responseAbotGetGames.data.time,
+          place: responseAbotGetGames.data.stadium,
           clubs: [
             {
               id: homeTeamId,
-              player: response.data.homeStartingPitcher,
+              player: responseAbotGetGames.data.homeStartingPitcher,
             },
             {
               id: awayTeamId,
-              player: response.data.awayStartingPitcher,
+              player: responseAbotGetGames.data.awayStartingPitcher,
             },
           ],
         };
 
-        // TODO: GET - 날씨 정보
-        gameInfoData.weather = "☀ 맑음";
+        const getWeatherRequest: GetWeatherRequest = {
+          nx: stadiums[gameInfoData.place].logitude,
+          ny: stadiums[gameInfoData.place].latitude,
+        };
+        const responseAboutWeather = await getWeather(getWeatherRequest);
+        const items = responseAboutWeather.data.response.body.items.item;
+        gameInfoData.weather = calculateWeather(items);
 
         // TODO: GET - 경기 진행 상황
         const gameSituationData: GameSituation = {
