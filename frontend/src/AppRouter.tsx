@@ -148,7 +148,7 @@ const AppRouter = () => {
           }
         />
         <Route
-          path="/gameschedule"
+          path="/game/schedule"
           element={
             <ProtectedRoute>
               <GameSchedule />
@@ -156,7 +156,7 @@ const AppRouter = () => {
           }
         />
         <Route
-          path="/gameschedule/gameresult"
+          path="/game/result/:id"
           element={
             <ProtectedRoute>
               <GameResult />

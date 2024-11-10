@@ -12,7 +12,11 @@ const ClubId: Id = {
   lotte: 7,
   hanwha: 8,
   nc: 9,
-  kiwoom: 10
+  kiwoom: 10,
+};
+
+export const getClubIdByNum = (value: number): string | undefined => {
+  return Object.entries(ClubId).find(([, v]) => v === value)?.[0];
 };
 
 export default ClubId;
