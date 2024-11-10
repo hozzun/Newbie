@@ -58,6 +58,7 @@ public class RankServiceImpl implements RankService {
                 .recent10(rank.getRecent10())
                 .streak(rank.getStreak())
                 .rankChange(rank.getRankChange())
+                .rankChangeAmount(rank.getRankChangeAmount())
                 .build();
     }
 }
