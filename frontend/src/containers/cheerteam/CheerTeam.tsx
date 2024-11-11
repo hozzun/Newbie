@@ -16,7 +16,7 @@ const CheerTeam = () => {
 
     try {
       const response = await axios.patch(api_url, {
-        favoriteTeamId: favoriteTeamId,
+        teamId: favoriteTeamId,
       });
   
       console.log("응답 결과:", response.data);

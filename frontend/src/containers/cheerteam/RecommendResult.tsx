@@ -46,7 +46,7 @@ const RecommendResult = (props: RecommendResultProps) => {
   }
 
   const onReClick = () => {
-    nav(-1)
+    nav('/cheerteam')
   }
 
   return (
