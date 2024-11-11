@@ -2,9 +2,6 @@ import axiosInstance from "../util/axiosInstance";
 
 const axios = axiosInstance;
 
-const getGamesApiUrl = import.meta.env.VITE_WATCH_GAME;
-const getClubRanksApiUrl = import.meta.env.VITE_GET_CLUB_RANKS;
-
 // 경기 조회
 export interface GetGamesRequest {
     year: string;
@@ -30,7 +27,7 @@ export interface GetGamesResponse {
     homeStartingPitcher: string
 }
 
-export const getGames = (request: GetGamesRequest) => axios.get<GetGamesResponse>(getGamesApiUrl, {
+export const getGames = (request: GetGamesRequest) => axios.get<GetGamesResponse>("/api-baseball/games", {
     params: {...request}
 })
 
@@ -56,6 +53,6 @@ export interface GetClubRanksResponse {
     rankChange: number;
 }
 
-export const getClubRanks = (request: GetClubRanksRequest) => axios.get<Array<GetClubRanksResponse>>(getClubRanksApiUrl, {
+export const getClubRanks = (request: GetClubRanksRequest) => axios.get<Array<GetClubRanksResponse>>("/api-baseball/ranks", {
     params: {...request}
 })
