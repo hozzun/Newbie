@@ -6,7 +6,7 @@ interface WatchCardProps {
 const WatchCard = (props: WatchCardProps) => {
   return (
     <>
-      <img src={props.img} alt="ticket" className="w-full h-44 rounded-2xl mt-7 ml-5" onClick={props.onClick}/>
+      <img src={props.img} alt="ticket" className="w-full h-44 rounded-2xl mt-7 ml-5 hover:cursor-pointer" onClick={props.onClick}/>
     </>
   )
 }
