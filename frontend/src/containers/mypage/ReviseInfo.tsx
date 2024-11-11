@@ -1,4 +1,5 @@
 import { useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from "react";
 import ReviseBox from "../../components/mypage/ReviseBox";
 import Button from "../../components/common/Button";
@@ -9,6 +10,8 @@ import profile from "../../assets/images/karina.jpg"
 const ReviseInfo = () => {
 
   // TODO: 저장하기 버튼 클릭 시 정보 수정 요청
+  const nav = useNavigate()
+
   const location = useLocation();
   const { userInfo } = location.state || {}
   const [name, setName] = useState<string>(userInfo.nickname);
@@ -37,6 +40,7 @@ const ReviseInfo = () => {
 
   const reviseClick = () => {
     console.log('회원 정보 수정 요청')
+    nav('/mypage')
   }
 
   useEffect(() => {
