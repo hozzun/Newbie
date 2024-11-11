@@ -23,6 +23,7 @@ const RecommendResult = (props: RecommendResultProps) => {
 
   const nav = useNavigate()
 
+  // TODO: URL 수정
   const updateFavoriteTeam = async (favoriteTeamId: number) => {
 
     const api_url = import.meta.env.VITE_CHEER_TEAM
@@ -41,11 +42,11 @@ const RecommendResult = (props: RecommendResultProps) => {
 
   const onCheerClick = () => {
     updateFavoriteTeam(ClubId[props.club])
-    nav(-2)
+    nav(-1)
   }
 
   const onReClick = () => {
-    nav(-1)
+    nav('/cheerteam')
   }
 
   return (
