@@ -9,56 +9,124 @@ import com.newbie.baseball.domain.youtube.dto.res.YouTubeResponseDto;
 import com.newbie.baseball.domain.youtube.exception.YoutubeNotFoundException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 @Service
 public class YouTubeServiceImpl implements YouTubeService {
 
+    private static final Logger logger = LoggerFactory.getLogger(YouTubeServiceImpl.class);
+
     @Value("${youtube.api.key}")
     private String apiKey;
 
-    public List<YouTubeResponseDto> searchVideos(String query) {
+    private static final String KBO_CHANNEL_ID = "UCoVz66yWHzVsXAFG8WhJK9g";
+
+    @Override
+    public List<YouTubeResponseDto> searchGameHighlights(String date, String teamName1, String teamName2) {
+        String formattedDate = formatDate(date);
+        String query = "[KBO 하이라이트] " + formattedDate + " " + teamName1 + " vs " + teamName2;
+        return searchFilteredVideo(query, KBO_CHANNEL_ID, true, 1);
+    }
+
+    @Override
+    public List<YouTubeResponseDto> searchHighlightsByDate(String date) {
+        String formattedDate = formatDate(date);
+        String query = "[KBO 하이라이트] " + formattedDate;
+        return searchFilteredVideo(query, KBO_CHANNEL_ID, true, 5);
+    }
+
+    @Override
+    public List<YouTubeResponseDto> searchPlayerHighlights(String playerName) {
+        String query = playerName + " 하이라이트";
+        return searchFilteredVideo(query, KBO_CHANNEL_ID, false, 3);
+    }
+
+    private List<YouTubeResponseDto> searchFilteredVideo(String query, String channelId, boolean strictTitleFilter, int maxResults) {
         try {
-            JsonFactory jsonFactory = GsonFactory.getDefaultInstance();
-
-            YouTube youtube = new YouTube.Builder(
-                    new com.google.api.client.http.javanet.NetHttpTransport(),
-                    jsonFactory,
-                    request -> {})
-                    .setApplicationName("youtube-search")
-                    .build();
-
-            YouTube.Search.List search = youtube.search().list(Collections.singletonList("id,snippet"));
-            search.setKey(apiKey);
-            search.setQ(query);
-            search.setType(Collections.singletonList("video"));
-            search.setMaxResults(3L);
+            YouTube.Search.List search = createYouTubeSearch(query, maxResults);
+            if (channelId != null) {
+                search.setChannelId(channelId);
+            }
 
             SearchListResponse searchResponse = search.execute();
             List<SearchResult> searchResultList = searchResponse.getItems();
 
-            return extractVideoDetails(searchResultList);
+            return filterVideoDetails(searchResultList, strictTitleFilter, query, maxResults > 1);
         } catch (IOException e) {
+            logger.error("Error occurred while searching YouTube videos", e);
             throw new YoutubeNotFoundException();
         }
     }
-    private List<YouTubeResponseDto> extractVideoDetails(List<SearchResult> searchResults) {
+
+    private YouTube.Search.List createYouTubeSearch(String query, int maxResults) throws IOException {
+        JsonFactory jsonFactory = GsonFactory.getDefaultInstance();
+
+        YouTube youtube = new YouTube.Builder(
+                new com.google.api.client.http.javanet.NetHttpTransport(),
+                jsonFactory,
+                request -> {})
+                .setApplicationName("youtube-search")
+                .build();
+
+        YouTube.Search.List search = youtube.search().list(Collections.singletonList("id,snippet"));
+        search.setKey(apiKey);
+        search.setQ(query);
+        search.setType(Collections.singletonList("video"));
+        search.setMaxResults((long) maxResults);
+
+        return search;
+    }
+
+    private List<YouTubeResponseDto> filterVideoDetails(List<SearchResult> searchResults, boolean strictTitleFilter, String query, boolean isPlayerHighlight) {
         if (searchResults == null || searchResults.isEmpty()) {
             throw new YoutubeNotFoundException();
         }
 
-        List<YouTubeResponseDto> videoDetails = new ArrayList<>();
+        List<YouTubeResponseDto> filteredVideos = new ArrayList<>();
+        String playerName = query.split(" ")[0];
+
         for (SearchResult searchResult : searchResults) {
-            String videoId = searchResult.getId().getVideoId();
             String videoTitle = searchResult.getSnippet().getTitle();
+
+            // 날짜와 팀 이름 조회 시 정확히 "[KBO 하이라이트]"로 시작하고 모든 키워드 포함
+            if (strictTitleFilter && !videoTitle.startsWith("[KBO 하이라이트]")) {
+                continue;
+            }
+
+            // 선수 이름 검색 시 하이라이트와 선수 이름이 포함된 경우만 필터링
+            if (!strictTitleFilter && isPlayerHighlight && !(videoTitle.contains("하이라이트") && videoTitle.contains(playerName))) {
+                continue;
+            }
+
+            String videoId = searchResult.getId().getVideoId();
             String videoUrl = "https://www.youtube.com/watch?v=" + videoId;
-            videoDetails.add(new YouTubeResponseDto(videoTitle, videoUrl));
+            filteredVideos.add(new YouTubeResponseDto(videoTitle, videoUrl));
         }
 
-        return videoDetails;
+        if (filteredVideos.isEmpty()) {
+            throw new YoutubeNotFoundException();
+        }
+        return filteredVideos;
+    }
+
+    private String formatDate(String date) {
+        try {
+            SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat outputFormat = new SimpleDateFormat("M.dd");
+            Date parsedDate = inputFormat.parse(date);
+            return outputFormat.format(parsedDate);
+        } catch (ParseException e) {
+            logger.error("Error occurred while parsing the date format", e);
+            throw new IllegalArgumentException("Invalid date format. Please use 'yyyy-MM-dd'.");
+        }
     }
 }

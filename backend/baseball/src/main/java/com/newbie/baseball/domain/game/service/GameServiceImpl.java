@@ -64,7 +64,7 @@ public class GameServiceImpl implements GameService {
                 .time(game.getTime())
                 .homeTeamName(game.getHomeTeam().getTeamName())
                 .awayTeamName(game.getAwayTeam().getTeamName())
-                .homTeamId(game.getHomeTeam().getId())
+                .homeTeamId(game.getHomeTeam().getId())
                 .awayTeamId(game.getAwayTeam().getId())
                 .awayScore(game.getAwayScore())
                 .homeScore(game.getHomeScore())
