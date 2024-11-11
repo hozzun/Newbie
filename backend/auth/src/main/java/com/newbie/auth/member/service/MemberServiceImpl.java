@@ -1,20 +1,19 @@
 package com.newbie.auth.member.service;
 
-import com.newbie.auth.global.common.util.MemberInfo;
 import com.newbie.auth.global.security.util.JwtUtil;
 import com.newbie.auth.member.domain.Member;
-import com.newbie.auth.member.domain.MemberImage;
 import com.newbie.auth.member.dto.MemberDto;
-import com.newbie.auth.member.dto.request.MemberFavoriteTeamUpdateRequestDto;
 import com.newbie.auth.member.dto.request.MemberSignUpRequestDto;
+import com.newbie.auth.member.dto.request.UserProfileRequestDto;
 import com.newbie.auth.member.exception.MemberDuplicateException;
-import com.newbie.auth.member.repository.MemberImageRepository;
 import com.newbie.auth.member.repository.MemberRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.Optional;
 
@@ -22,11 +21,16 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService{
+
     private final MemberRepository memberRepository;
-    private final MemberImageRepository memberImageRepository;
     private final JwtUtil jwtUtil;
     private final ModelMapper mapper;
+    private final RestTemplate restTemplate;
 
+    @Value("${register.api}")
+    private String registerApi;
+
+    @Override
     @Transactional
     public String signUp(MemberSignUpRequestDto signUpMemberDto) {
         Optional<Member> member = memberRepository.findByEmail(signUpMemberDto.getEmail());
@@ -34,38 +38,19 @@ public class MemberServiceImpl implements MemberService{
             throw new MemberDuplicateException();
         }
 
-        // 이미지가 있는 경우 S3에 업로드 후 URL 저장
-//        if (signUpMemberDto.getFile() != null && !signUpMemberDto.getFile().isEmpty()) {
-//            String imageUrl = saveMemberImage(signUpMemberDto.getFile(), savedMember);
-//            signUpMemberDto.setMemberImage(imageUrl);
-//        }
-
-        log.info("signUpMemberDto: {}", signUpMemberDto);
         Member savedMember = memberRepository.save(Member.signupBuilder()
                 .memberSignUpRequestDto(signUpMemberDto)
                 .build()
         );
 
-        saveMemberImage(signUpMemberDto, savedMember);
+        UserProfileRequestDto userProfileRequest = new UserProfileRequestDto(
+                savedMember.getMemberId(),
+                signUpMemberDto.getEmail(),
+                signUpMemberDto.getNickname(),
+                signUpMemberDto.getAddress()
+        );
+        restTemplate.postForObject(registerApi, userProfileRequest, Void.class);
 
         return jwtUtil.createAccessToken(mapper.map(savedMember, MemberDto.class));
-    }
-
-    @Override
-    public void saveFavoriteTeam(MemberFavoriteTeamUpdateRequestDto dto) {
-        Optional<Member> member = memberRepository.findByEmail(MemberInfo.getEmail());
-        log.info("member: {}", MemberInfo.getEmail());
-        if (member.isPresent()) {
-            member.get().updateFavoriteTeamId(dto.getFavoriteTeamId());
-            memberRepository.save(member.get());
-        }
-    }
-
-    private void saveMemberImage(MemberSignUpRequestDto signUpMemberDto, Member savedMember) {
-        MemberImage memberImage = MemberImage.builder()
-                .member(savedMember)
-//                .memberImage(signUpMemberDto.getMemberImage().getMemberImage())
-                .build();
-        memberImageRepository.save(memberImage);
     }
 }

@@ -1,8 +1,10 @@
 package com.newbie.baseball.domain.song.service;
 
 import com.newbie.baseball.domain.song.dto.res.SongResponseDto;
+import com.newbie.baseball.domain.song.exception.SongNotFoundException;
 import io.awspring.cloud.s3.S3Exception;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.ListObjectsV2Request;
@@ -15,8 +17,10 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class SongServiceImpl implements SongService {
 
-    private final String bucketName = "newbie-mp3-bucket";
     private final S3Client s3Client;
+
+    @Value("${spring.cloud.aws.s3.bucket}")
+    private String bucketName;
 
     @Override
     public List<SongResponseDto> getTeamCheeringSongs(String teamName) {
@@ -34,7 +38,7 @@ public class SongServiceImpl implements SongService {
                 .collect(Collectors.toList());
 
         if (songs.isEmpty()) {
-            throw new RuntimeException("해당 팀의 응원가가 없습니다.");
+            throw new SongNotFoundException();
         }
         return songs;
     }
@@ -69,7 +73,7 @@ public class SongServiceImpl implements SongService {
                     .getUrl(builder -> builder.bucket(bucketName).key(key))
                     .toExternalForm();
         } catch (S3Exception e) {
-            throw new RuntimeException("파일을 가져오는 도중 문제가 발생했습니다. 파일이 존재하지 않거나 접근할 수 없습니다.", e);
+            throw new SongNotFoundException();
         }
     }
 }

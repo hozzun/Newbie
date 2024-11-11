@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
 import java.util.List;
 
 @Tag(name = "유튜브 하이라이트 조회 API")
@@ -37,10 +36,6 @@ public class YouTubeController {
     }
 
     private List<YouTubeResponseDto> fetchHighlights(String query) {
-        try {
-            return youTubeService.searchVideos(query);
-        } catch (IOException e) {
-            throw new RuntimeException("YouTube API 요청 중 오류 발생", e);
-        }
+        return youTubeService.searchVideos(query);
     }
 }
