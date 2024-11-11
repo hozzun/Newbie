@@ -11,6 +11,8 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
 @Entity
 @Table(name = "member")
@@ -34,7 +36,7 @@ public class Member {
     @Column(name = "platform")
     private Platform platform;
 
-    @Column(name = "create_time", columnDefinition = "TIMESTAMP")
+    @Column(name = "create_time", columnDefinition = "DATETIME")
     private LocalDateTime createTime;
 
     @Builder(builderMethodName = "signupBuilder")
@@ -45,6 +47,6 @@ public class Member {
 
     @PrePersist
     protected void onCreate() {
-        this.createTime = LocalDateTime.now();
+        this.createTime = ZonedDateTime.now(ZoneId.of("Asia/Seoul")).toLocalDateTime();
     }
 }

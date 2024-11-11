@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
 @Getter
 @Entity
@@ -43,7 +45,7 @@ public class User {
     @ColumnDefault("false")
     private Boolean isResigned = false;
 
-    @Column(name = "create_time", columnDefinition = "TIMESTAMP")
+    @Column(name = "resign_time", columnDefinition = "DATETIME")
     private LocalDateTime resignTime;
 
     @Builder
@@ -79,6 +81,6 @@ public class User {
     }
 
     protected void onResign() {
-        this.resignTime = LocalDateTime.now();
+        this.resignTime = ZonedDateTime.now(ZoneId.of("Asia/Seoul")).toLocalDateTime();
     }
 }
