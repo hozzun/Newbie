@@ -23,10 +23,10 @@ const CommuTrade = () => {
         <div className="flex justify-between items-center">
           <div className="flex justify-start items-center gap-2">
             <div className="flex gap-1 font-kbogothiclight text-base">
-              <Coin className="w-4 h-4" /> 가격
+              <Coin className="w-4 h-4 text-[#FFA600]" /> 가격
             </div>
             <div className="flex gap-1 font-kbogothiclight text-base">
-              <Location className="w-4 h-4" /> 지역
+              <Location className="w-4 h-4 text-[#FFAEC5]" /> 지역
             </div>
           </div>
           <div className="flex justify-end items-center gap-2">
@@ -34,7 +34,7 @@ const CommuTrade = () => {
               <Like className="w-4 h-4" /> 조회수 수
             </div>
             <div className="flex gap-1 font-kbogothiclight text-base">
-              <Comment className="w-4 h-4" /> 코멘트 수
+              <Comment className="w-4 h-4 text-[#7FAAFF]" /> 코멘트 수
             </div>
           </div>
         </div>
