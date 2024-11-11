@@ -94,14 +94,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
-    public void resignUser(Long userId) {
-        User user = userRepository.findByUserId(userId)
-                .orElseThrow(UserNotFoundException::new);
-        user.resign();
-    }
-
-    @Override
     public void updateFavoriteTeam(Long userId, Integer teamId) {
         if (teamId < 1 || teamId > 10) {
             throw new IllegalArgumentException("favoriteTeamId는 1에서 10 사이의 값이어야 합니다.");
