@@ -1,14 +1,45 @@
+import axios from "axios";
 import CalenderIcon from "../../assets/icons/calender.svg?react"
-// import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import ClubLogos from "../../util/ClubLogos";
 
 const Calendar = () => {
 
   // TODO: 경기 정보 가져오기, 경기 일정에 따른 캘린더 표기
-  // const [currentDate, setCurrentDate] = useState(new Date());
+  const [day, setDay] = useState
+  const [stadium, setStadium] = useState<string>("")
+  const [awayId, setAwayId] = useState<number>(0)
   
   const year = new Date().getFullYear();
   const month = new Date().getMonth();
+
+  const getGameInfo = async () => {
+
+    const api_url = import.meta.env.VITE_GAME_INFO
+
+    try {
+      const response = await axios.get(api_url, {
+        params: {
+          year: year.toString(),
+          month: (month + 1).toString(),
+          teamId: 1
+        }
+      });
+      console.log("응답 결과:", response.data);
+      setDay(response.data.date)
+      setAwayId(response.data)
+    } catch (error) {
+      console.error("에러 발생:", error);
+      throw error;
+    }
+  };
+
+
+
+  // 화면 로드 시 카메라 자동 시작
+  useEffect(() => {
+    getGameInfo();
+  }, []);
 
   const firstDay = new Date(year, month, 1);
   const lastDay = new Date(year, month + 1, 0);
