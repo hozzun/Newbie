@@ -10,7 +10,17 @@ const createAxiosInstance = (config = {}): AxiosInstance => {
     withCredentials: true,
   };
 
-  return axios.create({ ...defaultConfig, ...config });
+  const instance = axios.create({ ...defaultConfig, ...config });
+
+  instance.interceptors.request.use(request => {
+    const token = sessionStorage.getItem("access_token");
+    if (token) {
+      request.headers["Authorization"] = `Bearer ${token}`;
+    }
+    return request;
+  });
+
+  return instance;
 };
 
 const axiosInstance = createAxiosInstance();
