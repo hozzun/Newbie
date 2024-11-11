@@ -131,6 +131,11 @@ def start_scheduler():
     # DB 비어있으면 DB 저장
     if is_db_empty():
         initialize_data()
+        
+    # 오후 2시부터 11시까지 5분마다 게임과 게임 기록 업데이트
+    scheduler.add_job(update_game, 'cron', hour='14-23', minute='*/5')
+    scheduler.add_job(update_game_record, 'cron', hour='14-23', minute='*/5')
+    
     # 스케줄링 작업 목록
     scheduler.add_job(update_game, 'cron', hour=2, minute=0)
     scheduler.add_job(update_player, 'cron', hour=2, minute=0)
