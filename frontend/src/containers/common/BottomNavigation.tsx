@@ -3,7 +3,7 @@ import BottomNavigationComponent from "../../components/common/BottomNavigation"
 import ClubId from "../../util/ClubId";
 import { useEffect, useState } from "react";
 
-const routes = ["/club", "/cheersong", "/", "/communication", "/mypage"];
+const routes = ["/club", "/cheersong", "/", "/commuhome", "/mypage"];
 
 const getClubName = (value: number): string | undefined => {
   return Object.entries(ClubId).find(([, v]) => v === value)?.[0];
