@@ -12,9 +12,9 @@ const CheerSong = () => {
   const club = "ssg"; // TODO: 나의 팀 정보 받아오기
   const [count, setCount] = useState<number>(0);
   const [cheerSongs, setCheerSongs] = useState<{ title: string; url: string }[]>([]);
-  const [currentIndex, setCurrentIndex] = useState<number | null>(null); // currentIndex를 null로 초기화
+  const [currentIndex, setCurrentIndex] = useState<number | null>(null);
   const [progress, setProgress] = useState<number>(0);
-  const [isPlaying, setIsPlaying] = useState<boolean>(false); // 상태 관리
+  const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const goClubSelect = () => {
@@ -60,7 +60,7 @@ const CheerSong = () => {
       const audio = new Audio(song.url);
       audioRef.current = audio;
       setProgress(0);
-      setIsPlaying(true); // 노래 재생 상태
+      setIsPlaying(true);
 
       audio.play();
       audio.addEventListener("ended", () => setCurrentIndex((index + 1) % cheerSongs.length));
@@ -79,7 +79,7 @@ const CheerSong = () => {
       } else {
         audio.play();
       }
-      setIsPlaying(!isPlaying); // play/pause 상태 변경
+      setIsPlaying(!isPlaying);
     }
   };
 
@@ -110,7 +110,7 @@ const CheerSong = () => {
     <>
       <PageName label="응원가" />
       <ClubChangeButton club={club} onClick={goClubSelect} />
-      <div className="mt-5 mb-7">
+      <div className="mt-5 mb-7 fixed bottom-12 w-full max-w-[600px] min-w-[320px] z-50 flex items-center justify-center pr-8">
         {currentIndex !== null && (
           <MusicController
             title={cheerSongs[currentIndex].title}
