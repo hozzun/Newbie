@@ -1,6 +1,10 @@
+import redis
+import json
 from sqlalchemy.orm import Session
 from app.models import Game, Team, SessionLocal
 
+# Redis 클라이언트 설정
+redis_client = redis.Redis(host='k11b304.p.ssafy.io', port=6379, db=0)
 
 def save_game_to_db(game_list):
     if not game_list:
@@ -32,6 +36,8 @@ def save_game_to_db(game_list):
                 away_team_id=game["away_team_id"],
                 home_team_id=game["home_team_id"]
             ).first()
+            
+            redis_key = f"game:{game['date']}:{game['time']}:{game['away_team_id']}:{game['home_team_id']}"
 
             # 이미 존재하는 경기라면 업데이트
             if existing_game:
@@ -58,6 +64,10 @@ def save_game_to_db(game_list):
                     season=game["season"]
                 )
                 db.add(db_game)  # 데이터 추가
+                
+            # Redis에 캐시: 유효기간 4시간 설정
+            redis_client.set(redis_key, json.dumps(game), ex=14400)
+                
         db.commit()  # 변경 사항 저장
     except Exception as e:
         print(f"데이터 저장 중 오류 발생: {e}")

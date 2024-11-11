@@ -1,5 +1,7 @@
 package com.newbie.baseball.domain.game.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.newbie.baseball.domain.game.dto.res.GameResponseDto;
 import com.newbie.baseball.domain.game.dto.res.SSEResponseDto;
 import com.newbie.baseball.domain.game.entity.Game;
@@ -11,6 +13,7 @@ import com.newbie.baseball.domain.record.service.RecordService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +23,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -30,6 +34,11 @@ public class GameServiceImpl implements GameService {
     private final GameRepository gameRepository;
     private final RecordService recordService;
     private final Map<Integer, SseEmitter> emitters = new ConcurrentHashMap<>();
+    private final RedisTemplate<String, Object> redisTemplate;
+    private final ObjectMapper objectMapper;
+
+    private static final String GAME_CACHE_KEY_PREFIX = "game:";
+    private static final long CACHE_EXPIRATION_MINUTES = 240; // 3시간
 
     @Override
     public GameResponseDto getGameById(Integer id) {
@@ -71,65 +80,87 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public SseEmitter streamRealTimeGameData(Integer gameId) {
-        SseEmitter emitter = new SseEmitter(Long.MAX_VALUE); // 무제한 타임아웃 설정
+        SseEmitter emitter = new SseEmitter(Long.MAX_VALUE);
         emitters.put(gameId, emitter);
 
         emitter.onCompletion(() -> emitters.remove(gameId));
         emitter.onTimeout(() -> emitters.remove(gameId));
 
-        // 초기 연결 시 이벤트 전송
-        try {
-            emitter.send(SseEmitter.event()
-                    .name("init")
-                    .data("Connected to game stream for game ID: " + gameId));
-        } catch (IOException e) {
-            emitters.remove(gameId);
+        // Redis에서 캐시된 데이터 확인
+        SSEResponseDto cachedData = getCachedGameData(gameId);
+        if (cachedData != null) {
+            try {
+                emitter.send(SseEmitter.event().name("gameRecordUpdate").data(cachedData).reconnectTime(3000L));
+                log.info("Sent cached game data for game ID: {}", gameId);
+            } catch (IOException e) {
+                emitters.remove(gameId);
+            }
+        } else {
+            try {
+                emitter.send(SseEmitter.event().name("init").data("Connected to game stream for game ID: " + gameId));
+            } catch (IOException e) {
+                emitters.remove(gameId);
+            }
         }
 
         return emitter;
     }
 
-    @Scheduled(fixedRate = 330000) // 5분 30초마다 갱신
+    @Scheduled(fixedRate = 60000) // 1분마다 SSE 갱신
     @Transactional
     public void updateAndSendRealTimeData() {
-        log.info("Updating and sending real-time data to clients every 30 seconds...");
-        List<Game> liveGames = gameRepository.findLiveGames();
-        log.info("Live games count: {}", liveGames.size());
+        log.info("Updating and sending real-time data to clients...");
+        gameRepository.findLiveGames().forEach(this::sendRealTimeData);
+    }
 
-        for (Game game : liveGames) {
-            Integer gameId = game.getId();
-            GameResponseDto gameData = convertToDto(game);
+    private void sendRealTimeData(Game game) {
+        Integer gameId = game.getId();
+        GameResponseDto gameData = convertToDto(game);
 
-            RecordResponseDto recordData;
+        RecordResponseDto recordData;
+        try {
+            recordData = recordService.getRecordByGameId(gameId);
+        } catch (RecordNotFoundException e) {
+            log.warn("Record not found for gameId: {}", gameId);
+            return;
+        }
+
+        SSEResponseDto gameRecordData = SSEResponseDto.builder().game(gameData).record(recordData).build();
+        cacheGameData(gameId, gameRecordData);
+
+        SseEmitter emitter = emitters.get(gameId);
+        if (emitter != null) {
             try {
-                recordData = recordService.getRecordByGameId(gameId);
-                log.info("Fetched record data for gameId: {}", gameId);
-            } catch (RecordNotFoundException e) {
-                log.warn("Record not found for gameId: {}", gameId);
-                continue;
-            }
-
-            SSEResponseDto gameRecordData = SSEResponseDto.builder()
-                    .game(gameData)
-                    .record(recordData)
-                    .build();
-
-            SseEmitter emitter = emitters.get(gameId);
-            if (emitter != null) {
-                try {
-                    log.info("Sending gameRecordUpdate for gameId: {}", gameId);
-                    emitter.send(SseEmitter.event()
-                            .name("gameRecordUpdate")
-                            .data(gameRecordData)
-                            .reconnectTime(3000L));
-                } catch (IOException e) {
-                    emitters.remove(gameId);
-                    log.warn("SSE 연결이 끊어졌습니다. gameId: {}", gameId);
-                }
-            } else {
-                log.warn("No emitter found for gameId: {}", gameId);
+                emitter.send(SseEmitter.event().name("gameRecordUpdate").data(gameRecordData).reconnectTime(3000L));
+            } catch (IOException e) {
+                emitters.remove(gameId);
+                log.warn("SSE connection closed for gameId: {}", gameId);
             }
         }
+    }
+
+    private void cacheGameData(Integer gameId, SSEResponseDto gameRecordData) {
+        String redisKey = GAME_CACHE_KEY_PREFIX + gameId;
+        try {
+            String data = objectMapper.writeValueAsString(gameRecordData);
+            redisTemplate.opsForValue().set(redisKey, data, CACHE_EXPIRATION_MINUTES, TimeUnit.MINUTES);
+            log.info("Cached game data in Redis for game ID: {}", gameId);
+        } catch (JsonProcessingException e) {
+            log.error("Failed to cache game data for game ID: {}", gameId, e);
+        }
+    }
+
+    private SSEResponseDto getCachedGameData(Integer gameId) {
+        String redisKey = GAME_CACHE_KEY_PREFIX + gameId;
+        Object cachedData = redisTemplate.opsForValue().get(redisKey);
+        if (cachedData != null) {
+            try {
+                return objectMapper.readValue(cachedData.toString(), SSEResponseDto.class);
+            } catch (JsonProcessingException e) {
+                log.error("Failed to parse cached data for game ID: {}", gameId, e);
+            }
+        }
+        return null;
     }
 
 
