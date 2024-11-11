@@ -6,8 +6,5 @@ import java.util.List;
 
 public interface RankService {
 
-    List<RankResponseDto> getAllRanks();
-    List<RankResponseDto> getRanksByYear(String year);
-    List<RankResponseDto> getRanksByTeamId(Integer teamId);
-    RankResponseDto getRankByYearAndTeamId(String year, Integer teamId);
+    List<RankResponseDto> getRanks(String year, Integer teamId);
 }

@@ -1,18 +1,18 @@
 package com.newbie.auth.member.domain;
 
 import com.newbie.auth.member.dto.request.MemberSignUpRequestDto;
-import com.newbie.auth.member.dto.request.MemberUpdateRequestDto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
 @Entity
 @Table(name = "member")
@@ -32,52 +32,21 @@ public class Member {
     private String email;
 
     @NotNull
-    @Column(name = "nickname", length = 30, unique = true)
-    private String nickname;
-
-    @Column(name = "address")
-    private String address;
-
-    @Column(name = "favorite_team_id")
-    @ColumnDefault("0")
-    private Integer favoriteTeamId;
-
-    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "platform")
     private Platform platform;
 
-    @Column(name = "create_time", columnDefinition = "TIMESTAMP")
+    @Column(name = "create_time", columnDefinition = "DATETIME")
     private LocalDateTime createTime;
-
-    @Column(name = "resign_time", columnDefinition = "TIMESTAMP")
-    private LocalDateTime resignTime;
-
-    @Column(name = "is_resigned")
-    @ColumnDefault("false")
-    private Boolean isResigned;
-
-
-    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private MemberImage memberImage;
-
-    public void updateMember(MemberUpdateRequestDto memberUpdateRequestDto) {
-        this.nickname = memberUpdateRequestDto.getNickname();
-    }
-
-    public void updateFavoriteTeamId(Integer favoriteTeamId) {
-        this.favoriteTeamId = favoriteTeamId;
-    }
-
-    public void resign() {
-        this.isResigned = false;
-    }
 
     @Builder(builderMethodName = "signupBuilder")
     public Member(MemberSignUpRequestDto memberSignUpRequestDto) {
-        this.nickname = memberSignUpRequestDto.getNickname();
         this.email = memberSignUpRequestDto.getEmail();
         this.platform = memberSignUpRequestDto.getPlatform();
-        this.address = memberSignUpRequestDto.getAddress();
+    }
+
+    @PrePersist
+    protected void onCreate() {
+        this.createTime = ZonedDateTime.now(ZoneId.of("Asia/Seoul")).toLocalDateTime();
     }
 }

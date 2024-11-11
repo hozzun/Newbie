@@ -23,6 +23,6 @@ public class RecoController {
 
     @PostMapping("/recommend")
     public RecoResponseDto recommendTeam(@RequestBody RecoRequestDto requestDto) {
-       return recoService.recommendTeam(requestDto);
+       return recoService.recommendTeam(requestDto).getBody();
     }
 }

@@ -20,23 +20,35 @@ public class RabbitMqConfig {
 
     private final RabbitMqProperties rabbitMqProperties;
 
-    @Value("${rabbitmq.queue.name}")
-    private String queueName;
-
     @Value("${rabbitmq.exchange.name}")
     private String exchangeName;
 
-    @Value("${rabbitmq.routing.key}")
-    private String routingKey;
+    @Value("${rabbitmq.routing.key.mileage}")
+    private String mileageRoutingKey;
 
-    // org.springframework.amqp.core.Queue
+    @Value("${rabbitmq.routing.key.player}")
+    private String playerRoutingKey;
+
+    @Value("${rabbitmq.queue.name.mileage}")
+    private String mileageQueueName;
+
+    @Value("${rabbitmq.queue.name.player}")
+    private String playerQueueName;
+
+    // mileage Queue 생성
     @Bean
-    public Queue queue() {
-        return new Queue(queueName);
+    public Queue mileageQueue() {
+        return new Queue(mileageQueueName);
+    }
+
+    // player Queue 생성
+    @Bean
+    public Queue playerQueue() {
+        return new Queue(playerQueueName);
     }
 
     /**
-     * 지정된 Exchange 이름으로 Direct Exchange Bean 을 생성
+     * 지정된 Exchange 이름으로 Direct Exchange Bean 생성
      */
     @Bean
     public DirectExchange directExchange() {
@@ -44,17 +56,24 @@ public class RabbitMqConfig {
     }
 
     /**
-     * 주어진 Queue 와 Exchange 을 Binding 하고 Routing Key 을 이용하여 Binding Bean 생성
-     * Exchange 에 Queue 을 등록한다고 이해하자
-     **/
+     * mileage Queue와 Exchange를 Binding
+     */
     @Bean
-    public Binding binding(Queue queue, DirectExchange exchange) {
-        return BindingBuilder.bind(queue).to(exchange).with(routingKey);
+    public Binding mileageBinding(Queue mileageQueue, DirectExchange exchange) {
+        return BindingBuilder.bind(mileageQueue).to(exchange).with(mileageRoutingKey);
     }
 
     /**
-     * RabbitMQ 연동을 위한 ConnectionFactory 빈을 생성하여 반환
-     **/
+     * player Queue와 Exchange를 Binding
+     */
+    @Bean
+    public Binding playerBinding(Queue playerQueue, DirectExchange exchange) {
+        return BindingBuilder.bind(playerQueue).to(exchange).with(playerRoutingKey);
+    }
+
+    /**
+     * RabbitMQ 연동을 위한 ConnectionFactory 빈 생성
+     */
     @Bean
     public CachingConnectionFactory connectionFactory() {
         CachingConnectionFactory connectionFactory = new CachingConnectionFactory();
@@ -67,7 +86,6 @@ public class RabbitMqConfig {
 
     /**
      * RabbitTemplate
-     * ConnectionFactory 로 연결 후 실제 작업을 위한 Template
      */
     @Bean
     public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {

@@ -3,6 +3,7 @@ package com.newbie.baseball.domain.team.controller;
 import com.newbie.baseball.domain.team.dto.res.TeamResponseDto;
 import com.newbie.baseball.domain.team.service.TeamService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -31,7 +32,8 @@ public class TeamController {
 
     @Operation(summary = "teamID로 팀 조회")
     @GetMapping("/{teamId}")
-    public ResponseEntity<TeamResponseDto> getTeamById(@PathVariable("teamId") Integer teamId) {
+    public ResponseEntity<TeamResponseDto> getTeamById(
+            @Parameter(description = "팀 ID [ 1 ~ 10 ]", example = "1") @PathVariable("teamId") Integer teamId) {
         TeamResponseDto team = teamService.getTeamById(teamId);
         return new ResponseEntity<>(team, HttpStatus.OK);
     }

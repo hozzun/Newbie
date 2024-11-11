@@ -17,43 +17,29 @@ public class RankServiceImpl implements RankService {
     private final RankRepository rankRepository;
 
     @Override
-    public List<RankResponseDto> getAllRanks() {
-        List<Rank> ranks = rankRepository.findAll();
+    public List<RankResponseDto> getRanks(String year, Integer teamId) {
+        List<Rank> ranks;
+
+        // 조건에 따른 조회
+        if (year != null && teamId != null) {
+            ranks = rankRepository.findByYearAndTeamId(year, teamId)
+                    .map(List::of)
+                    .orElseThrow(RankNotFoundException::new);
+        } else if (year != null) {
+            ranks = rankRepository.findByYear(year);
+        } else if (teamId != null) {
+            ranks = rankRepository.findByTeamId(teamId);
+        } else {
+            ranks = rankRepository.findAll();
+        }
+
         if (ranks.isEmpty()) {
             throw new RankNotFoundException();
         }
+
         return ranks.stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<RankResponseDto> getRanksByYear(String year) {
-        List<Rank> ranks = rankRepository.findByYear(year);
-        if (ranks.isEmpty()) {
-            throw new RankNotFoundException();
-        }
-        return ranks.stream()
-                .map(this::convertToDto)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<RankResponseDto> getRanksByTeamId(Integer teamId) {
-        List<Rank> ranks = rankRepository.findByTeamId(teamId);
-        if (ranks.isEmpty()) {
-            throw new RankNotFoundException();
-        }
-        return ranks.stream()
-                .map(this::convertToDto)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public RankResponseDto getRankByYearAndTeamId(String year, Integer teamId) {
-        Rank rank = rankRepository.findByYearAndTeamId(year, teamId)
-                .orElseThrow(RankNotFoundException::new);
-        return convertToDto(rank);
     }
 
     private RankResponseDto convertToDto(Rank rank) {
@@ -72,6 +58,7 @@ public class RankServiceImpl implements RankService {
                 .recent10(rank.getRecent10())
                 .streak(rank.getStreak())
                 .rankChange(rank.getRankChange())
+                .rankChangeAmount(rank.getRankChangeAmount())
                 .build();
     }
 }

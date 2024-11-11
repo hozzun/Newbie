@@ -16,4 +16,5 @@ public class PlayerResponseDto {
     private String birth;
     private String physical;
     private String academic;
+    private Integer likeCount;
 }

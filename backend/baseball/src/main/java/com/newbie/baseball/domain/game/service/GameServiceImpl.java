@@ -5,12 +5,14 @@ import com.newbie.baseball.domain.game.entity.Game;
 import com.newbie.baseball.domain.game.exception.GameNotFoundException;
 import com.newbie.baseball.domain.game.repository.GameRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class GameServiceImpl implements GameService {
@@ -19,40 +21,37 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public GameResponseDto getGameById(Integer id) {
+        log.info("Searching for Game with ID: {}", id);
         Game game = gameRepository.findById(id)
                 .orElseThrow(GameNotFoundException::new);
         return convertToDto(game);
     }
 
-    @Cacheable(value = "gamesByYearAndMonth", key = "#yearMonth")
+    @Cacheable(value = "gamesCache", key = "#year + '-' + (#month != null ? #month : '') + '-' + (#day != null ? #day : '') + '-' + (#teamId != null ? #teamId : '')")
     @Override
-    public List<GameResponseDto> getGameByYearAndMonth(String yearMonth) {
-        List<Game> games = gameRepository.findByDateStartingWith(yearMonth);
-        if (games.isEmpty()) {
-            throw new GameNotFoundException();
-        }
-        return games.stream()
-                .map(this::convertToDto)
-                .collect(Collectors.toList());
-    }
+    public List<GameResponseDto> getGamesByDateAndOptionalTeam(String year, String month, String day, Integer teamId) {
+        List<Game> games;
 
-    @Override
-    public List<GameResponseDto> getGameByDate(String date) {
-        List<Game> games = gameRepository.findByDate(date);
-        if (games.isEmpty()) {
-            throw new GameNotFoundException();
+        String dateInput = year;
+        if (month != null && !month.isEmpty()) {
+            dateInput += "-" + month;
+            if (day != null && !day.isEmpty()) {
+                dateInput += "-" + day;
+            }
         }
-        return games.stream()
-                .map(this::convertToDto)
-                .collect(Collectors.toList());
-    }
 
-    @Override
-    public List<GameResponseDto> getGameByDateAndTeamId(String date, Integer teamId) {
-        List<Game> games = gameRepository.findByDateAndHomeTeamIdOrDateAndAwayTeamId(date, teamId, date, teamId);
+        if (day != null && !day.isEmpty()) {
+            games = teamId != null ? gameRepository.findByDateAndTeam(dateInput, teamId) : gameRepository.findByDate(dateInput);
+        } else if (month != null && !month.isEmpty()) {
+            games = teamId != null ? gameRepository.findByYearAndMonthAndTeam(dateInput, teamId) : gameRepository.findByYearAndMonth(dateInput);
+        } else {
+            games = teamId != null ? gameRepository.findByYearAndTeam(dateInput, teamId) : gameRepository.findByYear(dateInput);
+        }
+
         if (games.isEmpty()) {
             throw new GameNotFoundException();
         }
+
         return games.stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
