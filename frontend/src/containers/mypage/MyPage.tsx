@@ -72,8 +72,8 @@ const MyPage = () => {
 
   const getUserInfo = async () => {
     try {
-      const response = await axiosInstance.get("/api-user/users/1", {
-        params: { userId: 1 } // TODO: userId 삭제 예정
+      const response = await axiosInstance.get("/api-user/users/5", {
+        params: { userId: 5 } // TODO: userId 삭제 예정
       });
       const userData: UserInfo = response.data;
       setUserInfo(userData);
