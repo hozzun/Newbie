@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import GameScheduleComponent from "../../components/home/GameSchedule";
 import { GameInfo, GameProps, GameSituation } from "./Home";
 import { GetGamesRequest, getGames } from "../../api/baseballApi";
@@ -16,6 +16,8 @@ const GameSchedule = () => {
 
   const currentDateISOString = useSelector((state: RootState) => state.game.currentDate);
   const currentDate = new Date(currentDateISOString);
+
+  const prevDateRef = useRef<Date | null>(null);
 
   const today = new Date();
   const [games, setGames] = useState<Array<GameProps> | null>(null);
@@ -163,7 +165,10 @@ const GameSchedule = () => {
   };
 
   useEffect(() => {
-    fetchGames();
+    if (!prevDateRef.current || currentDate.getTime() !== prevDateRef.current.getTime()) {
+      fetchGames();
+      prevDateRef.current = currentDate;
+    }
   }, [currentDate]);
 
   const goPreviousDay = () => {

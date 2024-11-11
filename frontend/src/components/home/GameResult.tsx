@@ -10,8 +10,6 @@ interface GameResultProps {
 }
 
 const GameResult = (props: GameResultProps) => {
-  console.log(props.game);
-  console.log(props.gameResult);
   return (
     <div className="flex flex-col items-center justify-center">
       {props.game ? (
