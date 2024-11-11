@@ -1,5 +1,6 @@
 import { GameResultData } from "../../containers/home/GameResult";
-import Game, { GameProps } from "./Game";
+import { GameProps } from "../../containers/home/Home";
+import Game from "./Game";
 import GameResultDetails from "./GameResultDetails";
 import GameScores from "./GameScores";
 

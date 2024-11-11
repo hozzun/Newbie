@@ -27,7 +27,7 @@ export interface GetGamesResponse {
     homeStartingPitcher: string
 }
 
-export const getGames = (request: GetGamesRequest) => axios.get<GetGamesResponse>("/api-baseball/games", {
+export const getGames = (request: GetGamesRequest) => axios.get<Array<GetGamesResponse>>("/api-baseball/games", {
     params: {...request}
 })
 

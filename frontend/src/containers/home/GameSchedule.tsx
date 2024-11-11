@@ -1,7 +1,12 @@
 import { useEffect, useState } from "react";
 import GameScheduleComponent from "../../components/home/GameSchedule";
-import { GameProps, GameSituation } from "../../components/home/Game";
-import { GameInfo } from "./Home";
+import { GameInfo, GameProps, GameSituation } from "./Home";
+import { GetGamesRequest, getGames } from "../../api/baseballApi";
+import { getClubIdByNum } from "../../util/ClubId";
+import { GetWeatherRequest, getWeather } from "../../api/weatherApi";
+import Stadiums from "../../util/Stadiums";
+import { calculateWeather } from "../../util/Weather";
+import axios from "axios";
 
 const GameSchedule = () => {
   const today = new Date();
@@ -9,213 +14,144 @@ const GameSchedule = () => {
   const [games, setGames] = useState<Array<GameProps> | null>(null);
 
   const fetchGames = async () => {
-    const todayWithoutHour = today.toISOString().split("T")[0];
-    const currentDateWithoutHour = currentDate.toISOString().split("T")[0];
+    const todayWithoutTime = today.toISOString().split("T")[0];
+    const currentDateWithoutTime = currentDate.toISOString().split("T")[0];
 
     try {
       // 경기 정보 가져오기
-      if (currentDateWithoutHour < todayWithoutHour) {
-        // TODO: GET - 과거 경기 정보
-        const gamesData: Array<GameProps> = [
-          {
-            gameInfo: {
-              day: "2024-11-03",
-              time: "17:00",
-              place: "광주스타디움",
-              clubs: [
-                {
-                  id: "samsung",
-                },
-                {
-                  id: "kia",
-                },
-              ],
-            },
-            gameSituation: {
-              isPlaying: false,
-              scores: {
-                samsung: 2,
-                kia: 1,
-              },
-            },
-          },
-          {
-            gameInfo: {
-              day: "2024-11-03",
-              time: "17:00",
-              place: "광주스타디움",
-              clubs: [
-                {
-                  id: "samsung",
-                },
-                {
-                  id: "kia",
-                },
-              ],
-            },
-            gameSituation: {
-              isPlaying: false,
-              scores: {
-                samsung: 2,
-                kia: 1,
-              },
-            },
-          },
-          {
-            gameInfo: {
-              day: "2024-11-03",
-              time: "17:00",
-              place: "광주스타디움",
-              clubs: [
-                {
-                  id: "samsung",
-                },
-                {
-                  id: "kia",
-                },
-              ],
-            },
-            gameSituation: {
-              isPlaying: false,
-              scores: {
-                samsung: 2,
-                kia: 1,
-              },
-            },
-          },
-          {
-            gameInfo: {
-              day: "2024-11-03",
-              time: "17:00",
-              place: "광주스타디움",
-              clubs: [
-                {
-                  id: "samsung",
-                },
-                {
-                  id: "kia",
-                },
-              ],
-            },
-            gameSituation: {
-              isPlaying: false,
-              scores: {
-                samsung: 2,
-                kia: 1,
-              },
-            },
-          },
-          {
-            gameInfo: {
-              day: "2024-11-03",
-              time: "17:00",
-              place: "광주스타디움",
-              clubs: [
-                {
-                  id: "samsung",
-                },
-                {
-                  id: "kia",
-                },
-              ],
-            },
-            gameSituation: {
-              isPlaying: false,
-              scores: {
-                samsung: 2,
-                kia: 1,
-              },
-            },
-          },
-        ];
+      const getGamesRequest: GetGamesRequest = {
+        year: currentDate.getFullYear().toString(),
+        month: (currentDate.getMonth() + 1).toString().padStart(2, "0"),
+        day: currentDate.getDate().toString().padStart(2, "0"),
+      };
+      const response = await getGames(getGamesRequest);
+      if (currentDateWithoutTime < todayWithoutTime) {
+        // 과거 경기 정보
+        const gameDatas: Array<GameProps> = response.data.map(d => {
+          const homeClubId = getClubIdByNum(d.homeTeamId);
+          const awayClubId = getClubIdByNum(d.awayTeamId);
 
-        setGames(gamesData);
-      } else if (currentDateWithoutHour == todayWithoutHour) {
+          return {
+            gameInfo: {
+              id: d.id,
+              day: d.date,
+              time: d.time,
+              place: d.stadium,
+              clubs: [
+                {
+                  id: homeClubId,
+                  player: d.homeStartingPitcher,
+                },
+                {
+                  id: awayClubId,
+                  player: d.awayStartingPitcher,
+                },
+              ],
+            },
+            gameSituation: {
+              isPlaying: false,
+              scores: {
+                [homeClubId]: d.homeScore,
+                [awayClubId]: d.awayScore,
+              },
+            },
+          };
+        });
+
+        setGames(gameDatas);
+      } else if (currentDateWithoutTime == todayWithoutTime) {
         // 오늘 경기 정보
-        // TODO: GET - 응원 구단에 맞는 오늘의 경기
-        const gameInfoData: GameInfo = {
-          day: "2024-11-05",
-          time: "17:00",
-          place: "광주스타디움",
-          clubs: [
-            {
-              id: "samsung",
-              player: "이재익",
-            },
-            {
-              id: "kia",
-              player: "곽도규",
-            },
-          ],
-        };
+        const gameInfoDatas: Array<GameInfo> = response.data.map(d => {
+          const homeClubId = getClubIdByNum(d.homeTeamId);
+          const awayClubId = getClubIdByNum(d.awayTeamId);
 
-        // TODO: GET - 날씨 정보
-        gameInfoData.weather = "☀ 맑음";
+          return {
+            id: d.id,
+            day: d.date,
+            time: d.time,
+            place: d.stadium,
+            clubs: [
+              {
+                id: homeClubId,
+                player: d.homeStartingPitcher,
+              },
+              {
+                id: awayClubId,
+                player: d.awayStartingPitcher,
+              },
+            ],
+          };
+        });
+
+        // 구장 기준 날씨 정보 가져오기
+        for (const gameInfoData of gameInfoDatas) {
+          const getWeatherRequest: GetWeatherRequest = {
+            nx: Stadiums[gameInfoData.place].logitude,
+            ny: Stadiums[gameInfoData.place].latitude,
+          };
+          const responseAboutWeather = await getWeather(getWeatherRequest);
+          const items = responseAboutWeather.data.response.body.items.item;
+          gameInfoData.weather = calculateWeather(items);
+        }
 
         // TODO: GET - 경기 진행 상황
-        const gameSituationData: GameSituation = {
-          isPlaying: true,
-          scores: {
-            samsung: 2,
-            kia: 1,
-          },
-        };
+        const gameSituationDatas: Array<GameSituation> = gameInfoDatas.map(gameInfoData => {
+          const homeClubId = gameInfoData.clubs[0].id;
+          const awayClubId = gameInfoData.clubs[1].id;
 
-        const gameData: GameProps = {
+          return {
+            isPlaying: true,
+            scores: {
+              [homeClubId]: 2,
+              [awayClubId]: 1,
+            },
+          };
+        });
+
+        const gameDatas = gameInfoDatas.map((gameInfoData, index) => ({
           gameInfo: gameInfoData,
-          gameSituation: gameSituationData,
-        };
+          gameSituation: gameSituationDatas[index],
+        }));
 
-        const gamesData: Array<GameProps> = [];
-        gamesData.push(gameData);
-
-        setGames(gamesData);
+        setGames(gameDatas);
       } else {
-        // TODO: GET - 미래 경기 정보
-        const gamesData: Array<GameProps> = [
-          {
+        // 미래 경기 정보
+        const gameDatas: Array<GameProps> = response.data.map(d => {
+          const homeClubId = getClubIdByNum(d.homeTeamId);
+          const awayClubId = getClubIdByNum(d.awayTeamId);
+
+          return {
             gameInfo: {
-              day: "2024-11-05",
-              time: "17:00",
-              place: "광주스타디움",
+              id: d.id,
+              day: d.date,
+              time: d.time,
+              place: d.stadium,
               clubs: [
                 {
-                  id: "samsung",
+                  id: homeClubId,
+                  player: d.homeStartingPitcher,
                 },
                 {
-                  id: "kia",
+                  id: awayClubId,
+                  player: d.awayStartingPitcher,
                 },
               ],
             },
             gameSituation: {
               isPlaying: false,
             },
-          },
+          };
+        });
 
-          {
-            gameInfo: {
-              day: "2024-11-05",
-              time: "17:00",
-              place: "광주스타디움",
-              clubs: [
-                {
-                  id: "samsung",
-                },
-                {
-                  id: "kia",
-                },
-              ],
-            },
-            gameSituation: {
-              isPlaying: false,
-            },
-          },
-        ];
-
-        setGames(gamesData);
+        setGames(gameDatas);
       }
     } catch (e) {
-      console.log(e);
+      if (axios.isAxiosError(e) && e.response?.status === 404) {
+        console.log("[ERROR] 경기 정보 없음 by game schedule");
+        setGames([]);
+      } else {
+        console.error(e);
+      }
     }
   };
 

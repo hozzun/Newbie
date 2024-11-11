@@ -1,4 +1,5 @@
-import GameComponent, { GameProps } from "../../components/home/Game";
+import GameComponent from "../../components/home/Game";
+import { GameProps } from "./Home";
 
 const Game = (props: GameProps) => {
   const today = new Date().toISOString().split("T")[0];
