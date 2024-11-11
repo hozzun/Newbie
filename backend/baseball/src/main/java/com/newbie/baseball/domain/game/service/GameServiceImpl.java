@@ -23,6 +23,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -39,6 +41,7 @@ public class GameServiceImpl implements GameService {
 
     private static final String GAME_CACHE_KEY_PREFIX = "game:";
     private static final long CACHE_EXPIRATION_MINUTES = 240; // 3시간
+    private static final long SSE_RECONNECT_TIME = 10000L; // 10초
 
     @Override
     public GameResponseDto getGameById(Integer id) {
@@ -80,6 +83,14 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public SseEmitter streamRealTimeGameData(Integer gameId) {
+        Game game = gameRepository.findById(gameId)
+                .orElseThrow(GameNotFoundException::new);
+
+        // 진행 중이 아닌 경우 연결 거부
+        if (!"진행 중".equals(game.getGameResult())) {
+            throw new IllegalStateException("해당 경기는 현재 진행 중이 아닙니다.");
+        }
+
         SseEmitter emitter = new SseEmitter(Long.MAX_VALUE);
         emitters.put(gameId, emitter);
 
