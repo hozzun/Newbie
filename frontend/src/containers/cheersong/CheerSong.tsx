@@ -1,4 +1,4 @@
-import axios from "axios";
+import axiosInstance from "../../util/axiosInstance";
 import { useState, useEffect, useRef, useCallback } from "react";
 import ClubChangeButton from "../../components/cheersong/ClubChangeButton";
 import PageName from "../../components/common/PageName";
@@ -22,11 +22,11 @@ const CheerSong = () => {
   };
 
   const getCheerSong = async () => {
-    const api_url = import.meta.env.VITE_CHEER_SONG;
+
     const teamName = club;
 
     try {
-      const response = await axios.get(api_url, {
+      const response = await axiosInstance.get("/api-baseball/songs/teams", {
         params: { teamName: teamName },
       });
       setCheerSongs(response.data);

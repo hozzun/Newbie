@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import axiosInstance from "../../util/axiosInstance";
 import { useState } from 'react'
 import CheerTeamComponents from "../../components/cheerteam/CheerTeam";
 import ClubSelectItemComponents from "../../components/cheerteam/ClubSelectItem";
@@ -12,10 +12,8 @@ const CheerTeam = () => {
 
   const updateFavoriteTeam = async (favoriteTeamId: number) => {
 
-    const api_url = import.meta.env.VITE_CHEER_TEAM
-
     try {
-      const response = await axios.patch(api_url, {
+      const response = await axiosInstance.patch("/api-user/users/favorite-team", {
         teamId: favoriteTeamId,
       });
   
