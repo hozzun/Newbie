@@ -44,8 +44,7 @@ const ClubRecommend = () => {
       const textData = await response.text();
       if (textData) {
         const data = JSON.parse(textData);
-        console.log("Recommended team:", data.recommended_team);
-        setMyClub(data.recommended_team);
+        setMyClub(data.recommended_team[0]);
       } else {
         console.warn("Response is empty or not JSON.");
       }
@@ -53,7 +52,6 @@ const ClubRecommend = () => {
       console.error("Error sending data to API:", error);
     }
   };
-  
 
   const handleMbtiSubmit = (writeMbti: string) => {
     setMbti(writeMbti);
