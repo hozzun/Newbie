@@ -6,7 +6,7 @@ import { getClubIdByNum } from "../../util/ClubId";
 
 interface Game {
   date: string;
-  homTeamId: number;
+  homeTeamId: number;
   awayTeamId: number;
   stadium: string;
 }
@@ -98,8 +98,8 @@ const Calendar = () => {
               );
             }
 
-            const isHomeGame = game.homTeamId == myTeamId;
-            const opponentTeamId = isHomeGame ? game.awayTeamId : game.homTeamId;
+            const isHomeGame = game.homeTeamId == myTeamId;
+            const opponentTeamId = isHomeGame ? game.awayTeamId : game.homeTeamId;
             const opponentTeamName = getClubIdByNum(opponentTeamId);
 
             return (

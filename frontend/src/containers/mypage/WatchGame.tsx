@@ -58,7 +58,7 @@ const WatchGame = (props: WatchGameProps) => {
       setTime(response.data[0].time)
       setStadium(response.data[0].stadium)
       setState(response.data[0].gameResult)
-      setHomeId(response.data[0].homTeamId)
+      setHomeId(response.data[0].homeTeamId)
       setAwayId(response.data[0].awayTeamId)
       setHomeScore(response.data[0].homeScore)
       setAwayScore(response.data[0].awayScore)
