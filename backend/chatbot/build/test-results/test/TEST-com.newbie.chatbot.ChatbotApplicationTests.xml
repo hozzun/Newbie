@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.newbie.chatbot.ChatbotApplicationTests" tests="1" skipped="0" failures="0" errors="0" timestamp="2024-11-08T03:56:42" hostname="DESKTOP-6ABJ64L" time="0.888">
+  <properties/>
+  <testcase name="contextLoads()" classname="com.newbie.chatbot.ChatbotApplicationTests" time="0.888"/>
+  <system-out><![CDATA[12:56:39.062 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.newbie.chatbot.ChatbotApplicationTests]: ChatbotApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+12:56:39.171 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.newbie.chatbot.ChatbotApplication for test class com.newbie.chatbot.ChatbotApplicationTests
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.3.5)
+
+2024-11-08T12:56:39.607+09:00  INFO 27596 --- [chatbot] [    Test worker] c.n.chatbot.ChatbotApplicationTests      : Starting ChatbotApplicationTests using Java 17.0.12 with PID 27596 (started by SSAFY in C:\Users\SSAFY\Desktop\S11P31B304\backend\chatbot)
+2024-11-08T12:56:39.609+09:00  INFO 27596 --- [chatbot] [    Test worker] c.n.chatbot.ChatbotApplicationTests      : No active profile set, falling back to 1 default profile: "default"
+2024-11-08T12:56:40.511+09:00  INFO 27596 --- [chatbot] [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2024-11-08T12:56:40.517+09:00  INFO 27596 --- [chatbot] [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2024-11-08T12:56:40.569+09:00  INFO 27596 --- [chatbot] [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 23 ms. Found 0 Redis repository interfaces.
+2024-11-08T12:56:42.382+09:00  INFO 27596 --- [chatbot] [    Test worker] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
+2024-11-08T12:56:42.385+09:00  INFO 27596 --- [chatbot] [    Test worker] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@1f6f0fe2]]
+2024-11-08T12:56:42.386+09:00  INFO 27596 --- [chatbot] [    Test worker] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
+2024-11-08T12:56:42.407+09:00  INFO 27596 --- [chatbot] [    Test worker] c.n.chatbot.ChatbotApplicationTests      : Started ChatbotApplicationTests in 3.064 seconds (process running for 4.576)
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
