@@ -7,15 +7,22 @@ import { GetWeatherRequest, getWeather } from "../../api/weatherApi";
 import Stadiums from "../../util/Stadiums";
 import { calculateWeather } from "../../util/Weather";
 import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { decrementDate, incrementDate } from "../../redux/gameSlice";
+import { RootState } from "../../redux/store";
 
 const GameSchedule = () => {
+  const dispatch = useDispatch();
+
+  const currentDateISOString = useSelector((state: RootState) => state.game.currentDate);
+  const currentDate = new Date(currentDateISOString);
+
   const today = new Date();
-  const [currentDate, setCurrentDate] = useState<Date>(today);
   const [games, setGames] = useState<Array<GameProps> | null>(null);
 
   const fetchGames = async () => {
     const todayWithoutTime = today.toISOString().split("T")[0];
-    const currentDateWithoutTime = currentDate.toISOString().split("T")[0];
+    const currentDateWithoutTime = currentDateISOString.split("T")[0];
 
     try {
       // 경기 정보 가져오기
@@ -157,22 +164,14 @@ const GameSchedule = () => {
 
   useEffect(() => {
     fetchGames();
-  }, [currentDate]);
+  }, []);
 
   const goPreviousDay = () => {
-    setCurrentDate(prevDate => {
-      const newDate = new Date(prevDate);
-      newDate.setDate(newDate.getDate() - 1);
-      return newDate;
-    });
+    dispatch(decrementDate());
   };
 
   const goNextDay = () => {
-    setCurrentDate(prevDate => {
-      const newDate = new Date(prevDate);
-      newDate.setDate(newDate.getDate() + 1);
-      return newDate;
-    });
+    dispatch(incrementDate());
   };
 
   return (
