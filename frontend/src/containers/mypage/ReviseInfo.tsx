@@ -1,3 +1,4 @@
+import axiosInstance from '../../util/axiosInstance';
 import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from "react";
@@ -9,7 +10,6 @@ import profile from "../../assets/images/karina.jpg"
 
 const ReviseInfo = () => {
 
-  // TODO: 저장하기 버튼 클릭 시 정보 수정 요청
   const nav = useNavigate()
 
   const location = useLocation();
@@ -38,8 +38,29 @@ const ReviseInfo = () => {
     setImageUrl(newImageUrl);
   };
 
+  const patchReviseUser = async () => {
+
+    const params = {
+      nickname: name,
+      address: address,
+      profileImg: imageUrl,
+    };
+
+    try {
+      // TODO: userId 바꾸기
+      const response = await axiosInstance.patch("/api-user/users/5", { params }
+      );
+      console.log(response.data)
+      console.log(params)
+    } catch (error) {
+      console.error('API 요청 중 오류 발생:', error);
+      throw error;
+    }
+  };
+
+
   const reviseClick = () => {
-    console.log('회원 정보 수정 요청')
+    patchReviseUser()
     nav('/mypage')
   }
 

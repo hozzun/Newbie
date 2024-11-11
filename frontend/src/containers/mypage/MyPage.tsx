@@ -1,79 +1,74 @@
-import { useNavigate } from "react-router-dom"
-import { useState, useEffect } from 'react'
-import axiosInstance from "../../util/axiosInstance"
-import PageName from "../../components/common/PageName"
-import Pencil from "../../assets/icons/pencil-solid.svg?react"
-import Profile from "../../components/mypage/Profile"
-import Image from "../../assets/images/karina.jpg"
-import ClubChangeButton from "../../components/common/ClubChangeButton"
-import ClubLogos from "../../util/ClubLogos"
-import ClubFullName from "../../util/ClubFullName"
-import MainButton from "../../components/mypage/MainButton"
-import Calendar from "../../components/mypage/Calendar"
-import WatchGame from "../../components/mypage/WatchGame"
-import OutButton from "../../components/mypage/OutButton"
-import { getClubIdByNum } from "../../util/ClubId"
+import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import axiosInstance from "../../util/axiosInstance";
+import PageName from "../../components/common/PageName";
+import Pencil from "../../assets/icons/pencil-solid.svg?react";
+import Profile from "../../components/mypage/Profile";
+import Image from "../../assets/images/karina.jpg";
+import ClubChangeButton from "../../components/common/ClubChangeButton";
+import ClubLogos from "../../util/ClubLogos";
+import ClubFullName from "../../util/ClubFullName";
+import MainButton from "../../components/mypage/MainButton";
+import Calendar from "../../components/mypage/Calendar";
+import WatchGame from "../../components/mypage/WatchGame";
+import OutButton from "../../components/mypage/OutButton";
+import { getClubIdByNum } from "../../util/ClubId";
 
 interface UserInfo {
-  email: string
-  nickname: string
-  address: string
-  profileImage: string
-  favoriteTeamId: number
+  email: string;
+  nickname: string;
+  address: string;
+  profileImage: string;
+  favoriteTeamId: number;
 }
 
-type TeamName = "doosan" | "hanwha" | "kia" | "kiwoom" | "kt" | "lg" | "lotte" | "nc" | "samsung" | "ssg";
+type TeamName =
+  | "doosan"
+  | "hanwha"
+  | "kia"
+  | "kiwoom"
+  | "kt"
+  | "lg"
+  | "lotte"
+  | "nc"
+  | "samsung"
+  | "ssg";
 
 const MyPage = () => {
+  const [userInfo, setUserInfo] = useState<UserInfo>();
 
-  const [userInfo, setUserInfo] = useState<UserInfo>({
-    email: 'mill@ssafy.com',
-    nickname: 'mill',
-    address: '충청북도 청주시 서원구',
-    profileImage: Image,
-    favoriteTeamId: 6
-  });
-
-  console.log(setUserInfo)
-  const nav = useNavigate()
-  // TODO: navigate 설정
+  console.log(setUserInfo);
+  const nav = useNavigate();
 
   const goRevise = () => {
-    nav('/mypage/revise',  { state: { userInfo } })
-  }
+    nav("/mypage/revise", { state: { userInfo } });
+  };
 
   const goRecommend = () => {
-    nav('/cheerteam')
-  }
+    nav("/cheerteam");
+  };
 
   const goPhotoCard = () => {
-    nav('/mypage/photocard')
-  }
+    nav("/mypage/photocard");
+  };
 
+  // TODO: navigate 설정
   const goWrite = () => {
-    console.log('나의 게시글 페이지로 이동')
-  }
+    console.log("나의 게시글 페이지로 이동");
+  };
 
   const goActive = () => {
-    console.log('나의 활동 페이지로 이동')
-  }
+    console.log("나의 활동 페이지로 이동");
+  };
 
   const goScrap = () => {
-    console.log('나의 스크랩 페이지로 이동')
-  }
-
-  const goLogout = () => {
-    console.log('로그아웃 모달')
-  }
-
-  const goDelete = () => {
-    console.log('회원탈퇴 모달')
-  }
+    console.log("나의 스크랩 페이지로 이동");
+  };
 
   const getUserInfo = async () => {
     try {
       const response = await axiosInstance.get("/api-user/users/5", {
-        params: { userId: 5 } // TODO: userId 삭제 예정
+        params: { userId: 5 }, // TODO: userId 삭제 예정
       });
       const userData: UserInfo = response.data;
       setUserInfo(userData);
@@ -83,43 +78,50 @@ const MyPage = () => {
   };
 
   useEffect(() => {
-    getUserInfo()
-  }, [])
+    getUserInfo();
+  }, []);
 
   if (userInfo) {
-    const teamName = getClubIdByNum(userInfo.favoriteTeamId) as TeamName | "doosan";
+    const teamName = getClubIdByNum(userInfo.favoriteTeamId) as TeamName | null;
 
-  return (
-    <>
-      <div className="flex justify-between items-center">
-        <PageName label="마이페이지" />
-        <Pencil className="w-6 h-6 text-gray-500 hover:cursor-pointer" onClick={goRevise} />
-      </div>
-      {userInfo && (
-        <div>
-          <Profile img={Image} name={userInfo.nickname} email={userInfo.email} />
-  
-          {/* 구단 이름 매핑 */}
-          <ClubChangeButton
-            logo={ClubLogos[teamName]}
-            clubColor={teamName}
-            club={ClubFullName[teamName]}
-            onClick={goRecommend}
-          />
-  
-          <MainButton
-            photoClick={goPhotoCard}
-            writeClick={goWrite}
-            activeClick={goActive}
-            scrapClick={goScrap}
-          />
-          <Calendar />
-          <WatchGame />
-          <OutButton logoutClick={goLogout} deleteClick={goDelete} />
+    return (
+      <>
+        <div className="flex justify-between items-center">
+          <PageName label="마이페이지" />
+          <Pencil className="w-6 h-6 text-gray-500 hover:cursor-pointer" onClick={goRevise} />
         </div>
-      )}
-    </>
-  );
-}}
+        {userInfo && (
+          <div>
+            <Profile img={Image} name={userInfo.nickname} email={userInfo.email} />
+            {teamName ? (
+              <ClubChangeButton
+                logo={ClubLogos[teamName]}
+                clubColor={teamName}
+                club={ClubFullName[teamName]}
+                onClick={goRecommend}
+              />
+            ) : (
+              <div
+                className="flex justify-center items-center font-kbogothicmedium text-lg bg-green-50 m-5 p-10 rounded-2xl hover:cursor-pointer"
+                onClick={goRecommend}
+              >
+                <p>응원할 팀을 선택해주세요!</p>
+              </div>
+            )}
+            <MainButton
+              photoClick={goPhotoCard}
+              writeClick={goWrite}
+              activeClick={goActive}
+              scrapClick={goScrap}
+            />
+            <Calendar />
+            <WatchGame />
+            <OutButton />
+          </div>
+        )}
+      </>
+    );
+  }
+};
 
-export default MyPage
+export default MyPage;
