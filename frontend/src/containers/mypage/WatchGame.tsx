@@ -1,4 +1,4 @@
-import axios from "axios";
+import axiosInstance from "../../util/axiosInstance";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from 'react';
 import LabelImage from "../../components/mypage/LabelImage";
@@ -44,18 +44,24 @@ const WatchGame = (props: WatchGameProps) => {
   const nav = useNavigate()
 
   const getGameData = async () => {
-    const api_url = import.meta.env.VITE_WATCH_GAME;
+
+    const params = {
+      year: "2024",
+      month: "08",
+      day: "03",
+      teamId: 6
+    };
 
     try {
-      const response = await axios.get(`${api_url}/${props.year}/${props.month}/${props.day}/${props.teamId}`);
-      console.log(response.data);
-      setTime(response.data.time)
-      setStadium(response.data.stadium)
-      setState(response.data.gameResult)
-      setHomeId(response.data.homTeamId)
-      setAwayId(response.data.awayTeamId)
-      setHomeScore(response.data.homeScore)
-      setAwayScore(response.data.awayScore)
+      const response = await axiosInstance.get("/api-baseball/games", { params }
+      );
+      setTime(response.data[0].time)
+      setStadium(response.data[0].stadium)
+      setState(response.data[0].gameResult)
+      setHomeId(response.data[0].homeTeamId)
+      setAwayId(response.data[0].awayTeamId)
+      setHomeScore(response.data[0].homeScore)
+      setAwayScore(response.data[0].awayScore)
     } catch (error) {
       console.error('API 요청 중 오류 발생:', error);
       throw error;
@@ -63,31 +69,27 @@ const WatchGame = (props: WatchGameProps) => {
   };
 
   const getInfoAPI = async () => {
-    const api_url = import.meta.env.VITE_TICKET_INFO;
-    const id = props.ticketId
+
+    const params = { id: props.ticketId };
   
     try {
-      const response = await axios.get(api_url, {
-        params: { id },
-      });
+      const response = await axiosInstance.get("/api-mypage/ticket", { params });
       console.log(response.data);
-      setDate(response.data.date)
-      setImg(response.data.imageUrl)
-      setText(response.data.text)
+      setDate(response.data.date);
+      setImg(response.data.imageUrl);
+      setText(response.data.text);
     } catch (error) {
       console.error("API 요청 중 오류 발생:", error);
       throw error;
     }
   };
-
+  
   const deleteGameAPI = async () => {
-    const api_url = import.meta.env.VITE_TICKET_DELETE;
-    const id = props.ticketId
+
+    const params = { id: props.ticketId };
   
     try {
-      const response = await axios.delete(api_url, {
-        params: { id },
-      });
+      const response = await axiosInstance.delete("/api-mypage/ticket/delete", { params });
       console.log(response.data);
       return response.data;
     } catch (error) {
@@ -95,6 +97,7 @@ const WatchGame = (props: WatchGameProps) => {
       throw error;
     }
   };
+  
 
   useEffect(() => {
     getGameData();

@@ -1,4 +1,4 @@
-import axios from "axios";
+import axiosInstance from "../../util/axiosInstance";
 import CalenderIcon from "../../assets/icons/calender.svg?react";
 import { useState, useEffect } from "react";
 import ClubLogos from "../../util/ClubLogos";
@@ -6,7 +6,7 @@ import { getClubIdByNum } from "../../util/ClubId";
 
 interface Game {
   date: string;
-  homTeamId: number;
+  homeTeamId: number;
   awayTeamId: number;
   stadium: string;
 }
@@ -18,21 +18,20 @@ const Calendar = () => {
   const myTeamId = 6; // 내가 응원하는 팀 ID
 
   const getGameInfo = async () => {
-    const api_url = import.meta.env.VITE_GAME_INFO;
-
+    const params = {
+      year: year.toString(),
+      month: "09",
+      teamId: myTeamId
+    };
+  
     try {
-      const response = await axios.get(api_url, {
-        params: {
-          year: year.toString(),
-          month: "09",
-          teamId: myTeamId,
-        },
-      });
+      const response = await axiosInstance.get("/api-baseball/games", { params });
       setGames(response.data);
     } catch (error) {
       console.error("에러 발생:", error);
     }
   };
+  
 
   useEffect(() => {
     getGameInfo();
@@ -99,8 +98,8 @@ const Calendar = () => {
               );
             }
 
-            const isHomeGame = game.homTeamId == myTeamId;
-            const opponentTeamId = isHomeGame ? game.awayTeamId : game.homTeamId;
+            const isHomeGame = game.homeTeamId == myTeamId;
+            const opponentTeamId = isHomeGame ? game.awayTeamId : game.homeTeamId;
             const opponentTeamName = getClubIdByNum(opponentTeamId);
 
             return (

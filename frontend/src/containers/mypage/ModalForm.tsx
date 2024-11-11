@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axiosInstance from "../../util/axiosInstance";
 import ModalFormComponent from "../../components/mypage/ModalForm";
 import ModalImage from "../../components/mypage/ModalImage";
 import ModalInput from "../../components/mypage/ModalInput";
@@ -29,7 +30,6 @@ const ModalForm = (props: ModalFormProps) => {
 
   // 메모 저장 API 호출
   const TextSaveAPI = async () => {
-    const api_url = import.meta.env.VITE_TICKET_TEXT;
 
     const TextData = {
       id: props.ticketId,
@@ -37,20 +37,8 @@ const ModalForm = (props: ModalFormProps) => {
     };
 
     try {
-      const response = await fetch(api_url, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(TextData),
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const data = await response.json();
-      console.log(data);
+      const response = await axiosInstance.put("/api-mypage/ticket/text",TextData)
+      console.log(response.data);
     } catch (error) {
       console.error("Error sending data to API:", error);
     }
