@@ -1,4 +1,5 @@
 import Container from "../../components/common/Container";
+import BottomNavigation from "../../containers/common/BottomNavigation";
 import CommuHomeContainer from "../../containers/commu/CommuHome";
 
 const CommuHome = () => {
@@ -7,6 +8,7 @@ const CommuHome = () => {
       <Container>
         <CommuHomeContainer />
       </Container>
+      <BottomNavigation />
     </>
   );
 };
