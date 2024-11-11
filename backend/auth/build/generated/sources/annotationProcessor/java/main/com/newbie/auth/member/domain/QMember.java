@@ -23,9 +23,13 @@ public class QMember extends EntityPathBase<Member> {
 
     public final StringPath email = createString("email");
 
+    public final BooleanPath isResigned = createBoolean("isResigned");
+
     public final NumberPath<Long> memberId = createNumber("memberId", Long.class);
 
     public final EnumPath<Platform> platform = createEnum("platform", Platform.class);
+
+    public final DateTimePath<java.time.LocalDateTime> resignTime = createDateTime("resignTime", java.time.LocalDateTime.class);
 
     public QMember(String variable) {
         super(Member.class, forVariable(variable));
