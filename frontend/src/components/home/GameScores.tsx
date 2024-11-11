@@ -1,9 +1,9 @@
-import { SCORE_INITIAL, TeamScoreDetail } from "../../containers/home/GameResult";
+import { ClubScoreDetail, SCORE_INITIAL } from "../../containers/home/GameResult";
 import GameScoreItem from "./GameScoreItem";
 
 interface GameScoresProps {
   inningCount: number;
-  teamScoreDetails: Array<TeamScoreDetail>;
+  clubScoreDetails: Array<ClubScoreDetail>;
 }
 
 const GameScores = (props: GameScoresProps) => {
@@ -25,8 +25,8 @@ const GameScores = (props: GameScoresProps) => {
           </p>
         ))}
       </div>
-      {props.teamScoreDetails.map((t, index) => (
-        <GameScoreItem key={index} teamScoreDetail={t} />
+      {props.clubScoreDetails.map((t, index) => (
+        <GameScoreItem key={index} inningCount={props.inningCount} clubScoreDetail={t} />
       ))}
     </div>
   );

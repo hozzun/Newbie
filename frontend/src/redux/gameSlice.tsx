@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { GameProps } from "../containers/home/Home";
 
 interface GameState {
@@ -25,8 +25,11 @@ const gameSlice = createSlice({
       newDate.setDate(newDate.getDate() - 1);
       state.currentDate = newDate.toISOString();
     },
+    setGame: (state, action: PayloadAction<GameProps>) => {
+      state.game = action.payload;
+    },
   },
 });
 
-export const { incrementDate, decrementDate } = gameSlice.actions;
+export const { incrementDate, decrementDate, setGame } = gameSlice.actions;
 export default gameSlice.reducer;

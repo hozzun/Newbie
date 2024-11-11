@@ -164,7 +164,7 @@ const GameSchedule = () => {
 
   useEffect(() => {
     fetchGames();
-  }, []);
+  }, [currentDate]);
 
   const goPreviousDay = () => {
     dispatch(decrementDate());

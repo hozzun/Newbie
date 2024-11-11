@@ -5,19 +5,25 @@ import GameResultDetails from "./GameResultDetails";
 import GameScores from "./GameScores";
 
 interface GameResultProps {
-  game: GameProps;
+  game: GameProps | null;
   gameResult: GameResultData | null;
 }
 
 const GameResult = (props: GameResultProps) => {
+  console.log(props.game);
+  console.log(props.gameResult);
   return (
     <div className="flex flex-col items-center justify-center">
-      <Game {...props.game} isVisibleDay={true} />
+      {props.game ? (
+        <Game {...props.game} isVisibleDay={true} />
+      ) : (
+        <p className="text-base font-kbogothicmedium text-gray-700">Loading...</p>
+      )}
       {props.gameResult && (
         <>
           <GameScores
             inningCount={props.gameResult.inningCount}
-            teamScoreDetails={props.gameResult.teamScoreDetails}
+            clubScoreDetails={props.gameResult.clubScoreDetails}
           />
           <GameResultDetails gameResultDetails={props.gameResult.gameResultDetails} />
         </>

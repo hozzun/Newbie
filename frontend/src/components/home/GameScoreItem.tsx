@@ -1,17 +1,18 @@
-import { SCORE_INITIAL, TeamScoreDetail } from "../../containers/home/GameResult";
+import { ClubScoreDetail, SCORE_INITIAL } from "../../containers/home/GameResult";
 import clubs from "./clubs";
 
 interface GameScoreItemProps {
-  teamScoreDetail: TeamScoreDetail;
+  inningCount: number;
+  clubScoreDetail: ClubScoreDetail;
 }
 
 const GameScoreItem = (props: GameScoreItemProps) => {
   return (
     <div className="flex flex-row w-full h-4 my-1.5 items-center justify-between">
       <p className="text-sm font-kbogothicmedium text-gray-700 min-w-[100px] text-center">
-        {clubs[props.teamScoreDetail.id].name}
+        {clubs[props.clubScoreDetail.id].name}
       </p>
-      {props.teamScoreDetail.scores.map((score, index) => (
+      {props.clubScoreDetail.scores.slice(0, props.inningCount).map((score, index) => (
         <p
           key={index}
           className="text-sm font-kbogothicmedium text-gray-700 min-w-[20px] text-center"
@@ -24,7 +25,7 @@ const GameScoreItem = (props: GameScoreItemProps) => {
           key={index}
           className="text-sm font-kbogothicmedium text-gray-700 min-w-[20px] text-center"
         >
-          {props.teamScoreDetail[scoreInitialKey]}
+          {props.clubScoreDetail[scoreInitialKey]}
         </p>
       ))}
     </div>
