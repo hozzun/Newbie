@@ -12,7 +12,7 @@ class UserData(BaseModel):
     responses: list[int]
     region: str = None
 
-@app.post("/recommend/")
+@app.post("/recommend")
 async def get_recommendation(request: UserData):
     try:
         recommended_team = recommend_team(request.mbti, request.responses, request.region)
