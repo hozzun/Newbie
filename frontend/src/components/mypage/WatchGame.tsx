@@ -27,7 +27,7 @@ const WatchGame = () => {
         {/* 직관 경기 수만큼 */}
         <WatchCard img={Ticket} onClick={goGameResult} />
         <div className="w-full h-44 rounded-2xl bg-gray-200 mt-7 flex justify-center items-center ml-5">
-          <Plus className="w-6 h-6 text-gray-500" onClick={goCamera} />
+          <Plus className="w-6 h-6 text-gray-500 hover:cursor-pointer" onClick={goCamera} />
         </div>
       </div>
     </div>

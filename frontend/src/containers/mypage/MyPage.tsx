@@ -1,67 +1,127 @@
-import { useNavigate } from "react-router-dom"
-import PageName from "../../components/common/PageName"
-import Pencil from "../../assets/icons/pencil-solid.svg?react"
-import Profile from "../../components/mypage/Profile"
-import Image from "../../assets/images/karina.jpg"
-import ClubChangeButton from "../../components/common/ClubChangeButton"
-import ClubLogos from "../../util/ClubLogos"
-import ClubFullName from "../../util/ClubFullName"
-import MainButton from "../../components/mypage/MainButton"
-import Calendar from "../../components/mypage/Calendar"
-import WatchGame from "../../components/mypage/WatchGame"
-import OutButton from "../../components/mypage/OutButton"
+import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import axiosInstance from "../../util/axiosInstance";
+import PageName from "../../components/common/PageName";
+import Pencil from "../../assets/icons/pencil-solid.svg?react";
+import Profile from "../../components/mypage/Profile";
+import Image from "../../assets/images/karina.jpg";
+import ClubChangeButton from "../../components/common/ClubChangeButton";
+import ClubLogos from "../../util/ClubLogos";
+import ClubFullName from "../../util/ClubFullName";
+import MainButton from "../../components/mypage/MainButton";
+import Calendar from "../../components/mypage/Calendar";
+import WatchGame from "../../components/mypage/WatchGame";
+import OutButton from "../../components/mypage/OutButton";
+import { getClubIdByNum } from "../../util/ClubId";
 
-const MyPage = () => {
-
-  const nav = useNavigate()
-  // TODO: 회원 정보 가져오기(image, name, email, favorite-team), navigate 설정
-
-  const goRevise = () => {
-    nav('/mypage/revise')
-  }
-
-  const goRecommend = () => {
-    nav('/cheerteam')
-  }
-
-  const goPhotoCard = () => {
-    nav('/mypage/photocard')
-  }
-
-  const goWrite = () => {
-    console.log('나의 게시글 페이지로 이동')
-  }
-
-  const goActive = () => {
-    console.log('나의 활동 페이지로 이동')
-  }
-
-  const goScrap = () => {
-    console.log('나의 스크랩 페이지로 이동')
-  }
-
-  const goLogout = () => {
-    console.log('로그아웃 모달')
-  }
-
-  const goDelete = () => {
-    console.log('회원탈퇴 모달')
-  }
-
-  return (
-    <>
-      <div className="flex justify-between items-center">
-        <PageName label="마이페이지" />
-        <Pencil className="w-6 h-6 text-gray-500" onClick={goRevise} />
-      </div>
-      <Profile img={Image} name="미량" email="miryang1016@gmail.com" />
-      <ClubChangeButton logo={ClubLogos["ssg"]} clubColor="ssg" club={ClubFullName["ssg"]} onClick={goRecommend} />
-      <MainButton photoClick={goPhotoCard} writeClick={goWrite} activeClick={goActive} scrapClick={goScrap} />
-      <Calendar />
-      <WatchGame />
-      <OutButton logoutClick={goLogout} deleteClick={goDelete} />
-    </>
-  )
+interface UserInfo {
+  email: string;
+  nickname: string;
+  address: string;
+  profileImage: string;
+  favoriteTeamId: number;
 }
 
-export default MyPage
+type TeamName =
+  | "doosan"
+  | "hanwha"
+  | "kia"
+  | "kiwoom"
+  | "kt"
+  | "lg"
+  | "lotte"
+  | "nc"
+  | "samsung"
+  | "ssg";
+
+const MyPage = () => {
+  const [userInfo, setUserInfo] = useState<UserInfo>();
+
+  console.log(setUserInfo);
+  const nav = useNavigate();
+
+  const goRevise = () => {
+    nav("/mypage/revise", { state: { userInfo } });
+  };
+
+  const goRecommend = () => {
+    nav("/cheerteam");
+  };
+
+  const goPhotoCard = () => {
+    nav("/mypage/photocard");
+  };
+
+  // TODO: navigate 설정
+  const goWrite = () => {
+    console.log("나의 게시글 페이지로 이동");
+  };
+
+  const goActive = () => {
+    console.log("나의 활동 페이지로 이동");
+  };
+
+  const goScrap = () => {
+    console.log("나의 스크랩 페이지로 이동");
+  };
+
+  const getUserInfo = async () => {
+    try {
+      const response = await axiosInstance.get("/api-user/users/5", {
+        params: { userId: 5 }, // TODO: userId 삭제 예정
+      });
+      const userData: UserInfo = response.data;
+      setUserInfo(userData);
+    } catch (error) {
+      console.error("에러 발생:", error);
+    }
+  };
+
+  useEffect(() => {
+    getUserInfo();
+  }, []);
+
+  if (userInfo) {
+    const teamName = getClubIdByNum(userInfo.favoriteTeamId) as TeamName | null;
+
+    return (
+      <>
+        <div className="flex justify-between items-center">
+          <PageName label="마이페이지" />
+          <Pencil className="w-6 h-6 text-gray-500 hover:cursor-pointer" onClick={goRevise} />
+        </div>
+        {userInfo && (
+          <div>
+            <Profile img={Image} name={userInfo.nickname} email={userInfo.email} />
+            {teamName ? (
+              <ClubChangeButton
+                logo={ClubLogos[teamName]}
+                clubColor={teamName}
+                club={ClubFullName[teamName]}
+                onClick={goRecommend}
+              />
+            ) : (
+              <div
+                className="flex justify-center items-center font-kbogothicmedium text-lg border-4 border-green-100 text-green-900 m-5 p-10 rounded-2xl hover:cursor-pointer"
+                onClick={goRecommend}
+              >
+                <p>응원할 팀을 선택해주세요!</p>
+              </div>
+            )}
+            <MainButton
+              photoClick={goPhotoCard}
+              writeClick={goWrite}
+              activeClick={goActive}
+              scrapClick={goScrap}
+            />
+            <Calendar />
+            <WatchGame />
+            <OutButton />
+          </div>
+        )}
+      </>
+    );
+  }
+};
+
+export default MyPage;
