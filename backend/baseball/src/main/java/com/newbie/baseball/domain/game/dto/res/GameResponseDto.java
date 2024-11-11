@@ -19,7 +19,7 @@ public class GameResponseDto implements Serializable {
     private String time;
     private String homeTeamName;
     private String awayTeamName;
-    private Integer homTeamId;
+    private Integer homeTeamId;
     private Integer awayTeamId;
     private Integer homeScore;
     private Integer awayScore;
