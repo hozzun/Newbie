@@ -1,11 +1,11 @@
-import CommuTradeComponent from "../../components/commu/CommuTrade";
+import CommuTradeItem from "../../components/commu/CommuTradeItem";
 
-const CommuFree = () => {
+const CommuTrade = () => {
   return (
     <>
-      <CommuTradeComponent />
+      <CommuTradeItem />
     </>
   );
 };
 
-export default CommuFree;
+export default CommuTrade;

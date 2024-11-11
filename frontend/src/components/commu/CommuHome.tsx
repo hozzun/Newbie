@@ -1,11 +1,18 @@
 export interface CommuHomeProps {
   selectedTab: "free" | "trade";
   onTabClick: (tab: "free" | "trade") => void;
+  selectedSearch: "title" | "writer" | "tag";
+  onSearchClick: (search: "title" | "writer" | "tag") => void;
 }
 
-const CommuHome = ({ selectedTab, onTabClick }: CommuHomeProps) => {
+const CommuHomeComponent = ({
+  selectedTab,
+  onTabClick,
+  selectedSearch,
+  onSearchClick,
+}: CommuHomeProps) => {
   return (
-    <>
+    <div className="mb-2">
       <div className="flex gap-4 font-kbogothicbold text-2xl mb-4">
         <button
           onClick={() => onTabClick("free")}
@@ -21,25 +28,40 @@ const CommuHome = ({ selectedTab, onTabClick }: CommuHomeProps) => {
         </button>
       </div>
       <div className="flex gap-1 mb-2">
-        <button className="inline-block px-3 py-1 text-sm font-kbogothiclight border border-green-900 bg-green-900 rounded-lg text-white">
+        <button
+          onClick={() => onSearchClick("title")}
+          className={`inline-block px-2 py-1 text-sm font-kbogothiclight border border-green-900 rounded-lg ${
+            selectedSearch === "title" ? "bg-green-900 text-white" : "text-green-900"
+          }`}
+        >
           제목
         </button>
-        <button className="inline-block px-3 py-1 text-sm font-kbogothiclight border border-green-900 rounded-lg text-green-900">
+        <button
+          onClick={() => onSearchClick("writer")}
+          className={`inline-block px-2 py-1 text-sm font-kbogothiclight border border-green-900 rounded-lg ${
+            selectedSearch === "writer" ? "bg-green-900 text-white" : "text-green-900"
+          }`}
+        >
           작성자
         </button>
-        <button className="inline-block px-3 py-1 text-sm font-kbogothiclight border border-green-900 rounded-lg text-green-900">
+        <button
+          onClick={() => onSearchClick("tag")}
+          className={`inline-block px-2 py-1 text-sm font-kbogothiclight border border-green-900 rounded-lg ${
+            selectedSearch === "tag" ? "bg-green-900 text-white" : "text-green-900"
+          }`}
+        >
           태그
         </button>
       </div>
-      <div className="max-w-md mx-auto">
+      <div className="mx-auto">
         <input
           type="text"
-          placeholder="Enter text here"
-          className="w-full px-4 py-4 border border-gray-200 rounded-lg focus:outline-none focus:border-green-900"
+          placeholder="검색어를 입력해 주세요"
+          className="w-full px-4 py-4 border font-kbogothiclight border-gray-200 rounded-lg focus:outline-none focus:border-green-900"
         />
       </div>
-    </>
+    </div>
   );
 };
 
-export default CommuHome;
+export default CommuHomeComponent;

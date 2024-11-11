@@ -1,9 +1,9 @@
-import CommuFreeComponent from "../../components/commu/CommuFree";
+import CommuFreeItem from "../../components/commu/CommuFreeItem";
 
 const CommuFree = () => {
   return (
     <>
-      <CommuFreeComponent />
+      <CommuFreeItem />
     </>
   );
 };
