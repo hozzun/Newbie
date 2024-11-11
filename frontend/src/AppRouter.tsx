@@ -25,6 +25,7 @@ import PlayerList from "./pages/player/PlayerList";
 import PhotoCard from "./pages/mypage/PhotoCard";
 import PhotoCardDetail from "./pages/mypage/PhotoCardDetail";
 import BaseballDict from "./pages/baseballdict/BaseballDict";
+import CommuHome from "./pages/commu/CommuHome";
 
 // 로그인 하지 않은 사용자는 로그인으로
 function ProtectedRoute({ children }: { children: JSX.Element }) {
@@ -216,6 +217,14 @@ const AppRouter = () => {
           element={
             <ProtectedRoute>
               <CameraCapture />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/commuhome"
+          element={
+            <ProtectedRoute>
+              <CommuHome />
             </ProtectedRoute>
           }
         />
