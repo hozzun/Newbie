@@ -31,7 +31,7 @@ def crawl_game_record():
 
         current_date_str = driver.find_element(By.ID, "nowDate").get_attribute("value")
         current_date = datetime.strptime(current_date_str, "%Y%m%d")
-        end_date = current_date - timedelta(days=100)
+        end_date = current_date - timedelta(days=1)
 
         while current_date >= end_date:
             games = driver.find_elements(By.CSS_SELECTOR, ".game-cont")
