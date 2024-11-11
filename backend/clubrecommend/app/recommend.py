@@ -20,7 +20,7 @@ region_data = {
     "대구": ["samsung"],
     "인천": ["ssg"],
     "대전": ["hanwha"],
-    "경기": ["kt", "lg"],
+    "경기": ["kt", "lg", "doosan", "kiwoom"],
     "충청": ["hanwha"],
     "세종": ["hanwha"],
     "전라": ["kia"],
@@ -78,7 +78,6 @@ def mbti_team(mbti, team_count):
 
 
 def recommend_team(mbti, responses, region):
-    
     team_count = {}
 
     for response in responses:
@@ -91,13 +90,15 @@ def recommend_team(mbti, responses, region):
                     team_count[team] = 1
 
     if region:
-        return region_team(mbti, region, region_data, team_count)
-    
+        recommended_team = region_team(mbti, region, region_data, team_count)
     else:
         max_count = max(team_count.values(), default=0)
         recommended_teams = [team for team, count in team_count.items() if count == max_count]
 
         if len(recommended_teams) >= 2:
-            return mbti_team(mbti, team_count)
+            recommended_team = mbti_team(mbti, team_count)
         else:
-            return recommended_teams
+            recommended_team = recommended_teams
+
+    # 결과를 항상 리스트로 반환하도록 변환
+    return recommended_team if isinstance(recommended_team, list) else [recommended_team]
