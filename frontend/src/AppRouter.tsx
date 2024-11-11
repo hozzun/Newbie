@@ -25,6 +25,7 @@ import PlayerList from "./pages/player/PlayerList";
 import PhotoCard from "./pages/mypage/PhotoCard";
 import PhotoCardDetail from "./pages/mypage/PhotoCardDetail";
 import BaseballDict from "./pages/baseballdict/BaseballDict";
+import WatchGame from "./pages/mypage/WatchGame";
 
 // 로그인 하지 않은 사용자는 로그인으로
 function ProtectedRoute({ children }: { children: JSX.Element }) {
@@ -208,6 +209,14 @@ const AppRouter = () => {
           element={
             <ProtectedRoute>
               <PhotoCardDetail />
+            </ProtectedRoute>
+          }
+        />
+         <Route
+          path="/mypage/watchgame"
+          element={
+            <ProtectedRoute>
+              <WatchGame />
             </ProtectedRoute>
           }
         />
