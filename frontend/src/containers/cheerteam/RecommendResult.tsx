@@ -1,4 +1,4 @@
-import axios from "axios";
+import axiosInstance from "../../util/axiosInstance";
 import { useNavigate } from "react-router-dom";
 import RecommendResultComponent from "../../components/cheerteam/RecommendResult"
 import ResultButton from "../../components/cheerteam/ResultButton"
@@ -25,11 +25,9 @@ const RecommendResult = (props: RecommendResultProps) => {
 
   const updateFavoriteTeam = async (favoriteTeamId: number) => {
 
-    const api_url = import.meta.env.VITE_CHEER_TEAM
-
     try {
-      const response = await axios.patch(api_url, {
-        favoriteTeamId: favoriteTeamId,
+      const response = await axiosInstance.patch("/api-user/users/favorite-team", {
+        teamId: favoriteTeamId,
       });
   
       console.log("응답 결과:", response.data);
@@ -41,11 +39,11 @@ const RecommendResult = (props: RecommendResultProps) => {
 
   const onCheerClick = () => {
     updateFavoriteTeam(ClubId[props.club])
-    nav(-2)
+    nav(-1)
   }
 
   const onReClick = () => {
-    nav(-1)
+    nav('/cheerteam')
   }
 
   return (

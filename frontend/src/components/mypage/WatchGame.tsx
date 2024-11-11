@@ -14,6 +14,7 @@ const WatchGame = () => {
 
   const goGameResult = () => {
     console.log('경기 결과 상세 조회 페이지로 이동')
+    nav('/mypage/watchgame')
   }
 
   return (

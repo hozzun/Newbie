@@ -21,7 +21,7 @@ const MyPage = () => {
   }
 
   const goRecommend = () => {
-    nav('/clubrecommend')
+    nav('/cheerteam')
   }
 
   const goPhotoCard = () => {

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import axiosInstance from "../../util/axiosInstance";
 import ClubRecommendComponent from "../../components/cheerteam/ClubRecommend";
 import InputMbtiComponent from "../../components/cheerteam/InputMbti";
 import questions from "../../util/ClubRecommendQuestion";
@@ -17,7 +18,6 @@ const ClubRecommend = () => {
 
   // 추천 알고리즘 연결
   const ClubRecommendAPI = async () => {
-    const api_url = import.meta.env.VITE_CLUB_RECOMMEND;
     const UserData = {
       "userId": 1,
       "mbti": mbti,
@@ -28,32 +28,20 @@ const ClubRecommend = () => {
     console.log("입력 데이터", UserData);
   
     try {
-      const response = await fetch(api_url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(UserData), // JSON 형태로 데이터 변환
-      });
+      const response = await axiosInstance.post("/api-mypage/recommend", UserData);
   
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-  
-      // 응답이 비어있지 않은 경우에만 JSON 파싱 시도
-      const textData = await response.text();
-      if (textData) {
-        const data = JSON.parse(textData);
-        console.log("Recommended team:", data.recommended_team);
-        setMyClub(data.recommended_team);
+      if (response.status === 200) {
+        const data = response.data;
+        setMyClub(data.recommended_team[0]);
       } else {
-        console.warn("Response is empty or not JSON.");
+        console.error(`HTTP error! status: ${response.status}`);
       }
     } catch (error) {
-      console.error("Error sending data to API:", error);
+      console.log(error)
     }
   };
   
+
 
   const handleMbtiSubmit = (writeMbti: string) => {
     setMbti(writeMbti);
