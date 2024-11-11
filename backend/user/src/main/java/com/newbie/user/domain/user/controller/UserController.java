@@ -4,6 +4,7 @@ import com.newbie.user.domain.user.dto.req.UserProfileRequestDto;
 import com.newbie.user.domain.user.dto.req.UserRequestDto;
 import com.newbie.user.domain.user.dto.res.UserResponseDto;
 import com.newbie.user.domain.user.service.UserService;
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ public class UserController {
 
     private final UserService userService;
 
+    @Hidden
     @Operation(summary = "회원 정보 저장")
     @PostMapping
     public ResponseEntity<Void> saveUserProfile(@RequestBody UserRequestDto requestDto) {

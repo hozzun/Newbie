@@ -11,6 +11,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -26,6 +27,9 @@ public class MemberServiceImpl implements MemberService{
     private final ModelMapper mapper;
     private final RestTemplate restTemplate;
 
+    @Value("${register.api}")
+    private String registerApi;
+
     @Override
     @Transactional
     public String signUp(MemberSignUpRequestDto signUpMemberDto) {
@@ -39,14 +43,13 @@ public class MemberServiceImpl implements MemberService{
                 .build()
         );
 
-        // user 서버로 memberId 전달
         UserProfileRequestDto userProfileRequest = new UserProfileRequestDto(
                 savedMember.getMemberId(),
                 signUpMemberDto.getEmail(),
                 signUpMemberDto.getNickname(),
                 signUpMemberDto.getAddress()
         );
-        restTemplate.postForObject("http://localhost:8081/api/v1/users", userProfileRequest, Void.class);
+        restTemplate.postForObject(registerApi, userProfileRequest, Void.class);
 
         return jwtUtil.createAccessToken(mapper.map(savedMember, MemberDto.class));
     }

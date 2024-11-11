@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Entity
 @Table(name = "`user`")
@@ -41,6 +43,9 @@ public class User {
     @ColumnDefault("false")
     private Boolean isResigned = false;
 
+    @Column(name = "create_time", columnDefinition = "TIMESTAMP")
+    private LocalDateTime resignTime;
+
     @Builder
     public User(Long userId, String email, String nickname, String address, String profileImage, Integer favoriteTeamId, Boolean isResigned) {
         this.userId = userId;
@@ -70,5 +75,10 @@ public class User {
 
     public void resign() {
         this.isResigned = true;
+        onResign();
+    }
+
+    protected void onResign() {
+        this.resignTime = LocalDateTime.now();
     }
 }
