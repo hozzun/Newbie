@@ -1,5 +1,11 @@
 import { useEffect, useState } from "react";
 import GameResultComponent from "../../components/home/GameResult";
+import { GetGameResultRequest, getGameResult } from "../../api/baseballApi";
+import { useParams } from "react-router-dom";
+import CustomError from "../../util/CustomError";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
+import { getClubIdByNum } from "../../util/ClubId";
 
 export enum SCORE_INITIAL {
   run = "R",
@@ -21,14 +27,14 @@ export enum GAME_RESULT_DETAILS {
   umpires = "심판",
 }
 
-export interface TeamScoreDetail {
+export interface ClubScoreDetail {
   id: string;
-  scores: Array<number>;
+  scores: Array<string>;
   run: number;
   hit: number;
   error: number;
   baseOnBalls: number;
-  [key: string]: number | string | number[];
+  [key: string]: number | string | Array<string>;
 }
 
 export interface GameResultDetailsData {
@@ -46,70 +52,60 @@ export interface GameResultDetailsData {
 export interface GameResultData {
   id: number;
   inningCount: number;
-  teamScoreDetails: Array<TeamScoreDetail>;
+  clubScoreDetails: Array<ClubScoreDetail>;
   gameResultDetails: GameResultDetailsData;
 }
 
-const game = {
-  gameInfo: {
-    day: "2024-11-03",
-    time: "17:00",
-    place: "광주스타디움",
-    clubs: [
-      {
-        id: "samsung",
-      },
-      {
-        id: "kia",
-      },
-    ],
-  },
-  gameSituation: {
-    isPlaying: false,
-    scores: {
-      samsung: 2,
-      kia: 1,
-    },
-  },
+const translateGameResultDetail = (gameResultDetail: Array<string>): string => {
+  if (gameResultDetail.length === 0) {
+    return "-";
+  }
+
+  return gameResultDetail.join(" ");
 };
 
 const GameResult = () => {
+  const game = useSelector((state: RootState) => state.game.game);
+
+  const { id } = useParams<{ id: string }>();
+
   const [gameResult, setGameResult] = useState<GameResultData | null>(null);
 
   const fetchGameResult = async () => {
     try {
       // TODO: GET - 경기 결과 상세정보
+      if (!id) {
+        throw new CustomError("[ERROR] 경기 ID 없음 by game result");
+      }
+
+      const getGameResultRequest: GetGameResultRequest = {
+        id: parseInt(id),
+      };
+      const response = await getGameResult(getGameResultRequest);
+      const clubScoreDetailDatas: Array<ClubScoreDetail> = response.data.teamScoreDetails.map(
+        teamScoreDetail => ({
+          id: getClubIdByNum(teamScoreDetail.teamId),
+          scores: teamScoreDetail.scores,
+          run: parseInt(teamScoreDetail.run),
+          hit: parseInt(teamScoreDetail.hit),
+          error: parseInt(teamScoreDetail.error),
+          baseOnBalls: parseInt(teamScoreDetail.baseOnBalls),
+        }),
+      );
       const gameResultData: GameResultData = {
-        id: 1234, // 경기 ID
-        inningCount: 9, // 이닝 횟수
-        teamScoreDetails: [
-          {
-            id: "kt", // 구단 ID
-            scores: [1, 2, 3, 4, 5, 6, 7, 8, 9],
-            run: 1, // 득점
-            hit: 2, // 안타
-            error: 3, // 실책
-            baseOnBalls: 4, // 볼넷
-          },
-          {
-            id: "samsung", // 구단 ID
-            scores: [1, 2, 3, 4, 5, 6, 7, 8, 9],
-            run: 5, // 득점
-            hit: 6, // 안타
-            error: 7, // 실책
-            baseOnBalls: 8, // 볼넷
-          },
-        ],
+        id: response.data.id,
+        inningCount: response.data.inningCount,
+        clubScoreDetails: clubScoreDetailDatas,
         gameResultDetails: {
-          winningHit: "박병호(4회 1사 1, 3루서 우익수 희생플라이)",
-          homeRuns: "전병우3호(7회2점 한재승) 이재현14호(8회2점 박주현)",
-          doubles: "천재환(2회) 김형준(6회)",
-          errors: "김태현(6회)",
-          stolenBases: "도태훈(2회)",
-          caughtStealing: "김지찬(1회)",
-          doublePlays: "김지찬(1회)",
-          wildPitches: "김지찬(1회)",
-          umpires: "김지찬(1회)",
+          winningHit: translateGameResultDetail(response.data.gameResultDetails.winningHit),
+          homeRuns: translateGameResultDetail(response.data.gameResultDetails.homeRuns),
+          doubles: translateGameResultDetail(response.data.gameResultDetails.doubles),
+          errors: translateGameResultDetail(response.data.gameResultDetails.errors),
+          stolenBases: translateGameResultDetail(response.data.gameResultDetails.stolenBases),
+          caughtStealing: translateGameResultDetail(response.data.gameResultDetails.caughtStealing),
+          doublePlays: translateGameResultDetail(response.data.gameResultDetails.doublePlays),
+          wildPitches: translateGameResultDetail(response.data.gameResultDetails.wildPitches),
+          umpires: translateGameResultDetail(response.data.gameResultDetails.umpires),
         },
       };
 

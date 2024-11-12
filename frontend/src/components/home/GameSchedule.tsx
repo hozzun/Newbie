@@ -1,9 +1,9 @@
 import AngleLeft from "../../assets/icons/angle-left.svg?react";
 import AngleRight from "../../assets/icons/angle-right.svg?react";
 import Game from "../../containers/home/Game";
+import { GameProps } from "../../containers/home/Home";
 import CircleButton from "../common/CircleButton";
 import { CIRCLE_BUTTON_VARIANTS } from "../common/variants";
-import { GameProps } from "./Game";
 
 interface GameScheduleProps {
   day: string;
