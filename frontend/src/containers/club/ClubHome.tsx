@@ -4,6 +4,7 @@ import ClubHomeComponent from "../../components/club/ClubHome";
 import { getClubIdByNum } from "../../util/ClubId";
 import axios from "axios";
 import { ClubOverviewProps } from "../../components/club/ClubOverview";
+import { registerCheerClub } from "../../api/clubApi";
 
 export interface ClubOverviewData {
   id: string;
@@ -54,9 +55,23 @@ const ClubHome = () => {
     fetchClubOverview();
   }, []);
 
-  const handleRegisterCheerClub = () => {
-    // TODO: PATCH - 해당 구단 응원 구단으로 등록
-    console.log("해당 구단 응원 구단으로 등록");
+  const handleRegisterCheerClub = async () => {
+    // TODO: GET - 사용자 응원 구단 ID
+    // TODO: 응원 구단 등록 완료 시 stackbar 표시하기
+    try {
+      const response = await registerCheerClub({ teamId: 1 });
+
+      if (response.status === 200) {
+        alert("응원 구단 등록 성공");
+      }
+    } catch (e) {
+      if (axios.isAxiosError(e) && e.response?.status === 404) {
+        console.log("[ERROR] 응원 구단 등록 실패 by club home");
+        setClubOverview(null);
+      } else {
+        console.error(e);
+      }
+    }
   };
 
   const clubOverviewProps: ClubOverviewProps = {
