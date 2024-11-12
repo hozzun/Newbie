@@ -30,6 +30,7 @@ type TeamName =
   | "ssg";
 
 const WatchGame = (props: WatchGameProps) => {
+  const [id, setId] = useState<number>(0)
   const [date, setDate] = useState<string>('')
   const [text, setText] = useState<string>('')
   const [img, setImg] = useState<string>('')
@@ -40,6 +41,12 @@ const WatchGame = (props: WatchGameProps) => {
   const [awayId, setAwayId] = useState<number>(0)
   const [homeScore, setHomeScore] = useState<number>(0)
   const [awayScore, setAwayScore] = useState<number>(0)
+
+  const [isModified, setIsModified] = useState<boolean>(false);
+
+  const handleModifyChange = (modified: boolean) => {
+    setIsModified(modified);
+  };
 
   const nav = useNavigate()
 
@@ -55,6 +62,8 @@ const WatchGame = (props: WatchGameProps) => {
     try {
       const response = await axiosInstance.get("/api-baseball/games", { params }
       );
+      console.log(response.data)
+      setId(response.data[0].id)
       setTime(response.data[0].time)
       setStadium(response.data[0].stadium)
       setState(response.data[0].gameResult)
@@ -123,10 +132,10 @@ const WatchGame = (props: WatchGameProps) => {
   return (
     <>
       <LabelImage date={date} imageUrl={img} />
-      <MemoInput memo={text} />
+      <MemoInput memo={text} onModifyChange={handleModifyChange} />
       <GameLabel time={time} loc={stadium} state={state} />
       <GameResult team1={teamEnglish(homeId)} team2={teamEnglish(awayId)} score1={homeScore} score2={awayScore} />
-      <WatchButton onClick={deleteGame} />
+      <WatchButton onClick={deleteGame} state={isModified} gameId={id} />
     </>
   );
 };

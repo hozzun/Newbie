@@ -23,7 +23,7 @@ const WatchGame = () => {
         <Storage className="w-6 h-6 ml-5 text-gray-200" />
         <p className="font-kbogothicbold text-gray-600 ml-3">나의 직관 경기</p>
       </div>
-      <div className="grid grid-cols-2 justify-center items-center gap-7 mr-10"> {/* Center grid items */}
+      <div className="grid grid-cols-2 justify-center items-center gap-7 mr-10">
         {/* 직관 경기 수만큼 */}
         <WatchCard img={Ticket} onClick={goGameResult} />
         <div className="w-full h-44 rounded-2xl bg-gray-200 mt-7 flex justify-center items-center ml-5">
