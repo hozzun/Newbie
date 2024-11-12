@@ -19,6 +19,10 @@ const MemoInput = (props: MemoInputProps) => {
     }
   };
 
+  const handleBlur = () => {
+    props.onWriteChange(write);
+  };
+
 
   return (
     <>
@@ -29,6 +33,7 @@ const MemoInput = (props: MemoInputProps) => {
             value={write}
             placeholder="메모를 입력해주세요"
             onChange={handleChange}
+            onBlur={handleBlur}
           />
           <span
             className={`absolute bottom-3 right-3 text-sm ${

@@ -34,6 +34,7 @@ const WatchButton = (props: WatchButtonProps) => {
     try {
       const response = await axiosInstance.put("/api-mypage/ticket/text", Text);
       console.log(response);
+      console.log(props.memo)
     } catch (error) {
       console.error("Error fetching cheer song:", error);
     }
@@ -42,7 +43,7 @@ const WatchButton = (props: WatchButtonProps) => {
   const yesNav = () => {
     putText()
     setShowDialog(false);
-    nav(`/game/result/${props.gameId}`);
+    // nav(`/game/result/${props.gameId}`);
   };
 
   const noNav = () => {
