@@ -19,5 +19,8 @@ public interface UsedBoardRepository extends JpaRepository<UsedBoard, Long> {
             "OR MATCH(t.name) AGAINST(:keyword IN NATURAL LANGUAGE MODE))",
             nativeQuery = true)
     List<UsedBoard> searchByKeyword(@Param("keyword") String keyword);
+
+    @Query("SELECT u FROM UsedBoard u WHERE u.isDeleted = 'N' ORDER BY u.createdAt DESC")
+    List<UsedBoard> findAllByOrderByCreatedAtDesc();
 }
 
