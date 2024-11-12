@@ -34,6 +34,8 @@ const PlayerList = () => {
         throw new CustomError("[ERROR] 구단 ID 없음 by club home");
       }
 
+      console.log(`selectedSortOption: ${selectedSortOption}`);
+
       const getPlayerListRequest: GetPlayersRequest = {
         teamId: ClubId[id],
         page: pgNo.current,
@@ -59,6 +61,7 @@ const PlayerList = () => {
       if (response.data.content.length < 30) {
         setHasMore(false);
       } else {
+        setHasMore(true);
         pgNo.current += 1;
       }
     } catch (e) {
@@ -96,8 +99,18 @@ const PlayerList = () => {
     };
   }, [observeRef.current, hasMore]);
 
+  useEffect(() => {
+    if (selectedSortOption !== "") {
+      fetchPlayerList();
+    }
+  }, [selectedSortOption]);
+
   const handleSelectSortOption = (value: string) => {
     setSelectedSortOption(value);
+
+    setHasMore(false);
+    setPlayers(null);
+    pgNo.current = 0;
   };
 
   return (
