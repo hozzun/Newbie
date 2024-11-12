@@ -1,4 +1,4 @@
-package com.newbie.board.usedBoard.entity;
+package com.newbie.board.generalBoard.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -10,12 +10,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "tag")
-@AllArgsConstructor
-@NoArgsConstructor
+@Table(name = "general_tag")
 @Getter
 @Setter
-public class Tag {
+@AllArgsConstructor
+@NoArgsConstructor
+public class GeneralBoardTag {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,11 +24,10 @@ public class Tag {
     @Column(unique = true)
     private String name;
 
-    @ManyToMany(mappedBy = "tags", fetch = FetchType.EAGER)
-    private List<UsedBoard> usedBoards = new ArrayList<>();
+    @ManyToMany(mappedBy = "generalBoardTags", fetch = FetchType.EAGER)
+    private List<GeneralBoard> generalBoards = new ArrayList<>();
 
-
-    public Tag(String name) {
+    public GeneralBoardTag(String name) {
         this.name = name;
     }
 }
