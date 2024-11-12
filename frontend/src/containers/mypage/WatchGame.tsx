@@ -1,16 +1,14 @@
 import axiosInstance from "../../util/axiosInstance";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
+import { useParams } from 'react-router-dom';
 import LabelImage from "../../components/mypage/LabelImage";
 import MemoInput from "../../components/mypage/MemoInput";
 import WatchButton from "../../components/mypage/WatchButton";
 import GameResult from "../../components/mypage/GameResult";
 import GameLabel from "../../components/mypage/GameLabel";
 import ClubId from "../../util/ClubId";
-
-interface WatchGameProps {
-  ticketId?: string;
-}
 
 interface GameData {
   id: number;
@@ -41,7 +39,10 @@ type TeamName =
   | "samsung"
   | "ssg";
 
-const WatchGame = (props: WatchGameProps) => {
+const WatchGame = () => {
+  const { id } = useParams();
+  const location = useLocation();
+  const { year, month, day, teamId } = location.state || {};
   const [gameData, setGameData] = useState<GameData | null>(null);
   const [ticketInfo, setTicketInfo] = useState<TicketInfoData | null>(null);
   const [isModified, setIsModified] = useState<boolean>(false);
@@ -59,10 +60,10 @@ const WatchGame = (props: WatchGameProps) => {
 
   const getGameData = async () => {
     const params = {
-      year: "2022",
-      month: "06",
-      day: "28",
-      teamId: 1,
+      year: year,
+      month: month,
+      day: day,
+      teamId: teamId,
     };
 
     try {
@@ -77,7 +78,7 @@ const WatchGame = (props: WatchGameProps) => {
   };
 
   const getInfoAPI = async () => {
-    const params = { id: props.ticketId };
+    const params = { id: id };
     try {
       const response = await axiosInstance.get<TicketInfoData>("/api-mypage/ticket", { params });
       setTicketInfo(response.data);
@@ -90,7 +91,7 @@ const WatchGame = (props: WatchGameProps) => {
   };
 
   const deleteGameAPI = async () => {
-    const params = { id: props.ticketId };
+    const params = { id: id };
     try {
       const response = await axiosInstance.delete("/api-mypage/ticket/delete", { params });
       console.log(response.data);
@@ -139,7 +140,7 @@ const WatchGame = (props: WatchGameProps) => {
             onClick={deleteGame}
             state={isModified}
             gameId={gameData.id}
-            ticketId={props.ticketId}
+            ticketId={id}
             memo={write}
           />
         </>

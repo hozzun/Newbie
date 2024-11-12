@@ -217,7 +217,7 @@ const AppRouter = () => {
           }
         />
         <Route
-          path="/mypage/watchgame"
+          path="/mypage/watchgame/:id"
           element={
             <ProtectedRoute>
               <WatchGame />
