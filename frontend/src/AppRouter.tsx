@@ -27,6 +27,7 @@ import PhotoCardDetail from "./pages/mypage/PhotoCardDetail";
 import BaseballDict from "./pages/baseballdict/BaseballDict";
 import WatchGame from "./pages/mypage/WatchGame";
 import CommuHome from "./pages/commu/CommuHome";
+import ScrollToTop from "./components/common/ScrollToTop";
 
 // 로그인 하지 않은 사용자는 로그인으로
 function ProtectedRoute({ children }: { children: JSX.Element }) {
@@ -54,6 +55,7 @@ function AuthRoute({ children }: { children: JSX.Element }) {
 const AppRouter = () => {
   return (
     <Router>
+      <ScrollToTop />
       <Routes>
         {/* Intro 페이지 라우트 추가 */}
         <Route path="/intro" element={<Intro />} />
