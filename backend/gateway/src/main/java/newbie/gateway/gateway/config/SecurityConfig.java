@@ -15,7 +15,7 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())  // CSRF 비활성화
                 .authorizeExchange(exchange -> exchange
-                        .pathMatchers("/", "/api-auth/**").permitAll() // 인증 없이 접근 가능 경로
+                        .pathMatchers("/", "/api/v1/login/**", "/api/v1/members/**").permitAll() // 인증 없이 접근 가능 경로
                         .anyExchange().authenticated()  // 그 외 경로는 인증 필요
                 );
 
