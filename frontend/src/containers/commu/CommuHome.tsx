@@ -2,6 +2,7 @@ import { useState } from "react";
 import CommuHomeComponent from "../../components/commu/CommuHome";
 import CommuFree from "./CommuFree";
 import CommuTrade from "./CommuTrade";
+import CommuFAB from "./CommuFAB";
 
 const CommuHome = () => {
   const [selectedTab, setSelectedTab] = useState<"free" | "trade">("free");
@@ -24,6 +25,7 @@ const CommuHome = () => {
       />
       {selectedTab === "free" && <CommuFree />}
       {selectedTab === "trade" && <CommuTrade />}
+      <CommuFAB selectedTab={selectedTab} />
     </>
   );
 };
