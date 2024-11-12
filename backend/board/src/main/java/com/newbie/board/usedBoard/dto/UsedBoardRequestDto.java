@@ -1,4 +1,4 @@
-package com.newbie.board.domain.usedBoard.dto;
+package com.newbie.board.usedBoard.dto;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

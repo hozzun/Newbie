@@ -1,9 +1,9 @@
-package com.newbie.board.domain.usedBoard.controller;
+package com.newbie.board.usedBoard.controller;
 
 
-import com.newbie.board.domain.usedBoard.dto.UsedBoardRequestDto;
-import com.newbie.board.domain.usedBoard.entity.UsedBoard;
-import com.newbie.board.domain.usedBoard.service.UsedBoardService;
+import com.newbie.board.usedBoard.dto.UsedBoardRequestDto;
+import com.newbie.board.usedBoard.entity.UsedBoard;
+import com.newbie.board.usedBoard.service.UsedBoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

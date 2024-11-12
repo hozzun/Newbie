@@ -1,12 +1,12 @@
-package com.newbie.board.domain.usedBoard.service;
+package com.newbie.board.usedBoard.service;
 
-import com.newbie.board.domain.usedBoard.dto.UsedBoardRequestDto;
-import com.newbie.board.domain.usedBoard.entity.Tag;
-import com.newbie.board.domain.usedBoard.entity.UsedBoard;
-import com.newbie.board.domain.usedBoard.entity.User;
-import com.newbie.board.domain.usedBoard.repository.TagRepository;
-import com.newbie.board.domain.usedBoard.repository.UsedBoardRepository;
-import com.newbie.board.domain.usedBoard.repository.UserRepository;
+import com.newbie.board.usedBoard.dto.UsedBoardRequestDto;
+import com.newbie.board.usedBoard.entity.Tag;
+import com.newbie.board.usedBoard.entity.UsedBoard;
+import com.newbie.board.usedBoard.entity.User;
+import com.newbie.board.usedBoard.repository.TagRepository;
+import com.newbie.board.usedBoard.repository.UsedBoardRepository;
+import com.newbie.board.usedBoard.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

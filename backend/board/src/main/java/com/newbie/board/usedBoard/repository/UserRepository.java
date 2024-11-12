@@ -1,6 +1,6 @@
-package com.newbie.board.domain.usedBoard.repository;
+package com.newbie.board.usedBoard.repository;
 
-import com.newbie.board.domain.usedBoard.entity.User;
+import com.newbie.board.usedBoard.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserRepository extends JpaRepository<User, Long> {

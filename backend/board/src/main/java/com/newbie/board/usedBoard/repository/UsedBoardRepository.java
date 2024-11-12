@@ -1,6 +1,6 @@
-package com.newbie.board.domain.usedBoard.repository;
+package com.newbie.board.usedBoard.repository;
 
-import com.newbie.board.domain.usedBoard.entity.UsedBoard;
+import com.newbie.board.usedBoard.entity.UsedBoard;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
