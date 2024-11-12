@@ -5,7 +5,7 @@ import { PlayerItemProps } from "../../containers/player/PlayerList";
 const PlayerItem = (props: PlayerItemProps) => {
   return (
     <div className="flex flex-col justify-center">
-      <div className="relative aspect-[2/2.4] hover:cursor-pointer">
+      <div className="relative aspect-[2/2.4] hover:cursor-pointer" onClick={props.goDetail}>
         <img src={Karina} alt="인물 사진" className="w-full h-full object-cover rounded-lg" />
         <p className="absolute left-1/2 transform -translate-x-1/2 bottom-2 w-[92%] text-center bg-black bg-opacity-75 text-white text-sm p-1 rounded-lg font-kbogothicmedium">
           {props.name}

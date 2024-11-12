@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import PlayerListComponent from "../../components/player/PlayerList";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import ClubId from "../../util/ClubId";
 import CustomError from "../../util/CustomError";
 import { GetPlayersRequest, getPlayers } from "../../api/playerApi";
@@ -11,6 +11,7 @@ export interface PlayerItemProps {
   imgUrl: string;
   name: string;
   likeCount: number;
+  goDetail: () => void;
 }
 
 const sortItem: Record<string, string> = {
@@ -19,6 +20,8 @@ const sortItem: Record<string, string> = {
 };
 
 const PlayerList = () => {
+  const nav = useNavigate();
+
   const { id } = useParams<{ id: string }>();
 
   const [selectedPositionOption, setSelectedPositionOption] = useState<string>("투수");
@@ -52,6 +55,7 @@ const PlayerList = () => {
           imgUrl: "선수 사진 URL", // TODO: GET - 선수 사진 URL
           name: d.name,
           likeCount: d.likeCount,
+          goDetail: () => nav(`/club/${id}/player/${d.id}`),
         };
       });
 
