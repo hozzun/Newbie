@@ -34,11 +34,10 @@ public class UsedBoardController {
      */
     @Operation(summary = "유저 게시글 생성", description = "유저가 게시글을 생성합니다.")
     @PostMapping("/create")
-    public void createUsedBoard(
+    public ResponseEntity<UsedBoardResponseDto> createUsedBoard(
             @ModelAttribute @Parameter(description = "userId, title, content, tagList, price, region") UsedBoardRequestDto usedBoardDto,
             @RequestPart("imageFile") MultipartFile imageFile) throws IOException {
-        usedBoardDto.setImageFile(imageFile);
-        usedBoardService.createUsedBoard(usedBoardDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(usedBoardService.createUsedBoard(usedBoardDto, imageFile));
     }
 
     /**
@@ -75,7 +74,7 @@ public class UsedBoardController {
     /**
      * 게시글을 업데이트합니다.
      */
-    @Operation(summary = "유저 게시글 업데이트", description = "유저가 게시글을 업데이트합니다..")
+    @Operation(summary = "유저 게시글 업데이트", description = "유저가 게시글을 업데이트합니다.")
     @PutMapping("/{id}")
     public void updateUsedBoard(
             @PathVariable @Parameter(description = "boardId") Long id,

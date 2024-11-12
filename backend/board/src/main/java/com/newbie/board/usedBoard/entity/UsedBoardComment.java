@@ -2,10 +2,7 @@ package com.newbie.board.usedBoard.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -16,7 +13,8 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Data
 @Table(name = "comment")
-public class Comment {
+@Builder(toBuilder = true)
+public class UsedBoardComment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,9 +24,9 @@ public class Comment {
     @JoinColumn(name = "used_board_id", nullable = false)
     private UsedBoard usedBoard;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    private Long userId;
+
+    private String userName;
 
     @NotNull
     private String content;
@@ -37,10 +35,11 @@ public class Comment {
 
     @ManyToOne
     @JoinColumn(name = "parent_id")
-    private Comment parent;
+    private UsedBoardComment parent;
 
-    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
-    private List<Comment> replies = new ArrayList<>();
+    @Builder.Default
+    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<UsedBoardComment> replies = new ArrayList<>();
 
     private String isDeleted = "N";
 }

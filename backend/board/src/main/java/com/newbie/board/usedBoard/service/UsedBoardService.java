@@ -3,19 +3,17 @@ package com.newbie.board.usedBoard.service;
 import com.newbie.board.usedBoard.dto.UsedBoardRequestDto;
 import com.newbie.board.usedBoard.dto.UsedBoardResponseDto;
 import com.newbie.board.usedBoard.dto.UsedBoardUpdateRequestDto;
-import com.newbie.board.usedBoard.entity.Tag;
+import com.newbie.board.usedBoard.entity.UsedBoardTag;
 import com.newbie.board.usedBoard.entity.UsedBoard;
-import com.newbie.board.usedBoard.entity.User;
-import com.newbie.board.usedBoard.repository.TagRepository;
+import com.newbie.board.usedBoard.repository.UsedBoardTagRepository;
 import com.newbie.board.usedBoard.repository.UsedBoardRepository;
-import com.newbie.board.usedBoard.repository.UserRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
-import javax.swing.text.html.Option;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -27,8 +25,7 @@ import java.util.stream.Collectors;
 public class UsedBoardService {
 
     private final UsedBoardRepository usedBoardRepository;
-    private final TagRepository tagRepository;
-    private final UserRepository userRepository;
+    private final UsedBoardTagRepository usedBoardTagRepository;
     private final S3Service s3Service;
 
     @PersistenceContext
@@ -52,7 +49,7 @@ public class UsedBoardService {
      */
     public Optional<UsedBoardResponseDto> getUsedBoardById(Long id) {
         return usedBoardRepository.findById(id)
-                .map(UsedBoardResponseDto::new); // 엔티티를 DTO로 변환
+                .map(UsedBoardResponseDto::new);
     }
 
     /**
@@ -63,7 +60,7 @@ public class UsedBoardService {
     public List<UsedBoardResponseDto> searchBoardList(String keyword) {
         return usedBoardRepository.searchByKeyword(keyword == null ? "" : keyword)
                 .stream()
-                .map(UsedBoardResponseDto::new) // 엔티티를 DTO로 변환
+                .map(UsedBoardResponseDto::new)
                 .collect(Collectors.toList());
     }
 
@@ -73,28 +70,22 @@ public class UsedBoardService {
      * @param requestDto
      */
     @Transactional
-    public void createUsedBoard(UsedBoardRequestDto requestDto) throws IOException {
-        // 사용자 정보 조회
-        User user = userRepository.findByUserId(requestDto.getUserId());
+    public UsedBoardResponseDto createUsedBoard(UsedBoardRequestDto requestDto, MultipartFile imageFile) throws IOException {
 
-        // 태그 목록 조회 및 생성
-        List<Tag> tags = requestDto.getTags().stream()
+        List<UsedBoardTag> usedBoardTags = requestDto.getTags().stream()
                 .map(tagName -> {
-                    Tag tag = tagRepository.findByName(tagName)
-                            .orElseGet(() -> tagRepository.save(new Tag(tagName)));
+                    UsedBoardTag usedBoardTag = usedBoardTagRepository.findByName(tagName)
+                            .orElseGet(() -> usedBoardTagRepository.save(new UsedBoardTag(tagName)));
 
-                    // 태그가 영속성 컨텍스트에 없으면 병합
-                    if (!entityManager.contains(tag)) {
-                        tag = entityManager.merge(tag);
+                    if (!entityManager.contains(usedBoardTag)) {
+                        usedBoardTag = entityManager.merge(usedBoardTag);
                     }
-                    return tag;
+                    return usedBoardTag;
                 })
                 .collect(Collectors.toList());
 
-        // 이미지 파일을 S3에 업로드하고 URL 반환
-        String imageUrl = s3Service.uploadFile(requestDto.getImageFile());
+        String imageUrl = s3Service.uploadFile(imageFile);
 
-        // UsedBoard 엔티티 생성
         UsedBoard usedBoard = UsedBoard.builder()
                 .title(requestDto.getTitle())
                 .content(requestDto.getContent())
@@ -102,15 +93,16 @@ public class UsedBoardService {
                 .price(requestDto.getPrice())
                 .createdAt(LocalDateTime.now())
                 .region(requestDto.getRegion())
-                .user(user)
+                .userId(requestDto.getUserId())
+                .userName(requestDto.getUserName())
                 .isDeleted("N")
                 .build();
 
-        // 태그를 UsedBoard에 추가하여 중간 테이블 매핑
-        tags.forEach(usedBoard::addTag);
+        usedBoardTags.forEach(usedBoard::addTag);
 
-        // UsedBoard 저장
         usedBoardRepository.save(usedBoard);
+
+        return new UsedBoardResponseDto(usedBoard);
     }
 
 
@@ -126,7 +118,6 @@ public class UsedBoardService {
         if (board.isPresent()) {
             UsedBoard existingBoard = board.get();
 
-            // Builder 패턴을 통해 null이 아닌 필드만 업데이트
             UsedBoard updatedBoard = existingBoard.toBuilder()
                     .title(requestDto.getTitle() != null ? requestDto.getTitle() : existingBoard.getTitle())
                     .content(requestDto.getContent() != null ? requestDto.getContent() : existingBoard.getContent())
