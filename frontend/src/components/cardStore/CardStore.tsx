@@ -3,7 +3,8 @@ import SortSelectBox from "../common/SortSelectBox";
 import PhotoCard from "./PhotoCard";
 import TabBar from "./TabBar";
 
-const options: Array<string> = ["가나다순", "최신순", "판매순", "가격낮은순", "가격높은순"];
+const tabBarOptions: Array<string> = ["투수", "내야수", "외야수", "포수"];
+const sortOptions: Array<string> = ["가나다순", "최신순", "판매순", "가격낮은순", "가격높은순"];
 
 const photoCardData = {
   id: "1",
@@ -26,10 +27,20 @@ const CardStore = () => {
           <p className="text-base font-kbogothicmedium text-gray-700">3,000</p>
         </div>
       </div>
-      <TabBar />
+      <TabBar
+        className="mt-8"
+        options={tabBarOptions}
+        selectedOption={tabBarOptions[0]}
+        handleSelectOption={(value: string) => console.log(`tab bar: ${value}`)}
+      />
       <div className="flex flex-row justify-between items-center w-full mt-3">
         <p className="text-base font-kbogothicmedium text-gray-700">총 6개</p>
-        <SortSelectBox options={options} minWidth={100} />
+        <SortSelectBox
+          options={sortOptions}
+          minWidth={100}
+          selectedSortOption=""
+          handleSelectSortOption={() => console.log("기능 구현")}
+        />
       </div>
       <div className="grid grid-cols-3 gap-4 mt-3">
         <PhotoCard photoCard={photoCardData} onClick={onClick} />

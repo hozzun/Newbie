@@ -1,31 +1,27 @@
-import { useState } from "react";
 import Button from "../common/Button";
 import { BUTTON_VARIANTS } from "../common/variants";
 
-const tabBarItems: Array<string> = ["투수", "내야수", "외야수", "포수"];
+interface TabBarProps {
+  className?: string;
+  options: Array<string>;
+  selectedOption: string;
+  handleSelectOption: (value: string) => void;
+}
 
-const TabBar = () => {
-  const [clickedIndex, setClickedIndex] = useState<number>(0);
-
-  const handleTabBar = (index: number) => {
-    setClickedIndex(index);
-    // TODO: GET - 해당 분류로 선수 카드
-    console.log(`${tabBarItems[index]} 선수 카드 조회`);
-  };
-
+const TabBar = (props: TabBarProps) => {
   return (
-    <div className="flex flex-row justify-start w-full space-x-3 mt-8">
-      {tabBarItems.map((tabBarItem, index) => (
+    <div className={`${props.className} flex flex-row justify-start w-full space-x-3`}>
+      {props.options.map((option, index) => (
         <Button
           key={index}
           variant={
-            clickedIndex === index
+            props.selectedOption === option
               ? BUTTON_VARIANTS.clickedTabBar
               : BUTTON_VARIANTS.nonClickedTabBar
           }
-          onClick={() => handleTabBar(index)}
+          onClick={() => props.handleSelectOption(option)}
         >
-          {tabBarItem}
+          {option}
         </Button>
       ))}
     </div>
