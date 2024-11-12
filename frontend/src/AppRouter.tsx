@@ -27,6 +27,9 @@ import PhotoCardDetail from "./pages/mypage/PhotoCardDetail";
 import BaseballDict from "./pages/baseballdict/BaseballDict";
 import WatchGame from "./pages/mypage/WatchGame";
 import CommuHome from "./pages/commu/CommuHome";
+import MyBoard from "./pages/mypage/MyBoard";
+import MyScrap from "./pages/mypage/MyScrap";
+import MyActive from "./pages/mypage/MyActive";
 
 // 로그인 하지 않은 사용자는 로그인으로
 function ProtectedRoute({ children }: { children: JSX.Element }) {
@@ -218,6 +221,30 @@ const AppRouter = () => {
           element={
             <ProtectedRoute>
               <WatchGame />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/mypage/board"
+          element={
+            <ProtectedRoute>
+              <MyBoard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/mypage/active"
+          element={
+            <ProtectedRoute>
+              <MyActive />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/mypage/scrap"
+          element={
+            <ProtectedRoute>
+              <MyScrap />
             </ProtectedRoute>
           }
         />
