@@ -26,4 +26,14 @@ export const getClubIdByNum = (value: number): string => {
   return clubId;
 };
 
+export const getIdByNum = (value: number): string | null => {
+  const clubId = Object.entries(ClubId).find(([, v]) => v === value)?.[0];
+  if (!clubId) {
+    console.warn("[WARN] 구단 ID 변환 실패: 유효하지 않은 ID입니다.");
+    return null;
+  }
+  return clubId;
+};
+
+
 export default ClubId;
