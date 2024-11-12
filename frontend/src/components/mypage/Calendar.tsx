@@ -12,6 +12,7 @@ interface Game {
 }
 
 const Calendar = () => {
+  // TODO: 데이터 수정
   const [games, setGames] = useState<Game[]>([]);
   const year = new Date().getFullYear();
   const month = 8; // 9월로 고정(현재 경기 없음 이슈)
