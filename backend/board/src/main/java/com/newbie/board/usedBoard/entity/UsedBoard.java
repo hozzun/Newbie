@@ -1,11 +1,9 @@
 package com.newbie.board.usedBoard.entity;
 
+import com.newbie.board.usedBoard.entity.Tag;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -14,8 +12,9 @@ import java.util.List;
 @Entity
 @AllArgsConstructor
 @Table(name = "used_board")
-@Builder
+@Builder(toBuilder = true)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 public class UsedBoard {
 
     @Id
@@ -33,10 +32,28 @@ public class UsedBoard {
     private String content;
 
     private String imageUrl;
-    private int price;
+    private Integer price;
     private String region;
     private LocalDateTime createdAt;
+    @Column(name = "is_deleted")
+    private String isDeleted = "N";
 
-    @ManyToMany(mappedBy = "usedBoards")  // 중간 테이블 자동 생성
-    private List<Tag> tags = new ArrayList<>();
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
+    @Builder.Default
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+            name = "used_board_tags",
+            joinColumns = @JoinColumn(name = "used_board_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id")
+    )
+    private List<Tag> tags = new ArrayList<>(); // 기본값으로 빈 리스트 할당
+
+    public void addTag(Tag tag) {
+        if (!tags.contains(tag)) {
+            tags.add(tag);
+            tag.getUsedBoards().add(this);
+        }
+    }
 }
