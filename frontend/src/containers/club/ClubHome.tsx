@@ -9,7 +9,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import CustomError from "../../util/CustomError";
 import { PlayerListProps } from "../../components/club/PlayerList";
 import { GetPlayersRequest, getPlayers } from "../../api/playerApi";
-import { PlayerItemProps } from "../player/PlayerList";
+import { PlayerInfo, PlayerItemProps } from "../player/PlayerList";
+import { useDispatch } from "react-redux";
+import { setPlayer } from "../../redux/playerSlice";
 
 export interface ClubOverviewData {
   id: string;
@@ -30,6 +32,7 @@ export interface UpcomingGameData {
 
 const ClubHome = () => {
   const nav = useNavigate();
+  const dispatch = useDispatch();
 
   const { id } = useParams<{ id: string }>();
 
@@ -93,6 +96,11 @@ const ClubHome = () => {
     }
   };
 
+  const goDetail = (playerInfo: PlayerInfo) => {
+    dispatch(setPlayer(playerInfo));
+    nav(`/club/${id}/player/${playerInfo.id}`);
+  };
+
   const fetchPlayers = async () => {
     try {
       if (!id) {
@@ -106,12 +114,21 @@ const ClubHome = () => {
       };
       const response = await getPlayers(getPlayerListRequest);
       const playerDats: Array<PlayerItemProps> = response.data.content.slice(0, 3).map(d => {
+        const playerInfo: PlayerInfo = {
+          id: d.id,
+          backNumber: parseInt(d.backNumber),
+          name: d.name,
+          birth: d.birth,
+          physical: d.physical,
+          likeCount: d.likeCount,
+        };
+
         return {
           id: d.id,
           imgUrl: "선수 사진 URL", // TODO: GET - 선수 사진 URL
           name: d.name,
           likeCount: d.likeCount,
-          goDetail: () => nav(`/club/${id}/player/${d.id}`),
+          goDetail: () => goDetail(playerInfo),
         };
       });
 

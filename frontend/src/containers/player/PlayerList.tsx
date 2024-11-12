@@ -5,6 +5,8 @@ import ClubId from "../../util/ClubId";
 import CustomError from "../../util/CustomError";
 import { GetPlayersRequest, getPlayers } from "../../api/playerApi";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { setPlayer } from "../../redux/playerSlice";
 
 export interface PlayerItemProps {
   id: number;
@@ -14,6 +16,15 @@ export interface PlayerItemProps {
   goDetail: () => void;
 }
 
+export interface PlayerInfo {
+  id: number;
+  backNumber: number;
+  name: string;
+  birth: string;
+  physical: string;
+  likeCount: number;
+}
+
 const sortItem: Record<string, string> = {
   등번호순: "backNumber",
   좋아요순: "likeCount",
@@ -21,6 +32,7 @@ const sortItem: Record<string, string> = {
 
 const PlayerList = () => {
   const nav = useNavigate();
+  const dispatch = useDispatch();
 
   const { id } = useParams<{ id: string }>();
 
@@ -31,6 +43,11 @@ const PlayerList = () => {
   const isFirstRender = useRef<boolean>(true);
   const pgNo = useRef<number>(0);
   const observeRef = useRef(null);
+
+  const goDetail = (playerInfo: PlayerInfo) => {
+    dispatch(setPlayer(playerInfo));
+    nav(`/club/${id}/player/${playerInfo.id}`);
+  };
 
   const fetchPlayerList = async () => {
     try {
@@ -50,12 +67,21 @@ const PlayerList = () => {
       }
       const response = await getPlayers(getPlayerListRequest);
       const playerDatas: Array<PlayerItemProps> = response.data.content.map(d => {
+        const playerInfo: PlayerInfo = {
+          id: d.id,
+          backNumber: parseInt(d.backNumber),
+          name: d.name,
+          birth: d.birth,
+          physical: d.physical,
+          likeCount: d.likeCount,
+        };
+
         return {
           id: d.id,
           imgUrl: "선수 사진 URL", // TODO: GET - 선수 사진 URL
           name: d.name,
           likeCount: d.likeCount,
-          goDetail: () => nav(`/club/${id}/player/${d.id}`),
+          goDetail: () => goDetail(playerInfo),
         };
       });
 
