@@ -21,10 +21,11 @@ const sortItem: Record<string, string> = {
 const PlayerList = () => {
   const { id } = useParams<{ id: string }>();
 
-  const [selectedPositionOption, setSelectedPositionOption] = useState<string>("");
+  const [selectedPositionOption, setSelectedPositionOption] = useState<string>("투수");
   const [selectedSortOption, setSelectedSortOption] = useState<string>("");
   const [hasMore, setHasMore] = useState<boolean>(true);
   const [players, setPlayers] = useState<Array<PlayerItemProps> | null>(null);
+  const isFirstRender = useRef<boolean>(true);
   const pgNo = useRef<number>(0);
   const observeRef = useRef(null);
 
@@ -33,8 +34,6 @@ const PlayerList = () => {
       if (!id) {
         throw new CustomError("[ERROR] 구단 ID 없음 by club home");
       }
-
-      console.log(`selectedSortOption: ${selectedSortOption}`);
 
       const getPlayerListRequest: GetPlayersRequest = {
         teamId: ClubId[id],
@@ -100,10 +99,21 @@ const PlayerList = () => {
   }, [observeRef.current, hasMore]);
 
   useEffect(() => {
-    if (selectedSortOption !== "") {
-      fetchPlayerList();
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
     }
-  }, [selectedSortOption]);
+
+    fetchPlayerList();
+  }, [selectedPositionOption, selectedSortOption]);
+
+  const handleSelectPositionOption = (value: string) => {
+    setSelectedPositionOption(value);
+
+    setHasMore(false);
+    setPlayers(null);
+    pgNo.current = 0;
+  };
 
   const handleSelectSortOption = (value: string) => {
     setSelectedSortOption(value);
@@ -117,6 +127,8 @@ const PlayerList = () => {
     <PlayerListComponent
       hasMore={hasMore}
       observeRef={observeRef}
+      selectedPositionOption={selectedPositionOption}
+      handleSelectPositionOption={handleSelectPositionOption}
       selectedSortOption={selectedSortOption}
       handleSelectSortOption={handleSelectSortOption}
       players={players}
