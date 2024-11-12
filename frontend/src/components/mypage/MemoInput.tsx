@@ -3,6 +3,7 @@ import { useState } from 'react';
 interface MemoInputProps {
   memo?: string;
   onModifyChange: (modified: boolean) => void;
+  onWriteChange: (write: string) => void;
 }
 
 const MemoInput = (props: MemoInputProps) => {
