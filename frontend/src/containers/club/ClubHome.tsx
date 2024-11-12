@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { GetClubRanksRequest, getClubRanks } from "../../api/baseballApi";
 import ClubHomeComponent from "../../components/club/ClubHome";
-import { getClubIdByNum } from "../../util/ClubId";
+import ClubId, { getClubIdByNum } from "../../util/ClubId";
 import axios from "axios";
 import { ClubOverviewProps } from "../../components/club/ClubOverview";
 import { registerCheerClub } from "../../api/clubApi";
+import { useParams } from "react-router-dom";
+import CustomError from "../../util/CustomError";
 
 export interface ClubOverviewData {
   id: string;
@@ -18,15 +20,22 @@ export interface ClubOverviewData {
 }
 
 const ClubHome = () => {
+  const { id } = useParams<{ id: string }>();
+
   const today = new Date();
 
   const [clubOverview, setClubOverview] = useState<ClubOverviewData | null>(null);
+  const [isVisibleButton, setIsVisibleButton] = useState<boolean>(false);
 
   const fetchClubOverview = async () => {
     try {
+      if (!id) {
+        throw new CustomError("[ERROR] 구단 ID 없음 by club home");
+      }
+
       const getClubOverviewRequest: GetClubRanksRequest = {
         year: today.getFullYear().toString(),
-        teamId: 1, // TODO: GET - 사용자 응원 구단 ID
+        teamId: ClubId[id],
       };
       const response = await getClubRanks(getClubOverviewRequest);
       const clubOverviewData: ClubOverviewData = {
@@ -55,6 +64,15 @@ const ClubHome = () => {
     fetchClubOverview();
   }, []);
 
+  useEffect(() => {
+    if (id) {
+      // TODO: GET - 사용자 응원 구단 ID
+      setIsVisibleButton(1 === ClubId[id]);
+    } else {
+      throw new CustomError("[ERROR] 구단 ID 없음 by club home");
+    }
+  }, []);
+
   const handleRegisterCheerClub = async () => {
     // TODO: GET - 사용자 응원 구단 ID
     // TODO: 응원 구단 등록 완료 시 stackbar 표시하기
@@ -76,7 +94,7 @@ const ClubHome = () => {
 
   const clubOverviewProps: ClubOverviewProps = {
     clubOverviewData: clubOverview,
-    isVisibleButton: true,
+    isVisibleButton: isVisibleButton,
     handleRegisterCheerClub: handleRegisterCheerClub,
   };
 
