@@ -13,7 +13,7 @@ const playerSlice = createSlice({
   name: "player",
   initialState,
   reducers: {
-    setPlayer: (state, action: PayloadAction<PlayerInfo>) => {
+    setPlayer: (state, action: PayloadAction<PlayerInfo | null>) => {
       state.player = action.payload;
     },
   },
