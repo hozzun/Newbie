@@ -14,11 +14,12 @@ import java.util.List;
 @AllArgsConstructor
 public class UsedBoardRequestDto {
 
-    private int userId;
     private String title;
     private String content;
     private List<String> tags = new ArrayList<>();
     private MultipartFile imageFile;
     private Integer price;
     private String region;
+    private Long userId;
+    private String userName;
 }

@@ -20,9 +20,9 @@ public class UsedBoard {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    private Long userId;
+
+    private String userName;
 
     @NotNull
     private String title;
@@ -47,18 +47,15 @@ public class UsedBoard {
             joinColumns = @JoinColumn(name = "used_board_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id")
     )
-    private List<Tag> tags = new ArrayList<>(); // 기본값으로 빈 리스트 할당
+    private List<UsedBoardTag> usedBoardTags = new ArrayList<>();
 
-    public void addTag(Tag tag) {
-        if (!tags.contains(tag)) {
-            tags.add(tag);
-            tag.getUsedBoards().add(this);
+    public void addTag(UsedBoardTag usedBoardTag) {
+        if (!usedBoardTags.contains(usedBoardTag)) {
+            usedBoardTags.add(usedBoardTag);
+            usedBoardTag.getUsedBoards().add(this);
         }
     }
 
     @OneToMany(mappedBy = "usedBoard", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Comment> comments = new ArrayList<>();
-
-    @OneToMany(mappedBy = "usedBoard", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<BoardLike> likes = new ArrayList<>();
+    private List<UsedBoardComment> comments = new ArrayList<>();
 }
