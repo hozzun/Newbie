@@ -1,23 +1,23 @@
 import { useNavigate } from "react-router-dom"
 import Container from "../../components/common/Container"
 import SectionBox from "../../components/common/SectionBox"
-import PhotoCardContainer from "../../containers/mypage/PhotoCard"
+import MyBoardContainer from "../../containers/mypage/MyBoard"
 
-const PhotoCard = () => {
+const MyBoard = () => {
 
   const nav = useNavigate()
-  const goMyPage = () => {
+  const goMypage = () => {
     nav('/mypage')
   }
-
-  return(
+ 
+  return (
     <>
-      <SectionBox label="포토카드" onBackClick={goMyPage} />
+      <SectionBox label="나의 게시글" onBackClick={goMypage}/>
       <Container>
-        <PhotoCardContainer />
+        <MyBoardContainer />
       </Container>
     </>
   )
 }
 
-export default PhotoCard
+export default MyBoard

@@ -1,11 +1,12 @@
 import TextButton from "../common/TextButton";
 import Button from "../common/Button";
 import { BUTTON_VARIANTS } from "../common/variants";
-import Game, { GameProps } from "./Game";
+import Game from "./Game";
+import { GameProps } from "../../containers/home/Home";
 
 export interface TodayGameProps {
   hasCheeringClub: boolean;
-  todayGame?: GameProps;
+  todayGame?: GameProps | null;
   goMore: () => void;
 }
 
