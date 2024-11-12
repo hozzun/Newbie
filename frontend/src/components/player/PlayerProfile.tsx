@@ -33,7 +33,11 @@ const PlayerProfile = (props: PlayerProfileProps) => {
       <p className="text-base font-kbogothicbold text-gray-700">
         {ClubFullName[props.playerInfo.teamId]}
       </p>
-      <p className="text-base font-kbogothicbold text-gray-700">{`No.${props.playerInfo.backNumber} ${props.playerInfo.name}`}</p>
+      <p className="text-base font-kbogothicbold text-gray-700">
+        {props.playerInfo.backNumber
+          ? `No.${props.playerInfo.backNumber} ${props.playerInfo.name}`
+          : props.playerInfo.name}
+      </p>
       <div className="flex flex-col space-y-1 mt-6">
         <PlayerProfileItem label="포지션" value={props.playerInfo.position} />
         <PlayerProfileItem label="출생" value={props.playerInfo.birth.replace(/-/g, ".")} />
