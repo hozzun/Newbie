@@ -10,9 +10,9 @@ import ClubLogos from "../../util/ClubLogos";
 import ClubFullName from "../../util/ClubFullName";
 import MainButton from "../../components/mypage/MainButton";
 import Calendar from "../../components/mypage/Calendar";
-import WatchGame from "../../components/mypage/WatchGame";
+import WatchGame from "./WatchGameInfo";
 import OutButton from "../../components/mypage/OutButton";
-import { getClubIdByNum } from "../../util/ClubId";
+import { getIdByNum } from "../../util/ClubId";
 
 interface UserInfo {
   email: string;
@@ -52,17 +52,16 @@ const MyPage = () => {
     nav("/mypage/photocard");
   };
 
-  // TODO: navigate 설정
   const goWrite = () => {
-    console.log("나의 게시글 페이지로 이동");
+    nav("/mypage/board");
   };
 
   const goActive = () => {
-    console.log("나의 활동 페이지로 이동");
+    nav("/mypage/active");
   };
 
   const goScrap = () => {
-    console.log("나의 스크랩 페이지로 이동");
+    nav("/mypage/scrap");
   };
 
   const getUserInfo = async () => {
@@ -82,7 +81,7 @@ const MyPage = () => {
   }, []);
 
   if (userInfo) {
-    const teamName = getClubIdByNum(userInfo.favoriteTeamId) as TeamName | null;
+    const teamName = getIdByNum(userInfo.favoriteTeamId) as TeamName | null;
 
     return (
       <>

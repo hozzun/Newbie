@@ -27,6 +27,11 @@ import PhotoCardDetail from "./pages/mypage/PhotoCardDetail";
 import BaseballDict from "./pages/baseballdict/BaseballDict";
 import WatchGame from "./pages/mypage/WatchGame";
 import CommuHome from "./pages/commu/CommuHome";
+import MyBoard from "./pages/mypage/MyBoard";
+import MyScrap from "./pages/mypage/MyScrap";
+import MyActive from "./pages/mypage/MyActive";
+import CommuFreeCreate from "./pages/commu/CommuFreeCreate";
+import CommuTradeCreate from "./pages/commu/CommuTradeCreate";
 import ScrollToTop from "./components/common/ScrollToTop";
 
 // 로그인 하지 않은 사용자는 로그인으로
@@ -216,10 +221,34 @@ const AppRouter = () => {
           }
         />
         <Route
-          path="/mypage/watchgame"
+          path="/mypage/watchgame/:id"
           element={
             <ProtectedRoute>
               <WatchGame />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/mypage/board"
+          element={
+            <ProtectedRoute>
+              <MyBoard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/mypage/active"
+          element={
+            <ProtectedRoute>
+              <MyActive />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/mypage/scrap"
+          element={
+            <ProtectedRoute>
+              <MyScrap />
             </ProtectedRoute>
           }
         />
@@ -236,6 +265,22 @@ const AppRouter = () => {
           element={
             <ProtectedRoute>
               <CommuHome />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/commuhome/freecreate"
+          element={
+            <ProtectedRoute>
+              <CommuFreeCreate />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/commuhome/tradecreate"
+          element={
+            <ProtectedRoute>
+              <CommuTradeCreate />
             </ProtectedRoute>
           }
         />
