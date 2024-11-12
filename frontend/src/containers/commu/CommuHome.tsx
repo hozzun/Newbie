@@ -7,12 +7,22 @@ import CommuFAB from "./CommuFAB";
 const CommuHome = () => {
   const [selectedTab, setSelectedTab] = useState<"free" | "trade">("free");
   const [selectedSearch, setSelectedSearch] = useState<"title" | "writer" | "tag">("title");
+  const [searchQuery, setSearchQuery] = useState("");
 
   const handleTabClick = (tab: "free" | "trade") => {
     setSelectedTab(tab);
   };
+
   const handleSearchClick = (search: "title" | "writer" | "tag") => {
     setSelectedSearch(search);
+  };
+
+  const handleSearch = () => {
+    if (selectedTab === "free") {
+      // CommuFree의 검색 로직 호출
+    } else if (selectedTab === "trade") {
+      // CommuTrade의 검색 로직 호출
+    }
   };
 
   return (
@@ -22,9 +32,11 @@ const CommuHome = () => {
         onTabClick={handleTabClick}
         selectedSearch={selectedSearch}
         onSearchClick={handleSearchClick}
+        onSearchSubmit={handleSearch}
+        setSearchQuery={setSearchQuery}
       />
-      {selectedTab === "free" && <CommuFree />}
-      {selectedTab === "trade" && <CommuTrade />}
+      {selectedTab === "free" && <CommuFree searchQuery={searchQuery} />}
+      {selectedTab === "trade" && <CommuTrade searchQuery={searchQuery} />}
       <CommuFAB selectedTab={selectedTab} />
     </>
   );

@@ -33,13 +33,26 @@ const generateMockTradePosts = (startIndex: number, count: number): TradePost[] 
   }));
 };
 
-const CommuTrade = () => {
+const CommuTrade = ({ searchQuery }: { searchQuery: string }) => {
   const [tradePosts, setTradePosts] = useState<TradePost[]>([]);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const pageRef = useRef(0);
   const observerRef = useRef<IntersectionObserver | null>(null);
   const lastPostRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    // searchQuery 값이 변경될 때 API 요청
+    if (searchQuery) {
+      // API 호출 함수에 searchQuery를 전달하여 검색 데이터 가져오기
+      loadPosts(searchQuery);
+    }
+  }, [searchQuery]);
+
+  const loadPosts = async (query: string) => {
+    console.log(query);
+    // 검색을 통해 필터된 게시물을 불러오는 API 호출 로직
+  };
 
   // 새로운 게시물 로드 함수
   const loadMorePosts = async () => {
