@@ -5,8 +5,9 @@ import ClubId, { getClubIdByNum } from "../../util/ClubId";
 import axios from "axios";
 import { ClubOverviewProps } from "../../components/club/ClubOverview";
 import { registerCheerClub } from "../../api/clubApi";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import CustomError from "../../util/CustomError";
+import { PlayerListProps } from "../../components/club/PlayerList";
 
 export interface ClubOverviewData {
   id: string;
@@ -26,6 +27,8 @@ export interface UpcomingGameData {
 }
 
 const ClubHome = () => {
+  const nav = useNavigate();
+
   const { id } = useParams<{ id: string }>();
 
   const today = new Date();
@@ -120,16 +123,25 @@ const ClubHome = () => {
     }
   };
 
+  const goMore = () => {
+    nav("/player");
+  };
+
   const clubOverviewProps: ClubOverviewProps = {
     clubOverviewData: clubOverview,
     isVisibleButton: isVisibleButton,
     handleRegisterCheerClub: handleRegisterCheerClub,
   };
 
+  const playerListProps: PlayerListProps = {
+    goMore: goMore,
+  };
+
   return (
     <ClubHomeComponent
       clubOverviewProps={clubOverviewProps}
       upcomingGameProps={{ upcomingGameData: upcomingGame }}
+      playerListProps={playerListProps}
     />
   );
 };

@@ -86,7 +86,7 @@ const AppRouter = () => {
           }
         />
         <Route
-          path="/club/player"
+          path="/player"
           element={
             <ProtectedRoute>
               <PlayerList />
@@ -94,7 +94,7 @@ const AppRouter = () => {
           }
         />
         <Route
-          path="/club/player/:id"
+          path="/player/:id"
           element={
             <ProtectedRoute>
               <Player />

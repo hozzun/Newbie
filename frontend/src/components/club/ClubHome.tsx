@@ -1,12 +1,13 @@
 import ClubOverview, { ClubOverviewProps } from "./ClubOverview";
 import ClubRecord from "./ClubRecord";
 import OtherClubs from "./OtherClubs";
-import PlayerList from "./PlayerList";
+import PlayerList, { PlayerListProps } from "./PlayerList";
 import UpcomingGame, { UpcomingGameProps } from "./UpcomingGame";
 
 interface ClubHomeProps {
   clubOverviewProps: ClubOverviewProps;
   upcomingGameProps: UpcomingGameProps;
+  playerListProps: PlayerListProps;
 }
 
 const clubColors: Record<string, string> = {
@@ -33,7 +34,7 @@ const ClubHome = (props: ClubHomeProps) => {
       <div className="bg-white w-full rounded-t-2xl pt-6 px-4 mt-6 pb-32">
         <ClubRecord />
         <UpcomingGame {...props.upcomingGameProps} />
-        <PlayerList />
+        <PlayerList {...props.playerListProps} />
         <OtherClubs />
       </div>
     </div>
