@@ -3,7 +3,7 @@ import { PlayerRecordItemProps } from "./PlayerRecordItem";
 
 interface PlayerRecordProps {
   label: string;
-  items: Array<PlayerRecordItemProps>;
+  items: Array<PlayerRecordItemProps> | null;
 }
 
 const PlayerRecord = (props: PlayerRecordProps) => {
@@ -12,7 +12,11 @@ const PlayerRecord = (props: PlayerRecordProps) => {
       <div className="flex justify-start w-full mb-3">
         <p className="text-2xl font-kbogothicbold text-gray-700">{props.label}</p>
       </div>
-      <PlayerCarousel itemCount={4} items={props.items} />
+      {props.items ? (
+        <PlayerCarousel itemCount={4} items={props.items} />
+      ) : (
+        <p className="text-base font-kbogothiclight text-gray-700">이번 시즌 성적이 없습니다...</p>
+      )}
     </div>
   );
 };

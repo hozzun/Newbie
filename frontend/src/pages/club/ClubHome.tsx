@@ -1,10 +1,10 @@
-import ClubHomeComponent from "../../components/club/ClubHome";
+import ClubHomeContainer from "../../containers/club/ClubHome";
 import BottomNavigation from "../../containers/common/BottomNavigation";
 
 const ClubHome = () => {
   return (
     <>
-      <ClubHomeComponent />
+      <ClubHomeContainer />
       <BottomNavigation />
     </>
   );

@@ -9,6 +9,12 @@ import { CircleButtonProps } from "../common/CircleButton";
 import { CIRCLE_BUTTON_VARIANTS } from "../common/variants";
 import Heart from "../../assets/icons/heart-solid.svg?react";
 import Karina from "../../assets/images/karina.jpg";
+import { PlayerInfo } from "../../containers/player/PlayerList";
+
+interface PlayerProps {
+  playerInfo: PlayerInfo | null;
+  playerSeasonRecordItem: Array<PlayerRecordItemProps> | null;
+}
 
 const playerRecordItems: Array<PlayerRecordItemProps> = [
   {
@@ -67,7 +73,7 @@ const rightButtonProps: CircleButtonProps = {
   item: { img: Heart },
 };
 
-const Player = () => {
+const Player = (props: PlayerProps) => {
   const currentYear = new Date().getFullYear();
 
   return (
@@ -79,9 +85,9 @@ const Player = () => {
             <div className="aspect-[2/2.4] w-[45%]">
               <img src={Karina} alt="인물 사진" className="w-full h-full object-cover rounded-lg" />
             </div>
-            <PlayerProfile />
+            <PlayerProfile playerInfo={props.playerInfo} />
           </div>
-          <PlayerRecord label={`${currentYear} 기록`} items={playerRecordItems} />
+          <PlayerRecord label={`${currentYear} 기록`} items={props.playerSeasonRecordItem} />
           <PlayerRecord label="통산 기록" items={playerRecordItems} />
           <PlayerMusicController />
           <PlayerHighlight />

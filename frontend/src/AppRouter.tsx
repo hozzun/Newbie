@@ -32,6 +32,7 @@ import MyScrap from "./pages/mypage/MyScrap";
 import MyActive from "./pages/mypage/MyActive";
 import CommuFreeCreate from "./pages/commu/CommuFreeCreate";
 import CommuTradeCreate from "./pages/commu/CommuTradeCreate";
+import ScrollToTop from "./components/common/ScrollToTop";
 
 // 로그인 하지 않은 사용자는 로그인으로
 function ProtectedRoute({ children }: { children: JSX.Element }) {
@@ -59,6 +60,7 @@ function AuthRoute({ children }: { children: JSX.Element }) {
 const AppRouter = () => {
   return (
     <Router>
+      <ScrollToTop />
       <Routes>
         {/* Intro 페이지 라우트 추가 */}
         <Route path="/intro" element={<Intro />} />
@@ -91,7 +93,7 @@ const AppRouter = () => {
           }
         />
         <Route
-          path="/club/player"
+          path="/club/:id/player"
           element={
             <ProtectedRoute>
               <PlayerList />
@@ -99,7 +101,7 @@ const AppRouter = () => {
           }
         />
         <Route
-          path="/club/player/:id"
+          path="/club/:clubId/player/:playerId"
           element={
             <ProtectedRoute>
               <Player />
