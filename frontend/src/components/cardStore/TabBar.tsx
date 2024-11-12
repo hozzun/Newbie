@@ -2,9 +2,13 @@ import { useState } from "react";
 import Button from "../common/Button";
 import { BUTTON_VARIANTS } from "../common/variants";
 
+interface TabBarProps {
+  className?: string;
+}
+
 const tabBarItems: Array<string> = ["투수", "내야수", "외야수", "포수"];
 
-const TabBar = () => {
+const TabBar = (props: TabBarProps) => {
   const [clickedIndex, setClickedIndex] = useState<number>(0);
 
   const handleTabBar = (index: number) => {
@@ -14,7 +18,7 @@ const TabBar = () => {
   };
 
   return (
-    <div className="flex flex-row justify-start w-full space-x-3 mt-8">
+    <div className={`${props.className} flex flex-row justify-start w-full space-x-3`}>
       {tabBarItems.map((tabBarItem, index) => (
         <Button
           key={index}
