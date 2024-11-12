@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>채팅 테스트 페이지</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        #chat { width: 500px; margin: 0 auto; }
+        #messageArea { height: 300px; border: 1px solid #ccc; overflow-y: scroll; padding: 10px; }
+        #messageArea .message { margin-bottom: 10px; }
+        #messageArea .message .sender { font-weight: bold; }
+        #messageForm { margin-top: 10px; }
+        #messageForm input[type="text"] { width: 80%; padding: 5px; }
+        #messageForm button { padding: 5px 10px; }
+    </style>
+</head>
+<body>
+    <div id="chat">
+        <h2>채팅 테스트 페이지</h2>
+        <div>
+            <label for="username">사용자 이름:</label>
+            <input type="text" id="username" placeholder="사용자 이름 입력">
+        </div>
+        <div>
+            <label for="roomId">채팅방 선택:</label>
+            <select id="roomId">
+                <option value="hanwha">한화</option>
+                <option value="kia">KIA</option>
+                <option value="samsung">삼성</option>
+                <option value="lg">LG</option>
+                <option value="doosan">두산</option>
+                <option value="lotte">롯데</option>
+                <option value="kt">KT</option>
+                <option value="nc">NC</option>
+                <option value="ssg">SSG</option>
+                <option value="kiwoom">키움</option>
+            </select>
+            <button id="connect">채팅방 입장</button>
+            <button id="disconnect" disabled>채팅방 퇴장</button>
+        </div>
+        <div id="messageArea"></div>
+        <form id="messageForm">
+            <input type="text" id="messageInput" placeholder="메시지를 입력하세요." disabled>
+            <button type="submit" disabled>전송</button>
+        </form>
+    </div>
+
+    <!-- SockJS와 Stomp.js 라이브러리 로드 -->
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client/dist/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/stompjs/lib/stomp.min.js"></script>
+
+
+    <!-- 채팅 스크립트 -->
+    <script>
+        let stompClient = null;
+        let subscription = null;
+
+        const connectButton = document.getElementById('connect');
+        const disconnectButton = document.getElementById('disconnect');
+        const messageForm = document.getElementById('messageForm');
+        const messageInput = document.getElementById('messageInput');
+        const messageArea = document.getElementById('messageArea');
+        const usernameInput = document.getElementById('username');
+        const roomIdSelect = document.getElementById('roomId');
+
+        connectButton.addEventListener('click', function() {
+            const username = usernameInput.value.trim();
+            const roomId = roomIdSelect.value;
+
+            if (!username) {
+                alert('사용자 이름을 입력하세요.');
+                return;
+            }
+
+            connect(username, roomId);
+        });
+
+        disconnectButton.addEventListener('click', function() {
+            disconnect();
+        });
+
+        messageForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            sendMessage();
+        });
+
+        function connect(username, roomId) {
+            const socket = new SockJS('/ws/chat');
+            stompClient = Stomp.over(socket);
+
+            stompClient.connect({}, function(frame) {
+                console.log('Connected: ' + frame);
+
+                // 채팅방 구독
+                subscription = stompClient.subscribe('/topic/chatroom/' + roomId, function(messageOutput) {
+                    const message = JSON.parse(messageOutput.body);
+                    showMessage(message);
+                });
+
+                // 채팅방 입장 메시지 전송
+                const joinMessage = {
+                    sender: username,
+                    type: 'JOIN'
+                };
+                stompClient.send('/app/chat/' + roomId + '/join', {}, JSON.stringify(joinMessage));
+
+                // 버튼 및 입력 필드 상태 변경
+                connectButton.disabled = true;
+                disconnectButton.disabled = false;
+                messageInput.disabled = false;
+                messageForm.querySelector('button').disabled = false;
+                usernameInput.disabled = true;
+                roomIdSelect.disabled = true;
+            }, function(error) {
+                console.error('STOMP error: ' + error);
+                alert('채팅 서버에 연결할 수 없습니다.');
+            });
+        }
+
+        function disconnect() {
+            if (stompClient !== null) {
+                // 채팅방 퇴장 메시지 전송
+                const username = usernameInput.value.trim();
+                const roomId = roomIdSelect.value;
+                const leaveMessage = {
+                    sender: username,
+                    type: 'LEAVE'
+                };
+                stompClient.send('/app/chat/' + roomId + '/leave', {}, JSON.stringify(leaveMessage));
+
+                // 구독 해지 및 연결 끊기
+                subscription.unsubscribe();
+                stompClient.disconnect();
+
+                // 버튼 및 입력 필드 상태 변경
+                connectButton.disabled = false;
+                disconnectButton.disabled = true;
+                messageInput.disabled = true;
+                messageForm.querySelector('button').disabled = true;
+                usernameInput.disabled = false;
+                roomIdSelect.disabled = false;
+
+                messageArea.innerHTML = '';
+                console.log('Disconnected');
+            }
+        }
+
+        function sendMessage() {
+            const messageContent = messageInput.value.trim();
+            const username = usernameInput.value.trim();
+            const roomId = roomIdSelect.value;
+
+            if (messageContent && stompClient) {
+                const chatMessage = {
+                    sender: username,
+                    message: messageContent,
+                    type: 'CHAT'
+                };
+                stompClient.send('/app/chat/' + roomId + '/sendMessage', {}, JSON.stringify(chatMessage));
+                messageInput.value = '';
+            }
+        }
+
+        function showMessage(message) {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message');
+
+            const senderElement = document.createElement('span');
+            senderElement.classList.add('sender');
+
+            if (message.type === 'JOIN') {
+                messageElement.textContent = message.message;
+            } else if (message.type === 'LEAVE') {
+                messageElement.textContent = message.message;
+            } else if (message.type === 'CHAT') {
+                senderElement.textContent = message.sender + ': ';
+                messageElement.appendChild(senderElement);
+                const textElement = document.createElement('span');
+                textElement.textContent = message.message;
+                messageElement.appendChild(textElement);
+            }
+
+            messageArea.appendChild(messageElement);
+            messageArea.scrollTop = messageArea.scrollHeight;
+        }
+    </script>
+</body>
+</html>

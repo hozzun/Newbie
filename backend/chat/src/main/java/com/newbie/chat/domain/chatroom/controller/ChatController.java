@@ -3,37 +3,46 @@ package com.newbie.chat.domain.chatroom.controller;
 import com.newbie.chat.domain.chatroom.dto.res.ChatMessage;
 import com.newbie.chat.domain.chatroom.service.ChatService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.RestController;
 
+@Slf4j
 @RequiredArgsConstructor
 @RestController
 public class ChatController {
 
     private final ChatService chatService;
+    // private final SimpMessagingTemplate messagingTemplate; // 제거
 
-    @MessageMapping("/chat/sendMessage")
-    @SendTo("/topic/chatroom/{roomId}")
-    public void sendMessage(ChatMessage message) {
-        chatService.saveMessage(message.getRoomId(), message);
+    @MessageMapping("/chat/{roomId}/sendMessage")
+    public void sendMessage(@DestinationVariable String roomId, ChatMessage message) {
+        message.setRoomId(roomId);
+        log.info("Message received in sendMessage: {}", message);
+        chatService.saveMessage(roomId, message);
+        // messagingTemplate.convertAndSend("/topic/chatroom/" + roomId, message); // 제거
     }
 
-    @MessageMapping("/chat/join")
-    @SendTo("/topic/chatroom/{roomId}")
-    public ChatMessage joinRoom(ChatMessage message) {
+    @MessageMapping("/chat/{roomId}/join")
+    public void joinRoom(@DestinationVariable String roomId, ChatMessage message) {
+        message.setRoomId(roomId);
         message.setType(ChatMessage.MessageType.JOIN);
         message.setMessage(message.getSender() + "님이 입장하셨습니다.");
-        chatService.saveMessage(message.getRoomId(), message);
-        return message;
+        log.info("Join message received in joinRoom: {}", message);
+        chatService.saveMessage(roomId, message);
+        // messagingTemplate.convertAndSend("/topic/chatroom/" + roomId, message); // 제거
     }
 
-    @MessageMapping("/chat/leave")
-    @SendTo("/topic/chatroom/{roomId}")
-    public ChatMessage leaveRoom(ChatMessage message) {
+    @MessageMapping("/chat/{roomId}/leave")
+    public void leaveRoom(@DestinationVariable String roomId, ChatMessage message) {
+        message.setRoomId(roomId);
         message.setType(ChatMessage.MessageType.LEAVE);
         message.setMessage(message.getSender() + "님이 퇴장하셨습니다.");
-        chatService.saveMessage(message.getRoomId(), message);
-        return message;
+        log.info("Leave message received in leaveRoom: {}", message);
+        chatService.saveMessage(roomId, message);
+        // messagingTemplate.convertAndSend("/topic/chatroom/" + roomId, message); // 제거
     }
 }

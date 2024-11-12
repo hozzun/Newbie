@@ -13,7 +13,7 @@ public class ChatRoomInitService {
 
     private final RedisTemplate<String, Object> redisTemplate;
 
-    private static final List<String> TEAM_NAMES = List.of("한화", "KIA", "삼성", "LG", "두산", "롯데", "KT", "NC", "SK", "키움");
+    private static final List<String> TEAM_NAMES = List.of("hanwha", "kia", "samsung", "lg", "doosan", "lotte", "kt", "nc", "ssg", "kiwoom");
 
     @PostConstruct
     public void initializeChatRooms() {

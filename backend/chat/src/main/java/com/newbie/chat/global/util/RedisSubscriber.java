@@ -23,8 +23,11 @@ public class RedisSubscriber implements MessageListener {
     @Override
     public void onMessage(Message message, byte[] pattern) {
         try {
+            String channel = new String(message.getChannel());
+            String roomId = channel.substring("chatroom:".length());
             ChatMessage chatMessage = objectMapper.readValue(message.getBody(), ChatMessage.class);
-            messagingTemplate.convertAndSend("/topic/chatroom/" + chatMessage.getRoomId(), chatMessage);
+            log.debug("Received message from Redis: {}", chatMessage);
+            messagingTemplate.convertAndSend("/topic/chatroom/" + roomId, chatMessage);
         } catch (Exception e) {
             log.error("Error occurred while processing Redis message: {}", e.getMessage(), e);
         }

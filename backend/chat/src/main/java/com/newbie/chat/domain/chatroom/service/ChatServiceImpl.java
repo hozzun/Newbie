@@ -20,10 +20,13 @@ public class ChatServiceImpl implements ChatService {
     @Override
     public void saveMessage(String roomId, ChatMessage message) {
         try {
+            log.debug("Saving message to Redis: {}", message);
             redisTemplate.opsForList().rightPush("chatroom:" + roomId, message);
+            // Redis Pub/Sub 채널에 메시지 발행
+            redisTemplate.convertAndSend("chatroom:" + roomId, message);
         } catch (Exception e) {
-            log.error("Redis에 메시지를 저장하는 중 오류 발생: {}", e.getMessage());
-            throw new RuntimeException("메시지 저장 실패");
+            log.error("Error saving message to Redis: {}", e.getMessage());
+            throw new RuntimeException("Message save failed");
         }
     }
 
