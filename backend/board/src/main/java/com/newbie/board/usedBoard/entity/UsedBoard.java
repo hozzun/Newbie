@@ -1,6 +1,5 @@
 package com.newbie.board.usedBoard.entity;
 
-import com.newbie.board.usedBoard.entity.Tag;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -56,4 +55,10 @@ public class UsedBoard {
             tag.getUsedBoards().add(this);
         }
     }
+
+    @OneToMany(mappedBy = "usedBoard", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Comment> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "usedBoard", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<BoardLike> likes = new ArrayList<>();
 }
