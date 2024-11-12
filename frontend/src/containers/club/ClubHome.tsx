@@ -8,6 +8,8 @@ import { registerCheerClub } from "../../api/clubApi";
 import { useNavigate, useParams } from "react-router-dom";
 import CustomError from "../../util/CustomError";
 import { PlayerListProps } from "../../components/club/PlayerList";
+import { GetPlayersRequest, getPlayers } from "../../api/playerApi";
+import { PlayerItemProps } from "../player/PlayerList";
 
 export interface ClubOverviewData {
   id: string;
@@ -36,6 +38,7 @@ const ClubHome = () => {
   const [clubOverview, setClubOverview] = useState<ClubOverviewData | null>(null);
   const [isVisibleButton, setIsVisibleButton] = useState<boolean>(false);
   const [upcomingGame, setUpcomingGame] = useState<UpcomingGameData | null>(null);
+  const [players, setPlayers] = useState<Array<PlayerItemProps> | null>(null);
 
   const fetchClubOverview = async () => {
     try {
@@ -90,9 +93,43 @@ const ClubHome = () => {
     }
   };
 
+  const fetchPlayers = async () => {
+    try {
+      if (!id) {
+        throw new CustomError("[ERROR] 구단 ID 없음 by club home");
+      }
+
+      const getPlayerListRequest: GetPlayersRequest = {
+        teamId: ClubId[id],
+        page: 0,
+        sortBy: "likeCount",
+      };
+      const response = await getPlayers(getPlayerListRequest);
+      const playerDats: Array<PlayerItemProps> = response.data.content.slice(0, 3).map(d => {
+        return {
+          id: d.id,
+          imgUrl: "선수 사진 URL", // TODO: GET - 선수 사진 URL
+          name: d.name,
+          likeCount: d.likeCount,
+          goDetail: () => nav(`/club/${id}/player/${d.id}`),
+        };
+      });
+
+      setPlayers(playerDats);
+    } catch (e) {
+      if (axios.isAxiosError(e) && e.response?.status === 404) {
+        console.log("[INFO] 선수 정보 없음 by player list");
+        setPlayers([]);
+      } else {
+        console.error(e);
+      }
+    }
+  };
+
   useEffect(() => {
     fetchClubOverview();
     fetchUpcomingGame();
+    fetchPlayers();
   }, []);
 
   useEffect(() => {
@@ -134,6 +171,7 @@ const ClubHome = () => {
   };
 
   const playerListProps: PlayerListProps = {
+    players: players,
     goMore: goMore,
   };
 

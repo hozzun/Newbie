@@ -1,7 +1,9 @@
 import TextButton from "../common/TextButton";
 import PlayerItem from "../common/PlayerItem";
+import { PlayerItemProps } from "../../containers/player/PlayerList";
 
 export interface PlayerListProps {
+  players: Array<PlayerItemProps> | null;
   goMore: () => void;
 }
 
@@ -13,9 +15,7 @@ const PlayerList = (props: PlayerListProps) => {
         <TextButton onClick={props.goMore}>더보기</TextButton>
       </div>
       <div className="flex justify-between space-x-4 w-[98%] mt-3">
-        <PlayerItem />
-        <PlayerItem />
-        <PlayerItem />
+        {props.players && props.players.map(player => <PlayerItem key={player.id} {...player} />)}
       </div>
     </div>
   );

@@ -12,7 +12,7 @@ const PlayerItem = (props: PlayerItemProps) => {
         </p>
       </div>
       <div className="flex flex-row justify-center items-center w-full mt-2">
-        <Heart className="w-3 h-3 text-error-400 mr-0.9" />
+        <Heart className="w-3 h-3 text-error-400 mr-1" />
         <p className="text-xs font-kbogothiclight text-gray-700">{props.likeCount}</p>
       </div>
     </div>
