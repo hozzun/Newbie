@@ -1,3 +1,10 @@
+import { PlayerInfo } from "../../containers/player/PlayerList";
+import ClubFullName from "../../util/ClubFullName";
+
+interface PlayerProfileProps {
+  playerInfo: PlayerInfo | null;
+}
+
 interface PlayerProfileItemProps {
   label: string;
   value: string;
@@ -12,16 +19,29 @@ const PlayerProfileItem = (props: PlayerProfileItemProps) => {
   );
 };
 
-const PlayerProfile = () => {
+const PlayerProfile = (props: PlayerProfileProps) => {
+  if (!props.playerInfo) {
+    return (
+      <div className="flex flex-col min-w-[50%]">
+        <p className="text-base font-kbogothicmedium text-gray-700">Loading...</p>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col min-w-[50%]">
-      <p className="text-base font-kbogothicbold text-gray-700">SSG 랜더스</p>
-      <p className="text-base font-kbogothicbold text-gray-700">No.42 김광현</p>
+      <p className="text-base font-kbogothicbold text-gray-700">
+        {ClubFullName[props.playerInfo.teamId]}
+      </p>
+      <p className="text-base font-kbogothicbold text-gray-700">{`No.${props.playerInfo.backNumber} ${props.playerInfo.name}`}</p>
       <div className="flex flex-col space-y-1 mt-6">
-        <PlayerProfileItem label="포지션" value="투수" />
-        <PlayerProfileItem label="출생" value="2003.01.03" />
-        <PlayerProfileItem label="신체" value="165cm / 68kg" />
-        <PlayerProfileItem label="좋아요" value="1,000" />
+        <PlayerProfileItem label="포지션" value={props.playerInfo.position} />
+        <PlayerProfileItem label="출생" value={props.playerInfo.birth.replace(/-/g, ".")} />
+        <PlayerProfileItem label="신체" value={props.playerInfo.physical} />
+        <PlayerProfileItem
+          label="좋아요"
+          value={props.playerInfo.likeCount.toLocaleString("ko-KR")}
+        />
       </div>
     </div>
   );

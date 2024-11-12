@@ -116,8 +116,10 @@ const ClubHome = () => {
       const playerDats: Array<PlayerItemProps> = response.data.content.slice(0, 3).map(d => {
         const playerInfo: PlayerInfo = {
           id: d.id,
+          teamId: id,
           backNumber: parseInt(d.backNumber),
           name: d.name,
+          position: d.position,
           birth: d.birth,
           physical: d.physical,
           likeCount: d.likeCount,

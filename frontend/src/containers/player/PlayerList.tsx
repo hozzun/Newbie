@@ -18,8 +18,10 @@ export interface PlayerItemProps {
 
 export interface PlayerInfo {
   id: number;
+  teamId: string;
   backNumber: number;
   name: string;
+  position: string;
   birth: string;
   physical: string;
   likeCount: number;
@@ -69,8 +71,10 @@ const PlayerList = () => {
       const playerDatas: Array<PlayerItemProps> = response.data.content.map(d => {
         const playerInfo: PlayerInfo = {
           id: d.id,
+          teamId: id,
           backNumber: parseInt(d.backNumber),
           name: d.name,
+          position: d.position,
           birth: d.birth,
           physical: d.physical,
           likeCount: d.likeCount,
