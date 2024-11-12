@@ -19,6 +19,12 @@ export interface ClubOverviewData {
   winRate: number;
 }
 
+export interface UpcomingGameData {
+  stadium: string;
+  day: string;
+  teamId: string;
+}
+
 const ClubHome = () => {
   const { id } = useParams<{ id: string }>();
 
@@ -26,6 +32,7 @@ const ClubHome = () => {
 
   const [clubOverview, setClubOverview] = useState<ClubOverviewData | null>(null);
   const [isVisibleButton, setIsVisibleButton] = useState<boolean>(false);
+  const [upcomingGame, setUpcomingGame] = useState<UpcomingGameData | null>(null);
 
   const fetchClubOverview = async () => {
     try {
@@ -52,7 +59,27 @@ const ClubHome = () => {
       setClubOverview(clubOverviewData);
     } catch (e) {
       if (axios.isAxiosError(e) && e.response?.status === 404) {
-        console.log("[ERROR] 구단 간단한 소개 정보 없음 by club home");
+        console.log("[INFO] 구단 간단한 소개 정보 없음 by club home");
+        setClubOverview(null);
+      } else {
+        console.error(e);
+      }
+    }
+  };
+
+  const fetchUpcomingGame = async () => {
+    try {
+      // TODO: GET - 예정된 경기 정보
+      const upcomingGameData: UpcomingGameData = {
+        stadium: "수원",
+        day: "2024.10.01 (화) 17:00",
+        teamId: getClubIdByNum(2),
+      };
+
+      setUpcomingGame(upcomingGameData);
+    } catch (e) {
+      if (axios.isAxiosError(e) && e.response?.status === 404) {
+        console.log("[INFO] 예정된 경기 없음  by club home");
         setClubOverview(null);
       } else {
         console.error(e);
@@ -62,6 +89,7 @@ const ClubHome = () => {
 
   useEffect(() => {
     fetchClubOverview();
+    fetchUpcomingGame();
   }, []);
 
   useEffect(() => {
@@ -98,7 +126,12 @@ const ClubHome = () => {
     handleRegisterCheerClub: handleRegisterCheerClub,
   };
 
-  return <ClubHomeComponent clubOverviewProps={clubOverviewProps} />;
+  return (
+    <ClubHomeComponent
+      clubOverviewProps={clubOverviewProps}
+      upcomingGameProps={{ upcomingGameData: upcomingGame }}
+    />
+  );
 };
 
 export default ClubHome;
