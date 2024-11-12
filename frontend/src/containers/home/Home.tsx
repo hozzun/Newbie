@@ -6,12 +6,13 @@ import { ClubRankProps } from "../../components/home/ClubRank";
 import { HighlightProps } from "../../components/home/Highlight";
 import { CardStoreItemProps } from "../../components/home/CardStoreItem";
 import { CardStoreProps } from "../../components/home/CardStore";
-import { GameProps, GameSituation } from "../../components/home/Game";
 import { useNavigate } from "react-router-dom";
 import { GetGamesRequest, getClubRanks, getGames } from "../../api/baseballApi";
 import { getClubIdByNum } from "../../util/ClubId";
-import CustomError from "../../util/CustomError";
-import { GetWeatherRequest, GetWeatherResponse, getWeather } from "../../api/weatherApi";
+import { GetWeatherRequest, getWeather } from "../../api/weatherApi";
+import Stadiums from "../../util/Stadiums";
+import { calculateWeather } from "../../util/Weather";
+import axios from "axios";
 
 export interface ClubProps {
   id: string;
@@ -19,11 +20,24 @@ export interface ClubProps {
 }
 
 export interface GameInfo {
+  id: number;
   day: string;
   time: string;
   place: string;
   clubs: Array<ClubProps>;
   weather?: string;
+}
+
+export interface GameSituation {
+  isPlaying: boolean;
+  scores?: Record<string, number>;
+}
+
+export interface GameProps {
+  gameInfo: GameInfo;
+  gameSituation: GameSituation;
+  isVisibleDay?: boolean;
+  goDetail?: () => void;
 }
 
 export interface ClubRankItemProps {
@@ -36,115 +50,6 @@ export interface ClubRankItemProps {
   gameDifference: number;
   rankDifference: number;
 }
-
-interface GeoPoint {
-  logitude: number;
-  latitude: number;
-}
-
-const stadiums: Record<string, GeoPoint> = {
-  잠실: {
-    logitude: 37.512011,
-    latitude: 127.071619,
-  },
-  고척: {
-    logitude: 37.498229,
-    latitude: 126.866836,
-  },
-  문학: {
-    logitude: 37.436962,
-    latitude: 126.693254,
-  },
-  수원: {
-    logitude: 37.299585,
-    latitude: 127.009526,
-  },
-  청주: {
-    logitude: 36.638676,
-    latitude: 127.470008,
-  },
-  대전: {
-    logitude: 36.316982,
-    latitude: 127.429025,
-  },
-  광주: {
-    logitude: 35.168194,
-    latitude: 126.889385,
-  },
-  대구: {
-    logitude: 35.84104,
-    latitude: 128.681774,
-  },
-  포항: {
-    logitude: 36.007952,
-    latitude: 129.359549,
-  },
-  울산: {
-    logitude: 35.532037,
-    latitude: 129.265693,
-  },
-  창원: {
-    logitude: 35.222439,
-    latitude: 128.582573,
-  },
-  사직: {
-    logitude: 35.193742,
-    latitude: 129.061572,
-  },
-};
-
-const pty: Record<number, string> = {
-  1: "🌧 비",
-  2: "🌨 비/눈",
-  3: "🌨 눈",
-  4: "⛈ 소나기",
-};
-
-const sky: Record<number, string> = {
-  1: "☀ 맑음",
-  2: "🌥 구름많음",
-  3: "☁ 흐림",
-};
-
-const validateTeamId = (teamId: string | undefined) => {
-  if (!teamId) {
-    throw new CustomError("[ERROR] 구단 ID 변환 과정 by HOME");
-  }
-
-  return teamId;
-};
-
-const getFcstTime = (): string => {
-  const today = new Date();
-
-  const hours = today.getHours() + 1;
-
-  return `${hours.toString().padStart(2, "0")}00`;
-};
-
-const calculateWeather = (items: Array<GetWeatherResponse>): string => {
-  let ptyItem = null;
-  let skyItem = null;
-
-  const targetTime = getFcstTime();
-  for (const item of items) {
-    if (item.fcstTime === targetTime) {
-      if (item.category === "PTY") {
-        ptyItem = item;
-      } else if (item.category === "SKY") {
-        skyItem = item;
-      }
-    }
-  }
-
-  if (ptyItem && parseInt(ptyItem.fcstValue) > 0) {
-    return pty[parseInt(ptyItem.fcstValue)];
-  } else if (skyItem) {
-    return sky[parseInt(skyItem.fcstValue)];
-  } else {
-    throw new CustomError("[ERROR] 날씨 데이터 토대로 계산 by HOME");
-  }
-};
 
 // 더미 데이터
 // const gameSituationData: GameSituation = {
@@ -162,7 +67,7 @@ const Home = () => {
   const today = new Date();
 
   const [hasCheeringClub, setHasCheeringClub] = useState<boolean>(false);
-  const [todayGame, setTodayGame] = useState<GameProps>();
+  const [todayGame, setTodayGame] = useState<GameProps | null>(null);
   const [photoCardImage, setPhotoCardImage] = useState<string | null>(null);
   const [watchedGameImage, setWatchedGameImage] = useState<string | null>(null);
   const [clubRanks, setClubRanks] = useState<Array<ClubRankItemProps> | null>(null);
@@ -184,27 +89,29 @@ const Home = () => {
           teamId: 1, // TODO: 나의 응원 구단 ID 구하기
         };
         const responseAbotGetGames = await getGames(getGamesRequest);
-        const homeTeamId = validateTeamId(getClubIdByNum(responseAbotGetGames.data.homeTeamId));
-        const awayTeamId = validateTeamId(getClubIdByNum(responseAbotGetGames.data.awayTeamId));
+        const homeClubId = getClubIdByNum(responseAbotGetGames.data[0].homeTeamId);
+        const awayClubId = getClubIdByNum(responseAbotGetGames.data[0].awayTeamId);
         const gameInfoData: GameInfo = {
-          day: responseAbotGetGames.data.date,
-          time: responseAbotGetGames.data.time,
-          place: responseAbotGetGames.data.stadium,
+          id: responseAbotGetGames.data[0].id,
+          day: responseAbotGetGames.data[0].date,
+          time: responseAbotGetGames.data[0].time,
+          place: responseAbotGetGames.data[0].stadium,
           clubs: [
             {
-              id: homeTeamId,
-              player: responseAbotGetGames.data.homeStartingPitcher,
+              id: homeClubId,
+              player: responseAbotGetGames.data[0].homeStartingPitcher,
             },
             {
-              id: awayTeamId,
-              player: responseAbotGetGames.data.awayStartingPitcher,
+              id: awayClubId,
+              player: responseAbotGetGames.data[0].awayStartingPitcher,
             },
           ],
         };
 
+        // 구장 기준 날씨 정보 가져오기
         const getWeatherRequest: GetWeatherRequest = {
-          nx: stadiums[gameInfoData.place].logitude,
-          ny: stadiums[gameInfoData.place].latitude,
+          nx: Stadiums[gameInfoData.place].logitude,
+          ny: Stadiums[gameInfoData.place].latitude,
         };
         const responseAboutWeather = await getWeather(getWeatherRequest);
         const items = responseAboutWeather.data.response.body.items.item;
@@ -226,7 +133,12 @@ const Home = () => {
         setTodayGame(todayGameData);
       }
     } catch (e) {
-      console.log(e);
+      if (axios.isAxiosError(e) && e.response?.status === 404) {
+        console.log("[ERROR] 경기 정보 없음 by home");
+        setTodayGame(null);
+      } else {
+        console.error(e);
+      }
     }
   };
 
@@ -248,7 +160,7 @@ const Home = () => {
     try {
       const response = await getClubRanks({ year: today.getFullYear().toString() });
       const clubRanksData: Array<ClubRankItemProps> = response.data.map(d => ({
-        id: validateTeamId(getClubIdByNum(d.teamId)),
+        id: getClubIdByNum(d.teamId),
         rank: d.rank,
         gameCount: d.gameCount,
         winCount: d.winCount,

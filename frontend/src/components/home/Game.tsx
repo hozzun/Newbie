@@ -1,17 +1,5 @@
-import { ClubProps, GameInfo } from "../../containers/home/Home";
+import { ClubProps, GameProps } from "../../containers/home/Home";
 import clubs from "./clubs";
-
-export interface GameSituation {
-  isPlaying: boolean;
-  scores?: Record<string, number>;
-}
-
-export interface GameProps {
-  gameInfo: GameInfo;
-  gameSituation: GameSituation;
-  isVisibleDay?: boolean;
-  goDetail?: () => void;
-}
 
 const Club = (props: ClubProps) => {
   return (
