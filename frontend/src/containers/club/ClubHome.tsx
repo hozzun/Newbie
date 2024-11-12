@@ -124,7 +124,7 @@ const ClubHome = () => {
   };
 
   const goMore = () => {
-    nav("/player");
+    nav(`/club/${id}/player`);
   };
 
   const clubOverviewProps: ClubOverviewProps = {

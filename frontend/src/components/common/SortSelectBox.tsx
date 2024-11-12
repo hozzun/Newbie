@@ -9,12 +9,12 @@ interface DropdownProps {
   options: Array<string>;
   selected: string;
   onSelect: (value: string) => void;
-  handleSelectSortOption: (value: string) => void;
 }
 
 export interface SortSelectBoxProps {
   options: Array<string>;
   minWidth: number;
+  selectedSortOption: string;
   handleSelectSortOption: (value: string) => void;
 }
 
@@ -24,7 +24,6 @@ const Dropdown = (props: DropdownProps) => {
   const handleToggle = () => setIsOpen(!isOpen);
   const handleSelect = (value: string) => {
     props.onSelect(value);
-    props.handleSelectSortOption(value);
     setIsOpen(false);
   };
 
@@ -70,17 +69,12 @@ const Dropdown = (props: DropdownProps) => {
 };
 
 const SortSelectBox = (props: SortSelectBoxProps) => {
-  const [selectedOption, setSelectedOption] = useState("");
-
-  const handleSelect = (value: string) => setSelectedOption(value);
-
   return (
     <Dropdown
       minWidth={props.minWidth}
       options={props.options}
-      selected={selectedOption}
-      onSelect={handleSelect}
-      handleSelectSortOption={props.handleSelectSortOption}
+      selected={props.selectedSortOption}
+      onSelect={props.handleSelectSortOption}
     />
   );
 };
