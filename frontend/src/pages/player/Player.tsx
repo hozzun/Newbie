@@ -1,7 +1,7 @@
-import PlayerComponent from "../../components/player/Player";
+import PlayerContainer from "../../containers/player/Player";
 
 const Player = () => {
-  return <PlayerComponent />;
+  return <PlayerContainer />;
 };
 
 export default Player;

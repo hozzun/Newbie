@@ -1,6 +1,6 @@
 export interface PlayerRecordItemProps {
   label: string;
-  value: string;
+  value: number | string;
 }
 
 const PlayerRecordItem = (props: PlayerRecordItemProps) => {
