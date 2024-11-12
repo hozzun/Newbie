@@ -52,17 +52,16 @@ const MyPage = () => {
     nav("/mypage/photocard");
   };
 
-  // TODO: navigate 설정
   const goWrite = () => {
-    nav("/mypage/board")
+    nav("/mypage/board");
   };
 
   const goActive = () => {
-    console.log("나의 활동 페이지로 이동");
+    nav("/mypage/active");
   };
 
   const goScrap = () => {
-    nav("/mypage/scrap")
+    nav("/mypage/scrap");
   };
 
   const getUserInfo = async () => {
