@@ -10,7 +10,7 @@ import ClubLogos from "../../util/ClubLogos";
 import ClubFullName from "../../util/ClubFullName";
 import MainButton from "../../components/mypage/MainButton";
 import Calendar from "../../components/mypage/Calendar";
-import WatchGame from "../../components/mypage/WatchGame";
+import WatchGame from "./WatchGameInfo";
 import OutButton from "../../components/mypage/OutButton";
 import { getIdByNum } from "../../util/ClubId";
 
