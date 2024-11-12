@@ -62,7 +62,7 @@ const MyPage = () => {
   };
 
   const goScrap = () => {
-    console.log("나의 스크랩 페이지로 이동");
+    nav("/mypage/scrap")
   };
 
   const getUserInfo = async () => {
