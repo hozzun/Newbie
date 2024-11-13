@@ -11,6 +11,7 @@ const CommuTradeCreate = () => {
   const [text, setText] = useState("");
   const [images, setImages] = useState<File[]>([]);
   const [buttonVariant, setButtonVariant] = useState(BUTTON_VARIANTS.second);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const clearTitle = () => setTitleValue("");
   const clearPrice = () => setPriceValue(null); // 초기화 시 null로 설정
@@ -30,11 +31,29 @@ const CommuTradeCreate = () => {
   };
 
   const handleTagKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter" && tagValue.trim()) {
-      setTags(prevTags => [...prevTags, tagValue.trim()]);
-      setTagValue("");
+    if (e.key === "Enter") {
+      e.preventDefault();
+      // 태그 개수 및 글자수 제한 확인
+      if (tags.length >= 5) {
+        setErrorMessage("최대 5개의 태그만 추가할 수 있습니다.");
+        return;
+      }
+      if (tagValue.trim().length > 5) {
+        setErrorMessage("태그는 최대 5글자까지 입력 가능합니다.");
+        return;
+      }
+      if (tagValue.trim()) {
+        setTags(prevTags => [...prevTags, tagValue.trim()]);
+        setTagValue("");
+      }
     }
   };
+  useEffect(() => {
+    if (errorMessage) {
+      const timer = setTimeout(() => setErrorMessage(null), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [errorMessage]);
 
   const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const inputText = e.target.value;
@@ -61,6 +80,7 @@ const CommuTradeCreate = () => {
 
   return (
     <div>
+      {errorMessage && <div className="text-red-500 text-sm mt-2">{errorMessage}</div>}
       <CommuTradeCreateComponent
         titleValue={titleValue}
         priceValue={priceValue}
@@ -78,6 +98,7 @@ const CommuTradeCreate = () => {
         onClearPrice={clearPrice}
         onClearTag={clearTag}
       />
+
       <Button variant={buttonVariant} className="w-full">
         완료
       </Button>
