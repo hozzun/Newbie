@@ -176,11 +176,11 @@ const ClubHome = () => {
   useEffect(() => {
     if (id) {
       // TODO: GET - 사용자 응원 구단 ID
-      setIsVisibleButton(1 === ClubId[id]);
+      setIsVisibleButton(1 !== ClubId[id]);
     } else {
       throw new CustomError("[ERROR] 구단 ID 없음 by club home");
     }
-  }, []);
+  }, [id]);
 
   const handleRegisterCheerClub = async () => {
     // TODO: GET - 사용자 응원 구단 ID
