@@ -5,7 +5,7 @@ import { setPlayer } from "../../redux/playerSlice";
 import { RootState } from "../../redux/store";
 import CustomError from "../../util/CustomError";
 import axios from "axios";
-import { getHitterRecord, getPitcherRecord } from "../../api/playerApi";
+import { getHitterRecord, getPitcherRecord, getPlayerHightlights } from "../../api/playerApi";
 import { PlayerRecordItemProps } from "../../components/player/PlayerRecordItem";
 
 export interface PitcherRecord {
@@ -80,6 +80,11 @@ const hitterSeasonRecord: Record<string, string> = {
   sacrificeFly: "희생플라이",
 };
 
+export interface Video {
+  url: string;
+  title: string;
+}
+
 const Player = () => {
   const dispatch = useDispatch();
 
@@ -87,6 +92,7 @@ const Player = () => {
 
   const [playerSeasonRecordItem, setPlayerSeasonRecordItem] =
     useState<Array<PlayerRecordItemProps> | null>(null);
+  const [playerHighlights, setPlayerHighlights] = useState<Array<Video> | null>(null);
 
   const fetchPlayerRecord = async () => {
     try {
@@ -169,8 +175,28 @@ const Player = () => {
     }
   };
 
+  const fetchPlayerHighlights = async () => {
+    try {
+      if (!playerInfo) {
+        throw new CustomError("[ERROR] 선수 정보 없음 by player");
+      }
+
+      const response = await getPlayerHightlights({ name: playerInfo.name });
+      const playerHighlightDatas: Array<Video> = response.data;
+
+      setPlayerHighlights(playerHighlightDatas);
+    } catch (e) {
+      if (axios.isAxiosError(e) && e.response?.status === 404) {
+        console.log("[INFO] 선수 하이라이트 없음 by player");
+      } else {
+        console.error(e);
+      }
+    }
+  };
+
   useEffect(() => {
     fetchPlayerRecord();
+    fetchPlayerHighlights();
 
     return () => {
       dispatch(setPlayer(null));
@@ -178,7 +204,11 @@ const Player = () => {
   }, []);
 
   return (
-    <PlayerComponent playerInfo={playerInfo} playerSeasonRecordItem={playerSeasonRecordItem} />
+    <PlayerComponent
+      playerInfo={playerInfo}
+      playerSeasonRecordItem={playerSeasonRecordItem}
+      playerHighlights={playerHighlights}
+    />
   );
 };
 

@@ -1,3 +1,4 @@
+import { Video } from "../containers/player/Player";
 import axiosInstance from "../util/axiosInstance"
 
 const axios = axiosInstance;
@@ -85,3 +86,15 @@ export interface GetHitterRecordResponse {
 export const getPitcherRecord = (request: GetPlayerRecordRequest) => axios.get<GetPitcherRecordResponse>(`/api-baseball/stats/pitchers/${request.id}`);
 
 export const getHitterRecord = (request: GetPlayerRecordRequest) => axios.get<GetHitterRecordResponse>(`/api-baseball/stats/hitters/${request.id}`);
+
+// 선수 하이라이트 영상 조회
+
+export interface GetPlayerHighlightsRequest {
+    name: string;
+}
+
+export const getPlayerHightlights = (request: GetPlayerHighlightsRequest) => axios.get<Array<Video>>("/api-baseball/highlights/player", {
+    params: {
+        playerName: request.name
+    }
+})

@@ -1,10 +1,26 @@
-const PlayerHightlightItem = () => {
+import ReactPlayer from "react-player/lazy";
+import { Video } from "../../containers/player/Player";
+
+interface PlayerHighlightItemProps {
+  playerHighlight: Video;
+}
+
+const PlayerHightlightItem = (props: PlayerHighlightItemProps) => {
   return (
     <div className="flex flex-col justify-center items-center w-full hover:cursor-pointer">
-      <div className="w-full aspect-video bg-gray-500 rounded-lg"></div>
-      <p className="text-sm font-kbogothiclight text-gray-700 line-clamp-2 mt-1">
-        {"김광현 앞세워 ‘쓰윽’ 올라간 SSG ‘가을 야구’ 보인다! [9시 뉴스] / KBS 2024.09.23."}
-      </p>
+      <div className="w-full aspect-video rounded-lg overflow-hidden">
+        <ReactPlayer
+          className="rounded-lg"
+          url={props.playerHighlight.url}
+          controls
+          width={"100%"}
+          height={"100%"}
+        />
+      </div>
+      <p
+        className="text-sm font-kbogothiclight text-gray-700 line-clamp-2 mt-1"
+        dangerouslySetInnerHTML={{ __html: props.playerHighlight.title }}
+      />
     </div>
   );
 };
