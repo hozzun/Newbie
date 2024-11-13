@@ -31,9 +31,10 @@ const CardStore = () => {
 
   // TODO: 캐러셀로 구단 ID 지정하기
   // TODO: 사용자 응원 구단으로 지정하기
-  const [selectedClubOption, setSelectedClubOption] = useState<string>(
-    cardStoreListItem.club === "" ? "kia" : cardStoreListItem.club,
-  );
+  // const [selectedClubOption, setSelectedClubOption] = useState<string>(
+  //   cardStoreListItem.club === "" ? "kia" : cardStoreListItem.club,
+  // );
+  const selectedClubOption = "kia";
   // TODO: 카드 목록 조회 시 포지션도 반영
   const [selectedPositionOption, setSelectedPositionOption] = useState<string>(
     cardStoreListItem.position,
@@ -101,11 +102,11 @@ const CardStore = () => {
     };
   }, [selectedClubOption, selectedPositionOption, selectedSortOption, isVisibleBoughtCard]);
 
-  const handleSelectClubOption = (value: string) => {
-    setSelectedClubOption(value);
+  // const handleSelectClubOption = (value: string) => {
+  //   setSelectedClubOption(value);
 
-    setPhotoCardInfos(null);
-  };
+  //   setPhotoCardInfos(null);
+  // };
 
   const handleSelectPositionOption = (value: string) => {
     setSelectedPositionOption(value);
