@@ -38,6 +38,10 @@ const CommuTradeCreate = () => {
         setErrorMessage("최대 5개의 태그만 추가할 수 있습니다.");
         return;
       }
+      if (tags.includes(tagValue.trim())) {
+        setErrorMessage("이미 추가된 태그입니다.");
+        return;
+      }
       if (tagValue.trim().length > 5) {
         setErrorMessage("태그는 최대 5글자까지 입력 가능합니다.");
         return;
@@ -58,17 +62,25 @@ const CommuTradeCreate = () => {
     }
   }, [errorMessage]);
 
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const newImages = Array.from(e.target.files);
+      if (images.length + newImages.length > 5) {
+        setErrorMessage("이미지는 최대 5개까지 추가할 수 있습니다.");
+        return;
+      }
+      setImages(prevImages => [...prevImages, ...newImages]);
+    }
+  };
+
+  const handleImageRemove = (index: number) => {
+    setImages(prevImages => prevImages.filter((_, i) => i !== index));
+  };
+
   const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const inputText = e.target.value;
     if (inputText.length <= 1000) {
       setText(inputText);
-    }
-  };
-
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      const newImages = Array.from(e.target.files);
-      setImages(prevImages => [...prevImages, ...newImages]);
     }
   };
 
@@ -98,6 +110,7 @@ const CommuTradeCreate = () => {
         onTagRemove={handleTagRemove}
         onTextChange={handleTextChange}
         onImageChange={handleImageChange}
+        onImageRemove={handleImageRemove}
         onClearTitle={clearTitle}
         onClearPrice={clearPrice}
         onClearTag={clearTag}

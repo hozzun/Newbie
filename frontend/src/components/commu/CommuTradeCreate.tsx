@@ -20,6 +20,7 @@ interface CommuTradeCreateProps {
   onClearTitle: () => void;
   onClearPrice: () => void;
   onClearTag: () => void;
+  onImageRemove: (index: number) => void;
 }
 
 const CommuTradeCreate: React.FC<CommuTradeCreateProps> = ({
@@ -40,6 +41,7 @@ const CommuTradeCreate: React.FC<CommuTradeCreateProps> = ({
   onClearTitle,
   onClearPrice,
   onClearTag,
+  onImageRemove,
 }) => {
   return (
     <>
@@ -117,6 +119,10 @@ const CommuTradeCreate: React.FC<CommuTradeCreateProps> = ({
               src={URL.createObjectURL(image)}
               alt="Preview"
               className="w-full h-full object-cover"
+            />
+            <CrossCircle
+              onClick={() => onImageRemove(index)}
+              className="absolute w-6 h-6 top-1 right-1 bg-gray-700 text-white rounded-lg p-1"
             />
           </div>
         ))}
