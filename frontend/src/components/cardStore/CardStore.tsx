@@ -1,6 +1,7 @@
 import Coin from "../../assets/icons/copyright-solid.svg?react";
 import { PhotoCardInfo } from "../../containers/cardstore/CardStore";
 import SortSelectBox from "../common/SortSelectBox";
+import Checkbox from "./Checkbox";
 import PhotoCard from "./PhotoCard";
 import TabBar from "./TabBar";
 
@@ -9,6 +10,8 @@ interface CardStoreProps {
   handleSelectPositionOption: (value: string) => void;
   selectedSortOption: string;
   handleSelectSortOption: (value: string) => void;
+  isVisibleBoughtCard: boolean;
+  handleIsVisibleBoughtCard: () => void;
   photoCards: Array<PhotoCardInfo> | null;
 }
 
@@ -36,13 +39,23 @@ const CardStore = (props: CardStoreProps) => {
         handleSelectOption={props.handleSelectPositionOption}
       />
       <div className="flex flex-row justify-between items-center w-full mt-3">
-        <p className="text-base font-kbogothicmedium text-gray-700">총 6개</p>
-        <SortSelectBox
-          options={sortOptions}
-          minWidth={100}
-          selectedSortOption={props.selectedSortOption}
-          handleSelectSortOption={props.handleSelectSortOption}
-        />
+        <p className="text-base font-kbogothicmedium text-gray-700">
+          총 {props.photoCards ? props.photoCards.length : 0}개
+        </p>
+        <div className="flex flex-row justify-end items-center">
+          <SortSelectBox
+            options={sortOptions}
+            minWidth={100}
+            selectedSortOption={props.selectedSortOption}
+            handleSelectSortOption={props.handleSelectSortOption}
+          />
+          <Checkbox
+            className="ml-1"
+            label="구매한 카드 미포함"
+            checked={!props.isVisibleBoughtCard}
+            handleChecked={props.handleIsVisibleBoughtCard}
+          />
+        </div>
       </div>
       {props.photoCards ? (
         <div className="grid grid-cols-3 gap-4 mt-3">

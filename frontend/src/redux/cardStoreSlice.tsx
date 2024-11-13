@@ -30,8 +30,16 @@ const cardStoreSlice = createSlice({
     setCardStoreListItem: (state, action: PayloadAction<CardStoreListItem>) => {
       state.cardStoreListItem = action.payload;
     },
+    clearCardStoreListItem: state => {
+      state.cardStoreListItem = {
+        club: "",
+        position: "투수",
+        sort: "",
+        isVisibleBoughtCard: true,
+      };
+    },
   },
 });
 
-export const { setCardStoreListItem } = cardStoreSlice.actions;
+export const { setCardStoreListItem, clearCardStoreListItem } = cardStoreSlice.actions;
 export default cardStoreSlice.reducer;

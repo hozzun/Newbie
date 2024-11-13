@@ -2,9 +2,10 @@ import axios from "axios";
 import CardStoreComponent from "../../components/cardStore/CardStore";
 import { useEffect, useRef, useState } from "react";
 import { GetPhotoCardsRequest, getPhotoCards } from "../../api/cardStoreApi";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import ClubId from "../../util/ClubId";
+import { setCardStoreListItem } from "../../redux/cardStoreSlice";
 
 export interface PhotoCardInfo {
   id: string;
@@ -13,6 +14,7 @@ export interface PhotoCardInfo {
   price: number;
 }
 
+// TODO: 정렬 기준 추가
 const sortItem: Record<string, string> = {
   가나다순: "DEFAULT",
   최신순: "LATEST",
@@ -20,6 +22,8 @@ const sortItem: Record<string, string> = {
 };
 
 const CardStore = () => {
+  const dispatch = useDispatch();
+
   const cardStoreListItem = useSelector((state: RootState) => state.cardStore.cardStoreListItem);
 
   // TODO: 캐러셀로 구단 ID 지정하기
@@ -78,7 +82,18 @@ const CardStore = () => {
     }
 
     fetchPhotoCards();
-  }, [selectedPositionOption, selectedSortOption]);
+
+    return () => {
+      dispatch(
+        setCardStoreListItem({
+          club: selectedClubOption,
+          position: selectedPositionOption,
+          sort: selectedSortOption,
+          isVisibleBoughtCard: isVisibleBoughtCard,
+        }),
+      );
+    };
+  }, [selectedClubOption, selectedPositionOption, selectedSortOption, isVisibleBoughtCard]);
 
   const handleSelectPositionOption = (value: string) => {
     setSelectedPositionOption(value);
@@ -92,12 +107,20 @@ const CardStore = () => {
     setPhotoCards(null);
   };
 
+  const handleIsVisibleBoughtCard = () => {
+    setIsVisibleBoughtCard(!isVisibleBoughtCard);
+
+    setPhotoCards(null);
+  };
+
   return (
     <CardStoreComponent
       selectedPositionOption={selectedPositionOption}
       handleSelectPositionOption={handleSelectPositionOption}
       selectedSortOption={selectedSortOption}
       handleSelectSortOption={handleSelectSortOption}
+      isVisibleBoughtCard={isVisibleBoughtCard}
+      handleIsVisibleBoughtCard={handleIsVisibleBoughtCard}
       photoCards={photoCards}
     />
   );
