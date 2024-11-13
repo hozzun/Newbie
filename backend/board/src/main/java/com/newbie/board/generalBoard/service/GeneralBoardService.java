@@ -48,12 +48,27 @@ public class GeneralBoardService {
     }
 
     @Transactional
-    public List<GeneralBoardResponseDto> searchBoardList(String keyword) {
-        return generalBoardRepository.searchByKeyword(keyword == null ? "" : keyword)
-                .stream()
+    public List<GeneralBoardResponseDto> searchBoardList(String keyword, String type) {
+        List<GeneralBoard> boards;
+        switch (type) {
+            case "title":
+                boards = generalBoardRepository.searchByTitle(keyword);
+                break;
+            case "tags":
+                boards = generalBoardRepository.searchByTag(keyword);
+                break;
+            case "username":
+                boards = generalBoardRepository.searchByUsername(keyword);
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid search type: " + type);
+        }
+
+        return boards.stream()
                 .map(GeneralBoardResponseDto::new)
                 .collect(Collectors.toList());
     }
+
 
     @Transactional
     public GeneralBoardResponseDto createGeneralBoard(GeneralBoardRequestDto requestDto, MultipartFile imageFile) throws IOException {
