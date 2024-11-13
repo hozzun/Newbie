@@ -10,6 +10,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
@@ -18,6 +19,7 @@ import software.amazon.awssdk.services.s3.model.S3Exception;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -58,36 +60,39 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByUserId(userId)
                 .orElseThrow(UserNotFoundException::new);
 
-        // 닉네임과 주소 업데이트
         if (userProfileRequestDto.getNickname() != null) user.updateNickname(userProfileRequestDto.getNickname());
         if (userProfileRequestDto.getAddress() != null) user.updateAddress(userProfileRequestDto.getAddress());
 
-        // 프로필 이미지 업데이트
-        if (userProfileRequestDto.getProfileImage() != null && !userProfileRequestDto.getProfileImage().isEmpty()) {
-            String originalFilename = userProfileRequestDto.getProfileImage().getOriginalFilename();
+        MultipartFile profileImage = userProfileRequestDto.getProfileImage();
+        if (profileImage != null && !profileImage.isEmpty()) {
+            String fileExtension = getFileExtension(Objects.requireNonNull(profileImage.getOriginalFilename())).toLowerCase();
 
-            if (originalFilename == null || originalFilename.isEmpty()) {
-                throw new IllegalArgumentException("파일 이름이 유효하지 않습니다.");
-            }
-
-            String fileExtension = getFileExtension(originalFilename).toLowerCase();
-
+            // 허용된 확장자 확인
             if (!ALLOWED_FILE_EXTENSIONS.contains(fileExtension)) {
-                throw new IllegalArgumentException("허용되지 않은 파일 형식입니다. jpg 또는 png 파일을 업로드해주세요.");
+                throw new IllegalArgumentException("허용되지 않은 파일 형식입니다. jpg, jpeg, png 파일만 지원됩니다.");
             }
 
-            String key = "profile/" + user.getUserId() + "/" + originalFilename;
+            String key = "profile/" + user.getId() + "/profile." + fileExtension;
             try {
+                // S3 업로드
                 s3Client.putObject(PutObjectRequest.builder()
                                 .bucket(bucketName)
                                 .key(key)
                                 .build(),
-                        RequestBody.fromInputStream(userProfileRequestDto.getProfileImage().getInputStream(), userProfileRequestDto.getProfileImage().getSize()));
+                        RequestBody.fromInputStream(profileImage.getInputStream(), profileImage.getSize()));
 
+                // 업로드된 이미지 URL 생성
                 String imageUrl = getS3ObjectUrl(key);
-                user.updateProfileImage(imageUrl);
-            } catch (IOException | S3Exception e) {
-                throw new RuntimeException("파일 업로드 중 오류 발생", e);
+
+                // 기존 이미지가 존재하면 URL만 업데이트
+                if (user.getProfileImage() != null) {
+                    user.updateProfileImage(imageUrl);
+                } else {
+                    // 처음 업로드인 경우 URL 설정
+                    user.updateProfileImage(imageUrl);
+                }
+            } catch (IOException e) {
+                throw new RuntimeException("파일 업로드 중 오류가 발생했습니다.", e);
             }
         }
         userRepository.save(user);
@@ -103,6 +108,13 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(UserNotFoundException::new);
         user.updateFavoriteTeamId(teamId);
         userRepository.save(user);
+    }
+
+    @Override
+    public Integer getFavoriteTeam(Long userId) {
+        User user = userRepository.findByUserId(userId)
+                .orElseThrow(UserNotFoundException::new);
+        return user.getFavoriteTeamId();
     }
 
     private String getFileExtension(String fileName) {
