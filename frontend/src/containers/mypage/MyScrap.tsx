@@ -1,12 +1,14 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import CommuFreeItem from "../../components/commu/CommuFreeItem";
+import axiosInstance from '../../util/axiosInstance';
 
 interface Post {
   id: number;
-  title: string;
-  contents: string;
-  writer: string;
-  createTimeStamp: string;
+  boardTitle: string;
+  content: string;
+  username: string;
+  imageUrl: string;
+  createdAt: string;
   viewCount: number;
   likeCount: number;
   commentCount: number;
@@ -16,26 +18,45 @@ const MyBoard = () => {
   const [posts, setPosts] = useState<Post[]>([
     {
       id: 1,
-      title: "기본 게시물 제목",
-      contents: "이것은 기본 게시물의 내용입니다. 여기에 설명이 들어갑니다.",
-      writer: "관리자",
-      createTimeStamp: new Date().toLocaleDateString(),
+      boardTitle: "기본 제목",
+      content: "기본 내용",
+      username: "김미량",
+      imageUrl: "",
+      createdAt: "2024.11.13",
       viewCount: 10,
       likeCount: 5,
-      commentCount: 2,
-    },
+      commentCount: 2
+    }
   ]);
   console.log(setPosts)
+
+  const getScrap = async () => {
+    
+    const params = {
+      userId: 5
+    }
+
+    try {
+      const response = await axiosInstance.get("/api-board/scrap", { params });
+      setPosts(response.data);
+    } catch (error) {
+      console.error("에러 발생:", error);
+    }
+  };
+
+  useEffect(() => {
+    getScrap();
+  }, []);
 
   return (
     <>
       {posts.map((post, index) => (
         <div key={post.id}>
           <CommuFreeItem
-            title={post.title}
-            contents={post.contents}
-            writer={post.writer}
-            createTimeStamp={post.createTimeStamp}
+            title={post.boardTitle}
+            contents={post.content}
+            writer={post.username}
+            createTimeStamp={post.createdAt}
             viewCount={post.viewCount}
             likeCount={post.likeCount}
             commentCount={post.commentCount}
