@@ -40,7 +40,6 @@ public class TicketService {
         Ticket ticket = ticketRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Ticket not found"));
 
-        // 기존 필드 정보를 유지하면서 text 필드만 업데이트
         Ticket updatedTicket = Ticket.builder()
                 .id(ticket.getId())
                 .userId(ticket.getUserId())
@@ -50,10 +49,11 @@ public class TicketService {
                 .team1Korean(ticket.getTeam1Korean())
                 .team2Korean(ticket.getTeam2Korean())
                 .imageUrl(ticket.getImageUrl())
-                .text(text)  // text 필드만 새로 설정
+                .text(text)
+                .createdAt(ticket.getCreatedAt())
                 .build();
 
-        ticketRepository.save(updatedTicket);  // 수정된 객체를 저장
+        ticketRepository.save(updatedTicket);
     }
 
 
