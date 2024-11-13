@@ -2,7 +2,7 @@ import Coin from "../../assets/icons/copyright-solid.svg?react";
 import { PhotoCardInfo } from "../../containers/cardstore/CardStore";
 import SortSelectBox from "../common/SortSelectBox";
 import Checkbox from "./Checkbox";
-import PhotoCard from "./PhotoCard";
+import PhotoCard from "../../containers/cardstore/PhotoCard";
 import TabBar from "./TabBar";
 
 interface CardStoreProps {
@@ -17,11 +17,6 @@ interface CardStoreProps {
 
 const tabBarOptions: Array<string> = ["투수", "내야수", "외야수", "포수"];
 const sortOptions: Array<string> = ["가나다순", "최신순", "판매순", "가격낮은순", "가격높은순"];
-
-const onClick = () => {
-  // TODO: MOVE - 카드 상세조회 페이지
-  console.log("카드 상세조회 페이지로 이동");
-};
 
 const CardStore = (props: CardStoreProps) => {
   return (
@@ -60,7 +55,7 @@ const CardStore = (props: CardStoreProps) => {
       {props.photoCards ? (
         <div className="grid grid-cols-3 gap-4 mt-3">
           {props.photoCards.map(photoCard => (
-            <PhotoCard key={photoCard.id} photoCard={photoCard} onClick={onClick} />
+            <PhotoCard key={photoCard.id} photoCard={photoCard} />
           ))}
         </div>
       ) : (
