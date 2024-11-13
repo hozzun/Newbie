@@ -11,7 +11,7 @@ import { PlayerListProps } from "../../components/club/PlayerList";
 import { GetPlayersRequest, getPlayers } from "../../api/playerApi";
 import { PlayerInfo, PlayerItemProps } from "../player/PlayerList";
 import { useDispatch } from "react-redux";
-import { setPlayer } from "../../redux/playerSlice";
+import { clearPlayerListItem, setPlayer } from "../../redux/playerSlice";
 
 export interface ClubOverviewData {
   id: string;
@@ -149,6 +149,8 @@ const ClubHome = () => {
     fetchClubOverview();
     fetchUpcomingGame();
     fetchPlayers();
+
+    dispatch(clearPlayerListItem());
   }, []);
 
   useEffect(() => {

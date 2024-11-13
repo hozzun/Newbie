@@ -10,10 +10,12 @@ import { CIRCLE_BUTTON_VARIANTS } from "../common/variants";
 import Heart from "../../assets/icons/heart-solid.svg?react";
 import Karina from "../../assets/images/karina.jpg";
 import { PlayerInfo } from "../../containers/player/PlayerList";
+import { Video } from "../../containers/player/Player";
 
 interface PlayerProps {
   playerInfo: PlayerInfo | null;
   playerSeasonRecordItem: Array<PlayerRecordItemProps> | null;
+  playerHighlights: Array<Video> | null;
 }
 
 const playerRecordItems: Array<PlayerRecordItemProps> = [
@@ -90,7 +92,7 @@ const Player = (props: PlayerProps) => {
           <PlayerRecord label={`${currentYear} 기록`} items={props.playerSeasonRecordItem} />
           <PlayerRecord label="통산 기록" items={playerRecordItems} />
           <PlayerMusicController />
-          <PlayerHighlight />
+          <PlayerHighlight playerHighlights={props.playerHighlights} />
         </div>
       </Container>
     </>

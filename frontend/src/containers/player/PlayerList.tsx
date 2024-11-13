@@ -5,8 +5,9 @@ import ClubId from "../../util/ClubId";
 import CustomError from "../../util/CustomError";
 import { GetPlayersRequest, getPlayers } from "../../api/playerApi";
 import axios from "axios";
-import { useDispatch } from "react-redux";
-import { setPlayer } from "../../redux/playerSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { setPlayer, setPlayerListItem } from "../../redux/playerSlice";
+import { RootState } from "../../redux/store";
 
 export interface PlayerItemProps {
   id: number;
@@ -36,10 +37,14 @@ const PlayerList = () => {
   const nav = useNavigate();
   const dispatch = useDispatch();
 
+  const playerListItem = useSelector((state: RootState) => state.player.playerListItem);
+
   const { id } = useParams<{ id: string }>();
 
-  const [selectedPositionOption, setSelectedPositionOption] = useState<string>("투수");
-  const [selectedSortOption, setSelectedSortOption] = useState<string>("");
+  const [selectedPositionOption, setSelectedPositionOption] = useState<string>(
+    playerListItem.position,
+  );
+  const [selectedSortOption, setSelectedSortOption] = useState<string>(playerListItem.sort);
   const [hasMore, setHasMore] = useState<boolean>(true);
   const [players, setPlayers] = useState<Array<PlayerItemProps> | null>(null);
   const isFirstRender = useRef<boolean>(true);
@@ -106,6 +111,17 @@ const PlayerList = () => {
       }
     }
   };
+
+  useEffect(() => {
+    return () => {
+      dispatch(
+        setPlayerListItem({
+          position: selectedPositionOption,
+          sort: selectedSortOption,
+        }),
+      );
+    };
+  }, [selectedPositionOption, selectedSortOption]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
