@@ -120,7 +120,7 @@ const Calendar = () => {
                       src={ClubLogos[opponentTeamName]}
                       alt={`${opponentTeamName} logo`}
                     />
-                    <p>{game.stadium}</p>
+                    <p className="text-[7px]">{game.stadium}</p>
                   </>
                 )}
               </div>
