@@ -31,6 +31,7 @@ public class UsedBoardComment {
     @NotNull
     private String content;
 
+    @Builder.Default
     private LocalDateTime createdAt = LocalDateTime.now();
 
     @ManyToOne
@@ -41,5 +42,6 @@ public class UsedBoardComment {
     @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<UsedBoardComment> replies = new ArrayList<>();
 
+    @Builder.Default
     private String isDeleted = "N";
 }

@@ -32,7 +32,7 @@ public class GeneralBoardComment {
     @NotNull
     private String content;
 
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private LocalDateTime createdAt;
 
     @ManyToOne
     @JoinColumn(name = "parent_id")
@@ -42,5 +42,6 @@ public class GeneralBoardComment {
     @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<GeneralBoardComment> replies = new ArrayList<>();
 
+    @Builder.Default
     private String isDeleted = "N";
 }

@@ -34,6 +34,8 @@ public class UsedBoard {
     private Integer price;
     private String region;
     private LocalDateTime createdAt;
+
+    @Builder.Default
     @Column(name = "is_deleted")
     private String isDeleted = "N";
 
@@ -56,6 +58,7 @@ public class UsedBoard {
         }
     }
 
+    @Builder.Default
     @OneToMany(mappedBy = "usedBoard", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<UsedBoardComment> comments = new ArrayList<>();
 }

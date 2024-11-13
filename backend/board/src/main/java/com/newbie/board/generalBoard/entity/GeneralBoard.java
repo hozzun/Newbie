@@ -36,9 +36,11 @@ public class GeneralBoard {
     @Column(name = "image_url")
     private String imageUrl;
 
+    @Builder.Default
     @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
 
+    @Builder.Default
     @Column(name = "is_deleted")
     private String isDeleted = "N";
 
@@ -63,6 +65,8 @@ public class GeneralBoard {
         }
     }
 
+
+    @Builder.Default
     @OneToMany(mappedBy = "generalBoard", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<GeneralBoardComment> comments = new ArrayList<>();
 }
