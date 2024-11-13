@@ -3,13 +3,15 @@ import userReducer from "./userSlice";
 import notiReducer from "./notiSlice";
 import gameReducer from "./gameSlice";
 import playerReducer from "./playerSlice";
+import cardStoreReducer from "./cardStoreSlice";
 
 const store = configureStore({
   reducer: {
     user: userReducer,
     notification: notiReducer,
     game: gameReducer,
-    player: playerReducer
+    player: playerReducer,
+    cardStore: cardStoreReducer
   },
 });
 

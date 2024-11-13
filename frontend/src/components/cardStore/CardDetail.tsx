@@ -1,45 +1,44 @@
 import { useState } from "react";
-import Karina from "../../assets/images/karina.jpg";
 import Button, { ButtonProps } from "../common/Button";
 import { BUTTON_VARIANTS } from "../common/variants";
-import { PhotoCardData } from "./PhotoCard";
 import "./CardDetail.css";
 import Dialog, { DialogProps } from "../common/Dialog";
+import ClubFullName from "../../util/ClubFullName";
+import { PhotoCardInfo } from "../../containers/cardstore/CardStore";
+import { PlayerInfo } from "../../containers/cardstore/CardDetail";
+
+export interface CardDetailProps {
+  photoCardInfo: PhotoCardInfo | null;
+  playerInfo: PlayerInfo | null;
+  handleBuyPhotoCard: () => void;
+}
 
 interface CardDetailBackItemProps {
   label: string;
   value: string;
 }
 
-interface Player {
-  name: string;
-  no: number;
-  clubName: string;
-  position: string;
-  birthday: string;
-  bodyInfo: string;
-  finalEducation: string;
-}
+const clubColors: Record<string, string> = {
+  kia: "bg-club-kia",
+  samsung: "bg-club-samsung",
+  lg: "bg-club-lg",
+  doosan: "bg-club-doosan",
+  kt: "bg-club-kt",
+  ssg: "bg-club-ssg",
+  lotte: "bg-club-lotte",
+  hanwha: "bg-club-hanwha",
+  nc: "bg-club-nc",
+  kiwoom: "bg-club-kiwoom",
+};
 
-interface CardDetailProps extends PhotoCardData {
-  player: Player;
-}
-
-interface CardDetailBackProps extends Player {
-  title: string;
-}
-
-interface CardDialogBodyPRops {
-  title: string;
-  playerNo: number;
-  playerName: string;
-  price: number;
-}
-
-const CardDetailFront = (props: PhotoCardData) => {
+const CardDetailFront = (props: PhotoCardInfo) => {
   return (
     <div className="w-full h-full hover:cursor-pointer">
-      <img src={Karina} alt={props.title} className="w-full h-full object-cover rounded-lg" />
+      <img
+        src={props.imageUrl}
+        alt={`${props.title} No.${props.backNumber} ${props.name}`}
+        className="w-full h-full object-cover rounded-lg"
+      />
     </div>
   );
 };
@@ -53,41 +52,50 @@ const CardDetailBackItem = (props: CardDetailBackItemProps) => {
   );
 };
 
-const CardDetailBack = (props: CardDetailBackProps) => {
+const CardDetailBack = (props: CardDetailProps) => {
+  if (!props.photoCardInfo || !props.playerInfo) {
+    return;
+  }
+
   return (
-    <div className="w-full h-full hover:cursor-pointer bg-gray-700 rounded-lg justify-center items-center flex flex-col">
-      <p className="text-base font-kbogothicbold text-white">{props.title}</p>
+    <div
+      className={`w-full h-full hover:cursor-pointer ${clubColors[props.photoCardInfo.teamId]} rounded-lg justify-center items-center flex flex-col`}
+    >
+      <p className="text-base font-kbogothicbold text-white">{props.photoCardInfo.title}</p>
       <p className="text-base font-kbogothicbold text-white">
-        No.{props.no} {props.name}
+        No.{props.photoCardInfo.backNumber} {props.photoCardInfo.name}
       </p>
       <div className="flex flex-col space-y-2 mt-10">
-        <CardDetailBackItem label="소속구단" value={props.clubName} />
-        <CardDetailBackItem label="포지션" value={props.position} />
-        <CardDetailBackItem label="생년월일" value={props.birthday} />
-        <CardDetailBackItem label="체격" value={props.bodyInfo} />
-        <CardDetailBackItem label="최종학력" value={props.finalEducation} />
+        <CardDetailBackItem label="소속구단" value={ClubFullName[props.photoCardInfo.teamId]} />
+        <CardDetailBackItem label="포지션" value={props.playerInfo.position} />
+        <CardDetailBackItem label="생년월일" value={props.playerInfo.birth.replace(/-/g, ".")} />
+        <CardDetailBackItem label="체격" value={props.playerInfo.physical} />
+        <CardDetailBackItem label="학력" value={props.playerInfo.education} />
       </div>
     </div>
   );
 };
 
-const cardDetailProps: CardDetailProps = {
-  id: "카드ID",
-  title: "2024",
-  imgSrc: "카드URL",
-  price: 1000,
-  player: {
-    name: "카리나",
-    no: 1,
-    clubName: "에스파",
-    position: "리더",
-    birthday: "2000.01.01",
-    bodyInfo: "모름",
-    finalEducation: "모름",
-  },
+const CardDialogBody = (props: PhotoCardInfo) => {
+  return (
+    <div className="flex flex-col justify-center items-center w-full">
+      <div className="flex flex-row justify-center items-center w-full">
+        <p className="text-sm font-kbogothiclight text-gray-700 text-center">
+          <span className="font-kbogothicmedium">
+            {props.title} No.{props.backNumber} {props.name}{" "}
+          </span>
+          을(를) {props.price.toLocaleString("ko-KR")}P에 구매하시겠습니까? 구매를 완료하시려면
+          '확인'을 눌러주세요.
+        </p>
+      </div>
+      <p className="text-sm font-kbogothiclight text-gray-700 mt-2">
+        언제나 만족스러운 쇼핑이 되시길 바랍니다!
+      </p>
+    </div>
+  );
 };
 
-const CardDetail = () => {
+const CardDetail = (props: CardDetailProps) => {
   const [isFlipped, setIsFlipped] = useState<boolean>(false);
   const [isOpenedDialog, setIsOpenedDialog] = useState<boolean>(false);
 
@@ -100,14 +108,13 @@ const CardDetail = () => {
   };
 
   const onNoClick = () => {
-    console.log("구매 취소");
     setIsOpenedDialog(false);
   };
 
   const yesButton: ButtonProps = {
     variant: BUTTON_VARIANTS.success,
     children: "확인",
-    onClick: () => console.log("구매 확인"),
+    onClick: () => props.handleBuyPhotoCard(),
   };
 
   const noButton: ButtonProps = {
@@ -116,35 +123,19 @@ const CardDetail = () => {
     onClick: () => onNoClick(),
   };
 
-  const CardDialogBody = (props: CardDialogBodyPRops) => {
+  if (!props.photoCardInfo || !props.playerInfo) {
     return (
-      <div className="flex flex-col justify-center items-center w-full">
-        <div className="flex flex-row justify-center items-center w-full">
-          <p className="text-sm font-kbogothiclight text-gray-700 text-center">
-            <span className="font-kbogothicmedium">
-              {props.title} No.{props.playerNo} {props.playerName}{" "}
-            </span>
-            을(를) {cardDetailProps.price.toLocaleString("ko-KR")}P에 구매하시겠습니까? 구매를
-            완료하시려면 '확인'을 눌러주세요.
-          </p>
-        </div>
-        <p className="text-sm font-kbogothiclight text-gray-700 mt-2">
-          언제나 만족스러운 쇼핑이 되시길 바랍니다!
+      <div className="flex w-full justify-center items-center">
+        <p className="text-base font-kbogothicmedium text-gray-700">
+          포토 카드 정보가 없습니다...😥
         </p>
       </div>
     );
-  };
+  }
 
   const cardDialog: DialogProps = {
     title: "구매 확인해주세요!",
-    body: (
-      <CardDialogBody
-        title={cardDetailProps.title}
-        playerNo={cardDetailProps.player.no}
-        playerName={cardDetailProps.player.name}
-        price={cardDetailProps.price}
-      />
-    ),
+    body: <CardDialogBody {...props.photoCardInfo} />,
     yesButton: yesButton,
     noButton: noButton,
   };
@@ -158,15 +149,10 @@ const CardDetail = () => {
             onClick={handleFlip}
           >
             <div className="card-side card-side-front absolute inset-0 flex items-center justify-center w-full h-full">
-              <CardDetailFront
-                id={cardDetailProps.id}
-                title={cardDetailProps.title}
-                imgSrc={cardDetailProps.imgSrc}
-                price={cardDetailProps.price}
-              />
+              <CardDetailFront {...props.photoCardInfo} />
             </div>
             <div className="card-side card-side-back absolute inset-0 flex items-center justify-center rotate-y-180">
-              <CardDetailBack {...cardDetailProps.player} title={cardDetailProps.title} />
+              <CardDetailBack {...props} />
             </div>
           </div>
         </div>

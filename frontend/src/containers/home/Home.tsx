@@ -13,6 +13,8 @@ import { GetWeatherRequest, getWeather } from "../../api/weatherApi";
 import Stadiums from "../../util/Stadiums";
 import { calculateWeather } from "../../util/Weather";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { clearCardStoreListItem } from "../../redux/cardStoreSlice";
 
 export interface ClubProps {
   id: string;
@@ -63,6 +65,7 @@ export interface ClubRankItemProps {
 
 const Home = () => {
   const nav = useNavigate();
+  const dispatch = useDispatch();
 
   const today = new Date();
 
@@ -221,6 +224,8 @@ const Home = () => {
     fetchClubRanks();
     fetchHighlightUrl();
     fetchCards();
+
+    dispatch(clearCardStoreListItem());
   }, []);
 
   const goGameScheduleMore = () => {
