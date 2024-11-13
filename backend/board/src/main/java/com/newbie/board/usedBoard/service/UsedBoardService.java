@@ -1,5 +1,7 @@
 package com.newbie.board.usedBoard.service;
 
+import com.newbie.board.generalBoard.dto.GeneralBoardResponseDto;
+import com.newbie.board.generalBoard.entity.GeneralBoard;
 import com.newbie.board.usedBoard.dto.UsedBoardRequestDto;
 import com.newbie.board.usedBoard.dto.UsedBoardResponseDto;
 import com.newbie.board.usedBoard.dto.UsedBoardUpdateRequestDto;
@@ -57,9 +59,24 @@ public class UsedBoardService {
      * @param keyword 제목, 태그, 이름
      * @return
      */
-    public List<UsedBoardResponseDto> searchBoardList(String keyword) {
-        return usedBoardRepository.searchByKeyword(keyword == null ? "" : keyword)
-                .stream()
+    @Transactional
+    public List<UsedBoardResponseDto> searchBoardList(String keyword, String type) {
+        List<UsedBoard> boards;
+        switch (type) {
+            case "title":
+                boards = usedBoardRepository.searchByTitle(keyword);
+                break;
+            case "tags":
+                boards = usedBoardRepository.searchByTag(keyword);
+                break;
+            case "username":
+                boards = usedBoardRepository.searchByUsername(keyword);
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid search type: " + type);
+        }
+
+        return boards.stream()
                 .map(UsedBoardResponseDto::new)
                 .collect(Collectors.toList());
     }
