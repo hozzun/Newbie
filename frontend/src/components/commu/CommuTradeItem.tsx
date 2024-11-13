@@ -31,31 +31,31 @@ const CommuTrade = ({
       <div>
         <div className="flex justify-between items-start">
           <div className="flex flex-col">
-            <div className="font-kbogothicmedium text-xl">{title}</div>
-            <div className="font-kbogothiclight text-lg">{contents}</div>
+            <div className="flex items-start font-kbogothicmedium text-lg">{title}</div>
+            <div className="font-kbogothiclight text-sm py-2">{contents}</div>
           </div>
           <div className="ml-4">
             <img src={imageUrl} alt={`${title} 이미지`} className="w-20 h-20 object-cover" />
           </div>
         </div>
-        <div className="flex justify-between items-center">
-          <div className="font-kbogothiclight text-base">{writer}</div>
-          <div className="font-kbogothiclight text-base">{createTimeStamp}</div>
+        <div className="flex justify-between items-center pb-1">
+          <div className="font-kbogothiclight text-xs">{writer}</div>
+          <div className="font-kbogothiclight text-xs">{createTimeStamp}</div>
         </div>
         <div className="flex justify-between items-center">
           <div className="flex justify-start items-center gap-2">
-            <div className="flex gap-1 font-kbogothiclight text-base">
+            <div className="flex gap-1 font-kbogothiclight text-xs">
               <Coin className="w-4 h-4 text-[#FFA600]" /> {price}
             </div>
-            <div className="flex gap-1 font-kbogothiclight text-base">
+            <div className="flex gap-1 font-kbogothiclight text-xs">
               <Location className="w-4 h-4 text-[#FFAEC5]" /> {location}
             </div>
           </div>
           <div className="flex justify-end items-center gap-2">
-            <div className="flex gap-1 font-kbogothiclight text-base">
+            <div className="flex gap-1 font-kbogothiclight text-xs">
               <Like className="w-4 h-4" /> {viewCount}
             </div>
-            <div className="flex gap-1 font-kbogothiclight text-base">
+            <div className="flex gap-1 font-kbogothiclight text-xs">
               <Comment className="w-4 h-4 text-[#7FAAFF]" /> {commentCount}
             </div>
           </div>

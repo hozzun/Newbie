@@ -1,11 +1,12 @@
 import { useState } from "react";
 import CrossCircle from "../../assets/icons/cross-circle.svg?react";
+import Picture from "../../assets/icons/picture-solid.svg?react";
 
 const CommuFreeCreate = () => {
   const [titleValue, setTitleValue] = useState("");
   const [tagValue, setTagValue] = useState("");
   const [text, setText] = useState("");
-  const [imageName, setImageName] = useState("");
+  const [image, setImage] = useState<string | null>(null);
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitleValue(e.target.value);
@@ -21,7 +22,8 @@ const CommuFreeCreate = () => {
   };
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      setImageName(e.target.files[0].name);
+      const file = e.target.files[0];
+      setImage(URL.createObjectURL(file)); // 이미지 미리보기 URL 생성
     }
   };
 
@@ -60,16 +62,20 @@ const CommuFreeCreate = () => {
         />
       </div>
 
-      <div className="relative w-full border-dashed border-2 border-gray-300 p-4 rounded-md flex items-center justify-center">
+      <div className="relative w-full p-4 border-b-2 border-gray-100 flex items-center justify-center mb-4">
         <input
           type="file"
           accept="image/*"
           onChange={handleImageChange}
           className="absolute inset-0 opacity-0 cursor-pointer"
         />
-        <span className="text-gray-500 font-kbogothiclight">
-          {imageName || "이미지를 첨부하려면 클릭하세요"}
-        </span>
+        <div className="text-gray-500 font-kbogothiclight flex items-center border border-dashed rounded-lg justify-center w-20 h-20">
+          {image ? (
+            <img src={image} alt="Preview" className="w-20 h-20 object-cover rounded-lg" />
+          ) : (
+            <Picture className="w-20 h-20 p-2 text-gray-500" />
+          )}
+        </div>
       </div>
 
       <div className="relative w-full mx-auto">
@@ -79,9 +85,8 @@ const CommuFreeCreate = () => {
           value={text}
           onChange={handleTextChange}
           className="w-full p-2 pb-14 border border-none font-kbogothiclight focus:outline-none focus:border-green-900 resize-none"
-          rows={10} // 적절한 행 수 설정
+          rows={10}
         />
-        {/* 글자 수 표시 */}
         <div className="absolute bottom-4 font-kbogothiclight right-6 text-xs text-gray-400">
           ( {text.length} / 1000 )
         </div>
