@@ -32,7 +32,7 @@ const CardStore = () => {
   // TODO: 캐러셀로 구단 ID 지정하기
   // TODO: 사용자 응원 구단으로 지정하기
   const [selectedClubOption, setSelectedClubOption] = useState<string>(
-    cardStoreListItem.club === "" ? "ssg" : cardStoreListItem.club,
+    cardStoreListItem.club === "" ? "kia" : cardStoreListItem.club,
   );
   // TODO: 카드 목록 조회 시 포지션도 반영
   const [selectedPositionOption, setSelectedPositionOption] = useState<string>(

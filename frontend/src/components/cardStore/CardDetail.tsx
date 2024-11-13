@@ -10,6 +10,7 @@ import { PlayerInfo } from "../../containers/cardstore/CardDetail";
 export interface CardDetailProps {
   photoCardInfo: PhotoCardInfo | null;
   playerInfo: PlayerInfo | null;
+  handleBuyPhotoCard: () => void;
 }
 
 interface CardDetailBackItemProps {
@@ -113,7 +114,7 @@ const CardDetail = (props: CardDetailProps) => {
   const yesButton: ButtonProps = {
     variant: BUTTON_VARIANTS.success,
     children: "확인",
-    onClick: () => console.log("구매 확인"),
+    onClick: () => props.handleBuyPhotoCard(),
   };
 
   const noButton: ButtonProps = {

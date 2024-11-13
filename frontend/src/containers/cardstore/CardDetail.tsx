@@ -46,11 +46,29 @@ const CardDetail = () => {
     }
   };
 
+  const handleBuyPhotoCard = async () => {
+    try {
+      if (!photoCardInfo) {
+        throw new CustomError("[ERROR] 선수 포토카드 정보 없음 by card detail");
+      }
+
+      console.log(`${photoCardInfo.id} 구매 시도`);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   useEffect(() => {
     fetchPlayerInfos();
   }, []);
 
-  return <CardDetailComponent photoCardInfo={photoCardInfo} playerInfo={playerInfo} />;
+  return (
+    <CardDetailComponent
+      photoCardInfo={photoCardInfo}
+      playerInfo={playerInfo}
+      handleBuyPhotoCard={handleBuyPhotoCard}
+    />
+  );
 };
 
 export default CardDetail;
