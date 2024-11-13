@@ -4,13 +4,16 @@ import { useEffect, useRef, useState } from "react";
 import { GetPhotoCardsRequest, getPhotoCards } from "../../api/cardStoreApi";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
-import ClubId from "../../util/ClubId";
+import ClubId, { getClubIdByNum } from "../../util/ClubId";
 import { setCardStoreListItem } from "../../redux/cardStoreSlice";
 
 export interface PhotoCardInfo {
   id: string;
+  title: string;
   imageUrl: string;
   name: string;
+  teamId: string;
+  backNumber: string;
   price: number;
 }
 
@@ -29,7 +32,7 @@ const CardStore = () => {
   // TODO: 캐러셀로 구단 ID 지정하기
   // TODO: 사용자 응원 구단으로 지정하기
   const [selectedClubOption, setSelectedClubOption] = useState<string>(
-    cardStoreListItem.club === "" ? "kia" : cardStoreListItem.club,
+    cardStoreListItem.club === "" ? "ssg" : cardStoreListItem.club,
   );
   // TODO: 카드 목록 조회 시 포지션도 반영
   const [selectedPositionOption, setSelectedPositionOption] = useState<string>(
@@ -39,11 +42,11 @@ const CardStore = () => {
   const [isVisibleBoughtCard, setIsVisibleBoughtCard] = useState<boolean>(
     cardStoreListItem.isVisibleBoughtCard,
   );
-  const [photoCards, setPhotoCards] = useState<Array<PhotoCardInfo> | null>(null);
+  const [photoCardInfos, setPhotoCardInfos] = useState<Array<PhotoCardInfo> | null>(null);
 
   const isFirstRender = useRef<boolean>(true);
 
-  const fetchPhotoCards = async () => {
+  const fetchPhotoCardInfos = async () => {
     try {
       const getPhotoCardsRequest: GetPhotoCardsRequest = {
         team: ClubId[selectedClubOption],
@@ -51,20 +54,23 @@ const CardStore = () => {
         includeCard: isVisibleBoughtCard,
       };
       const response = await getPhotoCards(getPhotoCardsRequest);
-      const photoCardDatas: Array<PhotoCardInfo> = response.data.map(d => {
+      const photoCardInfoDatas: Array<PhotoCardInfo> = response.data.map(d => {
         return {
           id: d.id,
+          title: "2024",
           imageUrl: d.imageUrl,
           name: d.name,
+          teamId: getClubIdByNum(d.team),
+          backNumber: d.no,
           price: d.price,
         };
       });
 
-      setPhotoCards(photoCardDatas);
+      setPhotoCardInfos(photoCardInfoDatas);
     } catch (e) {
       if (axios.isAxiosError(e) && e.response?.status === 404) {
-        console.log("[INFO] 선수 정보 없음 by player list");
-        setPhotoCards([]);
+        console.log("[INFO] 카드 정보 없음 by card store");
+        setPhotoCardInfos([]);
       } else {
         console.error(e);
       }
@@ -72,7 +78,7 @@ const CardStore = () => {
   };
 
   useEffect(() => {
-    fetchPhotoCards();
+    fetchPhotoCardInfos();
   }, []);
 
   useEffect(() => {
@@ -81,7 +87,7 @@ const CardStore = () => {
       return;
     }
 
-    fetchPhotoCards();
+    fetchPhotoCardInfos();
 
     return () => {
       dispatch(
@@ -95,22 +101,28 @@ const CardStore = () => {
     };
   }, [selectedClubOption, selectedPositionOption, selectedSortOption, isVisibleBoughtCard]);
 
+  const handleSelectClubOption = (value: string) => {
+    setSelectedClubOption(value);
+
+    setPhotoCardInfos(null);
+  };
+
   const handleSelectPositionOption = (value: string) => {
     setSelectedPositionOption(value);
 
-    setPhotoCards(null);
+    setPhotoCardInfos(null);
   };
 
   const handleSelectSortOption = (value: string) => {
     setSelectedSortOption(value);
 
-    setPhotoCards(null);
+    setPhotoCardInfos(null);
   };
 
   const handleIsVisibleBoughtCard = () => {
     setIsVisibleBoughtCard(!isVisibleBoughtCard);
 
-    setPhotoCards(null);
+    setPhotoCardInfos(null);
   };
 
   return (
@@ -121,7 +133,7 @@ const CardStore = () => {
       handleSelectSortOption={handleSelectSortOption}
       isVisibleBoughtCard={isVisibleBoughtCard}
       handleIsVisibleBoughtCard={handleIsVisibleBoughtCard}
-      photoCards={photoCards}
+      photoCardInfos={photoCardInfos}
     />
   );
 };

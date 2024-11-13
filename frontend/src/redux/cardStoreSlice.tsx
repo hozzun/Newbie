@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { PhotoCardInfo } from "../containers/cardstore/CardStore";
 
 interface CardStoreListItem {
   club: string;
@@ -8,10 +9,12 @@ interface CardStoreListItem {
 }
 
 interface CardStoreState {
+  photoCardInfo: PhotoCardInfo | null;
   cardStoreListItem: CardStoreListItem;
 }
 
 const initialState: CardStoreState = {
+  photoCardInfo: null,
   cardStoreListItem: {
     club: "",
     position: "투수",
@@ -24,6 +27,9 @@ const cardStoreSlice = createSlice({
   name: "cardstore",
   initialState,
   reducers: {
+    setPhotoCardInfo: (state, action: PayloadAction<PhotoCardInfo | null>) => {
+      state.photoCardInfo = action.payload;
+    },
     setCardStoreClubItem: (state, action: PayloadAction<string>) => {
       state.cardStoreListItem.club = action.payload;
     },
@@ -41,5 +47,6 @@ const cardStoreSlice = createSlice({
   },
 });
 
-export const { setCardStoreListItem, clearCardStoreListItem } = cardStoreSlice.actions;
+export const { setPhotoCardInfo, setCardStoreListItem, clearCardStoreListItem } =
+  cardStoreSlice.actions;
 export default cardStoreSlice.reducer;

@@ -1,5 +1,5 @@
 import Container from "../../components/common/Container";
-import CardDetailComponent from "../../components/cardStore/CardDetail";
+import CardDetailContainer from "../../containers/cardstore/CardDetail";
 import SectionBox from "../../containers/common/SectionBox";
 
 const CardDetail = () => {
@@ -7,7 +7,7 @@ const CardDetail = () => {
     <>
       <SectionBox />
       <Container>
-        <CardDetailComponent />
+        <CardDetailContainer />
       </Container>
     </>
   );

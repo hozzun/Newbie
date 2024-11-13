@@ -20,7 +20,7 @@ export interface PlayerItemProps {
 export interface PlayerInfo {
   id: number;
   teamId: string;
-  backNumber: number;
+  backNumber: string;
   name: string;
   position: string;
   birth: string;
@@ -77,7 +77,7 @@ const PlayerList = () => {
         const playerInfo: PlayerInfo = {
           id: d.id,
           teamId: id,
-          backNumber: parseInt(d.backNumber),
+          backNumber: d.backNumber,
           name: d.name,
           position: d.position,
           birth: d.birth,

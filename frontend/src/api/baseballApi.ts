@@ -92,3 +92,18 @@ export interface TeamScoreDetailResponse {
 }
 
 export const getGameResult = (request: GetGameResultRequest) => axios.get<GameResultResponse>(`/api-baseball/records/${request.id}`);
+
+// 포토 카드 선수 정보 조회
+export interface GetPhotoCardPlayerInfoRequest {
+    teamId: number;
+    backNumber: string;
+}
+
+export interface GetPhotoCardPlayerInfoResponse {
+    position: string;
+    birth: string;
+    physical: string;
+    academic: string;
+}
+
+export const getPhotoCardPlayerInfo = (request: GetPhotoCardPlayerInfoRequest) => axios.get<GetPhotoCardPlayerInfoResponse>(`/api-baseball/players/photos/${request.teamId}/${request.backNumber}`);

@@ -137,7 +137,7 @@ const ClubHome = () => {
         const playerInfo: PlayerInfo = {
           id: d.id,
           teamId: id,
-          backNumber: parseInt(d.backNumber),
+          backNumber: d.backNumber,
           name: d.name,
           position: d.position,
           birth: d.birth,

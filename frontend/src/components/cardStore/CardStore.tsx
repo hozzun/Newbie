@@ -12,7 +12,7 @@ interface CardStoreProps {
   handleSelectSortOption: (value: string) => void;
   isVisibleBoughtCard: boolean;
   handleIsVisibleBoughtCard: () => void;
-  photoCards: Array<PhotoCardInfo> | null;
+  photoCardInfos: Array<PhotoCardInfo> | null;
 }
 
 const tabBarOptions: Array<string> = ["투수", "내야수", "외야수", "포수"];
@@ -35,7 +35,7 @@ const CardStore = (props: CardStoreProps) => {
       />
       <div className="flex flex-row justify-between items-center w-full mt-3">
         <p className="text-base font-kbogothicmedium text-gray-700">
-          총 {props.photoCards ? props.photoCards.length : 0}개
+          총 {props.photoCardInfos ? props.photoCardInfos.length : 0}개
         </p>
         <div className="flex flex-row justify-end items-center">
           <SortSelectBox
@@ -52,10 +52,10 @@ const CardStore = (props: CardStoreProps) => {
           />
         </div>
       </div>
-      {props.photoCards ? (
+      {props.photoCardInfos ? (
         <div className="grid grid-cols-3 gap-4 mt-3">
-          {props.photoCards.map(photoCard => (
-            <PhotoCard key={photoCard.id} photoCard={photoCard} />
+          {props.photoCardInfos.map(photoCardInfo => (
+            <PhotoCard key={photoCardInfo.id} photoCardInfo={photoCardInfo} />
           ))}
         </div>
       ) : (
