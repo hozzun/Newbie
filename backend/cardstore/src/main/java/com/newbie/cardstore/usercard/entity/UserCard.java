@@ -16,7 +16,7 @@ public class UserCard {
 
     @Id
     private ObjectId id;
-    private int userId;
+    private Long userId;
     private Set<ObjectId> cardIds = new HashSet<>();
     private String createdAt;
 }

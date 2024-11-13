@@ -24,7 +24,5 @@ public class Ticket {
     private String team2Korean;
     private String imageUrl;
     private String createdAt;
-
-    @Nullable
     private String text;
 }

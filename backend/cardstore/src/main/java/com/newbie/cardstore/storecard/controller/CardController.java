@@ -31,7 +31,7 @@ public class CardController {
             @RequestParam @Parameter(description = "구단 이름") int team,
             @RequestParam @Parameter(description = "정렬 타입") SortType sortType,
             @RequestParam @Parameter(description = "구매된 카드 포함 여부") boolean includeCard,
-            @RequestParam int userId) {
+            @RequestParam Long userId) {
         List<PlayerCardDto> cards = cardService.getCards(team, sortType, includeCard, userId);
         return ResponseEntity.ok(cards);
     }
@@ -49,7 +49,7 @@ public class CardController {
 
     @Operation(summary = "내 최신 카드 조회", description = "사용자가 가지고 있는 카드 중 최근 카드 하나를 조회합니다.")
     @GetMapping("/mycard")
-    public ResponseEntity<PlayerCardDto> getMyLatestCard(@RequestParam int userId) {
+    public ResponseEntity<PlayerCardDto> getMyLatestCard(@RequestParam Long userId) {
         PlayerCardDto myLatestCard = cardService.getMyLatestCard(userId);
         return ResponseEntity.ok(myLatestCard);
     }
@@ -59,5 +59,12 @@ public class CardController {
     public ResponseEntity<List<PlayerCardDto>> getTopSalesCards() {
         List<PlayerCardDto> topSalesCards = cardService.getTopSalesCards();
         return ResponseEntity.ok(topSalesCards);
+    }
+
+    @Operation(summary = "카드 확인", description = "사용자가 구매한 카드 목록을 조회합니다.")
+    @GetMapping("/users")
+    public ResponseEntity<List<PlayerCardDto>> getCardsByUserId(@RequestParam Long userId) {
+        List<PlayerCardDto> cardsByUserId = cardService.getCardsByUserId(userId);
+        return ResponseEntity.ok(cardsByUserId);
     }
 }
