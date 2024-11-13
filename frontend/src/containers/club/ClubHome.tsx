@@ -12,6 +12,12 @@ import { GetPlayersRequest, getPlayers } from "../../api/playerApi";
 import { PlayerInfo, PlayerItemProps } from "../player/PlayerList";
 import { useDispatch } from "react-redux";
 import { clearPlayerListItem, setPlayer } from "../../redux/playerSlice";
+import { ClubRankHistoryProps } from "../../components/club/ClubRankHistory";
+
+export interface ClubRank {
+  year: string;
+  rank: number;
+}
 
 export interface ClubOverviewData {
   id: string;
@@ -38,6 +44,7 @@ const ClubHome = () => {
 
   const today = new Date();
 
+  const [clubRankHistory, setClubRankHistory] = useState<Array<ClubRank> | null>(null);
   const [clubOverview, setClubOverview] = useState<ClubOverviewData | null>(null);
   const [isVisibleButton, setIsVisibleButton] = useState<boolean>(false);
   const [upcomingGame, setUpcomingGame] = useState<UpcomingGameData | null>(null);
@@ -50,22 +57,35 @@ const ClubHome = () => {
       }
 
       const getClubOverviewRequest: GetClubRanksRequest = {
-        year: today.getFullYear().toString(),
         teamId: ClubId[id],
       };
       const response = await getClubRanks(getClubOverviewRequest);
-      const clubOverviewData: ClubOverviewData = {
-        id: getClubIdByNum(response.data[0].teamId),
-        year: response.data[0].year,
-        rank: response.data[0].rank,
-        gameCount: response.data[0].gameCount,
-        winCount: response.data[0].winCount,
-        loseCount: response.data[0].loseCount,
-        drawCount: response.data[0].drawCount,
-        winRate: parseFloat(response.data[0].winRate),
-      };
+      const clubRankHistoryData: Array<ClubRank> = response.data.map(d => {
+        if (d.year === today.getFullYear().toString()) {
+          console.log(d.year);
+          const clubOverviewData: ClubOverviewData = {
+            id: getClubIdByNum(d.teamId),
+            year: d.year,
+            rank: d.rank,
+            gameCount: d.gameCount,
+            winCount: d.winCount,
+            loseCount: d.loseCount,
+            drawCount: d.drawCount,
+            winRate: parseFloat(d.winRate),
+          };
 
-      setClubOverview(clubOverviewData);
+          setClubOverview(clubOverviewData);
+        }
+
+        return {
+          year: d.year,
+          rank: d.rank,
+        };
+      });
+
+      clubRankHistoryData.sort((a, b) => parseInt(a.year) - parseInt(b.year));
+
+      setClubRankHistory(clubRankHistoryData);
     } catch (e) {
       if (axios.isAxiosError(e) && e.response?.status === 404) {
         console.log("[INFO] 구단 간단한 소개 정보 없음 by club home");
@@ -196,11 +216,17 @@ const ClubHome = () => {
     goMore: goMore,
   };
 
+  const clubRanknHistoryProps: ClubRankHistoryProps = {
+    clubId: id,
+    clubRankHistoryData: clubRankHistory,
+  };
+
   return (
     <ClubHomeComponent
       clubOverviewProps={clubOverviewProps}
       upcomingGameProps={{ upcomingGameData: upcomingGame }}
       playerListProps={playerListProps}
+      clubRankHistoryProps={clubRanknHistoryProps}
     />
   );
 };
