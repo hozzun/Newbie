@@ -1,25 +1,18 @@
 import Coin from "../../assets/icons/copyright-solid.svg?react";
-import Karina from "../../assets/images/karina.jpg";
-
-export interface PhotoCardData {
-  id: string;
-  title: string;
-  imgSrc: string;
-  price: number;
-}
+import { PhotoCardInfo } from "../../containers/cardstore/CardStore";
 
 interface PhotoCardProps {
-  photoCard: PhotoCardData;
+  photoCard: PhotoCardInfo;
   onClick: () => void;
 }
 
 const PhotoCard = (props: PhotoCardProps) => {
   return (
     <div className="flex flex-col justify-center items-center" onClick={props.onClick}>
-      <div className="aspect-[2/2.4] hover:cursor-pointer">
+      <div className="w-full aspect-[2/2.4] hover:cursor-pointer">
         <img
-          src={Karina}
-          alt={props.photoCard.title}
+          src={props.photoCard.imageUrl}
+          alt={props.photoCard.name}
           className="w-full h-full object-cover rounded-lg"
         />
       </div>
