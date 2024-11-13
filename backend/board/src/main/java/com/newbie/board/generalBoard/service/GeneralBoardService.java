@@ -7,7 +7,9 @@ import com.newbie.board.generalBoard.entity.GeneralBoard;
 import com.newbie.board.generalBoard.entity.GeneralBoardTag;
 import com.newbie.board.generalBoard.repository.GeneralBoardRepository;
 import com.newbie.board.generalBoard.repository.GeneralBoardTagRepository;
-import com.newbie.board.usedBoard.entity.User;
+import com.newbie.board.generalBoard.repository.GeneralBoardCommentRepository;
+import com.newbie.board.generalBoard.repository.GeneralBoardLikeRepository;
+import com.newbie.board.scrap.repository.ScrapRepository;
 import com.newbie.board.usedBoard.service.S3Service;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -29,6 +31,9 @@ public class GeneralBoardService {
 
     private final GeneralBoardRepository generalBoardRepository;
     private final GeneralBoardTagRepository generalBoardTagRepository;
+    private final GeneralBoardCommentRepository commentRepository;
+    private final GeneralBoardLikeRepository likeRepository;
+    private final ScrapRepository scrapRepository;
     private final S3Service s3Service;
 
     @PersistenceContext
@@ -37,14 +42,14 @@ public class GeneralBoardService {
     @Transactional
     public List<GeneralBoardResponseDto> getGeneralBoardList() {
         return generalBoardRepository.findAllByOrderByCreatedAtDesc().stream()
-                .map(GeneralBoardResponseDto::new)
+                .map(this::toGeneralBoardResponseDto)
                 .collect(Collectors.toList());
     }
 
     @Transactional
     public Optional<GeneralBoardResponseDto> getGeneralBoardById(Long id) {
         return generalBoardRepository.findById(id)
-                .map(GeneralBoardResponseDto::new);
+                .map(this::toGeneralBoardResponseDto);
     }
 
     @Transactional
@@ -63,26 +68,18 @@ public class GeneralBoardService {
             default:
                 throw new IllegalArgumentException("Invalid search type: " + type);
         }
-
         return boards.stream()
-                .map(GeneralBoardResponseDto::new)
+                .map(this::toGeneralBoardResponseDto)
                 .collect(Collectors.toList());
     }
-
 
     @Transactional
     public GeneralBoardResponseDto createGeneralBoard(GeneralBoardRequestDto requestDto, MultipartFile imageFile) throws IOException {
         List<GeneralBoardTag> generalBoardTags = Optional.ofNullable(requestDto.getTags())
                 .orElse(Collections.emptyList())
                 .stream()
-                .map(tagName -> {
-                    GeneralBoardTag generalBoardTag = generalBoardTagRepository.findByName(tagName)
-                            .orElseGet(() -> generalBoardTagRepository.save(new GeneralBoardTag(tagName)));
-                    if (!entityManager.contains(generalBoardTag)) {
-                        generalBoardTag = entityManager.merge(generalBoardTag);
-                    }
-                    return generalBoardTag;
-                })
+                .map(tagName -> generalBoardTagRepository.findByName(tagName)
+                        .orElseGet(() -> generalBoardTagRepository.save(new GeneralBoardTag(tagName))))
                 .collect(Collectors.toList());
 
         String imageUrl = (imageFile != null) ? s3Service.uploadFile(imageFile) : null;
@@ -100,36 +97,52 @@ public class GeneralBoardService {
         generalBoardTags.forEach(generalBoard::addTag);
         generalBoardRepository.save(generalBoard);
 
-        return new GeneralBoardResponseDto(generalBoard);
+        return toGeneralBoardResponseDto(generalBoard);
     }
-
 
     @Transactional
     public void updateGeneralBoard(GeneralBoardUpdateRequestDto requestDto, Long id) {
-        Optional<GeneralBoard> board = generalBoardRepository.findById(id);
-
-        if (board.isPresent()) {
-            GeneralBoard existingBoard = board.get();
-
+        generalBoardRepository.findById(id).ifPresent(existingBoard -> {
             GeneralBoard updatedBoard = existingBoard.toBuilder()
-                    .title(requestDto.getTitle() != null ? requestDto.getTitle() : existingBoard.getTitle())
-                    .content(requestDto.getContent() != null ? requestDto.getContent() : existingBoard.getContent())
+                    .title(Optional.ofNullable(requestDto.getTitle()).orElse(existingBoard.getTitle()))
+                    .content(Optional.ofNullable(requestDto.getContent()).orElse(existingBoard.getContent()))
                     .updatedAt(LocalDateTime.now())
                     .build();
 
             generalBoardRepository.save(updatedBoard);
-        }
+        });
     }
 
     @Transactional
     public void deleteGeneralBoard(Long id) {
-        Optional<GeneralBoard> board = generalBoardRepository.findById(id);
-
-        if (board.isPresent()) {
-            GeneralBoard updatedBoard = board.get().toBuilder()
+        generalBoardRepository.findById(id).ifPresent(board -> {
+            GeneralBoard updatedBoard = board.toBuilder()
                     .isDeleted("Y")
                     .build();
             generalBoardRepository.save(updatedBoard);
-        }
+        });
+    }
+
+    private GeneralBoardResponseDto toGeneralBoardResponseDto(GeneralBoard generalBoard) {
+        int commentCount = commentRepository.countByGeneralBoardIdAndIsDeleted(generalBoard.getId(), "N");
+        int likeCount = likeRepository.countByGeneralBoardId(generalBoard.getId());
+        int scrapCount = scrapRepository.countByGeneralBoardId(generalBoard.getId());
+
+        return GeneralBoardResponseDto.builder()
+                .id(generalBoard.getId())
+                .userId(generalBoard.getUserId())
+                .userName(generalBoard.getUserName())
+                .title(generalBoard.getTitle())
+                .content(generalBoard.getContent())
+                .imageUrl(generalBoard.getImageUrl())
+                .createdAt(generalBoard.getCreatedAt())
+                .updatedAt(generalBoard.getUpdatedAt())
+                .tags(generalBoard.getGeneralBoardTags().stream()
+                        .map(GeneralBoardTag::getName)
+                        .collect(Collectors.toList()))
+                .commentCount(commentCount)
+                .likeCount(likeCount)
+                .scrapCount(scrapCount)
+                .build();
     }
 }

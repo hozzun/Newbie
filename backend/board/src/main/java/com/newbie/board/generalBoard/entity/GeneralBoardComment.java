@@ -11,7 +11,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "general_board_comment")
-@Getter
+@Data
 @Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
