@@ -13,6 +13,7 @@ import { PlayerInfo, PlayerItemProps } from "../player/PlayerList";
 import { useDispatch } from "react-redux";
 import { clearPlayerListItem, setPlayer } from "../../redux/playerSlice";
 import { ClubRankHistoryProps } from "../../components/club/ClubRankHistory";
+import { ClubCarouselProps } from "../../components/common/ClubCarousel";
 
 export interface ClubRank {
   year: string;
@@ -62,7 +63,6 @@ const ClubHome = () => {
       const response = await getClubRanks(getClubOverviewRequest);
       const clubRankHistoryData: Array<ClubRank> = response.data.map(d => {
         if (d.year === today.getFullYear().toString()) {
-          console.log(d.year);
           const clubOverviewData: ClubOverviewData = {
             id: getClubIdByNum(d.teamId),
             year: d.year,
@@ -137,7 +137,7 @@ const ClubHome = () => {
         const playerInfo: PlayerInfo = {
           id: d.id,
           teamId: id,
-          backNumber: parseInt(d.backNumber),
+          backNumber: d.backNumber,
           name: d.name,
           position: d.position,
           birth: d.birth,
@@ -171,16 +171,16 @@ const ClubHome = () => {
     fetchPlayers();
 
     dispatch(clearPlayerListItem());
-  }, []);
+  }, [id]);
 
   useEffect(() => {
     if (id) {
       // TODO: GET - 사용자 응원 구단 ID
-      setIsVisibleButton(1 === ClubId[id]);
+      setIsVisibleButton(1 !== ClubId[id]);
     } else {
       throw new CustomError("[ERROR] 구단 ID 없음 by club home");
     }
-  }, []);
+  }, [id]);
 
   const handleRegisterCheerClub = async () => {
     // TODO: GET - 사용자 응원 구단 ID
@@ -205,6 +205,10 @@ const ClubHome = () => {
     nav(`/club/${id}/player`);
   };
 
+  const goOtherClub = (value: string) => {
+    nav(`/club/${value}`);
+  };
+
   const clubOverviewProps: ClubOverviewProps = {
     clubOverviewData: clubOverview,
     isVisibleButton: isVisibleButton,
@@ -221,12 +225,18 @@ const ClubHome = () => {
     clubRankHistoryData: clubRankHistory,
   };
 
+  const clubCarouselProps: ClubCarouselProps = {
+    selectedItem: id ? id : "",
+    handleClickItem: goOtherClub,
+  };
+
   return (
     <ClubHomeComponent
       clubOverviewProps={clubOverviewProps}
       upcomingGameProps={{ upcomingGameData: upcomingGame }}
       playerListProps={playerListProps}
       clubRankHistoryProps={clubRanknHistoryProps}
+      clubCarouselProps={clubCarouselProps}
     />
   );
 };
