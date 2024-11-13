@@ -2,6 +2,11 @@ import { useState } from "react";
 import ClubLogos from "../../util/ClubLogos";
 import Carousel from "./Carousel";
 
+export interface ClubCarouselProps {
+  selectedItem: string;
+  handleClickItem: (value: string) => void;
+}
+
 interface ClubCarouselItemProps {
   clubId: string;
   isSelected: boolean;
@@ -36,11 +41,12 @@ const ClubCarouselItem = (props: ClubCarouselItemProps) => {
   );
 };
 
-const ClubCarousel = () => {
-  const [selectedItem, setSelectedItem] = useState<string>("kia");
+const ClubCarousel = (props: ClubCarouselProps) => {
+  const [selectedItem, setSelectedItem] = useState<string>(props.selectedItem);
 
   const handleSelectItem = (value: string) => {
     setSelectedItem(value);
+    props.handleClickItem(value);
   };
 
   return (
@@ -55,6 +61,7 @@ const ClubCarousel = () => {
         />
       )}
       isIndexChanged={true}
+      firstIndex={Object.keys(clubColors).findIndex(key => key === selectedItem)}
     />
   );
 };

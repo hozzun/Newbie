@@ -10,6 +10,7 @@ interface CarouselProps<T> {
   items: Array<T>;
   renderItem: (item: T) => ReactNode;
   isIndexChanged?: boolean;
+  firstIndex?: number;
 }
 
 function useCarouselSize({ aspectRadio = 1 }: useCarouselSizeProps = { aspectRadio: 1 }) {
@@ -62,6 +63,12 @@ const Carousel = <T,>(props: CarouselProps<T>) => {
     const centeredIndex = inrange(index - Math.floor(props.itemCount / 2), 0, maxIndex);
     setCurrentIndex(centeredIndex);
   };
+
+  useEffect(() => {
+    if (props.firstIndex && props.firstIndex > 0) {
+      handleClick(props.firstIndex);
+    }
+  }, [props.firstIndex]);
 
   return (
     <div ref={ref} className="w-full overflow-hidden">

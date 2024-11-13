@@ -13,6 +13,7 @@ import { PlayerInfo, PlayerItemProps } from "../player/PlayerList";
 import { useDispatch } from "react-redux";
 import { clearPlayerListItem, setPlayer } from "../../redux/playerSlice";
 import { ClubRankHistoryProps } from "../../components/club/ClubRankHistory";
+import { ClubCarouselProps } from "../../components/common/ClubCarousel";
 
 export interface ClubRank {
   year: string;
@@ -62,7 +63,6 @@ const ClubHome = () => {
       const response = await getClubRanks(getClubOverviewRequest);
       const clubRankHistoryData: Array<ClubRank> = response.data.map(d => {
         if (d.year === today.getFullYear().toString()) {
-          console.log(d.year);
           const clubOverviewData: ClubOverviewData = {
             id: getClubIdByNum(d.teamId),
             year: d.year,
@@ -171,7 +171,7 @@ const ClubHome = () => {
     fetchPlayers();
 
     dispatch(clearPlayerListItem());
-  }, []);
+  }, [id]);
 
   useEffect(() => {
     if (id) {
@@ -205,6 +205,10 @@ const ClubHome = () => {
     nav(`/club/${id}/player`);
   };
 
+  const goOtherClub = (value: string) => {
+    nav(`/club/${value}`);
+  };
+
   const clubOverviewProps: ClubOverviewProps = {
     clubOverviewData: clubOverview,
     isVisibleButton: isVisibleButton,
@@ -221,12 +225,18 @@ const ClubHome = () => {
     clubRankHistoryData: clubRankHistory,
   };
 
+  const clubCarouselProps: ClubCarouselProps = {
+    selectedItem: id ? id : "",
+    handleClickItem: goOtherClub,
+  };
+
   return (
     <ClubHomeComponent
       clubOverviewProps={clubOverviewProps}
       upcomingGameProps={{ upcomingGameData: upcomingGame }}
       playerListProps={playerListProps}
       clubRankHistoryProps={clubRanknHistoryProps}
+      clubCarouselProps={clubCarouselProps}
     />
   );
 };
