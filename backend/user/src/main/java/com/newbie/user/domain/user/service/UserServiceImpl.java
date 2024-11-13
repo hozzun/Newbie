@@ -6,9 +6,9 @@ import com.newbie.user.domain.user.dto.res.UserResponseDto;
 import com.newbie.user.domain.user.entity.User;
 import com.newbie.user.domain.user.exception.UserNotFoundException;
 import com.newbie.user.domain.user.repository.UserRepository;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.transaction.TransactionAutoConfiguration;
 import org.springframework.stereotype.Service;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
@@ -25,6 +25,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final S3Client s3Client;
+    private final TransactionAutoConfiguration.EnableTransactionManagementConfiguration enableTransactionManagementConfiguration;
 
     @Value("${spring.cloud.aws.s3.bucket}")
     private String bucketName;
@@ -41,6 +42,7 @@ public class UserServiceImpl implements UserService {
                 .email(requestDto.getEmail())
                 .nickname(requestDto.getNickname())
                 .address(requestDto.getAddress())
+                .isResigned(requestDto.getIsResigned())
                 .profileImage(defaultImageUrl)
                 .build();
 
@@ -102,6 +104,14 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByUserId(userId)
                 .orElseThrow(UserNotFoundException::new);
         user.updateFavoriteTeamId(teamId);
+        userRepository.save(user);
+    }
+
+    @Override
+    public void updateIsResigned(Long userId) {
+        User user = userRepository.findByUserId(userId)
+                .orElseThrow(UserNotFoundException::new);
+        user.updateIsResigned(true);
         userRepository.save(user);
     }
 

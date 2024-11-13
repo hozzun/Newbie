@@ -49,4 +49,11 @@ public class UserController {
         userService.updateFavoriteTeam(userId, teamId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @Operation(summary = "회원 탈퇴 처리")
+    @PatchMapping("/resign")
+    public ResponseEntity<Void> resignUser(@RequestBody Long userId) {
+        userService.updateIsResigned(userId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }
