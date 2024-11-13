@@ -13,8 +13,8 @@ const PlayerHighlight = (props: PlayerHighlightProps) => {
       </div>
       {props.playerHighlights && props.playerHighlights.length > 0 ? (
         <div className="grid grid-cols-2 gap-3 w-full">
-          {props.playerHighlights.map(playerHighlight => (
-            <PlayerHightlightItem playerHighlight={playerHighlight} />
+          {props.playerHighlights.map((playerHighlight, index) => (
+            <PlayerHightlightItem key={index} playerHighlight={playerHighlight} />
           ))}
         </div>
       ) : (
