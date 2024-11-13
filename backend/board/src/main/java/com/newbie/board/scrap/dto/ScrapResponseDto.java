@@ -20,5 +20,6 @@ public class ScrapResponseDto {
     private int commentCount;
     private int likeCount;
     private int scrapCount;
+    private int viewCount;
     private LocalDateTime createdAt;
 }

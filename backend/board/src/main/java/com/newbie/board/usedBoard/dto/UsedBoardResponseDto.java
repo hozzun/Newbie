@@ -25,5 +25,5 @@ public class UsedBoardResponseDto {
     private int likeCount;
     private int commentCount;
     private int scrapCount;
-
+    private int viewCount;
 }
