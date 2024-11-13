@@ -22,7 +22,9 @@ def crawl_hitter_stats():
     service = Service(executable_path=driver_path)
     
     hitter_stats = []
-    current_year = datetime.now().year
+    # current_year = datetime.now().year
+    #여기
+    year_list = ["2020", "2021", "2022", "2023", "2024"]
     team_list = ["HT", "SS", "LG", "OB", "KT", "SK", "LT", "HH", "NC", "WO"]
 
     try:
@@ -36,53 +38,62 @@ def crawl_hitter_stats():
         Select(season_select).select_by_value("0")
         time.sleep(2)
         
-        for team in team_list:
-            team_select = WebDriverWait(driver, 10).until(
-                    EC.presence_of_element_located((By.ID, "cphContents_cphContents_cphContents_ddlTeam_ddlTeam"))
+        # 여기
+        for year in year_list:
+            year_select = WebDriverWait(driver, 10).until(
+                    EC.presence_of_element_located((By.ID, "cphContents_cphContents_cphContents_ddlSeason_ddlSeason"))
                 )
-            Select(team_select).select_by_value(team)
+            Select(year_select).select_by_value(year)
             time.sleep(2)
-            
-            first_page_button = driver.find_element(By.ID, "cphContents_cphContents_cphContents_ucPager_btnNo1")
-            first_page_button.click()
-            time.sleep(2)
-            
-            page_num = 1
-            while True:
-            
-                rows = driver.find_elements(By.CSS_SELECTOR, "#cphContents_cphContents_cphContents_udpContent > div.record_result > table > tbody > tr")
+            #까지
                 
-                for row in rows:
-                    columns = row.find_elements(By.TAG_NAME, "td")
+            for team in team_list:
+                team_select = WebDriverWait(driver, 10).until(
+                        EC.presence_of_element_located((By.ID, "cphContents_cphContents_cphContents_ddlTeam_ddlTeam"))
+                    )
+                Select(team_select).select_by_value(team)
+                time.sleep(2)
+                
+                first_page_button = driver.find_element(By.ID, "cphContents_cphContents_cphContents_ucPager_btnNo1")
+                first_page_button.click()
+                time.sleep(2)
+                
+                page_num = 1
+                while True:
+                
+                    rows = driver.find_elements(By.CSS_SELECTOR, "#cphContents_cphContents_cphContents_udpContent > div.record_result > table > tbody > tr")
                     
-                    player_stats = {
-                        "year": str(current_year),
-                        "player_name": columns[1].find_element(By.TAG_NAME, "a").text,
-                        "team_name": columns[2].text,
-                        "avg": columns[3].text,
-                        "game_count": columns[4].text,
-                        "pa": columns[5].text,
-                        "ab": columns[6].text,
-                        "r": columns[7].text,
-                        "h": columns[8].text,
-                        "two": columns[9].text,
-                        "three": columns[10].text,
-                        "homerun": columns[11].text,
-                        "tb": columns[12].text,
-                        "rbi": columns[13].text,
-                        "sac": columns[14].text,
-                        "sf": columns[15].text,
-                    }
-                    hitter_stats.append(player_stats)
-                    
-                try:
-                    next_page = driver.find_element(By.ID, f"cphContents_cphContents_cphContents_ucPager_btnNo{page_num + 1}")
-                    next_page.click()
-                    time.sleep(2)
-                    page_num += 1
-                except Exception:
-                    print(f"{team} 팀의 모든 페이지를 크롤링 완료")
-                    break  # 더 이상 페이지가 없을 경우 루프 종료
+                    for row in rows:
+                        columns = row.find_elements(By.TAG_NAME, "td")
+                        
+                        player_stats = {
+                            "year": str(year),
+                            "player_name": columns[1].find_element(By.TAG_NAME, "a").text,
+                            "team_name": columns[2].text,
+                            "avg": columns[3].text,
+                            "game_count": columns[4].text,
+                            "pa": columns[5].text,
+                            "ab": columns[6].text,
+                            "r": columns[7].text,
+                            "h": columns[8].text,
+                            "two": columns[9].text,
+                            "three": columns[10].text,
+                            "homerun": columns[11].text,
+                            "tb": columns[12].text,
+                            "rbi": columns[13].text,
+                            "sac": columns[14].text,
+                            "sf": columns[15].text,
+                        }
+                        hitter_stats.append(player_stats)
+                        
+                    try:
+                        next_page = driver.find_element(By.ID, f"cphContents_cphContents_cphContents_ucPager_btnNo{page_num + 1}")
+                        next_page.click()
+                        time.sleep(2)
+                        page_num += 1
+                    except Exception:
+                        print(f"{team} 팀의 모든 페이지를 크롤링 완료")
+                        break  # 더 이상 페이지가 없을 경우 루프 종료
 
     except Exception as e:
         print(f"크롤링 중 오류 발생: {e}")

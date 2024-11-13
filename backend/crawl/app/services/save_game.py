@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from app.models import Game, Team, SessionLocal
 
 # Redis 클라이언트 설정
-redis_client = redis.Redis(host='k11b304.p.ssafy.io', port=6379, db=0)
+# redis_client = redis.Redis(host='k11b304.p.ssafy.io', port=6379, db=0)
 
 def save_game_to_db(game_list):
     if not game_list:
@@ -14,6 +14,11 @@ def save_game_to_db(game_list):
     db: Session = SessionLocal()
     try:
         for game in game_list:
+            if game['away_team'] == "SK":
+                game['away_team'] = "SSG"
+            elif game['home_team'] == "SK":
+                game['home_team'] = "SSG"
+                
             # 팀 이름으로 팀 객체 조회
             away_team_obj = db.query(Team).filter_by(team_name=game['away_team']).first()
             home_team_obj = db.query(Team).filter_by(team_name=game['home_team']).first()
@@ -66,7 +71,7 @@ def save_game_to_db(game_list):
                 db.add(db_game)  # 데이터 추가
                 
             # Redis에 캐시: 유효기간 4시간 설정
-            redis_client.set(redis_key, json.dumps(game), ex=14400)
+            # redis_client.set(redis_key, json.dumps(game), ex=14400)
                 
         db.commit()  # 변경 사항 저장
     except Exception as e:

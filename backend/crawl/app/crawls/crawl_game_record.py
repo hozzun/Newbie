@@ -31,7 +31,8 @@ def crawl_game_record():
 
         current_date_str = driver.find_element(By.ID, "nowDate").get_attribute("value")
         current_date = datetime.strptime(current_date_str, "%Y%m%d")
-        end_date = current_date - timedelta(days=1)
+        end_date = current_date - timedelta(days=365)
+        # end_date = datetime(2023, 1, 1)
 
         while current_date >= end_date:
             games = driver.find_elements(By.CSS_SELECTOR, ".game-cont")
@@ -40,6 +41,10 @@ def crawl_game_record():
                 return []
             else:
                 for game in games:
+                    is_canceled = "cancel" in game.get_attribute("class")
+                    if is_canceled:
+                        print(f"경기 취소됨: {game.get_attribute('g_dt')} - {game.get_attribute('s_nm')}")
+                        continue  # 취소된 경기는 건너뛰기
                     game_date_raw = game.get_attribute("g_dt")
                     game_date = datetime.strptime(game_date_raw, '%Y%m%d').strftime('%Y-%m-%d')
                     stadium = game.get_attribute("s_nm")
