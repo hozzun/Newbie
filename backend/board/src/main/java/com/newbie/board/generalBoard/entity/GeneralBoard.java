@@ -21,8 +21,10 @@ public class GeneralBoard {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "user_id")
     private Long userId;
 
+    @Column(name = "user_name")
     private String userName;
 
     @NotNull
@@ -31,8 +33,13 @@ public class GeneralBoard {
     @NotNull
     private String content;
 
+    @Column(name = "image_url")
     private String imageUrl;
+
+    @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
+
+    @Column(name = "is_deleted")
     private String isDeleted = "N";
 
     @Column(name = "updated_at")
@@ -45,6 +52,7 @@ public class GeneralBoard {
             joinColumns = @JoinColumn(name = "general_board_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id")
     )
+
     private List<GeneralBoardTag> generalBoardTags = new ArrayList<>();
 
 

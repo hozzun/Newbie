@@ -1,6 +1,7 @@
 package com.newbie.board.usedBoard.controller;
 
 
+import com.newbie.board.generalBoard.dto.GeneralBoardResponseDto;
 import com.newbie.board.usedBoard.dto.UsedBoardRequestDto;
 import com.newbie.board.usedBoard.dto.UsedBoardResponseDto;
 import com.newbie.board.usedBoard.dto.UsedBoardUpdateRequestDto;
@@ -50,15 +51,13 @@ public class UsedBoardController {
         return ResponseEntity.ok(usedBoardService.getUsedBoardList());
     }
 
-    /**
-     * 게시글을 검색합니다.
-     * @param keyword
-     * @return List<UsedBoard>
-     */
+
     @Operation(summary = "유저 게시글 검색", description = "유저가 특정 게시글을 검색합니다.")
     @GetMapping("/search")
-    public ResponseEntity<List<UsedBoardResponseDto>> boardList(@RequestParam(required = false) @Parameter(description = "title, tags, username") String keyword) {
-        return ResponseEntity.status(HttpStatus.OK).body(usedBoardService.searchBoardList(keyword));
+    public ResponseEntity<List<UsedBoardResponseDto>> searchBoardList(
+            @RequestParam @Parameter(description = "검색 키워드") String keyword,
+            @RequestParam @Parameter(description = "검색 타입") String type) {
+        return ResponseEntity.status(HttpStatus.OK).body(usedBoardService.searchBoardList(keyword, type));
     }
 
     /**

@@ -7,6 +7,7 @@ import com.newbie.board.generalBoard.service.GeneralBoardService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -39,8 +40,10 @@ public class GeneralBoardController {
 
     @Operation(summary = "유저 게시글 검색", description = "유저가 특정 게시글을 검색합니다.")
     @GetMapping("/search")
-    public ResponseEntity<List<GeneralBoardResponseDto>> searchBoardList(@RequestParam(required = false) @Parameter(description = "title, tags, username") String keyword) {
-        return ResponseEntity.status(HttpStatus.OK).body(generalBoardService.searchBoardList(keyword));
+    public ResponseEntity<List<GeneralBoardResponseDto>> searchBoardList(
+            @RequestParam @Parameter(description = "검색 키워드") String keyword,
+            @RequestParam @Parameter(description = "검색 타입") String type) {
+        return ResponseEntity.status(HttpStatus.OK).body(generalBoardService.searchBoardList(keyword, type));
     }
 
     @Operation(summary = "유저 게시글 조회", description = "유저가 특정 게시글을 조회합니다.")
