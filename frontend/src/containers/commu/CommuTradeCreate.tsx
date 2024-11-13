@@ -48,6 +48,9 @@ const CommuTradeCreate = () => {
       }
     }
   };
+  const handleTagRemove = (tagToRemove: string) => {
+    setTags(prevTags => prevTags.filter(tag => tag !== tagToRemove));
+  };
   useEffect(() => {
     if (errorMessage) {
       const timer = setTimeout(() => setErrorMessage(null), 3000);
@@ -92,6 +95,7 @@ const CommuTradeCreate = () => {
         onPriceChange={handlePriceChange}
         onTagChange={handleTagChange}
         onTagKeyPress={handleTagKeyPress}
+        onTagRemove={handleTagRemove}
         onTextChange={handleTextChange}
         onImageChange={handleImageChange}
         onClearTitle={clearTitle}

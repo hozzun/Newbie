@@ -14,6 +14,7 @@ interface CommuTradeCreateProps {
   onPriceChange: (e: ChangeEvent<HTMLInputElement>) => void;
   onTagChange: (e: ChangeEvent<HTMLInputElement>) => void;
   onTagKeyPress: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+  onTagRemove: (tag: string) => void;
   onTextChange: (e: ChangeEvent<HTMLTextAreaElement>) => void;
   onImageChange: (e: ChangeEvent<HTMLInputElement>) => void;
   onClearTitle: () => void;
@@ -33,6 +34,7 @@ const CommuTradeCreate: React.FC<CommuTradeCreateProps> = ({
   onPriceChange,
   onTagChange,
   onTagKeyPress,
+  onTagRemove,
   onTextChange,
   onImageChange,
   onClearTitle,
@@ -60,7 +62,7 @@ const CommuTradeCreate: React.FC<CommuTradeCreateProps> = ({
         <input
           type="number"
           placeholder="가격을 입력해주세요"
-          value={priceValue !== null ? priceValue : ""} // null일 경우 빈 문자열로 설정
+          value={priceValue !== null ? priceValue : ""}
           onChange={onPriceChange}
           className="w-full pl-2 pr-12 py-4 border-b-2 font-kbogothiclight border-gray-100 focus:outline-none focus:border-green-900"
         />
@@ -77,6 +79,7 @@ const CommuTradeCreate: React.FC<CommuTradeCreateProps> = ({
           {tags.map((tag, index) => (
             <span
               key={index}
+              onClick={() => onTagRemove(tag)}
               className="inline-block px-2 py-1 text-sm font-kbogothiclight bg-gray-500 text-white rounded-lg"
             >
               {tag}
@@ -100,7 +103,9 @@ const CommuTradeCreate: React.FC<CommuTradeCreateProps> = ({
             }`}
           />
         </div>
-        <span className="absolute left-2 bottom-1 text-[9px] text-gray-400">
+        <span
+          className={`absolute left-2 bottom-1 text-[9px] ${errorMessage ? "text-red-400" : "text-gray-400"}`}
+        >
           {errorMessage || "태그를 입력 후, 엔터를 입력하면 등록됩니다."}
         </span>
       </div>
