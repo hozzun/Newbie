@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MileageDeductionDto {
-    private int userId;
+    private Long userId;
     private double amount;
     private String type;
     private String reason;

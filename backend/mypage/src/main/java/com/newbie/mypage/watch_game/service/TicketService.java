@@ -67,6 +67,7 @@ public class TicketService {
                 .team1Korean(ticket.getTeam1Korean())
                 .team2Korean(ticket.getTeam2Korean())
                 .imageUrl(ticket.getImageUrl())
+                .text(ticket.getText())
                 .build();
     }
 }
