@@ -4,7 +4,6 @@ import axiosInstance from "../../util/axiosInstance";
 import PageName from "../../components/common/PageName";
 import Pencil from "../../assets/icons/pencil-solid.svg?react";
 import Profile from "../../components/mypage/Profile";
-import Image from "../../assets/images/karina.jpg";
 import ClubChangeButton from "../../components/common/ClubChangeButton";
 import ClubLogos from "../../util/ClubLogos";
 import ClubFullName from "../../util/ClubFullName";
@@ -91,7 +90,7 @@ const MyPage = () => {
         </div>
         {userInfo && (
           <div>
-            <Profile img={Image} name={userInfo.nickname} email={userInfo.email} />
+            <Profile img={userInfo.profileImage} name={userInfo.nickname} email={userInfo.email} />
             {teamName ? (
               <ClubChangeButton
                 logo={ClubLogos[teamName]}

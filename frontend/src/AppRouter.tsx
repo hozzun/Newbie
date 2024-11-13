@@ -13,6 +13,7 @@ import GameResult from "./pages/home/GameResult";
 import GameSchedule from "./pages/home/GameSchedule";
 import CheerSong from "./pages/cheersong/CheerSong";
 import CheerTeam from "./pages/cheerteam/CheerTeam";
+import Cheerteam from "./pages/cheersong/CheerTeam";
 import ClubRecommend from "./pages/cheerteam/ClubRecommend";
 import CheerLyris from "./pages/cheersong/CheerLyris";
 import CardStore from "./pages/cardStore/CardStore";
@@ -133,18 +134,26 @@ const AppRouter = () => {
           }
         />
         <Route
-          path="/cheerteam"
-          element={
-            <ProtectedRoute>
-              <CheerTeam />
-            </ProtectedRoute>
-          }
-        />
-        <Route
           path="/cheersong/lyris"
           element={
             <ProtectedRoute>
               <CheerLyris />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/cheersong/team"
+          element={
+            <ProtectedRoute>
+              <Cheerteam />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/cheerteam"
+          element={
+            <ProtectedRoute>
+              <CheerTeam />
             </ProtectedRoute>
           }
         />

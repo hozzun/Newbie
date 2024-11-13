@@ -41,7 +41,7 @@ const ClubChangeButton = ({ logo, clubColor, club, onClick }: ClubChangeProps) =
         <img src={logo} alt={`${clubColor} logo`} className="w-[70%] h-[70%]" />
       </div>
       <div className="flex flex-col justify-center items-center mr-16">
-        <div className="text-white font-kbogothicbold text-[23px] mb-2">{club}</div>
+        <div className="text-white font-kbogothicbold text-[21px] mb-2">{club}</div>
         <Button className="w-full px-12 whitespace-nowrap" variant={BUTTON_VARIANTS.white} onClick={onClick}>
           구단 바꾸기
         </Button>
