@@ -106,7 +106,7 @@ const Calendar = () => {
             return (
               <div
                 key={date.getDate()}
-                className={`flex flex-col p-2 m-1 rounded-2xl text-[7px] bg-white ${
+                className={`flex flex-col p-2 m-1 rounded-lg text-[7px] bg-white ${
                   isHomeGame ? "border-2 border-green-900" : "border-2 border-gray-300"
                 }`}
               >
