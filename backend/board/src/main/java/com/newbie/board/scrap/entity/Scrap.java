@@ -30,6 +30,7 @@ public class Scrap {
     @JoinColumn(name = "used_board_id", nullable = true)
     private UsedBoard usedBoard;
 
+    @Builder.Default
     private LocalDateTime createdAt = LocalDateTime.now();
 }
 
