@@ -2,7 +2,6 @@ package com.newbie.board.generalBoard.repository;
 
 import com.newbie.board.generalBoard.entity.GeneralBoard;
 import com.newbie.board.generalBoard.entity.GeneralBoardLike;
-import com.newbie.board.usedBoard.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

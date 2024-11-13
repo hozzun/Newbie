@@ -13,7 +13,7 @@ import java.util.List;
 @Table(name = "used_board")
 @Builder(toBuilder = true)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Getter
+@Data
 public class UsedBoard {
 
     @Id
@@ -39,6 +39,10 @@ public class UsedBoard {
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @Column(name = "view_count")
+    @Builder.Default
+    private Integer viewCount = 0;
 
     @Builder.Default
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})

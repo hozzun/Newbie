@@ -74,6 +74,7 @@ public class MyPageService {
                 .commentCount(commentCount)
                 .likeCount(likeCount)
                 .scrapCount(scrapCount)
+                .viewCount(generalBoard.getViewCount())
                 .build();
     }
 
@@ -96,6 +97,7 @@ public class MyPageService {
                 .commentCount(commentCount)
                 .likeCount(likeCount)
                 .scrapCount(scrapCount)
+                .viewCount(usedBoard.getViewCount())
                 .build();
     }
 }

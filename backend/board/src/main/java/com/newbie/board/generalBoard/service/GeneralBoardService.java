@@ -49,7 +49,12 @@ public class GeneralBoardService {
     @Transactional
     public Optional<GeneralBoardResponseDto> getGeneralBoardById(Long id) {
         return generalBoardRepository.findById(id)
-                .map(this::toGeneralBoardResponseDto);
+                .map(generalBoard -> {
+                    generalBoard.setViewCount(generalBoard.getViewCount() + 1);
+                    generalBoardRepository.save(generalBoard);
+
+                    return toGeneralBoardResponseDto(generalBoard);
+                });
     }
 
     @Transactional
@@ -143,6 +148,7 @@ public class GeneralBoardService {
                 .commentCount(commentCount)
                 .likeCount(likeCount)
                 .scrapCount(scrapCount)
+                .viewCount(generalBoard.getViewCount())
                 .build();
     }
 }

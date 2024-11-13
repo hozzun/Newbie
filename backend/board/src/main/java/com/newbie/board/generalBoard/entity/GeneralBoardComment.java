@@ -1,6 +1,5 @@
 package com.newbie.board.generalBoard.entity;
 
-import com.newbie.board.usedBoard.entity.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
