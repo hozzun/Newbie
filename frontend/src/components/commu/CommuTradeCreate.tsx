@@ -9,6 +9,7 @@ interface CommuTradeCreateProps {
   tags: string[];
   text: string;
   images: File[];
+  errorMessage: string | null;
   onTitleChange: (e: ChangeEvent<HTMLInputElement>) => void;
   onPriceChange: (e: ChangeEvent<HTMLInputElement>) => void;
   onTagChange: (e: ChangeEvent<HTMLInputElement>) => void;
@@ -27,6 +28,7 @@ const CommuTradeCreate: React.FC<CommuTradeCreateProps> = ({
   tags,
   text,
   images,
+  errorMessage,
   onTitleChange,
   onPriceChange,
   onTagChange,
@@ -98,9 +100,8 @@ const CommuTradeCreate: React.FC<CommuTradeCreateProps> = ({
             }`}
           />
         </div>
-
         <span className="absolute left-2 bottom-1 text-[9px] text-gray-400">
-          태그를 입력 후, 엔터를 입력하면 등록됩니다.
+          {errorMessage || "태그를 입력 후, 엔터를 입력하면 등록됩니다."}
         </span>
       </div>
 

@@ -80,7 +80,6 @@ const CommuTradeCreate = () => {
 
   return (
     <div>
-      {errorMessage && <div className="text-red-500 text-sm mt-2">{errorMessage}</div>}
       <CommuTradeCreateComponent
         titleValue={titleValue}
         priceValue={priceValue}
@@ -88,6 +87,7 @@ const CommuTradeCreate = () => {
         tags={tags}
         text={text}
         images={images}
+        errorMessage={errorMessage}
         onTitleChange={handleTitleChange}
         onPriceChange={handlePriceChange}
         onTagChange={handleTagChange}
