@@ -33,7 +33,7 @@ export const getGames = (request: GetGamesRequest) => axios.get<Array<GetGamesRe
 
 // 구단 순위 조회
 export interface GetClubRanksRequest {
-    year: string;
+    year?: string;
     teamId?: number; 
 }
 

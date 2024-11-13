@@ -1,4 +1,5 @@
 import ClubOverview, { ClubOverviewProps } from "./ClubOverview";
+import ClubRankHistory, { ClubRankHistoryProps } from "./ClubRankHistory";
 import ClubRecord from "./ClubRecord";
 import OtherClubs from "./OtherClubs";
 import PlayerList, { PlayerListProps } from "./PlayerList";
@@ -8,6 +9,7 @@ interface ClubHomeProps {
   clubOverviewProps: ClubOverviewProps;
   upcomingGameProps: UpcomingGameProps;
   playerListProps: PlayerListProps;
+  clubRankHistoryProps: ClubRankHistoryProps;
 }
 
 const clubColors: Record<string, string> = {
@@ -34,6 +36,7 @@ const ClubHome = (props: ClubHomeProps) => {
       <div className="bg-white w-full rounded-t-2xl pt-6 px-4 mt-6 pb-32">
         <ClubRecord />
         <UpcomingGame {...props.upcomingGameProps} />
+        <ClubRankHistory {...props.clubRankHistoryProps} />
         <PlayerList {...props.playerListProps} />
         <OtherClubs />
       </div>
