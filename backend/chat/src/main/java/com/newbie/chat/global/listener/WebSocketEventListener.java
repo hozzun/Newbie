@@ -35,7 +35,6 @@ public class WebSocketEventListener {
                     .type(ChatMessage.MessageType.LEAVE)
                     .sender(userName)
                     .roomId(roomId)
-                    .message(userName + "님이 퇴장하셨습니다.")
                     .timestamp(LocalDateTime.now())
                     .build();
 

@@ -26,7 +26,7 @@ public class ChatServiceImpl implements ChatService {
 
     private static final String CHAT_KEY_PREFIX = "chatroom:";
     private static final String PARTICIPANT_KEY_PREFIX = "chatroom:participants:";
-    private static final Duration MESSAGE_TTL = Duration.ofDays(7); // 메시지 보존 기간 설정
+    private static final Duration MESSAGE_TTL = Duration.ofDays(3); // 메시지 보존 기간 설정
 
     @Override
     public void saveMessage(String roomId, ChatMessage message) {
@@ -47,8 +47,19 @@ public class ChatServiceImpl implements ChatService {
 
     @Override
     public List<ChatMessage> getMessages(String roomId) {
-        // 빈 리스트를 반환하여 이전 메시지를 전달하지 않음
-        return Collections.emptyList();
+        String key = CHAT_KEY_PREFIX + roomId;
+        ListOperations<String, Object> listOps = redisTemplate.opsForList();
+        List<Object> rawMessages = listOps.range(key, 0, -1);
+
+        if (rawMessages == null) {
+            return Collections.emptyList();
+        }
+
+        // ObjectMapper를 사용하여 Object를 ChatMessage로 변환
+        return rawMessages.stream()
+                .map(obj -> objectMapper.convertValue(obj, ChatMessage.class))
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
     }
 
     // 기존 채팅기록 보이는 ver

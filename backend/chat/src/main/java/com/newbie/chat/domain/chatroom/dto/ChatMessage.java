@@ -15,6 +15,7 @@ public class ChatMessage {
 
     private String roomId;
     private String sender;
+    private String profileImage;
     private String message;
     private MessageType type;
     private LocalDateTime timestamp;

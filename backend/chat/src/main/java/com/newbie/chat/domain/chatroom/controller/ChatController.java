@@ -45,7 +45,7 @@ public class ChatController {
                         .type(ChatMessage.MessageType.SYSTEM)
                         .sender("System")
                         .roomId(roomId)
-                        .message("신고로 인해 3일 동안 채팅을 할 수 없습니다. 차단 만료 시간: " + banExpiry.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+                        .message("신고누적으로 인해 3일 동안 모든 채팅방에서 채팅이 금지되었습니다. 차단 만료 시간: " + banExpiry.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
                         .timestamp(LocalDateTime.now())
                         .build();
 
@@ -90,7 +90,7 @@ public class ChatController {
                     .type(ChatMessage.MessageType.SYSTEM)
                     .sender("System")
                     .roomId(roomId)
-                    .message("신고로 인해 3일 동안 모든 채팅방에 입장할 수 없습니다. 차단 만료 시간: " +
+                    .message("신고누적으로 인해 3일 동안 모든 채팅방에서 채팅이 금지되었습니다. 차단 만료 시간: " +
                             banExpiry.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
                     .timestamp(LocalDateTime.now())
                     .build();
@@ -113,7 +113,6 @@ public class ChatController {
                 .type(ChatMessage.MessageType.JOIN)
                 .sender(sender)
                 .roomId(roomId)
-                .message(sender + "님이 입장하였습니다.")
                 .timestamp(LocalDateTime.now())
                 .build();
 
@@ -124,7 +123,7 @@ public class ChatController {
         int participantCount = chatService.getParticipantCount(roomId);
         messagingTemplate.convertAndSend("/topic/chatroom/" + roomId + "/participants", participantCount);
     }
-
+}
 //    @MessageMapping("/chat/{roomId}/leave")
 //    public void leaveRoom(@DestinationVariable String roomId, ChatMessage message, SimpMessageHeaderAccessor headerAccessor) {
 //        message.setRoomId(roomId);
@@ -145,4 +144,4 @@ public class ChatController {
 //        int participantCount = chatService.getParticipantCount(roomId);
 //        messagingTemplate.convertAndSend("/topic/chatroom/" + roomId + "/participants", participantCount);
 //    }
-}
+//}

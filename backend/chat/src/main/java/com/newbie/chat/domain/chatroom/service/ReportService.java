@@ -41,7 +41,7 @@ public class ReportService {
             redisTemplate.delete(userReportsKey); // 신고한 유저 목록 초기화
         } else {
             // 신고한 유저 목록 유지 시간 설정 (선택 사항)
-            redisTemplate.expire(userReportsKey, Duration.ofDays(7));
+            redisTemplate.expire(userReportsKey, Duration.ofDays(3));
         }
 
         return true;
@@ -50,7 +50,7 @@ public class ReportService {
     // 사용자 차단
     public void banUser(String userId) {
         String key = BAN_INFO_KEY_PREFIX + userId;
-        LocalDateTime banUntil = LocalDateTime.now().plusDays(3); // 3일로 변경
+        LocalDateTime banUntil = LocalDateTime.now().plusDays(3);
         redisTemplate.opsForValue().set(key, banUntil.toString());
         // 차단 정보의 TTL 설정
         redisTemplate.expire(key, Duration.ofDays(3));
@@ -65,7 +65,7 @@ public class ReportService {
             if (LocalDateTime.now().isBefore(banUntil)) {
                 return true;
             } else {
-                redisTemplate.delete(key); // 차단 기간 만료 시 키 삭제
+                redisTemplate.delete(key);
             }
         }
         return false;

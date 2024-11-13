@@ -14,7 +14,7 @@ public class RateLimitingService {
 
     private static final int MAX_MESSAGES = 10;
     private static final long TIME_WINDOW = 10; // 초 단위
-    private static final long BLOCK_TIME = 60 * 60; // 1시간 차단 (초 단위)
+    private static final long BLOCK_TIME = 60; // 1분 차단 (초 단위)
 
     public boolean isAllowed(String userId) {
         String key = "rate_limit:" + userId;
