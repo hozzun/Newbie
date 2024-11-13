@@ -18,6 +18,6 @@ class UserData(BaseModel):
 async def get_recommendation(request: UserData):
     try:
         recommended_team = recommend_team(request.mbti, request.responses, request.region)
-        return {"recommendTeam": recommended_team}
+        return {"recommended_team": recommended_team}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
