@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class PurchaseDto {
 
-    private int userId;
+    private Long userId;
     private String cardId;
     private double price;
     private String createdAt;

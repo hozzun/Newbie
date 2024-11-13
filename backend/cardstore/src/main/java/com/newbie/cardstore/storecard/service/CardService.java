@@ -15,8 +15,7 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import java.time.format.DateTimeFormatter;
-import java.time.LocalDate;
-import java.util.Comparator;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -37,6 +36,29 @@ public class CardService {
 
     @Value("${rabbitmq.routing.key.player}")
     private String playerRoutingKey;
+
+    /**
+     * 사용자 ID로 사용자가 구매한 카드 목록 조회
+     * @param userId
+     * @return List<PlayerCardDto>
+     */
+    public List<PlayerCardDto> getCardsByUserId(Long userId) {
+        Optional<UserCard> userCard = userCardRepository.findByUserId(userId);
+
+        if (userCard.isEmpty() || userCard.get().getCardIds().isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        Set<String> cardIds = userCard.get().getCardIds().stream()
+                .map(ObjectId::toHexString)
+                .collect(Collectors.toSet());
+
+        List<PlayerCard> playerCards = playerCardRepository.findAllById(cardIds);
+
+        return playerCards.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
 
     public PlayerDetailDto getPlayerDetailsWithCardInfo(String id, int team, String no) {
         // 요청할 메시지 생성
@@ -77,7 +99,7 @@ public class CardService {
      * @param teamId, sortType, includeCard, userId
      * @return List<PlayerCardDto>
      */
-    public List<PlayerCardDto> getCards(int teamId, SortType sortType, boolean includeCard, int userId) {
+    public List<PlayerCardDto> getCards(int teamId, SortType sortType, boolean includeCard, Long userId) {
         List<PlayerCard> cards;
 
         // 정렬 타입에 따라 카드를 조회
@@ -108,7 +130,7 @@ public class CardService {
                 .collect(Collectors.toList());
     }
 
-    public PlayerCardDto getMyLatestCard(int userId) {
+    public PlayerCardDto getMyLatestCard(Long userId) {
         Optional<UserCard> userCardOpt = userCardRepository.findByUserId(userId);
 
         Set<ObjectId> cardIds = userCardOpt.get().getCardIds();

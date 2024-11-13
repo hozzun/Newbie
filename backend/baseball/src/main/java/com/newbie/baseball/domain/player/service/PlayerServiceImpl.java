@@ -30,15 +30,17 @@ public class PlayerServiceImpl implements PlayerService {
             // 포지션별 조회
             if ("likeCount".equalsIgnoreCase(sortBy)) {
                 players = playerRepository.findByTeamIdAndPositionOrderByLikeCountDesc(teamId, position, pageable);
+            } else if ("backNumber".equalsIgnoreCase(sortBy)) {
+                players = playerRepository.findByTeamIdAndPositionOrderByBackNumberAsc(teamId, position, pageable);
             } else {
-                players = playerRepository.findByTeamIdAndPosition(teamId, position, pageable); // 기본 id 순
+                players = playerRepository.findByTeamIdAndPosition(teamId, position, pageable);
             }
         } else {
             // 포지션 필터 없이 전체 팀 조회
             if ("likeCount".equalsIgnoreCase(sortBy)) {
                 players = playerRepository.findByTeamIdOrderByLikeCountDesc(teamId, pageable);
             } else if ("backNumber".equalsIgnoreCase(sortBy)) {
-                players = playerRepository.findByTeamIdOrderByBackNumberDesc(teamId, pageable);
+                players = playerRepository.findByTeamIdOrderByBackNumberAsc(teamId, pageable);
             } else {
                 players = playerRepository.findByTeamId(teamId, pageable); // 기본 id 순
             }

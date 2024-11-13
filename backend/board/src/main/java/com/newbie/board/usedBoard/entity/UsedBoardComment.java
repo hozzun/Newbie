@@ -12,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Data
-@Table(name = "comment")
+@Table(name = "used_board_comment")
 @Builder(toBuilder = true)
 public class UsedBoardComment {
 

@@ -1,6 +1,5 @@
 package com.newbie.board.generalBoard.entity;
 
-import com.newbie.board.usedBoard.entity.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -11,7 +10,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "general_board")
-@Getter
+@Data
 @Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -47,6 +46,10 @@ public class GeneralBoard {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @Column(name = "view_count")
+    @Builder.Default
+    private Integer viewCount = 0;
+
     @Builder.Default
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
     @JoinTable(
@@ -64,7 +67,6 @@ public class GeneralBoard {
             generalBoardTag.getGeneralBoards().add(this);
         }
     }
-
 
     @Builder.Default
     @OneToMany(mappedBy = "generalBoard", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)

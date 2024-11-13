@@ -1,6 +1,5 @@
 package com.newbie.board.generalBoard.entity;
 
-import com.newbie.board.usedBoard.entity.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -11,7 +10,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "general_board_comment")
-@Getter
+@Data
 @Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -32,7 +31,8 @@ public class GeneralBoardComment {
     @NotNull
     private String content;
 
-    private LocalDateTime createdAt;
+    @Builder.Default
+    private LocalDateTime createdAt = LocalDateTime.now();
 
     @ManyToOne
     @JoinColumn(name = "parent_id")

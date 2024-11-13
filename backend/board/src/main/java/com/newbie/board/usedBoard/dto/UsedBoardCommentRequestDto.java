@@ -13,4 +13,5 @@ public class UsedBoardCommentRequestDto {
     private Long boardId;
     private Long parentId;
     private String content;
+
 }

@@ -87,7 +87,7 @@ public class TicketController {
         return ResponseEntity.noContent().build();
     }
 
-    @Operation(summary = "직관 경기 text 추가", description = "사용자가 직관 경기에 text를 추가합니다..")
+    @Operation(summary = "직관 경기 text 추가", description = "사용자가 직관 경기에 text를 추가합니다.")
     @PutMapping("/text")
     public ResponseEntity<Void> updateText(@RequestBody @Parameter(description = "티켓 ID와 Text") TicketTextDto textDto) {
         ticketService.updateText(textDto.getId(), textDto.getText());

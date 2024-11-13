@@ -31,7 +31,11 @@ public interface GeneralBoardRepository extends JpaRepository<GeneralBoard, Long
             nativeQuery = true)
     List<GeneralBoard> searchByTag(@Param("keyword") String keyword);
 
-
     @Query("SELECT u FROM GeneralBoard u WHERE u.isDeleted = 'N' ORDER BY u.createdAt DESC")
     List<GeneralBoard> findAllByOrderByCreatedAtDesc();
+
+    @Query("SELECT u FROM GeneralBoard u WHERE u.userId = :userId AND u.isDeleted = 'N'")
+    List<GeneralBoard> findActiveByUserId(@Param("userId") Long userId);
+
+
 }
