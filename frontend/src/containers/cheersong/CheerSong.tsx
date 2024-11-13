@@ -6,10 +6,23 @@ import CountSong from "../../components/cheersong/CountSong";
 import CheerSongComponent from "../../components/cheersong/CheerSong";
 import MusicController from "../../components/common/MusicController";
 import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+
+type TeamName =
+  | "doosan"
+  | "hanwha"
+  | "kia"
+  | "kiwoom"
+  | "kt"
+  | "lg"
+  | "lotte"
+  | "nc"
+  | "samsung"
+  | "ssg";
 
 const CheerSong = () => {
   const navigate = useNavigate();
-  const club = "ssg"; // TODO: 나의 팀 정보 받아오기
+  const [club, setClub] = useState<TeamName>("ssg"); // TODO: 나의 팀 정보 받아오기
   const [count, setCount] = useState<number>(0);
   const [cheerSongs, setCheerSongs] = useState<{ title: string; url: string }[]>([]);
   const [currentIndex, setCurrentIndex] = useState<number | null>(null);
@@ -17,8 +30,11 @@ const CheerSong = () => {
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
+  const location = useLocation();
+  const selectedClub = location.state?.selectedClub;
+
   const goClubSelect = () => {
-    navigate("/cheerteam");
+    navigate("/cheersong/team");
   };
 
   const getCheerSong = async () => {
@@ -37,8 +53,13 @@ const CheerSong = () => {
   };
 
   useEffect(() => {
+    if (selectedClub) {
+      setClub(selectedClub); // 선택된 클럽이 존재할 경우 상태 업데이트
+    }
     getCheerSong();
+  }, [club]);
 
+  useEffect(() => {
     return () => {
       if (audioRef.current) {
         audioRef.current.pause();

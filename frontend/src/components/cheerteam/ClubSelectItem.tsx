@@ -6,6 +6,7 @@ import { BUTTON_VARIANTS } from "../../components/common/variants";
 
 interface ClubSelectItemProps {
   onClick: (selectedClub: string) => void;
+  onSelectClub?: (club: string) => void;
 }
 
 const ClubSelectItem = (props: ClubSelectItemProps) => {
@@ -17,6 +18,9 @@ const ClubSelectItem = (props: ClubSelectItemProps) => {
     setSelectedClub(club);
     setIsDisabled(false);
     setIsCheerButton(BUTTON_VARIANTS.primary);
+    if (props.onSelectClub) {
+      props.onSelectClub(club)
+    }
   };
 
   return (
