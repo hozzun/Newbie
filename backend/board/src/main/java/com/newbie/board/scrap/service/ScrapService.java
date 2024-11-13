@@ -89,6 +89,7 @@ public class ScrapService {
                     int commentCount = 0;
                     int likeCount = 0;
                     int scrapCount = 0;
+                    int viewCount = 0;
 
                     if (scrap.getGeneralBoard() != null) {
                         boardId = scrap.getGeneralBoard().getId();
@@ -102,6 +103,7 @@ public class ScrapService {
                         commentCount = generalBoardCommentRepository.countByGeneralBoardIdAndIsDeleted(boardId, "N");
                         likeCount = generalBoardLikeRepository.countByGeneralBoardId(boardId);
                         scrapCount = scrapRepository.countByGeneralBoardId(boardId);
+                        viewCount = generalBoard.getViewCount();
 
                     } else if (scrap.getUsedBoard() != null) {
                         boardId = scrap.getUsedBoard().getId();
@@ -115,6 +117,7 @@ public class ScrapService {
                         commentCount = usedBoardCommentRepository.countByUsedBoardIdAndIsDeleted(boardId, "N");
                         likeCount = usedBoardLikeRepository.countByUsedBoardId(boardId);
                         scrapCount = scrapRepository.countByUsedBoardId(boardId);
+                        viewCount = usedBoard.getViewCount();
 
                     } else {
                         throw new IllegalStateException("Scrap entry with no associated board");
@@ -132,6 +135,7 @@ public class ScrapService {
                             .commentCount(commentCount)
                             .likeCount(likeCount)
                             .scrapCount(scrapCount)
+                            .viewCount(viewCount)
                             .createdAt(scrap.getCreatedAt())
                             .build();
                 })

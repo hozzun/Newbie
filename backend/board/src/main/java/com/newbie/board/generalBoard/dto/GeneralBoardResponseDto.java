@@ -26,4 +26,5 @@ public class GeneralBoardResponseDto {
     private int commentCount;
     private int likeCount;
     private int scrapCount;
+    private int viewCount;
 }

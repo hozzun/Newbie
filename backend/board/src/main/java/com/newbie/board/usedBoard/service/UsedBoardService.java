@@ -41,10 +41,19 @@ public class UsedBoardService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public Optional<UsedBoardResponseDto> getUsedBoardById(Long id) {
         return usedBoardRepository.findById(id)
-                .map(this::toUsedBoardResponseDto);
+                .map(usedBoard -> {
+                    // viewCount 증가
+                    usedBoard.setViewCount(usedBoard.getViewCount() + 1);
+                    usedBoardRepository.save(usedBoard); // 변경 사항 저장
+
+                    // DTO로 변환하여 반환
+                    return toUsedBoardResponseDto(usedBoard);
+                });
     }
+
 
     @Transactional
     public List<UsedBoardResponseDto> searchBoardList(String keyword, String type) {
@@ -136,6 +145,7 @@ public class UsedBoardService {
                 .createdAt(usedBoard.getCreatedAt())
                 .likeCount(likeCount)
                 .commentCount(commentCount)
+                .viewCount(usedBoard.getViewCount())
                 .build();
     }
 }
