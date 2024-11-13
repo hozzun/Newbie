@@ -11,4 +11,5 @@ public interface UserService {
     void saveUserProfile(UserRequestDto requestDto);
     void updateUserProfile(Long userId, UserProfileRequestDto userProfileRequestDto);
     void updateFavoriteTeam(Long userId, Integer teamId);
+    Integer getFavoriteTeam(Long userId);
 }
