@@ -1,14 +1,14 @@
-import { useEffect, useRef, useState } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 import registDragEvent from "../../util/registDragEvent";
-import PlayerRecordItem, { PlayerRecordItemProps } from "./PlayerRecordItem";
 
 interface useCarouselSizeProps {
   aspectRadio?: number;
 }
 
-interface CarouselProps {
+interface CarouselProps<T> {
   itemCount: number;
-  items: Array<PlayerRecordItemProps>;
+  items: Array<T>;
+  renderItem: (item: T) => ReactNode;
 }
 
 function useCarouselSize({ aspectRadio = 1 }: useCarouselSizeProps = { aspectRadio: 1 }) {
@@ -41,7 +41,7 @@ function useCarouselSize({ aspectRadio = 1 }: useCarouselSizeProps = { aspectRad
   };
 }
 
-const PlayerCarousel = (props: CarouselProps) => {
+const Carousel = <T,>(props: CarouselProps<T>) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [transX, setTransX] = useState(0);
 
@@ -81,7 +81,7 @@ const PlayerCarousel = (props: CarouselProps) => {
       >
         {props.items.map((item, index) => (
           <div key={index} className="flex-shrink-0 pr-2" style={{ width: itemWidth }}>
-            <PlayerRecordItem {...item} />
+            {props.renderItem(item)}
           </div>
         ))}
       </div>
@@ -89,4 +89,4 @@ const PlayerCarousel = (props: CarouselProps) => {
   );
 };
 
-export default PlayerCarousel;
+export default Carousel;
