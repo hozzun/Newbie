@@ -9,6 +9,7 @@ interface CarouselProps<T> {
   itemCount: number;
   items: Array<T>;
   renderItem: (item: T) => ReactNode;
+  isIndexChanged?: boolean;
 }
 
 function useCarouselSize({ aspectRadio = 1 }: useCarouselSizeProps = { aspectRadio: 1 }) {
@@ -56,6 +57,12 @@ const Carousel = <T,>(props: CarouselProps<T>) => {
 
   const itemWidth = width / props.itemCount;
 
+  const maxIndex = Math.max(0, props.items.length - props.itemCount);
+  const handleClick = (index: number) => {
+    const centeredIndex = inrange(index - Math.floor(props.itemCount / 2), 0, maxIndex);
+    setCurrentIndex(centeredIndex);
+  };
+
   return (
     <div ref={ref} className="w-full overflow-hidden">
       <div
@@ -80,7 +87,12 @@ const Carousel = <T,>(props: CarouselProps<T>) => {
         })}
       >
         {props.items.map((item, index) => (
-          <div key={index} className="flex-shrink-0 pr-2" style={{ width: itemWidth }}>
+          <div
+            key={index}
+            className="flex-shrink-0 pr-2"
+            style={{ width: itemWidth }}
+            onClick={props.isIndexChanged ? () => handleClick(index) : undefined}
+          >
             {props.renderItem(item)}
           </div>
         ))}
