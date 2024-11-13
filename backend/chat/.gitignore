@@ -10,6 +10,7 @@ etc/letsencrypt/
 .build/**
 .gradle/**
 build/
+build
 
 # User-specific stuff
 .idea
