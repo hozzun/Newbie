@@ -74,7 +74,7 @@ public class User {
 
     public void updateIsResigned(Boolean isResigned) {
         this.isResigned = isResigned;
-        this.email = null;
-        this.nickname = null;
+        this.email = "알수없음";
+        this.nickname = "알수없음";
     }
 }
