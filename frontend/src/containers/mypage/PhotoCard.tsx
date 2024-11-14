@@ -54,7 +54,9 @@ const PhotoCard = () => {
           selectedOption={tabBarOptions[0]}
           handleSelectOption={(value: string) => console.log(`tab bar: ${value}`)}
         />
-        <p className="font-kbogothicmedium text-gray-700 my-5">총 {count}개</p>
+        {count !== 0 ? (<p className="font-kbogothicmedium text-gray-700 my-5">총 {count}개</p>):(
+          <p className="font-kbogothicmedium text-gray-700 flex justify-center items-center mt-10">아직 구입한 포토카드가 없습니다.</p>
+        )}
         <div className="grid grid-cols-3 hover:cursor-pointer gap-4">
           {photos.map((photo) => (
             <PhotoCardComponent

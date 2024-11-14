@@ -119,11 +119,10 @@ const Calendar = () => {
                 {opponentTeamName && (
                   <>
                     <img
-                      className="flex justify-center items-center mb-1 h-5"
+                      className="flex justify-center items-center mb-1 h-6"
                       src={ClubLogos[opponentTeamName]}
                       alt={`${opponentTeamName} logo`}
                     />
-                    <p className="text-[7px]">{game.stadium}</p>
                   </>
                 )}
               </div>
