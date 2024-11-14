@@ -1,37 +1,83 @@
 import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 import TabBar from "../../components/cardStore/TabBar";
 import ClubSelect from "../../components/common/ClubSelect";
 import PhotoCardComponent from "../../components/mypage/PhotoCard";
-import Karina from "../../assets/images/karina.jpg";
+import axiosInstance from "../../util/axiosInstance";
+import { getIdByNum } from "../../util/ClubId";
+
+interface PhotoCard {
+  id: string;
+  no: string;
+  team: number;
+  imageUrl: string;
+  position: string;
+}
 
 const PhotoCard = () => {
-  // TODO: 선수 카드 목록 불러오기
+  const [photos, setPhotos] = useState<PhotoCard[]>([]);
+  const [selectedPosition, setSelectedPosition] = useState<string>("투수");
+  const [selectedClub, setSelectedClub] = useState<string | null>(null);
+
+  const handleSelectClub = (clubColor: string) => {
+    setSelectedClub(clubColor);
+  };
 
   const tabBarOptions: Array<string> = ["투수", "내야수", "외야수", "포수"];
 
   const nav = useNavigate();
 
-  const goCardDetail = () => {
-    nav("/mypage/photocard/:id");
+  const goCardDetail = (photo: PhotoCard) => {
+    nav(`/mypage/photocard/${photo.id}`, { state: photo });
   };
+
+  const getPhotoCard = async () => {
+    // TODO: userId 수정
+    const params = { userId: 5 };
+
+    try {
+      const response = await axiosInstance.get("/api-cardstore/cards/users", { params });
+      setPhotos(response.data);
+    } catch (error) {
+      console.error("API 요청 중 오류 발생:", error);
+      throw error;
+    }
+  };
+
+  useEffect(() => {
+    getPhotoCard();
+  }, []);
+
+  // 선택된 포지션의 카드만
+  const filteredPhotos = photos.filter(photo => {
+    const teamName = getIdByNum(photo.team);
+    return photo.position === selectedPosition && teamName === selectedClub;
+  });
 
   return (
     <>
-      <ClubSelect />
+      <ClubSelect page="photocard" onSelectClub={handleSelectClub} />
       <div className="m-5">
         <TabBar
           options={tabBarOptions}
-          selectedOption={tabBarOptions[0]}
-          handleSelectOption={(value: string) => console.log(`tab bar: ${value}`)}
+          selectedOption={selectedPosition} // 현재 선택된 포지션 전달
+          handleSelectOption={(value: string) => setSelectedPosition(value)} // 선택 시 상태 업데이트
         />
-        <p className="font-kbogothicmedium text-gray-700 my-5">총 6개</p>
+        {filteredPhotos.length !== 0 ? (
+          <p className="font-kbogothicmedium text-gray-700 my-5">총 {filteredPhotos.length}개</p>
+        ) : (
+          <p className="font-kbogothicmedium text-gray-700 flex justify-center items-center mt-10">
+            아직 구입한 포토카드가 없습니다.
+          </p>
+        )}
         <div className="grid grid-cols-3 hover:cursor-pointer gap-4">
-          <PhotoCardComponent imgSrc={Karina} onClick={goCardDetail} />
-          <PhotoCardComponent imgSrc={Karina} onClick={goCardDetail} />
-          <PhotoCardComponent imgSrc={Karina} onClick={goCardDetail} />
-          <PhotoCardComponent imgSrc={Karina} onClick={goCardDetail} />
-          <PhotoCardComponent imgSrc={Karina} onClick={goCardDetail} />
-          <PhotoCardComponent imgSrc={Karina} onClick={goCardDetail} />
+          {filteredPhotos.map(photo => (
+            <PhotoCardComponent
+              key={photo.id}
+              imgSrc={photo.imageUrl}
+              onClick={() => goCardDetail(photo)}
+            />
+          ))}
         </div>
       </div>
     </>
