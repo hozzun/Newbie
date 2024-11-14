@@ -42,8 +42,8 @@ public class SwaggerConfig {
 
     private Info apiInfo() {
         return new Info()
-            .title("Newbie 소셜로그인 APIs")
-            .description("Newbie social login APIs")
+            .title("Newbie auth APIs")
+            .description("Newbie 인증 관련 APIs")
             .version("1.0.0");
     }
 }
