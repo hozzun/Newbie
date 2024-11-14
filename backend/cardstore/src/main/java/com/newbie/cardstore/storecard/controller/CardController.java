@@ -8,10 +8,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -66,4 +63,13 @@ public class CardController {
         List<PlayerCardDto> cardsByUserId = cardService.getCardsByUserId(userId);
         return ResponseEntity.ok(cardsByUserId);
     }
+
+    @Operation(summary = "유저 카드 삭제", description = "사용자가 개인 유저 카드를 삭제합니다.")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteCard(
+            @PathVariable @Parameter(description = "카드 ID") String id) {
+        cardService.deleteCard(id);
+        return ResponseEntity.noContent().build();
+    }
+
 }
