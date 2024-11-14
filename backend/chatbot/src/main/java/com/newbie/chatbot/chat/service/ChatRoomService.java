@@ -46,5 +46,9 @@ public class ChatRoomService {
                 .map(ChatRequestDto.class::cast)
                 .toList();
     }
+
+    public String getRoomIdByUserId(int userId) {
+        return (String) redisTemplate.opsForValue().get("user:room:" + userId);
+    }
 }
 
