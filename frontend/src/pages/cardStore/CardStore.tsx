@@ -1,4 +1,4 @@
-import CardStoreComponent from "../../components/cardStore/CardStore";
+import CardStoreContainer from "../../containers/cardstore/CardStore";
 import Container from "../../components/common/Container";
 import SectionBox from "../../containers/common/SectionBox";
 
@@ -7,7 +7,7 @@ const CardStore = () => {
     <>
       <SectionBox label="스토어" />
       <Container>
-        <CardStoreComponent />
+        <CardStoreContainer />
       </Container>
     </>
   );

@@ -1,5 +1,5 @@
-import PlayerCarousel from "./PlayerCarousel";
-import { PlayerRecordItemProps } from "./PlayerRecordItem";
+import Carousel from "../common/Carousel";
+import PlayerRecordItem, { PlayerRecordItemProps } from "./PlayerRecordItem";
 
 interface PlayerRecordProps {
   label: string;
@@ -13,7 +13,11 @@ const PlayerRecord = (props: PlayerRecordProps) => {
         <p className="text-2xl font-kbogothicbold text-gray-700">{props.label}</p>
       </div>
       {props.items ? (
-        <PlayerCarousel itemCount={4} items={props.items} />
+        <Carousel
+          itemCount={4}
+          items={props.items}
+          renderItem={item => <PlayerRecordItem {...item} />}
+        />
       ) : (
         <p className="text-base font-kbogothiclight text-gray-700">이번 시즌 성적이 없습니다...</p>
       )}

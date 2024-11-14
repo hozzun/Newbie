@@ -1,14 +1,16 @@
-import { useEffect, useRef, useState } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 import registDragEvent from "../../util/registDragEvent";
-import PlayerRecordItem, { PlayerRecordItemProps } from "./PlayerRecordItem";
 
 interface useCarouselSizeProps {
   aspectRadio?: number;
 }
 
-interface CarouselProps {
+interface CarouselProps<T> {
   itemCount: number;
-  items: Array<PlayerRecordItemProps>;
+  items: Array<T>;
+  renderItem: (item: T) => ReactNode;
+  isIndexChanged?: boolean;
+  firstIndex?: number;
 }
 
 function useCarouselSize({ aspectRadio = 1 }: useCarouselSizeProps = { aspectRadio: 1 }) {
@@ -41,7 +43,7 @@ function useCarouselSize({ aspectRadio = 1 }: useCarouselSizeProps = { aspectRad
   };
 }
 
-const PlayerCarousel = (props: CarouselProps) => {
+const Carousel = <T,>(props: CarouselProps<T>) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [transX, setTransX] = useState(0);
 
@@ -55,6 +57,18 @@ const PlayerCarousel = (props: CarouselProps) => {
   };
 
   const itemWidth = width / props.itemCount;
+
+  const maxIndex = Math.max(0, props.items.length - props.itemCount);
+  const handleClick = (index: number) => {
+    const centeredIndex = inrange(index - Math.floor(props.itemCount / 2), 0, maxIndex);
+    setCurrentIndex(centeredIndex);
+  };
+
+  useEffect(() => {
+    if (props.firstIndex && props.firstIndex > 0) {
+      handleClick(props.firstIndex);
+    }
+  }, [props.firstIndex]);
 
   return (
     <div ref={ref} className="w-full overflow-hidden">
@@ -80,8 +94,13 @@ const PlayerCarousel = (props: CarouselProps) => {
         })}
       >
         {props.items.map((item, index) => (
-          <div key={index} className="flex-shrink-0 pr-2" style={{ width: itemWidth }}>
-            <PlayerRecordItem {...item} />
+          <div
+            key={index}
+            className="flex-shrink-0 pr-2"
+            style={{ width: itemWidth }}
+            onClick={props.isIndexChanged ? () => handleClick(index) : undefined}
+          >
+            {props.renderItem(item)}
           </div>
         ))}
       </div>
@@ -89,4 +108,4 @@ const PlayerCarousel = (props: CarouselProps) => {
   );
 };
 
-export default PlayerCarousel;
+export default Carousel;

@@ -34,6 +34,7 @@ import MyActive from "./pages/mypage/MyActive";
 import CommuFreeCreate from "./pages/commu/CommuFreeCreate";
 import CommuTradeCreate from "./pages/commu/CommuTradeCreate";
 import ScrollToTop from "./components/common/ScrollToTop";
+import CommuFreeDetail from "./pages/commu/CommuFreeDetail";
 
 // 로그인 하지 않은 사용자는 로그인으로
 function ProtectedRoute({ children }: { children: JSX.Element }) {
@@ -290,6 +291,14 @@ const AppRouter = () => {
           element={
             <ProtectedRoute>
               <CommuTradeCreate />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/commuhome/detail"
+          element={
+            <ProtectedRoute>
+              <CommuFreeDetail />
             </ProtectedRoute>
           }
         />

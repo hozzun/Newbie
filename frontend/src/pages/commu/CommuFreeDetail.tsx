@@ -1,16 +1,16 @@
 import Container from "../../components/common/Container";
-import CardDetailContainer from "../../containers/cardstore/CardDetail";
 import SectionBox from "../../containers/common/SectionBox";
+import CommuFreeDetailContainer from "../../containers/commu/CommuFreeDetail";
 
-const CardDetail = () => {
+const CommuFreeDetail = () => {
   return (
     <>
       <SectionBox />
       <Container>
-        <CardDetailContainer />
+        <CommuFreeDetailContainer />
       </Container>
     </>
   );
 };
 
-export default CardDetail;
+export default CommuFreeDetail;
