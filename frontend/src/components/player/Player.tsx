@@ -8,7 +8,6 @@ import SectionBox from "../../containers/common/SectionBox";
 import { CircleButtonProps } from "../common/CircleButton";
 import { CIRCLE_BUTTON_VARIANTS } from "../common/variants";
 import Heart from "../../assets/icons/heart-solid.svg?react";
-import Karina from "../../assets/images/karina.jpg";
 import { PlayerInfo } from "../../containers/player/PlayerList";
 import { Video } from "../../containers/player/Player";
 
@@ -83,9 +82,13 @@ const Player = (props: PlayerProps) => {
       <SectionBox label="스토어" rightButton={rightButtonProps} />
       <Container>
         <div className="flex flex-col justify-center items-center">
-          <div className="flex flex-row justify-between items-center">
-            <div className="aspect-[2/2.4] w-[45%]">
-              <img src={Karina} alt="인물 사진" className="w-full h-full object-cover rounded-lg" />
+          <div className="flex flex-row justify-between items-center w-full">
+            <div className="aspect-[2/2.4] w-[40%]">
+              <img
+                src={props.playerInfo?.imageUrl}
+                alt={props.playerInfo ? props.playerInfo.name : "선수 사진"}
+                className="w-full h-full object-cover rounded-lg"
+              />
             </div>
             <PlayerProfile playerInfo={props.playerInfo} />
           </div>

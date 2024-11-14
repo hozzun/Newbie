@@ -22,6 +22,7 @@ export interface GetPlayersResponse {
     physical: string;
     academic: string;
     likeCount: number;
+    imageUrl: string;
 }
 
 export const getPlayers = (request: GetPlayersRequest) => axios.get<{content: Array<GetPlayersResponse>}>(`/api-baseball/players/team/${request.teamId}`, {
