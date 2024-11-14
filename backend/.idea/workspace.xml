@@ -4,210 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e06d8f8a-87ad-4855-8c71-eb1ae6aa1df7" name="변경" comment="">
-      <change afterPath="$PROJECT_DIR$/auth/build/tmp/compileJava/compileTransaction/stash-dir/CustomUserDetailsService.class.uniqueId7" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/auth/build/tmp/compileJava/compileTransaction/stash-dir/GoogleServiceImpl.class.uniqueId10" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/auth/build/tmp/compileJava/compileTransaction/stash-dir/JwtAuthFilter.class.uniqueId4" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/auth/build/tmp/compileJava/compileTransaction/stash-dir/KakaoServiceImpl.class.uniqueId8" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/auth/build/tmp/compileJava/compileTransaction/stash-dir/Member$MemberBuilder.class.uniqueId1" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/auth/build/tmp/compileJava/compileTransaction/stash-dir/Member.class.uniqueId11" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/auth/build/tmp/compileJava/compileTransaction/stash-dir/MemberController.class.uniqueId2" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/auth/build/tmp/compileJava/compileTransaction/stash-dir/MemberRepository.class.uniqueId3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/auth/build/tmp/compileJava/compileTransaction/stash-dir/MemberService.class.uniqueId9" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/auth/build/tmp/compileJava/compileTransaction/stash-dir/MemberServiceImpl.class.uniqueId5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/auth/build/tmp/compileJava/compileTransaction/stash-dir/QMember.class.uniqueId6" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/auth/build/tmp/compileJava/compileTransaction/stash-dir/QMember.java.uniqueId12" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/auth/build/tmp/compileJava/compileTransaction/stash-dir/SecurityConfig.class.uniqueId0" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/baseball/src/main/java/com/newbie/baseball/domain/game/dto/res/SSEResponseDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/board/.gitattributes" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/board/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/board/Dockerfile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/board/Jenkinsfile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/board/build.gradle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/board/gradle/wrapper/gradle-wrapper.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/board/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/board/gradlew" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/board/gradlew.bat" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/board/settings.gradle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/board/src/main/java/com/newbie/board/BoardApplication.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/board/src/main/java/com/newbie/board/config/S3Config.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/board/src/main/java/com/newbie/board/config/SwaggerConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/board/src/main/java/com/newbie/board/config/WebConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/board/src/main/java/com/newbie/board/generalBoard/controller/BoardLikeController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/board/src/main/java/com/newbie/board/generalBoard/controller/GeneralBoardController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/board/src/main/java/com/newbie/board/generalBoard/dto/GeneralBoardRequestDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/board/src/main/java/com/newbie/board/generalBoard/dto/GeneralBoardResponseDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/board/src/main/java/com/newbie/board/generalBoard/dto/GeneralBoardUpdateRequestDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/board/src/main/java/com/newbie/board/generalBoard/entity/GeneralBoard.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/board/src/main/java/com/newbie/board/generalBoard/entity/GeneralBoardComment.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/board/src/main/java/com/newbie/board/generalBoard/entity/GeneralBoardLike.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/board/src/main/java/com/newbie/board/generalBoard/entity/GeneralBoardTag.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/board/src/main/java/com/newbie/board/generalBoard/repository/GeneralBoardCommentRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/board/src/main/java/com/newbie/board/generalBoard/repository/GeneralBoardLikeRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/board/src/main/java/com/newbie/board/generalBoard/repository/GeneralBoardRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/board/src/main/java/com/newbie/board/generalBoard/repository/GeneralBoardTagRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/board/src/main/java/com/newbie/board/generalBoard/service/GeneralBoardLikeService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/board/src/main/java/com/newbie/board/generalBoard/service/GeneralBoardService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/board/src/main/java/com/newbie/board/usedBoard/controller/UsedBoardCommentController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/board/src/main/java/com/newbie/board/usedBoard/controller/UsedBoardController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/board/src/main/java/com/newbie/board/usedBoard/dto/UsedBoardCommentRequestDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/board/src/main/java/com/newbie/board/usedBoard/dto/UsedBoardCommentResponseDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/board/src/main/java/com/newbie/board/usedBoard/dto/UsedBoardRequestDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/board/src/main/java/com/newbie/board/usedBoard/dto/UsedBoardResponseDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/board/src/main/java/com/newbie/board/usedBoard/dto/UsedBoardUpdateRequestDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/board/src/main/java/com/newbie/board/usedBoard/entity/UsedBoard.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/board/src/main/java/com/newbie/board/usedBoard/entity/UsedBoardComment.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/board/src/main/java/com/newbie/board/usedBoard/entity/UsedBoardTag.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/board/src/main/java/com/newbie/board/usedBoard/entity/User.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/board/src/main/java/com/newbie/board/usedBoard/repository/UsedBoardCommentRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/board/src/main/java/com/newbie/board/usedBoard/repository/UsedBoardRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/board/src/main/java/com/newbie/board/usedBoard/repository/UsedBoardTagRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/board/src/main/java/com/newbie/board/usedBoard/repository/UserRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/board/src/main/java/com/newbie/board/usedBoard/service/S3Service.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/board/src/main/java/com/newbie/board/usedBoard/service/UsedBoardCommentService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/board/src/main/java/com/newbie/board/usedBoard/service/UsedBoardService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/board/src/main/resources/application-prod.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/board/src/test/java/com/newbie/board/BoardApplicationTests.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chat/.gitattributes" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chat/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chat/HELP.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chat/build.gradle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chat/gradle/wrapper/gradle-wrapper.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chat/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chat/gradlew" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chat/gradlew.bat" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chat/settings.gradle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chat/src/main/java/com/newbie/chat/ChatApplication.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chat/src/main/java/com/newbie/chat/domain/chatroom/controller/ChatController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chat/src/main/java/com/newbie/chat/domain/chatroom/controller/ChatRoomController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chat/src/main/java/com/newbie/chat/domain/chatroom/controller/ReportController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chat/src/main/java/com/newbie/chat/domain/chatroom/dto/ChatMessage.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chat/src/main/java/com/newbie/chat/domain/chatroom/dto/ReportRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chat/src/main/java/com/newbie/chat/domain/chatroom/service/ChatRoomInitService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chat/src/main/java/com/newbie/chat/domain/chatroom/service/ChatService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chat/src/main/java/com/newbie/chat/domain/chatroom/service/ChatServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chat/src/main/java/com/newbie/chat/domain/chatroom/service/RateLimitingService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chat/src/main/java/com/newbie/chat/domain/chatroom/service/ReportService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chat/src/main/java/com/newbie/chat/global/config/RedisConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chat/src/main/java/com/newbie/chat/global/config/WebConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chat/src/main/java/com/newbie/chat/global/config/WebSocketConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chat/src/main/java/com/newbie/chat/global/filter/ProfanityFilter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chat/src/main/java/com/newbie/chat/global/listener/WebSocketEventListener.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chat/src/main/java/com/newbie/chat/global/util/RedisSubscriber.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chat/src/main/resources/application.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chat/src/main/resources/profanity-words.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chat/src/test/java/com/newbie/chat/ChatApplicationTests.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chatbot/.gradle/8.10.2/checksums/checksums.lock" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chatbot/.gradle/8.10.2/checksums/md5-checksums.bin" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chatbot/.gradle/8.10.2/checksums/sha1-checksums.bin" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chatbot/.gradle/8.10.2/dependencies-accessors/gc.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chatbot/.gradle/8.10.2/executionHistory/executionHistory.bin" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chatbot/.gradle/8.10.2/executionHistory/executionHistory.lock" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chatbot/.gradle/8.10.2/fileChanges/last-build.bin" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chatbot/.gradle/8.10.2/fileHashes/fileHashes.bin" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chatbot/.gradle/8.10.2/fileHashes/fileHashes.lock" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chatbot/.gradle/8.10.2/fileHashes/resourceHashesCache.bin" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chatbot/.gradle/8.10.2/gc.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chatbot/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chatbot/.gradle/buildOutputCleanup/cache.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chatbot/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chatbot/.gradle/file-system.probe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chatbot/.gradle/vcs-1/gc.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chatbot/.idea/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chatbot/.idea/compiler.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chatbot/.idea/gradle.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chatbot/.idea/jarRepositories.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chatbot/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chatbot/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chatbot/.idea/modules/chatbot.main.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chatbot/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chatbot/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chatbot/.settings/org.eclipse.buildship.core.prefs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chatbot/.settings/org.eclipse.jdt.apt.core.prefs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chatbot/.settings/org.eclipse.jdt.core.prefs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chatbot/HELP.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chatbot/build/classes/java/main/com/newbie/chatbot/ChatbotApplication.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chatbot/build/classes/java/main/com/newbie/chatbot/chat/controller/ChatController.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chatbot/build/classes/java/main/com/newbie/chatbot/chat/dto/ChatRequestDto.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chatbot/build/classes/java/main/com/newbie/chatbot/chat/dto/MessageDto$MessageDtoBuilder.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chatbot/build/classes/java/main/com/newbie/chatbot/chat/dto/MessageDto.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chatbot/build/classes/java/main/com/newbie/chatbot/chat/service/ChatRoomService.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chatbot/build/classes/java/main/com/newbie/chatbot/chat/service/OpenAIService.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chatbot/build/classes/java/main/com/newbie/chatbot/config/RedisConfig.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chatbot/build/classes/java/main/com/newbie/chatbot/config/SwaggerConfig.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chatbot/build/classes/java/main/com/newbie/chatbot/config/WebConfig.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chatbot/build/classes/java/main/com/newbie/chatbot/config/WebSocketConfig.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chatbot/build/classes/java/test/com/newbie/chatbot/ChatbotApplicationTests.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chatbot/build/libs/chatbot-0.0.1-SNAPSHOT-plain.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chatbot/build/libs/chatbot-0.0.1-SNAPSHOT.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chatbot/build/reports/tests/test/classes/com.newbie.chatbot.ChatbotApplicationTests.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chatbot/build/reports/tests/test/css/base-style.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chatbot/build/reports/tests/test/css/style.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chatbot/build/reports/tests/test/index.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chatbot/build/reports/tests/test/js/report.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chatbot/build/reports/tests/test/packages/com.newbie.chatbot.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chatbot/build/resolvedMainClassName" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chatbot/build/resources/main/application.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chatbot/build/test-results/test/TEST-com.newbie.chatbot.ChatbotApplicationTests.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chatbot/build/test-results/test/binary/output.bin" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chatbot/build/test-results/test/binary/output.bin.idx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chatbot/build/test-results/test/binary/results.bin" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chatbot/build/tmp/bootJar/MANIFEST.MF" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chatbot/build/tmp/compileJava/compileTransaction/stash-dir/ChatController.class.uniqueId0" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chatbot/build/tmp/compileJava/previous-compilation-data.bin" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chatbot/build/tmp/compileTestJava/previous-compilation-data.bin" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chatbot/build/tmp/jar/MANIFEST.MF" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chatbot/src/main/resources/application.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/user/Dockerfile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/user/Jenkinsfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/auth/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth/build/generated/sources/annotationProcessor/java/main/com/newbie/auth/member/domain/QMember.java" beforeDir="false" afterPath="$PROJECT_DIR$/auth/build/generated/sources/annotationProcessor/java/main/com/newbie/auth/member/domain/QMember.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth/build/tmp/compileJava/previous-compilation-data.bin" beforeDir="false" afterPath="$PROJECT_DIR$/auth/build/tmp/compileJava/previous-compilation-data.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth/src/main/java/com/newbie/auth/member/controller/MemberController.java" beforeDir="false" afterPath="$PROJECT_DIR$/auth/src/main/java/com/newbie/auth/member/controller/MemberController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth/src/main/java/com/newbie/auth/member/domain/Member.java" beforeDir="false" afterPath="$PROJECT_DIR$/auth/src/main/java/com/newbie/auth/member/domain/Member.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth/src/main/java/com/newbie/auth/member/service/MemberService.java" beforeDir="false" afterPath="$PROJECT_DIR$/auth/src/main/java/com/newbie/auth/member/service/MemberService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth/src/main/java/com/newbie/auth/member/service/MemberServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/auth/src/main/java/com/newbie/auth/member/service/MemberServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth/src/main/resources/application-prod.properties" beforeDir="false" afterPath="$PROJECT_DIR$/auth/src/main/resources/application-prod.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/baseball/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/baseball/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/baseball/build/resources/main/application-prod.properties" beforeDir="false" afterPath="$PROJECT_DIR$/user/src/main/resources/application-prod.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/baseball/build/resources/main/application.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/baseball/build/tmp/compileJava/compileTransaction/stash-dir/GlobalExceptionHandler.class.uniqueId0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/baseball/build/tmp/compileJava/previous-compilation-data.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/baseball/build/tmp/compileTestJava/previous-compilation-data.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/baseball/src/main/java/com/newbie/baseball/BaseballApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/baseball/src/main/java/com/newbie/baseball/BaseballApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/baseball/src/main/java/com/newbie/baseball/domain/game/controller/GameController.java" beforeDir="false" afterPath="$PROJECT_DIR$/baseball/src/main/java/com/newbie/baseball/domain/game/controller/GameController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/baseball/src/main/java/com/newbie/baseball/domain/game/dto/res/GameResponseDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/baseball/src/main/java/com/newbie/baseball/domain/game/dto/res/GameResponseDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/baseball/src/main/java/com/newbie/baseball/domain/game/repository/GameRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/baseball/src/main/java/com/newbie/baseball/domain/game/repository/GameRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/baseball/src/main/java/com/newbie/baseball/domain/game/service/GameService.java" beforeDir="false" afterPath="$PROJECT_DIR$/baseball/src/main/java/com/newbie/baseball/domain/game/service/GameService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/baseball/src/main/java/com/newbie/baseball/domain/game/service/GameServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/baseball/src/main/java/com/newbie/baseball/domain/game/service/GameServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/baseball/src/main/java/com/newbie/baseball/domain/youtube/controller/YouTubeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/baseball/src/main/java/com/newbie/baseball/domain/youtube/controller/YouTubeController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/baseball/src/main/java/com/newbie/baseball/domain/youtube/service/YouTubeService.java" beforeDir="false" afterPath="$PROJECT_DIR$/baseball/src/main/java/com/newbie/baseball/domain/youtube/service/YouTubeService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/baseball/src/main/java/com/newbie/baseball/domain/youtube/service/YouTubeServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/baseball/src/main/java/com/newbie/baseball/domain/youtube/service/YouTubeServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/baseball/src/main/java/com/newbie/baseball/global/exception/GlobalExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/baseball/src/main/java/com/newbie/baseball/global/exception/GlobalExceptionHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/baseball/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/baseball/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/clubrecommend/app/recommend.py" beforeDir="false" afterPath="$PROJECT_DIR$/clubrecommend/app/recommend.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/crawl/app/crawls/crawl_game_record.py" beforeDir="false" afterPath="$PROJECT_DIR$/crawl/app/crawls/crawl_game_record.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/crawl/app/services/save_game.py" beforeDir="false" afterPath="$PROJECT_DIR$/crawl/app/services/save_game.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/crawl/app/services/save_game_record.py" beforeDir="false" afterPath="$PROJECT_DIR$/crawl/app/services/save_game_record.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/crawl/app/services/scheduler.py" beforeDir="false" afterPath="$PROJECT_DIR$/crawl/app/services/scheduler.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/crawl/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/crawl/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/user/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user/.gradle/8.10.2/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/user/.gradle/8.10.2/executionHistory/executionHistory.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user/.gradle/8.10.2/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/user/.gradle/8.10.2/fileHashes/fileHashes.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user/.gradle/8.10.2/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/user/.gradle/8.10.2/fileHashes/fileHashes.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/user/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/user/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user/build/tmp/compileJava/compileTransaction/stash-dir/UserServiceImpl.class.uniqueId0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/user/build/tmp/compileJava/previous-compilation-data.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/user/build/tmp/compileTestJava/previous-compilation-data.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/user/src/main/java/com/newbie/user/UserApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/user/src/main/java/com/newbie/user/UserApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user/src/main/java/com/newbie/user/domain/user/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/user/src/main/java/com/newbie/user/domain/user/controller/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user/src/main/java/com/newbie/user/domain/user/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/user/src/main/java/com/newbie/user/domain/user/entity/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user/src/main/java/com/newbie/user/domain/user/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/user/src/main/java/com/newbie/user/domain/user/service/UserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user/src/main/java/com/newbie/user/domain/user/service/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/user/src/main/java/com/newbie/user/domain/user/service/UserServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user/src/main/java/com/newbie/user/global/config/WebConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/user/src/main/java/com/newbie/user/global/config/WebConfig.java" afterDir="false" />
-    </list>
+    <list default="true" id="e06d8f8a-87ad-4855-8c71-eb1ae6aa1df7" name="변경" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -243,7 +40,7 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "feature/gateway 병합 중",
+    "git-widget-placeholder": "feature/gateway",
     "kotlin-language-version-configured": "true",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -285,7 +82,7 @@
       <option name="presentableId" value="Default" />
       <updated>1731372411894</updated>
       <workItem from="1731372412980" duration="1509000" />
-      <workItem from="1731543356171" duration="624000" />
+      <workItem from="1731543356171" duration="702000" />
     </task>
     <servers />
   </component>
