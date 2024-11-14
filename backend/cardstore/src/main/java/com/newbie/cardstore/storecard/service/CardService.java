@@ -111,6 +111,11 @@ public class CardService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * 유저의 최신 선수 카드 한 개 조회
+     * @param userId
+     * @return
+     */
     public PlayerCardDto getMyLatestCard(Long userId) {
         Set<ObjectId> cardIds = findUserCardIds(userId);
 
@@ -123,11 +128,19 @@ public class CardService {
         return sortedCards.isEmpty() ? null : convertToDTO(sortedCards.get(0));
     }
 
+    /**
+     * 판매순 TOP3 카드 조회
+     * @return
+     */
     public List<PlayerCardDto> getTopSalesCards() {
         List<PlayerCard> cards = playerCardRepository.findTop3ByOrderBySalesCountDesc();
         return cards.stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
+    }
+
+    public void deleteCard(String id) {
+        userCardRepository.deleteById(id);
     }
 
     private Set<ObjectId> findUserCardIds(Long userId) {
