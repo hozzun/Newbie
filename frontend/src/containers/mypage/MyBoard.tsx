@@ -5,9 +5,9 @@ import CommuFreeItem from "../../components/commu/CommuFreeItem";
 interface Post {
   id: number;
   title: string;
-  contents: string;
-  writer: string;
-  createTimeStamp: string;
+  content: string;
+  userName: string;
+  createdAt: string;
   viewCount: number;
   likeCount: number;
   commentCount: number;
@@ -15,13 +15,14 @@ interface Post {
 
 const MyBoard = () => {
   const [posts, setPosts] = useState<Post[]>([]);
-  console.log(setPosts)
   
-  
-  const getScrap = async () => {
+  const getBoard = async () => {
+
+    // TODO: userId 수정, 일반 게시글과 중고거래 게시글 설정
+    const params = { userId: 5 }
   
     try {
-      const response = await axiosInstance.get("/api-board/scrap");
+      const response = await axiosInstance.get("/api-board/mypage/board", { params });
       setPosts(response.data);
     } catch (error) {
       console.error("에러 발생:", error);
@@ -29,7 +30,7 @@ const MyBoard = () => {
   };
 
   useEffect(() => {
-    getScrap();
+    getBoard();
   }, []);
 
 
@@ -39,9 +40,9 @@ const MyBoard = () => {
         <div key={post.id}>
           <CommuFreeItem
             title={post.title}
-            contents={post.contents}
-            writer={post.writer}
-            createTimeStamp={post.createTimeStamp}
+            contents={post.content}
+            writer={post.userName}
+            createTimeStamp={post.createdAt}
             viewCount={post.viewCount}
             likeCount={post.likeCount}
             commentCount={post.commentCount}
