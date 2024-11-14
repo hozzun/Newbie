@@ -18,9 +18,10 @@ public class JwtUtil {
     private long expiration;
 
     // JWT 생성 메서드
-    public String generateToken(String username) {
+    public String generateToken(String userId, String username) {
         return Jwts.builder()
-                .setSubject(username)
+                .setSubject(userId)
+                .claim("name", username)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(SignatureAlgorithm.HS256, secretKey)
@@ -42,5 +43,15 @@ public class JwtUtil {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    // JWT에서 userId 추출 메서드
+    public String getUserIdFromToken(String token) {
+        return getClaimsFromToken(token).getSubject();
+    }
+
+    // JWT에서 name 추출 메서드
+    public String getUsernameFromToken(String token) {
+        return getClaimsFromToken(token).get("name", String.class);
     }
 }
