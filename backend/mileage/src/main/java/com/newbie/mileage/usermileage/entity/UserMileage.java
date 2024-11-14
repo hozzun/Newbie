@@ -13,7 +13,7 @@ public class UserMileage {
 
     @Id
     private String id;
-    private int userId;
+    private Integer userId;
     private double mileage;
     private String createdAt;
     private String reason;
