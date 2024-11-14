@@ -12,6 +12,8 @@ import Calendar from "../../components/mypage/Calendar";
 import WatchGame from "./WatchGameInfo";
 import OutButton from "../../components/mypage/OutButton";
 import { getIdByNum } from "../../util/ClubId";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 
 interface UserInfo {
   email: string;
@@ -35,6 +37,7 @@ type TeamName =
 
 const MyPage = () => {
   const [userInfo, setUserInfo] = useState<UserInfo>();
+  const { team } = useSelector((state: RootState) => state.team);
 
   console.log(setUserInfo);
   const nav = useNavigate();
@@ -83,7 +86,7 @@ const MyPage = () => {
   }, []);
 
   if (userInfo) {
-    const teamName = getIdByNum(userInfo.favoriteTeamId) as TeamName | 0;
+    const teamName = getIdByNum(team) as TeamName | 0;
 
     return (
       <>

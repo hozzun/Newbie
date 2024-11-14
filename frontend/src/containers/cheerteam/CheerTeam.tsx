@@ -17,15 +17,24 @@ const CheerTeam = () => {
 
   const updateFavoriteTeam = async (favoriteTeamId: number) => {
 
-    const userId = 5
+    // TODO: userId 수정
+    const userId = 5;
+    const params = { teamId: favoriteTeamId, userId: userId };
 
     try {
-      const response = await axiosInstance.patch(`/api-user/users/${userId}/favorite-team`, {
-        teamId: favoriteTeamId,
-        userId: userId
-      });
-  
+      const response = await axiosInstance.patch(
+        `/api-user/users/${userId}/favorite-team`,
+        {},
+        {
+          params,
+          headers: {
+            "Content-Type": "application/json"
+          }
+        }
+      );
+
       console.log("응답 결과:", response.data);
+      dispatch(fetchTeam());
     } catch (error) {
       console.error("에러 발생:", error);
       throw error;
@@ -35,7 +44,6 @@ const CheerTeam = () => {
   const handleClubSelect = (club: string) => {
     setSelectedClub(ClubId[club]);
     updateFavoriteTeam(ClubId[club])
-    dispatch(fetchTeam());
     nav(-1)
   };
 

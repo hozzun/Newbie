@@ -36,7 +36,7 @@ const RecommendResult = (props: RecommendResultProps) => {
         `/api-user/users/${userId}/favorite-team`,
         {},
         {
-          params, // 쿼리 파라미터는 세 번째 인자의 params로 설정
+          params,
           headers: {
             "Content-Type": "application/json"
           }
@@ -44,6 +44,7 @@ const RecommendResult = (props: RecommendResultProps) => {
       );
   
       console.log("응답 결과:", response.data);
+      dispatch(fetchTeam());
     } catch (error) {
       console.error("에러 발생:", error);
       throw error;
@@ -53,7 +54,6 @@ const RecommendResult = (props: RecommendResultProps) => {
 
   const onCheerClick = () => {
     updateFavoriteTeam(ClubId[props.club])
-    dispatch(fetchTeam());
     nav(-1)
   }
 
