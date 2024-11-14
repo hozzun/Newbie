@@ -23,6 +23,7 @@ const MyActive = () => {
 
   const getActivity = async () => {
 
+    // TODO: userId 수정
     const userId = 5
     const params = { userId: userId }
   
@@ -45,22 +46,26 @@ const MyActive = () => {
 
   return (
     <>
-      {likes.map((like) => (
-        <MyActiveLike
-          key={like.boardId}
-          time={like.createdAt}
-          title={like.title}
-          onClick={like.onClick}
-        />
-      ))}
-      {comments.map((comment) => (
-        <MyActiveComment
-          key={comment.boardId}
-          time={comment.createdAt}
-          comment={comment.content}
-          onClick={comment.onClick}
-        />
-      ))}
+      <div onClick={() => console.log("클릭")}>
+        {likes.map((like) => (
+          <MyActiveLike
+            key={like.boardId}
+            time={like.createdAt}
+            title={like.title}
+            onClick={like.onClick}
+          />
+        ))}
+      </div>
+      <div onClick={() => console.log("클릭")}>
+        {comments.map((comment) => (
+          <MyActiveComment
+            key={comment.boardId}
+            time={comment.createdAt}
+            comment={comment.content}
+            onClick={comment.onClick}
+          />
+        ))}
+      </div>
     </>
   );
 };

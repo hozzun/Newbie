@@ -15,13 +15,14 @@ const Calendar = () => {
   // TODO: 데이터 수정
   const [games, setGames] = useState<Game[]>([]);
   const year = new Date().getFullYear();
-  const month = 8; // 9월로 고정(현재 경기 없음 이슈)
+  const month = 9; // 9월로 고정(현재 경기 없음 이슈)
+  const formattedMonth = month.toString().padStart(2, "0");
   const myTeamId = 6; // 내가 응원하는 팀 ID
 
   const getGameInfo = async () => {
     const params = {
       year: year.toString(),
-      month: "09",
+      month: formattedMonth,
       teamId: myTeamId
     };
   
@@ -92,7 +93,7 @@ const Calendar = () => {
               return (
                 <div
                   key={date.getDate()}
-                  className="flex flex-col p-2 m-2 rounded-lg text-[8px] bg-white"
+                  className="flex flex-col p-2 m-2 justify-center items-center rounded-lg text-[8px] bg-white"
                 >
                   <div className="flex justify-end">{date.getDate()}</div>
                 </div>
