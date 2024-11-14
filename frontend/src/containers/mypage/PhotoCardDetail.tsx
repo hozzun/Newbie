@@ -16,17 +16,15 @@ interface Player {
 const PhotoCardDetail = () => {
 
   const location = useLocation();
-  const { no, team, image } = location.state || {};
+  const { photo } = location.state || {};
   const [player, setPlayer] = useState<Player | null>(null);
-
-  // TODO: 삭제 api 연결
 
   const getPlayer = async () => {
 
-    const params = { teamId: team, backNumber: no }
+    const params = { teamId: photo.team, backNumber: photo.no }
 
     try {
-      const response = await axiosInstance.get(`/api-baseball/players/photos/${team}/${no}`, { params });
+      const response = await axiosInstance.get(`/api-baseball/players/photos/${photo.team}/${photo.no}`, { params });
       setPlayer(response.data)
     } catch (error) {
       console.error("API 요청 중 오류 발생:", error);
@@ -38,14 +36,27 @@ const PhotoCardDetail = () => {
     getPlayer();
   }, []);
 
+  const deletePlayer = async () => {
+
+    const params = { id: photo.id }
+
+    try {
+      const response = await axiosInstance.delete(`/api-cardstore/cards/${photo.id}`, { params });
+      console.log(response.data)
+    } catch (error) {
+      console.error("API 요청 중 오류 발생:", error);
+      throw error;
+    }
+  };
+
   const deleteClick = () => {
-    console.log('선수 카드 삭제')
+    deletePlayer()
   }
 
   return (
     <>
       {player && (
-        <CardDetail player={player} image={image} onClick={deleteClick} />
+        <CardDetail player={player} image={photo.imageUrl} onClick={deleteClick} />
       )}
   </>
   )

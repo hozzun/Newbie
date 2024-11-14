@@ -23,7 +23,7 @@ const PhotoCard = () => {
   const nav = useNavigate();
 
   const goCardDetail = (photo: PhotoCard) => {
-    nav(`/mypage/photocard/${photo.id}`, { state: { no: photo.no, team: photo.team, image: photo.imageUrl } });
+    nav(`/mypage/photocard/${photo.id}`, { state: photo });
   };
 
   const getPhotoCard = async () => {
