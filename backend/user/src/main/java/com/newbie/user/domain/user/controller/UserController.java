@@ -55,4 +55,11 @@ public class UserController {
     public ResponseEntity<Integer> getFavoriteTeam(@PathVariable Long userId) {
         return new ResponseEntity<>(userService.getFavoriteTeam(userId), HttpStatus.OK);
     }
+
+    @Operation(summary = "회원 탈퇴 처리")
+    @PatchMapping("/resign")
+    public ResponseEntity<Void> resignUser(@RequestBody Long userId) {
+        userService.updateIsResigned(userId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }
