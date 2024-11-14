@@ -1,5 +1,7 @@
 const isTouchScreen =
-  typeof window !== "undefined" && window.matchMedia("(hover: none) and (pointer: coarse)").matches;
+  typeof window !== "undefined" &&
+  (window.matchMedia("(hover: none) and (pointer: coarse)").matches ||
+    navigator.maxTouchPoints > 0);
 
 interface registDragEventProps {
   onDragChange?: (deltaX: number, deltaY: number) => void;
@@ -22,10 +24,9 @@ export default function registDragEvent(props: registDragEventProps) {
         };
 
         const touchEndHandler = (moveEvent: TouchEvent) => {
-          const deltaX = moveEvent.touches[0].pageX - touchEvent.touches[0].pageX;
-          const deltaY = moveEvent.touches[0].pageY - touchEvent.touches[0].pageY;
+          const deltaX = moveEvent.changedTouches[0].pageX - touchEvent.changedTouches[0].pageX;
+          const deltaY = moveEvent.changedTouches[0].pageY - touchEvent.changedTouches[0].pageY;
           props.onDragEnd?.(deltaX, deltaY);
-
           document.removeEventListener("touchmove", touchMoveHandler);
         };
 
