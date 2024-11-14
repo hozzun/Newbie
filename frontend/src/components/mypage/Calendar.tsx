@@ -3,6 +3,8 @@ import CalenderIcon from "../../assets/icons/calender.svg?react";
 import { useState, useEffect } from "react";
 import ClubLogos from "../../util/ClubLogos";
 import { getClubIdByNum } from "../../util/ClubId";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 
 interface Game {
   date: string;
@@ -17,13 +19,13 @@ const Calendar = () => {
   const year = new Date().getFullYear();
   const month = 9; // 9월로 고정(현재 경기 없음 이슈)
   const formattedMonth = month.toString().padStart(2, "0");
-  const myTeamId = 6; // 내가 응원하는 팀 ID
+  const { team } = useSelector((state: RootState) => state.team);
 
   const getGameInfo = async () => {
     const params = {
       year: year.toString(),
       month: formattedMonth,
-      teamId: myTeamId
+      teamId: team
     };
   
     try {
@@ -100,7 +102,7 @@ const Calendar = () => {
               );
             }
 
-            const isHomeGame = game.homeTeamId == myTeamId;
+            const isHomeGame = game.homeTeamId == team;
             const opponentTeamId = isHomeGame ? game.awayTeamId : game.homeTeamId;
             const opponentTeamName = getClubIdByNum(opponentTeamId);
 

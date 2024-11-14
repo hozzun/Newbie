@@ -20,7 +20,6 @@ interface UserInfo {
   nickname: string;
   address: string;
   profileImage: string;
-  favoriteTeamId: number;
 }
 
 type TeamName =
