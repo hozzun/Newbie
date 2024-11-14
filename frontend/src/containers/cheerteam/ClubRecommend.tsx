@@ -19,7 +19,7 @@ const ClubRecommend = () => {
   // 추천 알고리즘 연결
   const ClubRecommendAPI = async () => {
     const UserData = {
-      "userId": 1,
+      "userId": 5,
       "mbti": mbti,
       "responses": selectedChoices,
       "region": region,
