@@ -1,7 +1,5 @@
 package newbie.gateway.gateway.jwt;
 
-import io.jsonwebtoken.Claims;
-import newbie.gateway.gateway.jwt.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
@@ -20,7 +18,7 @@ public class JwtAuthenticationFilter extends AuthenticationWebFilter {
 
     @Autowired
     public JwtAuthenticationFilter(JwtUtil jwtUtil, ReactiveAuthenticationManager authenticationManager) {
-        super(authenticationManager); // 주입받은 authenticationManager 사용
+        super(authenticationManager);
         setServerAuthenticationConverter(new JwtAuthenticationConverter(jwtUtil));
     }
 
@@ -38,12 +36,21 @@ public class JwtAuthenticationFilter extends AuthenticationWebFilter {
             if (token != null && token.startsWith("Bearer ")) {
                 token = token.substring(7);
                 if (jwtUtil.validateToken(token)) {
-                    Claims claims = jwtUtil.getClaimsFromToken(token);
+
+                    Long userId = jwtUtil.getUserIdFromToken(token);
+                    String nickname = jwtUtil.getNicknameFromToken(token);
+
+                    exchange.getRequest().mutate()
+                            .header("user-id", userId.toString())
+                            .header("user-nickname", nickname)
+                            .build();
+
                     return Mono.just(new UsernamePasswordAuthenticationToken(
-                            claims.getSubject(), null, new ArrayList<>()));
+                            userId, null, new ArrayList<>()));
                 }
             }
             return Mono.empty();
         }
+
     }
 }
