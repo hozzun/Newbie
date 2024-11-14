@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
-import SockJS from "sockjs-client";
 import { Client } from "@stomp/stompjs";
-import axiosInstance from "../../util/axiosInstance";
+import { fetchRoomAndHistory, initializeWebSocket, sendMessage } from "../../api/baseballdictApi";
 import ChatMessages from "../../components/baseballdict/ChatMessages";
 import ChatInput from "../../components/baseballdict/ChatInput";
 
@@ -20,71 +19,19 @@ const BaseballDict = () => {
   const [roomId, setRoomId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const userId = 1;
+  const userId = 5;
 
-  const fetchRoomAndHistory = useCallback(async () => {
-    try {
-      setIsLoading(true);
-      setError(null);
-
-      const { data: fetchedRoomId } = await axiosInstance.post("/api-chatbot/create-room", null, {
-        params: { userId },
-      });
-
-      setRoomId(fetchedRoomId);
-
-      const { data: chatHistory } = await axiosInstance.get(
-        `/api-chatbot/chat/${fetchedRoomId}/history`,
-      );
-      setMessages(chatHistory);
-    } catch (error) {
-      console.error("Error fetching room or chat history:", error);
-      setError("Failed to load chat room. Please try again.");
-    } finally {
-      setIsLoading(false);
-    }
+  const fetchRoomAndChatHistory = useCallback(() => {
+    fetchRoomAndHistory(userId, setRoomId, setMessages, setError, setIsLoading);
   }, [userId]);
 
   useEffect(() => {
-    fetchRoomAndHistory();
-  }, [fetchRoomAndHistory]);
+    fetchRoomAndChatHistory();
+  }, [fetchRoomAndChatHistory]);
 
   useEffect(() => {
     if (roomId) {
-      const client = new Client({
-        webSocketFactory: () => new SockJS(`${axiosInstance.defaults.baseURL}/api-chatbot/ws`),
-        onConnect: () => {
-          setConnected(true);
-          setError(null);
-
-          client.subscribe(`/topic/chat/${roomId}`, message => {
-            try {
-              const receivedMessage = JSON.parse(message.body);
-              if (receivedMessage.content) {
-                // AI 응답을 messages 배열에 추가하여 실시간으로 UI에 반영
-                setMessages(prevMessages => [
-                  ...prevMessages,
-                  { ...receivedMessage, message: receivedMessage.content },
-                ]);
-                console.log("Received AI response:", receivedMessage.content);
-              }
-            } catch (error) {
-              console.error("Error parsing message:", error);
-            }
-          });
-        },
-        onDisconnect: () => {
-          setConnected(false);
-          console.log("Disconnected from WebSocket");
-        },
-        onStompError: frame => {
-          console.error("STOMP error:", frame);
-          setError("Connection error. Please refresh the page.");
-        },
-        reconnectDelay: 5000,
-      });
-
-      client.activate();
+      const client = initializeWebSocket(roomId, setConnected, setError, setMessages);
       setStompClient(client);
 
       return () => {
@@ -93,28 +40,15 @@ const BaseballDict = () => {
     }
   }, [roomId]);
 
+  useEffect(() => {
+    // messages 배열이 업데이트될 때마다 콘솔에 출력
+    console.log("Updated chat messages:", messages);
+  }, [messages]);
+
   const handleSendMessage = useCallback(() => {
     if (stompClient && connected && comment.trim()) {
-      const newMessage = {
-        userId,
-        message: comment.trim(),
-        roomId,
-        timestamp: Date.now(),
-      };
-
-      try {
-        setMessages(prevMessages => [...prevMessages, newMessage]);
-
-        stompClient.publish({
-          destination: `/app/chat/${roomId}`,
-          body: JSON.stringify(newMessage),
-        });
-
-        setComment("");
-      } catch (error) {
-        console.error("Error sending message:", error);
-        setError("Failed to send message. Please try again.");
-      }
+      sendMessage(stompClient, userId, roomId, comment, setMessages, setError);
+      setComment("");
     }
   }, [stompClient, connected, comment, roomId, userId]);
 
