@@ -10,6 +10,9 @@ def save_pitcher_stats_to_db(pitcher_stats_list):
     db: Session = SessionLocal()
     try:
         for stats in pitcher_stats_list:
+            if stats["team_name"] == "SK":
+                stats["team_name"] = "SSG"
+            
             team_obj = db.query(Team).filter_by(team_name=stats["team_name"]).first()
             player_obj = db.query(Player).filter_by(name=stats["player_name"]).first()
             

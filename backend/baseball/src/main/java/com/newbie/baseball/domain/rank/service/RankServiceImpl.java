@@ -44,7 +44,6 @@ public class RankServiceImpl implements RankService {
 
     private RankResponseDto convertToDto(Rank rank) {
         return RankResponseDto.builder()
-                .id(rank.getId())
                 .year(rank.getYear())
                 .rank(rank.getRank())
                 .teamId(rank.getTeam().getId())

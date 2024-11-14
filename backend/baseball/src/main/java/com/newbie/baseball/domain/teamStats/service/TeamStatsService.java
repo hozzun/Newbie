@@ -8,8 +8,10 @@ import java.util.List;
 public interface TeamStatsService {
 
     List<TeamHitterStatsResponseDto> getAllTeamHitterStats();
-    TeamHitterStatsResponseDto getTeamHitterStatsByTeamId(Integer teamId);
+    List<TeamHitterStatsResponseDto> getTeamHitterStatsByTeamId(Integer teamId);
+    TeamHitterStatsResponseDto getTeamHitterStatsByIdAndYear(Integer teamId, String year);
 
     List<TeamPitcherStatsResponseDto> getAllTeamPitcherStats();
-    TeamPitcherStatsResponseDto getTeamPitcherStatsByTeamId(Integer teamId);
+    List<TeamPitcherStatsResponseDto> getTeamPitcherStatsByTeamId(Integer teamId);
+    TeamPitcherStatsResponseDto getTeamPitcherStatsByIdAndYear(Integer teamId, String year);
 }

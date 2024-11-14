@@ -128,27 +128,46 @@ public class GameServiceImpl implements GameService {
         Integer gameId = game.getId();
         GameResponseDto gameData = convertToDto(game);
 
-        RecordResponseDto recordData;
-        try {
-            recordData = recordService.getRecordByGameId(gameId);
-        } catch (RecordNotFoundException e) {
-            log.warn("Record not found for gameId: {}", gameId);
-            return;
-        }
-
-        SSEResponseDto gameRecordData = SSEResponseDto.builder().game(gameData).record(recordData).build();
+        SSEResponseDto gameRecordData = SSEResponseDto.builder().game(gameData).build();
         cacheGameData(gameId, gameRecordData);
 
         SseEmitter emitter = emitters.get(gameId);
         if (emitter != null) {
             try {
-                emitter.send(SseEmitter.event().name("gameRecordUpdate").data(gameRecordData).reconnectTime(3000L));
+                emitter.send(SseEmitter.event().name("gameUpdate").data(gameRecordData).reconnectTime(3000L));
             } catch (IOException e) {
                 emitters.remove(gameId);
                 log.warn("SSE connection closed for gameId: {}", gameId);
             }
         }
     }
+
+//    private void sendRealTimeData(Game game) {
+//        Integer gameId = game.getId();
+//        GameResponseDto gameData = convertToDto(game);
+//
+//        RecordResponseDto recordData;
+//        try {
+//            recordData = recordService.getRecordByGameId(gameId);
+//        } catch (RecordNotFoundException e) {
+//            log.warn("Record not found for gameId: {}", gameId);
+//            return;
+//        }
+//
+////        SSEResponseDto gameRecordData = SSEResponseDto.builder().game(gameData).record(recordData).build();
+//        SSEResponseDto gameRecordData = SSEResponseDto.builder().game(gameData).build();
+//        cacheGameData(gameId, gameRecordData);
+//
+//        SseEmitter emitter = emitters.get(gameId);
+//        if (emitter != null) {
+//            try {
+//                emitter.send(SseEmitter.event().name("gameRecordUpdate").data(gameRecordData).reconnectTime(3000L));
+//            } catch (IOException e) {
+//                emitters.remove(gameId);
+//                log.warn("SSE connection closed for gameId: {}", gameId);
+//            }
+//        }
+//    }
 
     private void cacheGameData(Integer gameId, SSEResponseDto gameRecordData) {
         String redisKey = GAME_CACHE_KEY_PREFIX + gameId;

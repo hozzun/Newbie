@@ -86,7 +86,7 @@ def crawl_game():
                                 game_result = "진행 예정"
                     
                             else:                                                           
-                                game_result = "우천 취소"
+                                game_result = "경기 취소"
 
                             stadium = columns[7].text
 
@@ -127,7 +127,7 @@ def crawl_game():
                                 game_result = "진행 예정"
                     
                             else:                                                           
-                                game_result = "우천 취소"
+                                game_result = "경기 취소"
 
                             stadium = columns[6].text
 

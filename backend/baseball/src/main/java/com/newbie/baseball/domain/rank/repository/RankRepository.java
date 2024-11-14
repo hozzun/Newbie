@@ -12,4 +12,5 @@ public interface RankRepository extends JpaRepository<Rank, Integer> {
     List<Rank> findByYear(String year);
     List<Rank> findByTeamId(Integer teamId);
     Optional<Rank> findByYearAndTeamId(String year, Integer teamId);
+
 }

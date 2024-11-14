@@ -12,7 +12,7 @@ from selenium.webdriver.common.by import By
 def crawl_rank():
     now = datetime.datetime.now()
     current_year = now.year
-    start_year = 2021
+    start_year = 2020
     rank_list = []
 
     chrome_options = Options()

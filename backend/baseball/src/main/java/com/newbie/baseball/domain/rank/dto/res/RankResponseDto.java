@@ -7,7 +7,6 @@ import lombok.Data;
 @Data
 public class RankResponseDto {
 
-    private Integer id;
     private String year;
     private Integer rank;
     private Integer teamId;

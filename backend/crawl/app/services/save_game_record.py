@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from app.models import SessionLocal, GameRecord, Game, Team
 
 # Redis 클라이언트 설정
-redis_client = redis.Redis(host='k11b304.p.ssafy.io', port=6379, db=0)
+# redis_client = redis.Redis(host='k11b304.p.ssafy.io', port=6379, db=0)
 
 def save_game_record_to_db(game_record_list):
     if not game_record_list:
@@ -81,8 +81,8 @@ def save_game_record_to_db(game_record_list):
             db.add(game_record)
             
             # Redis에 캐시: 유효기간 4시간 설정
-            redis_key = f"game_record:{game.id}"
-            redis_client.set(redis_key, json.dumps(record), ex=14400)
+            # redis_key = f"game_record:{game.id}"
+            # redis_client.set(redis_key, json.dumps(record), ex=14400)
 
         db.commit()
 

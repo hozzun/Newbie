@@ -17,4 +17,5 @@ public class PlayerResponseDto {
     private String physical;
     private String academic;
     private Integer likeCount;
+    private String imageUrl;
 }

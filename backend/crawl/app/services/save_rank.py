@@ -9,6 +9,9 @@ def save_rank_to_db(rank_list):
     db: Session = SessionLocal()
     try:
         for rank in rank_list:
+            if rank['team'] == "SK":
+                rank['team'] = "SSG"
+                
             team_obj = db.query(Team).filter_by(team_name=rank['team']).first()
             if team_obj is None:
                 print(f"팀 정보를 찾을 수 없습니다: {rank['team']}")
