@@ -9,13 +9,14 @@ import { getHitterRecord, getPitcherRecord, getPlayerHightlights } from "../../a
 import { PlayerRecordItemProps } from "../../components/player/PlayerRecordItem";
 
 export interface PitcherRecord {
-  earnedRunAverage: number; // 평균자책점
+  year: number;
+  earnedRunAverage: string; // 평균자책점
   game: number; // 경기
   win: number; // 승리
   lose: number; // 패배
   save: number; // 세이브
   hold: number; // 홀드
-  winningPercentage: number; // 승률
+  winningPercentage: string; // 승률
   inningsPitched: string; // 이닝
   hitsAllowed: number; // 피안타
   homeRunsAllowed: number; // 피홈런
@@ -24,12 +25,12 @@ export interface PitcherRecord {
   strikeOuts: number; // 삼진
   runs: number; // 실점
   earnedRun: number; // 자책점
-  walksPlusHitsPerInningPitched: number; // 이닝당 출루율
-  [key: string]: number | string;
+  walksPlusHitsPerInningPitched: string; // 이닝당 출루율
 }
 
 export interface HitterRecord {
-  battingAverage: number; // 타율
+  year: number;
+  battingAverage: string; // 타율
   game: number; // 경기
   plateAppearance: number; // 타석
   atBat: number; // 타수
@@ -42,7 +43,6 @@ export interface HitterRecord {
   runsBattedIn: number; // 타점
   sacrificeHit: number; // 희생번트
   sacrificeFly: number; // 희생플라이
-  [key: string]: number;
 }
 
 const pitcherSeasonRecord: Record<string, string> = {
@@ -102,67 +102,81 @@ const Player = () => {
 
       if (playerInfo.position === "투수") {
         const response = await getPitcherRecord({ id: playerInfo.id });
-        const playerRecordData: PitcherRecord = {
-          earnedRunAverage: parseFloat(response.data.era),
-          game: response.data.gameCount,
-          win: response.data.win,
-          lose: response.data.lose,
-          save: response.data.save,
-          hold: response.data.hld,
-          winningPercentage: parseFloat(response.data.wpct),
-          inningsPitched: response.data.ip,
-          hitsAllowed: response.data.h,
-          homeRunsAllowed: response.data.hr,
-          baseOnBalls: response.data.bb,
-          hitByPitch: response.data.hbp,
-          strikeOuts: response.data.so,
-          runs: response.data.r,
-          earnedRun: response.data.er,
-          walksPlusHitsPerInningPitched: parseFloat(response.data.whip),
-        };
-
-        const playerRecordItemData: Array<PlayerRecordItemProps> = Object.keys(
-          playerRecordData,
-        ).map(key => {
-          const label = pitcherSeasonRecord[key];
-          const value = playerRecordData[key];
-
+        const playerRecordData: Array<PitcherRecord> = response.data.map(d => {
           return {
-            label,
-            value: value,
+            year: parseInt(d.year),
+            earnedRunAverage: d.era,
+            game: d.gameCount,
+            win: d.win,
+            lose: d.lose,
+            save: d.save,
+            hold: d.hld,
+            winningPercentage: d.wpct,
+            inningsPitched: d.ip,
+            hitsAllowed: d.h,
+            homeRunsAllowed: d.hr,
+            baseOnBalls: d.bb,
+            hitByPitch: d.hbp,
+            strikeOuts: d.so,
+            runs: d.r,
+            earnedRun: d.er,
+            walksPlusHitsPerInningPitched: d.whip,
           };
         });
+
+        playerRecordData.sort((a, b) => a.year - b.year);
+
+        const lastIndex = playerRecordData.length - 1;
+        const playerRecordItemData: Array<PlayerRecordItemProps> = Object.entries(
+          playerRecordData[lastIndex],
+        )
+          .filter(([key]) => key !== "year")
+          .map(([key, value]) => {
+            const label = pitcherSeasonRecord[key];
+
+            return {
+              label,
+              value,
+            };
+          });
 
         setPlayerSeasonRecordItem(playerRecordItemData);
       } else {
         const response = await getHitterRecord({ id: playerInfo.id });
-        const playerRecordData: HitterRecord = {
-          battingAverage: parseFloat(response.data.avg),
-          game: response.data.gameCount,
-          plateAppearance: response.data.pa,
-          atBat: response.data.ab,
-          runs: response.data.r,
-          hits: response.data.h,
-          double: response.data.two,
-          triple: response.data.three,
-          homeRun: response.data.homerun,
-          totalBases: response.data.tb,
-          runsBattedIn: response.data.rbi,
-          sacrificeHit: response.data.sac,
-          sacrificeFly: response.data.sf,
-        };
-
-        const playerRecordItemData: Array<PlayerRecordItemProps> = Object.keys(
-          playerRecordData,
-        ).map(key => {
-          const label = hitterSeasonRecord[key];
-          const value = playerRecordData[key];
-
+        const playerRecordData: Array<HitterRecord> = response.data.map(d => {
           return {
-            label,
-            value: value,
+            year: parseInt(d.year),
+            battingAverage: d.avg,
+            game: d.gameCount,
+            plateAppearance: d.pa,
+            atBat: d.ab,
+            runs: d.r,
+            hits: d.h,
+            double: d.two,
+            triple: d.three,
+            homeRun: d.homerun,
+            totalBases: d.tb,
+            runsBattedIn: d.rbi,
+            sacrificeHit: d.sac,
+            sacrificeFly: d.sf,
           };
         });
+
+        playerRecordData.sort((a, b) => a.year - b.year);
+
+        const lastIndex = playerRecordData.length - 1;
+        const playerRecordItemData: Array<PlayerRecordItemProps> = Object.entries(
+          playerRecordData[lastIndex],
+        )
+          .filter(([key]) => key !== "year")
+          .map(([key, value]) => {
+            const label = hitterSeasonRecord[key];
+
+            return {
+              label,
+              value,
+            };
+          });
 
         setPlayerSeasonRecordItem(playerRecordItemData);
       }

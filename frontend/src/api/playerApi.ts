@@ -83,9 +83,9 @@ export interface GetHitterRecordResponse {
     sf: number;
 }
 
-export const getPitcherRecord = (request: GetPlayerRecordRequest) => axios.get<GetPitcherRecordResponse>(`/api-baseball/stats/pitchers/${request.id}`);
+export const getPitcherRecord = (request: GetPlayerRecordRequest) => axios.get<Array<GetPitcherRecordResponse>>(`/api-baseball/stats/pitchers/${request.id}`);
 
-export const getHitterRecord = (request: GetPlayerRecordRequest) => axios.get<GetHitterRecordResponse>(`/api-baseball/stats/hitters/${request.id}`);
+export const getHitterRecord = (request: GetPlayerRecordRequest) => axios.get<Array<GetHitterRecordResponse>>(`/api-baseball/stats/hitters/${request.id}`);
 
 // 선수 하이라이트 영상 조회
 
