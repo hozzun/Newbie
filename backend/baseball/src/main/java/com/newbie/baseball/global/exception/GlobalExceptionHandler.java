@@ -39,6 +39,11 @@ public class GlobalExceptionHandler {
         return buildErrorResponse(ex.getMessage(), "Not Found", request.getRequestURI(), HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<Map<String, Object>> handleIllegalStateException(IllegalStateException ex, HttpServletRequest request) {
+        return buildErrorResponse("해당 경기는 현재 진행 중이 아닙니다.", "Bad Request", request.getRequestURI(), HttpStatus.BAD_REQUEST);
+    }
+
     private ResponseEntity<Map<String, Object>> buildErrorResponse(String message, String error, String path, HttpStatus status) {
         Map<String, Object> errorResponse = new HashMap<>();
         errorResponse.put("timestamp", LocalDateTime.now());

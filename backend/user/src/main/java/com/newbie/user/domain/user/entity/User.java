@@ -41,22 +41,14 @@ public class User {
     @ColumnDefault("0")
     private Integer favoriteTeamId = 0;
 
-    @Column(name = "is_resigned")
-    @ColumnDefault("false")
-    private Boolean isResigned = false;
-
-    @Column(name = "resign_time", columnDefinition = "DATETIME")
-    private LocalDateTime resignTime;
-
     @Builder
-    public User(Long userId, String email, String nickname, String address, String profileImage, Integer favoriteTeamId, Boolean isResigned) {
+    public User(Long userId, String email, String nickname, String address, String profileImage) {
         this.userId = userId;
         this.email = email;
         this.nickname = nickname;
         this.address = address;
         this.favoriteTeamId = 0;
         this.profileImage = profileImage;
-        this.isResigned = false;
     }
 
     public void updateFavoriteTeamId(Integer favoriteTeamId) {
@@ -73,14 +65,5 @@ public class User {
 
     public void updateProfileImage(String profileImage) {
         this.profileImage = profileImage;
-    }
-
-    public void resign() {
-        this.isResigned = true;
-        onResign();
-    }
-
-    protected void onResign() {
-        this.resignTime = ZonedDateTime.now(ZoneId.of("Asia/Seoul")).toLocalDateTime();
     }
 }

@@ -31,4 +31,7 @@ public interface GameRepository extends JpaRepository<Game, Integer> {
     // 연월일과 팀 ID로 조회
     @Query("SELECT g FROM Game g WHERE g.date = :date AND (g.homeTeam.id = :teamId OR g.awayTeam.id = :teamId)")
     List<Game> findByDateAndTeam(@Param("date") String date, @Param("teamId") Integer teamId);
+
+    @Query("SELECT g FROM Game g WHERE g.gameResult IS NULL OR g.gameResult = '진행 중'")
+    List<Game> findLiveGames();
 }

@@ -1,6 +1,7 @@
 package com.newbie.auth.member.service;
 
 import com.newbie.auth.global.security.util.JwtUtil;
+import com.newbie.auth.member.domain.ExceptionMessages;
 import com.newbie.auth.member.domain.Member;
 import com.newbie.auth.member.dto.MemberDto;
 import com.newbie.auth.member.dto.request.MemberSignUpRequestDto;
@@ -52,5 +53,13 @@ public class MemberServiceImpl implements MemberService{
         restTemplate.postForObject(registerApi, userProfileRequest, Void.class);
 
         return jwtUtil.createAccessToken(mapper.map(savedMember, MemberDto.class));
+    }
+
+    @Override
+    @Transactional
+    public void resignMember(Long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new IllegalArgumentException(ExceptionMessages.NOT_FOUND.getMessage()));
+        member.resign();
     }
 }
