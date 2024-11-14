@@ -27,14 +27,14 @@ public class ChatController {
         return chatRoomService.getOrCreateRoom(userId);
     }
 
-    @MessageMapping("/chat/{roomId}")
+    @MessageMapping("/chatbot/{roomId}")
     public MessageDto handleMessage(ChatRequestDto chatRequestDto, @DestinationVariable String roomId) {
         chatRoomService.saveMessage(roomId, chatRequestDto);
 
         return aiService.generateAnswer(chatRequestDto.getMessage(), roomId);
     }
 
-    @GetMapping("/chat/{roomId}/history")
+    @GetMapping("/chatbot/{roomId}/history")
     public List<ChatRequestDto> getMessageHistory(@PathVariable String roomId) {
         log.info("Get message history for room: {}", roomId);
         return chatRoomService.getMessages(roomId);
