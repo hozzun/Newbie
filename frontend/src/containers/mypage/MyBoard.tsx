@@ -1,41 +1,49 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import axiosInstance from '../../util/axiosInstance';
 import CommuFreeItem from "../../components/commu/CommuFreeItem";
 
 interface Post {
   id: number;
   title: string;
-  contents: string;
-  writer: string;
-  createTimeStamp: string;
+  content: string;
+  userName: string;
+  createdAt: string;
   viewCount: number;
   likeCount: number;
   commentCount: number;
 }
 
 const MyBoard = () => {
-  const [posts, setPosts] = useState<Post[]>([
-    {
-      id: 1,
-      title: "기본 게시물 제목",
-      contents: "이것은 기본 게시물의 내용입니다. 여기에 설명이 들어갑니다.",
-      writer: "관리자",
-      createTimeStamp: new Date().toLocaleDateString(),
-      viewCount: 10,
-      likeCount: 5,
-      commentCount: 2,
-    },
-  ]);
-  console.log(setPosts)
+  const [posts, setPosts] = useState<Post[]>([]);
+  
+  const getBoard = async () => {
+
+    // TODO: userId 수정, 일반 게시글과 중고거래 게시글 설정
+    const params = { userId: 5 }
+  
+    try {
+      const response = await axiosInstance.get("/api-board/mypage/board", { params });
+      setPosts(response.data);
+    } catch (error) {
+      console.error("에러 발생:", error);
+    }
+  };
+
+  useEffect(() => {
+    getBoard();
+  }, []);
+
 
   return (
     <>
       {posts.map((post, index) => (
-        <div key={post.id}>
+        // TODO: Navigate 설정
+        <div key={post.id} onClick={() => console.log("해당 게시글 페이지로 이동")}>
           <CommuFreeItem
             title={post.title}
-            contents={post.contents}
-            writer={post.writer}
-            createTimeStamp={post.createTimeStamp}
+            contents={post.content}
+            writer={post.userName}
+            createTimeStamp={post.createdAt}
             viewCount={post.viewCount}
             likeCount={post.likeCount}
             commentCount={post.commentCount}
