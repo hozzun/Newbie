@@ -64,9 +64,12 @@ const MyPage = () => {
   };
 
   const getUserInfo = async () => {
+    // TODO: userId 삭제 예정
+    const userId = 5
+
     try {
-      const response = await axiosInstance.get("/api-user/users/5", {
-        params: { userId: 5 }, // TODO: userId 삭제 예정
+      const response = await axiosInstance.get(`/api-user/users/${userId}`, {
+        params: { userId: userId },
       });
       const userData: UserInfo = response.data;
       setUserInfo(userData);
@@ -80,7 +83,7 @@ const MyPage = () => {
   }, []);
 
   if (userInfo) {
-    const teamName = getIdByNum(userInfo.favoriteTeamId) as TeamName | null;
+    const teamName = getIdByNum(userInfo.favoriteTeamId) as TeamName | 0;
 
     return (
       <>
@@ -91,7 +94,7 @@ const MyPage = () => {
         {userInfo && (
           <div>
             <Profile img={userInfo.profileImage} name={userInfo.nickname} email={userInfo.email} />
-            {teamName ? (
+            {teamName !== 0 ? (
               <ClubChangeButton
                 logo={ClubLogos[teamName]}
                 clubColor={teamName}
