@@ -45,9 +45,6 @@ public class User {
     @ColumnDefault("false")
     private Boolean isResigned = false;
 
-    @Column(name = "resign_time", columnDefinition = "DATETIME")
-    private LocalDateTime resignTime;
-
     @Builder
     public User(Long userId, String email, String nickname, String address, String profileImage, Boolean isResigned) {
         this.userId = userId;
@@ -56,7 +53,7 @@ public class User {
         this.address = address;
         this.favoriteTeamId = 0;
         this.profileImage = profileImage;
-        this.isResigned = isResigned;
+        this.isResigned = false;
     }
 
     public void updateFavoriteTeamId(Integer favoriteTeamId) {
