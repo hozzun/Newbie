@@ -23,6 +23,7 @@ const PhotoCard = () => {
   const nav = useNavigate();
 
   const goCardDetail = (photo: PhotoCard) => {
+    console.log('정보', photo)
     nav(`/mypage/photocard/${photo.id}`, { state: photo });
   };
 
@@ -35,6 +36,7 @@ const PhotoCard = () => {
       const response = await axiosInstance.get("/api-cardstore/cards/users", { params });
       setPhotos(response.data)
       setCount(response.data.length)
+      console.log(response.data)
     } catch (error) {
       console.error("API 요청 중 오류 발생:", error);
       throw error;

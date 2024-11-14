@@ -31,7 +31,6 @@ const Calendar = () => {
     try {
       const response = await axiosInstance.get("/api-baseball/games", { params });
       setGames(response.data);
-      console.log(response.data)
     } catch (error) {
       console.error("에러 발생:", error);
     }
@@ -72,60 +71,65 @@ const Calendar = () => {
             <p className="font-kbogothicmedium text-xs mr-2">원정 경기</p>
           </div>
         </div>
-
+  
         {/* 요일 표시 */}
         <div className="grid grid-cols-7 text-center mb-3 font-kbogothicbold">
           {daysOfWeek.map(day => (
             <div key={day}>{day}</div>
           ))}
         </div>
-
+  
         {/* 날짜 표시 */}
         <div className="grid grid-cols-7 gap-x-6 text-center font-kbogothicmedium text-gray-600">
           {/* 첫 주 앞쪽 공백 채우기 */}
           {Array.from({ length: firstDay.getDay() }).map((_, i) => (
             <div key={i}></div>
           ))}
-
+  
           {/* 날짜 표시 */}
           {dates.map(date => {
             const game = getGameForDate(date);
-            const isHomeGame = game ? game.homeTeamId === team : false;
-            console.log(isHomeGame)
-
+  
+            // game이 없는 경우: 테두리 없는 정사각형
+            if (!game) {
+              return (
+                <div key={date.getDate()} className="flex flex-col justify-center items-center">
+                  <div className="text-[10px] m-2 text-gray-600">{date.getDate()}</div>
+                  <div className="w-9 h-9 flex items-center justify-center rounded-lg bg-white" />
+                </div>
+              );
+            }
+  
+            // game이 있는 경우
+            const isHomeGame = game.homeTeamId === team;
+            const opponentTeamId = isHomeGame ? game.awayTeamId : game.homeTeamId;
+            const opponentTeamName = getClubIdByNum(opponentTeamId);
+  
             return (
               <div key={date.getDate()} className="flex flex-col justify-center items-center">
                 {/* 날짜 숫자 */}
                 <div className="text-[10px] m-2 text-gray-600">{date.getDate()}</div>
-
-                {game ? (
-                  <div
-                    className={`w-9 h-9 flex items-center justify-center rounded-lg border-2 bg-white ${
-                      isHomeGame
-                        ? "border-green-900"
-                        : "border-gray-300"
-                    }`}
-                  >
-                    {/* 경기 정보가 있는 경우 로고 넣기 */}
-                    <>
-                      <img
-                        className="w-6 h-6"
-                        src={ClubLogos[getClubIdByNum(isHomeGame ? game.awayTeamId : game.homeTeamId)]}
-                        alt="팀 로고"
-                      />
-                    </>
-                  </div>
-                ) : (
-                  // 경기가 없는 날짜는 테두리가 없는 정사각형
-                  <div className="w-9 h-9 flex items-center justify-center rounded-lg bg-white" />
-                )}
+  
+                <div
+                  className={`w-9 h-9 flex items-center justify-center rounded-lg border-2 bg-white ${
+                    isHomeGame ? "border-green-900" : "border-gray-300"
+                  }`}
+                >
+                  <img
+                    className="w-6 h-6"
+                    src={ClubLogos[opponentTeamName]}
+                    alt="팀 로고"
+                  />
                 </div>
+              </div>
             );
           })}
         </div>
       </div>
     </>
   );
+  
+  
 };
 
 export default Calendar;
