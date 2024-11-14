@@ -36,7 +36,7 @@ const CameraCapture = () => {
     setIsModalOpen(true);
 
     // TODO: userId 불러오기
-    const userId = "1016";
+    const userId = "5";
     const file = base64ToFile(imageData, "image.png");
 
     console.log(file);
@@ -46,7 +46,11 @@ const CameraCapture = () => {
     formData.append("image", file);
 
     try {
-      const response = await axiosInstance.post("/api-mypage/ticket/naverOcr", formData);
+      const response = await axiosInstance.post("/api-mypage/ticket/naverOcr", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
       console.log("OCR 처리 결과:", response.data);
       setDate(response.data.date);
       setTeamKorea(response.data.teamKorean);
