@@ -20,6 +20,7 @@ public class UserCard {
     private ObjectId id;
     private Long userId;
 
+    @Builder.Default
     private Set<ObjectId> cardIds = new HashSet<>();
 
     private String createdAt;
