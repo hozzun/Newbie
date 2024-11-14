@@ -46,7 +46,8 @@ const MyActive = () => {
 
   return (
     <>
-      <div onClick={() => console.log("클릭")}>
+      {/* TODO: Navigate 설정 */}
+      <div onClick={() => console.log("해당 좋아요 페이지로 이동")}>
         {likes.map((like) => (
           <MyActiveLike
             key={like.boardId}
@@ -56,7 +57,7 @@ const MyActive = () => {
           />
         ))}
       </div>
-      <div onClick={() => console.log("클릭")}>
+      <div onClick={() => console.log("해당 댓글 페이지로 이동")}>
         {comments.map((comment) => (
           <MyActiveComment
             key={comment.boardId}

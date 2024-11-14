@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import CommuFreeItem from "../../components/commu/CommuFreeItem";
 import axiosInstance from '../../util/axiosInstance';
 
-interface Post {
+interface Scrap {
   id: number;
   boardTitle: string;
   content: string;
@@ -15,19 +15,7 @@ interface Post {
 }
 
 const MyBoard = () => {
-  const [posts, setPosts] = useState<Post[]>([
-    {
-      id: 1,
-      boardTitle: "기본 제목",
-      content: "기본 내용",
-      username: "김미량",
-      imageUrl: "",
-      createdAt: "2024.11.13",
-      viewCount: 10,
-      likeCount: 5,
-      commentCount: 2
-    }
-  ]);
+  const [scraps, setScraps] = useState<Scrap[]>([]);
 
   const getScrap = async () => {
     
@@ -37,7 +25,7 @@ const MyBoard = () => {
 
     try {
       const response = await axiosInstance.get("/api-board/scrap", { params });
-      setPosts(response.data);
+      setScraps(response.data);
     } catch (error) {
       console.error("에러 발생:", error);
     }
@@ -49,18 +37,19 @@ const MyBoard = () => {
 
   return (
     <>
-      {posts.map((post, index) => (
-        <div key={post.id}>
+      {scraps.map((scrap, index) => (
+        // TODO: Navigate 설정
+        <div key={scrap.id} onClick={() => console.log("해당 스크랩 페이지로 이동")}>
           <CommuFreeItem
-            title={post.boardTitle}
-            contents={post.content}
-            writer={post.username}
-            createTimeStamp={post.createdAt}
-            viewCount={post.viewCount}
-            likeCount={post.likeCount}
-            commentCount={post.commentCount}
+            title={scrap.boardTitle}
+            contents={scrap.content}
+            writer={scrap.username}
+            createTimeStamp={scrap.createdAt}
+            viewCount={scrap.viewCount}
+            likeCount={scrap.likeCount}
+            commentCount={scrap.commentCount}
           />
-          {index < posts.length - 1 && <hr className="my-4 border-gray-200" />}
+          {index < scraps.length - 1 && <hr className="my-4 border-gray-200" />}
         </div>
       ))}
     </>

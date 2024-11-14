@@ -37,7 +37,8 @@ const MyBoard = () => {
   return (
     <>
       {posts.map((post, index) => (
-        <div key={post.id}>
+        // TODO: Navigate 설정
+        <div key={post.id} onClick={() => console.log("해당 게시글 페이지로 이동")}>
           <CommuFreeItem
             title={post.title}
             contents={post.content}
