@@ -12,6 +12,5 @@ public class ActivityResponseDto {
     private String type;
     private Long boardId;
     private String content;
-    private String title;
     private LocalDateTime createdAt;
 }

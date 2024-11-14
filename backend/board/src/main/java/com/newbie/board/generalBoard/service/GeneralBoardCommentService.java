@@ -6,6 +6,8 @@ import com.newbie.board.generalBoard.entity.GeneralBoard;
 import com.newbie.board.generalBoard.entity.GeneralBoardComment;
 import com.newbie.board.generalBoard.repository.GeneralBoardCommentRepository;
 import com.newbie.board.generalBoard.repository.GeneralBoardRepository;
+import com.newbie.board.scrap.entity.Activity;
+import com.newbie.board.scrap.repository.ActivityRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,7 @@ public class GeneralBoardCommentService {
 
     private final GeneralBoardCommentRepository commentRepository;
     private final GeneralBoardRepository generalBoardRepository;
+    private final ActivityRepository activityRepository;
 
     /**
      * 댓글 목록을 계층적으로 가져옵니다.
@@ -60,6 +63,16 @@ public class GeneralBoardCommentService {
         }
 
         GeneralBoardComment savedComment = commentRepository.save(comment);
+
+        Activity activity = Activity.builder()
+                .userId(userId)
+                .boardId(requestDto.getBoardId())
+                .boardType("GENERAL_BOARD")
+                .type("comment")
+                .content(requestDto.getContent())
+                .createdAt(LocalDateTime.now())
+                .build();
+        activityRepository.save(activity);
         return GeneralBoardCommentResponseDto.fromEntity(savedComment);
     }
 
@@ -79,5 +92,6 @@ public class GeneralBoardCommentService {
 
         generalBoardComment.setIsDeleted("Y");
         commentRepository.save(generalBoardComment);
+        activityRepository.deleteByUserIdAndBoardIdAndTypeAndBoardType(userId, generalBoardComment.getGeneralBoard().getId(), "comment", "GENERAL_BOARD");
     }
 }
