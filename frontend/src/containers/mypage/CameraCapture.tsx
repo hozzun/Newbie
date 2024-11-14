@@ -36,7 +36,7 @@ const CameraCapture = () => {
     setIsModalOpen(true);
 
     // TODO: userId 불러오기
-    const userId = "1016";
+    const userId = "5";
     const file = base64ToFile(imageData, "image.png");
 
     console.log(file);
