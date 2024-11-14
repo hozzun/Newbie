@@ -1,21 +1,26 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Button from "../../components/common/Button";
 import CommuTradeCreateComponent from "../../components/commu/CommuTradeCreate";
 import { BUTTON_VARIANTS } from "../../components/common/variants";
+import { createUsedBoard } from "../../api/boardApi";
 
 const CommuTradeCreate = () => {
+  const navigate = useNavigate();
   const [titleValue, setTitleValue] = useState("");
-  const [priceValue, setPriceValue] = useState<number | null>(null); // 초기값을 null로 설정
+  const [priceValue, setPriceValue] = useState<number | null>(null);
   const [tagValue, setTagValue] = useState("");
   const [tags, setTags] = useState<string[]>([]);
   const [text, setText] = useState("");
   const [images, setImages] = useState<File[]>([]);
   const [buttonVariant, setButtonVariant] = useState(BUTTON_VARIANTS.second);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [region, setRegion] = useState("");
 
   const clearTitle = () => setTitleValue("");
   const clearPrice = () => setPriceValue(null); // 초기화 시 null로 설정
   const clearTag = () => setTagValue("");
+  const clearRegion = () => setRegion("");
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitleValue(e.target.value);
@@ -28,6 +33,10 @@ const CommuTradeCreate = () => {
 
   const handleTagChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTagValue(e.target.value);
+  };
+
+  const handleRegionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setRegion(e.target.value);
   };
 
   const handleTagKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -93,6 +102,44 @@ const CommuTradeCreate = () => {
     }
   }, [titleValue, priceValue, text]);
 
+  const handleSubmit = async () => {
+    try {
+      // 이미지 파일을 base64로 변환
+      const imageFile = images.length > 0 ? await convertImageToBase64(images[0]) : "";
+
+      const requestData = {
+        usedBoardDto: {
+          userId: 0, // 실제 사용자 ID로 교체 필요
+          title: titleValue,
+          content: text,
+          tags: tags,
+          imageFile: imageFile,
+          price: priceValue || 0,
+          region: region || "기본 지역", // 실제 지역 정보로 교체 필요
+        },
+        imageFile: imageFile,
+      };
+
+      await createUsedBoard(requestData);
+      navigate("/used-board"); // 성공 후 이동할 경로
+    } catch (error) {
+      setErrorMessage("게시글 작성에 실패했습니다.");
+      console.error("Failed to create post:", error);
+    }
+  };
+
+  // 이미지를 base64로 변환하는 유틸리티 함수
+  const convertImageToBase64 = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        resolve(reader.result as string);
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  };
+
   return (
     <div>
       <CommuTradeCreateComponent
@@ -103,6 +150,8 @@ const CommuTradeCreate = () => {
         text={text}
         images={images}
         errorMessage={errorMessage}
+        region={region}
+        onRegionChange={handleRegionChange}
         onTitleChange={handleTitleChange}
         onPriceChange={handlePriceChange}
         onTagChange={handleTagChange}
@@ -114,9 +163,15 @@ const CommuTradeCreate = () => {
         onClearTitle={clearTitle}
         onClearPrice={clearPrice}
         onClearTag={clearTag}
+        onClearRegion={clearRegion}
       />
 
-      <Button variant={buttonVariant} className="w-full">
+      <Button
+        variant={buttonVariant}
+        className="w-full"
+        onClick={handleSubmit}
+        disabled={buttonVariant === BUTTON_VARIANTS.second}
+      >
         완료
       </Button>
     </div>
