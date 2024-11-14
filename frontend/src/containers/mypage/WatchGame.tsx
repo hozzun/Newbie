@@ -83,7 +83,6 @@ const WatchGame = () => {
       const response = await axiosInstance.get<TicketInfoData>("/api-mypage/ticket", { params });
       setTicketInfo(response.data);
       setWrite(response.data.text);
-      console.log("메모", response.data.text);
     } catch (error) {
       console.error("API 요청 중 오류 발생:", error);
       throw error;

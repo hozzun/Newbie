@@ -12,6 +12,8 @@ import Calendar from "../../components/mypage/Calendar";
 import WatchGame from "./WatchGameInfo";
 import OutButton from "../../components/mypage/OutButton";
 import { getIdByNum } from "../../util/ClubId";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 
 interface UserInfo {
   email: string;
@@ -35,6 +37,7 @@ type TeamName =
 
 const MyPage = () => {
   const [userInfo, setUserInfo] = useState<UserInfo>();
+  const { team } = useSelector((state: RootState) => state.team);
 
   console.log(setUserInfo);
   const nav = useNavigate();
@@ -64,9 +67,12 @@ const MyPage = () => {
   };
 
   const getUserInfo = async () => {
+    // TODO: userId 삭제 예정
+    const userId = 5
+
     try {
-      const response = await axiosInstance.get("/api-user/users/5", {
-        params: { userId: 5 }, // TODO: userId 삭제 예정
+      const response = await axiosInstance.get(`/api-user/users/${userId}`, {
+        params: { userId: userId },
       });
       const userData: UserInfo = response.data;
       setUserInfo(userData);
@@ -80,7 +86,7 @@ const MyPage = () => {
   }, []);
 
   if (userInfo) {
-    const teamName = getIdByNum(userInfo.favoriteTeamId) as TeamName | null;
+    const teamName = getIdByNum(team) as TeamName | 0;
 
     return (
       <>
