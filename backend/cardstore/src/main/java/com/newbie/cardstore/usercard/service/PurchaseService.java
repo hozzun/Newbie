@@ -37,11 +37,12 @@ public class PurchaseService {
     @Value("${mileage.server.domain}")
     private String milesServerName;
 
-    @Value("${server.path}")
+    @Value("${mileage.server.path}")
     private String mileageServerPath;
 
     public boolean checkMileage(Long userId, double price) {
         String url = milesServerName + mileageServerPath + "/check-mileage?userId=" + userId + "&price=" + price;
+        log.info(url);
         log.info("Sending request to check mileage for userId: {}, price: {}", userId, price);
 
         ResponseEntity<Boolean> response = restTemplate.getForEntity(url, Boolean.class);
