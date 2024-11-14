@@ -10,6 +10,9 @@ def save_team_pitcher_stats_to_db(team_pitcher_stats_list):
     db: Session = SessionLocal()
     try:
         for stats in team_pitcher_stats_list:
+            if stats["team_name"] == "SK":
+                stats["team_name"] = "SSG"
+                
             # 팀 이름을 통해 팀 ID 가져오기
             team_obj = db.query(Team).filter_by(team_name=stats["team_name"]).first()
             

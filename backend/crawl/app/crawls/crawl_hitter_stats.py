@@ -40,6 +40,7 @@ def crawl_hitter_stats():
         
         # 여기
         for year in year_list:
+            print(f"{year} 크롤링 중")
             year_select = WebDriverWait(driver, 10).until(
                     EC.presence_of_element_located((By.ID, "cphContents_cphContents_cphContents_ddlSeason_ddlSeason"))
                 )

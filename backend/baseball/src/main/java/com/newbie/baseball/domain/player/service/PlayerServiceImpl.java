@@ -67,6 +67,7 @@ public class PlayerServiceImpl implements PlayerService {
                 .physical(player.getPhysical())
                 .academic(player.getAcademic())
                 .likeCount(player.getLikeCount())
+                .imageUrl(player.getImageUrl())
                 .build();
     }
 }

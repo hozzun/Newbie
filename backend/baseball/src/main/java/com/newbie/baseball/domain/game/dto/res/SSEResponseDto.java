@@ -9,5 +9,5 @@ import lombok.Data;
 public class SSEResponseDto {
 
     private GameResponseDto game;
-    private RecordResponseDto record;
+//    private RecordResponseDto record;
 }

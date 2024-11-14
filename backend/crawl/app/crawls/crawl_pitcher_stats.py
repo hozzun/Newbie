@@ -31,13 +31,16 @@ def crawl_pitcher_stats():
         driver = webdriver.Chrome(service=service, options=chrome_options)
         driver.get("https://www.koreabaseball.com/Record/Player/PitcherBasic/Basic1.aspx")
         time.sleep(3)
-
-        season_select = Select(driver.find_element(By.ID, "cphContents_cphContents_cphContents_ddlSeries_ddlSeries"))
-        season_select.select_by_value("0")
+        
+        season_select = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.ID, "cphContents_cphContents_cphContents_ddlSeries_ddlSeries"))
+        )
+        Select(season_select).select_by_value("0")
         time.sleep(2)
         
         # 여기
         for year in year_list:
+            print(f"{year} 크롤링 중")
             year_select = WebDriverWait(driver, 10).until(
                     EC.presence_of_element_located((By.ID, "cphContents_cphContents_cphContents_ddlSeason_ddlSeason"))
                 )
@@ -46,8 +49,10 @@ def crawl_pitcher_stats():
             #까지
         
             for team in team_list:
-                team_select = Select(driver.find_element(By.ID, "cphContents_cphContents_cphContents_ddlTeam_ddlTeam"))
-                team_select.select_by_value(team)
+                team_select = WebDriverWait(driver, 10).until(
+                        EC.presence_of_element_located((By.ID, "cphContents_cphContents_cphContents_ddlTeam_ddlTeam"))
+                    )
+                Select(team_select).select_by_value(team)
                 time.sleep(2)
                 
                 first_page_button = driver.find_element(By.ID, "cphContents_cphContents_cphContents_ucPager_btnNo1")

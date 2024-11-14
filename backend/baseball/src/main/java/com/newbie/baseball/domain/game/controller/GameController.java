@@ -25,7 +25,7 @@ public class GameController {
     @Operation(summary = "gameID로 경기조회")
     @GetMapping("/{gameId}")
     public ResponseEntity<GameResponseDto> getGameById(
-            @Parameter(description = "게임 ID", example = "3291")
+            @Parameter(description = "게임 ID", example = "4093")
             @PathVariable Integer gameId) {
         GameResponseDto game = gameService.getGameById(gameId);
         return new ResponseEntity<>(game, HttpStatus.OK);

@@ -14,6 +14,6 @@ def update_hitters():
 
 # 수동으로 update_game 함수를 실행하여 크롤링한 데이터를 DB에 저장
 print("타자 기록 데이터를 크롤링하고 DB에 저장 중입니다...")
-update_team_hitters()
+# update_team_hitters()
 update_hitters()
 print("데이터 저장이 완료되었습니다.")

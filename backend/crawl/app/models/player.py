@@ -14,6 +14,8 @@ class Player(Base):
     birth = Column(String(10))
     physical = Column(String(20))
     academic = Column(String(50))
+    image_url = Column(String(100), nullable=True)  # 올바른 정의
+    like_count = Column(Integer, default=0)  # 기본값 0으로 설정
     
     team = relationship("Team", back_populates="players")
     hitter_stats = relationship("HitterStats", back_populates="player")

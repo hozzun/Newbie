@@ -39,6 +39,9 @@ public class Player {
     @Column(name = "academic", length = 50)
     private String academic;
 
+    @Column(name = "image_url")
+    private String imageUrl;
+
     @OneToMany(mappedBy = "player")
     private List<LineUp> lineUpList;
 

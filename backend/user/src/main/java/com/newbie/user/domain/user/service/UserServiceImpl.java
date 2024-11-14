@@ -6,7 +6,6 @@ import com.newbie.user.domain.user.dto.res.UserResponseDto;
 import com.newbie.user.domain.user.entity.User;
 import com.newbie.user.domain.user.exception.UserNotFoundException;
 import com.newbie.user.domain.user.repository.UserRepository;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -14,7 +13,6 @@ import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
-import software.amazon.awssdk.services.s3.model.S3Exception;
 
 import java.io.IOException;
 import java.util.Arrays;

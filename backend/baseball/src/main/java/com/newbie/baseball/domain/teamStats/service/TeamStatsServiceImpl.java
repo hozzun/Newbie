@@ -32,10 +32,21 @@ public class TeamStatsServiceImpl implements TeamStatsService {
     }
 
     @Override
-    public TeamHitterStatsResponseDto getTeamHitterStatsByTeamId(Integer teamId) {
-        TeamHitterStats teamHitterStats = teamHitterStatsRepository.findByTeamId(teamId)
+    public List<TeamHitterStatsResponseDto> getTeamHitterStatsByTeamId(Integer teamId) {
+        List<TeamHitterStats> teamHitterStats = teamHitterStatsRepository.findByTeamId(teamId);
+        if (teamHitterStats.isEmpty()) {
+            throw new TeamStatsNotFoundException();
+        }
+        return teamHitterStats.stream()
+                .map(this::convertToTeamHitterStatsResponseDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public TeamHitterStatsResponseDto getTeamHitterStatsByIdAndYear(Integer teamId, String year) {
+        TeamHitterStats teamHitterStat = teamHitterStatsRepository.findByTeamIdAndYear(teamId, year)
                 .orElseThrow(TeamStatsNotFoundException::new);
-        return convertToTeamHitterStatsResponseDto(teamHitterStats);
+        return convertToTeamHitterStatsResponseDto(teamHitterStat);
     }
 
     @Override
@@ -50,12 +61,22 @@ public class TeamStatsServiceImpl implements TeamStatsService {
     }
 
     @Override
-    public TeamPitcherStatsResponseDto getTeamPitcherStatsByTeamId(Integer teamId) {
-        TeamPitcherStats teamPitcherStats = teamPitcherStatsRepository.findByTeamId(teamId)
-                .orElseThrow(TeamStatsNotFoundException::new);
-        return convertToTeamPitcherStatsResponseDto(teamPitcherStats);
+    public List<TeamPitcherStatsResponseDto> getTeamPitcherStatsByTeamId(Integer teamId) {
+        List<TeamPitcherStats> teamPitcherStats = teamPitcherStatsRepository.findByTeamId(teamId);
+        if (teamPitcherStats.isEmpty()) {
+            throw new TeamStatsNotFoundException();
+        }
+        return teamPitcherStats.stream()
+                .map(this::convertToTeamPitcherStatsResponseDto)
+                .collect(Collectors.toList());
     }
 
+    @Override
+    public TeamPitcherStatsResponseDto getTeamPitcherStatsByIdAndYear(Integer teamId, String year) {
+        TeamPitcherStats teamPitcherStat = teamPitcherStatsRepository.findByTeamIdAndYear(teamId, year)
+                .orElseThrow(TeamStatsNotFoundException::new);
+        return convertToTeamPitcherStatsResponseDto(teamPitcherStat);
+    }
 
     private TeamHitterStatsResponseDto convertToTeamHitterStatsResponseDto(TeamHitterStats teamHitterStats) {
         return TeamHitterStatsResponseDto.builder()
