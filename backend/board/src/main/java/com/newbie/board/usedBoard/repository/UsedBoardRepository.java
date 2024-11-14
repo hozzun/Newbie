@@ -34,4 +34,7 @@ public interface UsedBoardRepository extends JpaRepository<UsedBoard, Long> {
 
     @Query("SELECT u FROM UsedBoard u WHERE u.isDeleted = 'N' ORDER BY u.createdAt DESC")
     List<UsedBoard> findAllByOrderByCreatedAtDesc();
+
+    @Query("SELECT u FROM UsedBoard u WHERE u.userId = :userId AND u.isDeleted = 'N'")
+    List<UsedBoard> findActiveByUserId(@Param("userId") Long userId);
 }

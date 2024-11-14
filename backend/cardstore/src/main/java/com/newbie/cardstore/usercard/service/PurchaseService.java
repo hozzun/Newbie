@@ -40,7 +40,7 @@ public class PurchaseService {
     @Value("${server.path}")
     private String mileageServerPath;
 
-    public boolean checkMileage(int userId, double price) {
+    public boolean checkMileage(Long userId, double price) {
         String url = milesServerName + mileageServerPath + "/check-mileage?userId=" + userId + "&price=" + price;
         log.info("Sending request to check mileage for userId: {}, price: {}", userId, price);
 
@@ -109,7 +109,7 @@ public class PurchaseService {
     /**
      * 마일리지 차감 요청 메시지를 RabbitMQ로 전송
      */
-    private boolean sendMileageDeductionRequest(int userId, double amount) {
+    private boolean sendMileageDeductionRequest(Long userId, double amount) {
         MileageDeductionDto mileageDeductionDto = new MileageDeductionDto(userId, amount, "deduct", "purchase");
         log.info("Sending mileage deduction request: {}", mileageDeductionDto);
 

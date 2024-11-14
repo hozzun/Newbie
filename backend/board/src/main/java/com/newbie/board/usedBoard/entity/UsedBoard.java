@@ -13,7 +13,7 @@ import java.util.List;
 @Table(name = "used_board")
 @Builder(toBuilder = true)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Getter
+@Data
 public class UsedBoard {
 
     @Id
@@ -34,11 +34,17 @@ public class UsedBoard {
     private Integer price;
     private String region;
     private LocalDateTime createdAt;
+
+    @Builder.Default
     @Column(name = "is_deleted")
     private String isDeleted = "N";
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @Column(name = "view_count")
+    @Builder.Default
+    private Integer viewCount = 0;
 
     @Builder.Default
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
@@ -56,6 +62,7 @@ public class UsedBoard {
         }
     }
 
+    @Builder.Default
     @OneToMany(mappedBy = "usedBoard", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<UsedBoardComment> comments = new ArrayList<>();
 }

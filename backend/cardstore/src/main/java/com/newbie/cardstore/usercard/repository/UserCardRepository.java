@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @Repository
 public interface UserCardRepository extends MongoRepository<UserCard, String> {
-    boolean existsByUserIdAndCardIdsContains(int userId, ObjectId cardId);
-    List<ObjectId> findCardIdsByUserId(int userId);
-    Optional<UserCard> findByUserId(int userId);
+    boolean existsByUserIdAndCardIdsContains(Long userId, ObjectId cardId);
+    List<ObjectId> findCardIdsByUserId(Long userId);
+    Optional<UserCard> findByUserId(Long userId);
 }
