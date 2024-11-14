@@ -38,7 +38,7 @@ public class UserController {
 
     @Operation(summary = "유저 프로필 업데이트")
     @PatchMapping("/{userId}")
-    public ResponseEntity<Void> updateUserProfile(@PathVariable Long userId, @RequestBody UserProfileRequestDto requestDto) {
+    public ResponseEntity<Void> updateUserProfile(@PathVariable Long userId, @ModelAttribute UserProfileRequestDto requestDto) {
         userService.updateUserProfile(userId, requestDto);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
@@ -48,6 +48,12 @@ public class UserController {
     public ResponseEntity<Void> updateFavoriteTeam(@PathVariable Long userId, @RequestParam Integer teamId) {
         userService.updateFavoriteTeam(userId, teamId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @Operation(summary = "응원 팀 조회")
+    @GetMapping("/{userId}/favorite-team")
+    public ResponseEntity<Integer> getFavoriteTeam(@PathVariable Long userId) {
+        return new ResponseEntity<>(userService.getFavoriteTeam(userId), HttpStatus.OK);
     }
 
     @Operation(summary = "회원 탈퇴 처리")

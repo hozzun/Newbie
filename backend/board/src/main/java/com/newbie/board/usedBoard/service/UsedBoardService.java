@@ -1,14 +1,14 @@
 package com.newbie.board.usedBoard.service;
 
-import com.newbie.board.generalBoard.dto.GeneralBoardResponseDto;
-import com.newbie.board.generalBoard.entity.GeneralBoard;
 import com.newbie.board.usedBoard.dto.UsedBoardRequestDto;
 import com.newbie.board.usedBoard.dto.UsedBoardResponseDto;
 import com.newbie.board.usedBoard.dto.UsedBoardUpdateRequestDto;
-import com.newbie.board.usedBoard.entity.UsedBoardTag;
 import com.newbie.board.usedBoard.entity.UsedBoard;
+import com.newbie.board.usedBoard.entity.UsedBoardTag;
 import com.newbie.board.usedBoard.repository.UsedBoardTagRepository;
 import com.newbie.board.usedBoard.repository.UsedBoardRepository;
+import com.newbie.board.usedBoard.repository.UsedBoardCommentRepository;
+import com.newbie.board.usedBoard.repository.UsedBoardLikeRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
@@ -28,37 +28,33 @@ public class UsedBoardService {
 
     private final UsedBoardRepository usedBoardRepository;
     private final UsedBoardTagRepository usedBoardTagRepository;
+    private final UsedBoardCommentRepository commentRepository;
+    private final UsedBoardLikeRepository likeRepository;
     private final S3Service s3Service;
 
     @PersistenceContext
     private EntityManager entityManager;
 
-
-    /**
-     * 게시글 전체를 최신순으로 조회합니다.
-     * @return List<UsedBoard>
-     */
     public List<UsedBoardResponseDto> getUsedBoardList() {
         return usedBoardRepository.findAllByOrderByCreatedAtDesc().stream()
-                .map(UsedBoardResponseDto::new)
+                .map(this::toUsedBoardResponseDto)
                 .collect(Collectors.toList());
     }
 
-    /**
-     * 특정 게시글을 조회합니다.
-     * @param id
-     * @return
-     */
+    @Transactional
     public Optional<UsedBoardResponseDto> getUsedBoardById(Long id) {
         return usedBoardRepository.findById(id)
-                .map(UsedBoardResponseDto::new);
+                .map(usedBoard -> {
+                    // viewCount 증가
+                    usedBoard.setViewCount(usedBoard.getViewCount() + 1);
+                    usedBoardRepository.save(usedBoard); // 변경 사항 저장
+
+                    // DTO로 변환하여 반환
+                    return toUsedBoardResponseDto(usedBoard);
+                });
     }
 
-    /**
-     * 중고 거래 게시글을 keyword 기준으로 조회합니다. 기본 값은 제목입니다.
-     * @param keyword 제목, 태그, 이름
-     * @return
-     */
+
     @Transactional
     public List<UsedBoardResponseDto> searchBoardList(String keyword, String type) {
         List<UsedBoard> boards;
@@ -77,28 +73,16 @@ public class UsedBoardService {
         }
 
         return boards.stream()
-                .map(UsedBoardResponseDto::new)
+                .map(this::toUsedBoardResponseDto)
                 .collect(Collectors.toList());
     }
 
-
-    /**
-     * 유저가 게시글을 생성합니다.
-     * @param requestDto
-     */
     @Transactional
     public UsedBoardResponseDto createUsedBoard(UsedBoardRequestDto requestDto, MultipartFile imageFile) throws IOException {
 
         List<UsedBoardTag> usedBoardTags = requestDto.getTags().stream()
-                .map(tagName -> {
-                    UsedBoardTag usedBoardTag = usedBoardTagRepository.findByName(tagName)
-                            .orElseGet(() -> usedBoardTagRepository.save(new UsedBoardTag(tagName)));
-
-                    if (!entityManager.contains(usedBoardTag)) {
-                        usedBoardTag = entityManager.merge(usedBoardTag);
-                    }
-                    return usedBoardTag;
-                })
+                .map(tagName -> usedBoardTagRepository.findByName(tagName)
+                        .orElseGet(() -> usedBoardTagRepository.save(new UsedBoardTag(tagName))))
                 .collect(Collectors.toList());
 
         String imageUrl = s3Service.uploadFile(imageFile);
@@ -116,30 +100,21 @@ public class UsedBoardService {
                 .build();
 
         usedBoardTags.forEach(usedBoard::addTag);
-
         usedBoardRepository.save(usedBoard);
 
-        return new UsedBoardResponseDto(usedBoard);
+        return toUsedBoardResponseDto(usedBoard);
     }
 
-
-
-    /**
-     * 유저가 게시글을 업데이트합니다.
-     * @param requestDto
-     * @param id
-     */
     public void updateUsedBoard(UsedBoardUpdateRequestDto requestDto, Long id) {
         Optional<UsedBoard> board = usedBoardRepository.findById(id);
-
         if (board.isPresent()) {
             UsedBoard existingBoard = board.get();
 
             UsedBoard updatedBoard = existingBoard.toBuilder()
-                    .title(requestDto.getTitle() != null ? requestDto.getTitle() : existingBoard.getTitle())
-                    .content(requestDto.getContent() != null ? requestDto.getContent() : existingBoard.getContent())
-                    .price((requestDto.getPrice() != null) ? requestDto.getPrice() : existingBoard.getPrice())
-                    .region(requestDto.getRegion() != null ? requestDto.getRegion() : existingBoard.getRegion())
+                    .title(Optional.ofNullable(requestDto.getTitle()).orElse(existingBoard.getTitle()))
+                    .content(Optional.ofNullable(requestDto.getContent()).orElse(existingBoard.getContent()))
+                    .price(Optional.ofNullable(requestDto.getPrice()).orElse(existingBoard.getPrice()))
+                    .region(Optional.ofNullable(requestDto.getRegion()).orElse(existingBoard.getRegion()))
                     .updatedAt(LocalDateTime.now())
                     .build();
 
@@ -147,18 +122,30 @@ public class UsedBoardService {
         }
     }
 
-    /**
-     * 유저가 게시글을 삭제합니다.
-     * @param id
-     */
     public void deleteUsedBoard(Long id) {
         Optional<UsedBoard> board = usedBoardRepository.findById(id);
-
         if (board.isPresent()) {
             UsedBoard updatedBoard = board.get().toBuilder()
                     .isDeleted("Y")
                     .build();
             usedBoardRepository.save(updatedBoard);
         }
+    }
+
+    private UsedBoardResponseDto toUsedBoardResponseDto(UsedBoard usedBoard) {
+        int commentCount = commentRepository.countByUsedBoardIdAndIsDeleted(usedBoard.getId(), "N");
+        int likeCount = likeRepository.countByUsedBoardId(usedBoard.getId());
+
+        return UsedBoardResponseDto.builder()
+                .id(usedBoard.getId())
+                .title(usedBoard.getTitle())
+                .content(usedBoard.getContent())
+                .price(usedBoard.getPrice())
+                .region(usedBoard.getRegion())
+                .createdAt(usedBoard.getCreatedAt())
+                .likeCount(likeCount)
+                .commentCount(commentCount)
+                .viewCount(usedBoard.getViewCount())
+                .build();
     }
 }

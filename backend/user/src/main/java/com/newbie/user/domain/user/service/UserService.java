@@ -11,5 +11,9 @@ public interface UserService {
     void saveUserProfile(UserRequestDto requestDto);
     void updateUserProfile(Long userId, UserProfileRequestDto userProfileRequestDto);
     void updateFavoriteTeam(Long userId, Integer teamId);
+<<<<<<< HEAD
     void updateIsResigned(Long userId);
+=======
+    Integer getFavoriteTeam(Long userId);
+>>>>>>> develop/be
 }

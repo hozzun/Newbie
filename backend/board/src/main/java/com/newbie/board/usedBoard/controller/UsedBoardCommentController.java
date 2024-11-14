@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/comment")
+@RequestMapping("/used-comment")
 @RequiredArgsConstructor
 public class UsedBoardCommentController {
 

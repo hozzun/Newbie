@@ -2,6 +2,8 @@ package com.newbie.baseball.global.exception;
 
 import com.newbie.baseball.domain.game.exception.GameNotFoundException;
 import com.newbie.baseball.domain.lineup.exception.LineUpNotFoundException;
+import com.newbie.baseball.domain.player.exception.LikeEventException;
+import com.newbie.baseball.domain.player.exception.LikeNotFoundException;
 import com.newbie.baseball.domain.player.exception.PlayerNotFoundException;
 import com.newbie.baseball.domain.playerStats.exception.StatsNotFoundException;
 import com.newbie.baseball.domain.rank.exception.RankNotFoundException;
@@ -33,7 +35,8 @@ public class GlobalExceptionHandler {
             TeamStatsNotFoundException.class,
             LineUpNotFoundException.class,
             SongNotFoundException.class,
-            YoutubeNotFoundException.class
+            YoutubeNotFoundException.class,
+            LikeNotFoundException.class
     })
     public ResponseEntity<Map<String, Object>> handleNotFoundExceptions(RuntimeException  ex, HttpServletRequest request) {
         return buildErrorResponse(ex.getMessage(), "Not Found", request.getRequestURI(), HttpStatus.NOT_FOUND);

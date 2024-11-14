@@ -24,6 +24,7 @@ public class GeneralBoardLike {
 
     private Long userId;
 
+    @Builder.Default
     @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
 }

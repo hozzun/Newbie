@@ -1,5 +1,6 @@
 package com.newbie.baseball.domain.player.controller;
 
+import com.newbie.baseball.domain.player.dto.res.LikePlayerResponseDto;
 import com.newbie.baseball.domain.player.service.PlayerLikeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -7,10 +8,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -36,5 +36,17 @@ public class PlayerLikeController {
     private Long extractMemberIdFromToken(HttpServletRequest request) {
         // JWT에서 memberId를 추출하는 로직을 구현합니다.
         return 1L; // 예제용으로 반환한 ID. 실제로는 JWT 토큰 파싱하여 memberId 추출 필요
+    }
+
+    @Operation(summary = "자신이 해당 선수 좋아요하고 있는지 여부")
+    @GetMapping("/{memberId}/{playerId}")
+    public ResponseEntity<LikePlayerResponseDto> getLikedPlayer(@PathVariable Long memberId, @PathVariable Integer playerId) {
+        return ResponseEntity.ok(playerLikeService.getLikedPlayer(memberId, playerId));
+    }
+
+    @Operation(summary = "현재 자신이 좋아요 중인 선수들 목록")
+    @GetMapping("/{memberId}")
+    public ResponseEntity<List<LikePlayerResponseDto>> getLikedPlayersByMember(@PathVariable Long memberId) {
+        return ResponseEntity.ok(playerLikeService.getLikedPlayersByMember(memberId));
     }
 }
