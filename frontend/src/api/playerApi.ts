@@ -34,6 +34,14 @@ export const getPlayers = (request: GetPlayersRequest) => axios.get<{content: Ar
     }
 })
 
+
+// 선수 정보 조회
+export interface GetPlayerRequest {
+    playerId: number;
+}
+
+export const getPlayer = (request: GetPlayerRequest) => axios.get<GetPlayersResponse>(`/api-baseball/players/player/${request.playerId}`);
+
 // 선수 성적 조회
 export interface GetPlayerRecordRequest {
     id: number;

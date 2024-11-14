@@ -5,8 +5,16 @@ import { setPlayer } from "../../redux/playerSlice";
 import { RootState } from "../../redux/store";
 import CustomError from "../../util/CustomError";
 import axios from "axios";
-import { getHitterRecord, getPitcherRecord, getPlayerHightlights } from "../../api/playerApi";
+import {
+  getHitterRecord,
+  getPitcherRecord,
+  getPlayer,
+  getPlayerHightlights,
+} from "../../api/playerApi";
 import { PlayerRecordItemProps } from "../../components/player/PlayerRecordItem";
+import { useParams } from "react-router-dom";
+import { PlayerInfo } from "./PlayerList";
+import { getClubIdByNum } from "../../util/ClubId";
 
 export interface PitcherRecord {
   year: number;
@@ -90,9 +98,41 @@ const Player = () => {
 
   const playerInfo = useSelector((state: RootState) => state.player.player);
 
+  const { playerId } = useParams<{ playerId: string }>();
+
+  const [subPlayerInfo, setSubPlayerInfo] = useState<PlayerInfo | null>(null);
   const [playerSeasonRecordItem, setPlayerSeasonRecordItem] =
     useState<Array<PlayerRecordItemProps> | null>(null);
   const [playerHighlights, setPlayerHighlights] = useState<Array<Video> | null>(null);
+
+  const fetchPlayerInfo = async () => {
+    try {
+      if (!playerId) {
+        throw new CustomError("[ERROR] 선수 ID 없음 by player");
+      }
+
+      const response = await getPlayer({ playerId: parseInt(playerId) });
+      const subPlayerInfoData: PlayerInfo = {
+        id: response.data.id,
+        teamId: getClubIdByNum(response.data.teamId),
+        backNumber: response.data.backNumber,
+        name: response.data.name,
+        position: response.data.position,
+        birth: response.data.birth,
+        physical: response.data.physical,
+        likeCount: response.data.likeCount,
+        imageUrl: response.data.imageUrl,
+      };
+
+      setSubPlayerInfo(subPlayerInfoData);
+    } catch (e) {
+      if (axios.isAxiosError(e) && e.response?.status === 404) {
+        console.log("[INFO] 선수 정보 없음 by player");
+      } else {
+        console.error(e);
+      }
+    }
+  };
 
   const fetchPlayerRecord = async () => {
     try {
@@ -209,6 +249,9 @@ const Player = () => {
   };
 
   useEffect(() => {
+    if (!playerInfo) {
+      fetchPlayerInfo();
+    }
     fetchPlayerRecord();
     fetchPlayerHighlights();
 
@@ -219,7 +262,7 @@ const Player = () => {
 
   return (
     <PlayerComponent
-      playerInfo={playerInfo}
+      playerInfo={playerInfo ? playerInfo : subPlayerInfo}
       playerSeasonRecordItem={playerSeasonRecordItem}
       playerHighlights={playerHighlights}
     />
