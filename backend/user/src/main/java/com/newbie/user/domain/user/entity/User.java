@@ -41,14 +41,19 @@ public class User {
     @ColumnDefault("0")
     private Integer favoriteTeamId = 0;
 
+    @Column(name = "is_resigned")
+    @ColumnDefault("false")
+    private Boolean isResigned = false;
+
     @Builder
-    public User(Long userId, String email, String nickname, String address, String profileImage) {
+    public User(Long userId, String email, String nickname, String address, String profileImage, Boolean isResigned) {
         this.userId = userId;
         this.email = email;
         this.nickname = nickname;
         this.address = address;
         this.favoriteTeamId = 0;
         this.profileImage = profileImage;
+        this.isResigned = false;
     }
 
     public void updateFavoriteTeamId(Integer favoriteTeamId) {
@@ -65,5 +70,11 @@ public class User {
 
     public void updateProfileImage(String profileImage) {
         this.profileImage = profileImage;
+    }
+
+    public void updateIsResigned(Boolean isResigned) {
+        this.isResigned = isResigned;
+        this.email = "알수없음";
+        this.nickname = "알수없음";
     }
 }

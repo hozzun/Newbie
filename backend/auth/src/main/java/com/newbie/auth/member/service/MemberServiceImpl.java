@@ -31,6 +31,9 @@ public class MemberServiceImpl implements MemberService{
     @Value("${register.api}")
     private String registerApi;
 
+    @Value("${resign.api}")
+    private String resignApi;
+
     @Override
     @Transactional
     public String signUp(MemberSignUpRequestDto signUpMemberDto) {
@@ -58,8 +61,7 @@ public class MemberServiceImpl implements MemberService{
     @Override
     @Transactional
     public void resignMember(Long memberId) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new IllegalArgumentException(ExceptionMessages.NOT_FOUND.getMessage()));
-        member.resign();
+        memberRepository.deleteById(memberId);
+        restTemplate.patchForObject(resignApi, memberId, Void.class);
     }
 }

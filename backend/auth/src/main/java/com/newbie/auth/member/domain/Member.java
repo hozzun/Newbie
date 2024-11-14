@@ -40,13 +40,6 @@ public class Member {
     @Column(name = "create_time", columnDefinition = "DATETIME")
     private LocalDateTime createTime;
 
-    @Column(name = "is_resigned")
-    @ColumnDefault("false")
-    private Boolean isResigned = false;
-
-    @Column(name = "resign_time", columnDefinition = "DATETIME")
-    private LocalDateTime resignTime;
-
     @Builder(builderMethodName = "signupBuilder")
     public Member(MemberSignUpRequestDto memberSignUpRequestDto) {
         this.email = memberSignUpRequestDto.getEmail();
@@ -56,10 +49,5 @@ public class Member {
     @PrePersist
     protected void onCreate() {
         this.createTime = ZonedDateTime.now(ZoneId.of("Asia/Seoul")).toLocalDateTime();
-    }
-
-    public void resign() {
-        this.isResigned = true;
-        this.resignTime = ZonedDateTime.now(ZoneId.of("Asia/Seoul")).toLocalDateTime();
     }
 }

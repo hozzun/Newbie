@@ -22,8 +22,8 @@ public class MemberController {
         return SuccessResponse.created(memberService.signUp(memberSignUpRequestDto));
     }
 
-    @DeleteMapping("/{memberId}")
-    @Operation(summary = "회원 탈퇴")
+    @DeleteMapping("/resign/{memberId}")
+    @Operation(summary = "회원탈퇴", description = "회원탈퇴 할 때 사용하는 API")
     public ResponseEntity<Void> resignMember(@PathVariable Long memberId) {
         memberService.resignMember(memberId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
