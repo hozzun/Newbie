@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import ClubId, { getClubIdByNum } from "../../util/ClubId";
 import { setCardStoreListItem } from "../../redux/cardStoreSlice";
+import { ClubCarouselProps } from "../../components/common/ClubCarousel";
 
 export interface PhotoCardInfo {
   id: string;
@@ -29,12 +30,10 @@ const CardStore = () => {
 
   const cardStoreListItem = useSelector((state: RootState) => state.cardStore.cardStoreListItem);
 
-  // TODO: 캐러셀로 구단 ID 지정하기
   // TODO: 사용자 응원 구단으로 지정하기
-  // const [selectedClubOption, setSelectedClubOption] = useState<string>(
-  //   cardStoreListItem.club === "" ? "kia" : cardStoreListItem.club,
-  // );
-  const selectedClubOption = "kia";
+  const [selectedClubOption, setSelectedClubOption] = useState<string>(
+    cardStoreListItem.club === "" ? "kia" : cardStoreListItem.club,
+  );
   // TODO: 카드 목록 조회 시 포지션도 반영
   const [selectedPositionOption, setSelectedPositionOption] = useState<string>(
     cardStoreListItem.position,
@@ -51,6 +50,7 @@ const CardStore = () => {
     try {
       const getPhotoCardsRequest: GetPhotoCardsRequest = {
         team: ClubId[selectedClubOption],
+        position: selectedPositionOption,
         sortType: selectedSortOption === "" ? sortItem["가나다순"] : sortItem[selectedSortOption],
         includeCard: isVisibleBoughtCard,
       };
@@ -102,11 +102,11 @@ const CardStore = () => {
     };
   }, [selectedClubOption, selectedPositionOption, selectedSortOption, isVisibleBoughtCard]);
 
-  // const handleSelectClubOption = (value: string) => {
-  //   setSelectedClubOption(value);
+  const handleSelectClubOption = (value: string) => {
+    setSelectedClubOption(value);
 
-  //   setPhotoCardInfos(null);
-  // };
+    setPhotoCardInfos(null);
+  };
 
   const handleSelectPositionOption = (value: string) => {
     setSelectedPositionOption(value);
@@ -126,8 +126,14 @@ const CardStore = () => {
     setPhotoCardInfos(null);
   };
 
+  const clubCarouselProps: ClubCarouselProps = {
+    selectedItem: selectedClubOption,
+    handleClickItem: handleSelectClubOption,
+  };
+
   return (
     <CardStoreComponent
+      clubCarouselProps={clubCarouselProps}
       selectedPositionOption={selectedPositionOption}
       handleSelectPositionOption={handleSelectPositionOption}
       selectedSortOption={selectedSortOption}
