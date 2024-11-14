@@ -94,7 +94,7 @@ const MyPage = () => {
         {userInfo && (
           <div>
             <Profile img={userInfo.profileImage} name={userInfo.nickname} email={userInfo.email} />
-            {teamName !== 0 ? (
+            {teamName ? (
               <ClubChangeButton
                 logo={ClubLogos[teamName]}
                 clubColor={teamName}

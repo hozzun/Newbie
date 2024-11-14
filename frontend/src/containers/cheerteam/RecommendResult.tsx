@@ -3,6 +3,9 @@ import { useNavigate } from "react-router-dom";
 import RecommendResultComponent from "../../components/cheerteam/RecommendResult"
 import ResultButton from "../../components/cheerteam/ResultButton"
 import ClubId from "../../util/ClubId";
+import { useDispatch } from 'react-redux';
+import { fetchTeam } from '../../redux/teamSlice';
+import { AppDispatch } from "../../redux/store";
 
 interface RecommendResultProps {
   club: 
@@ -22,13 +25,23 @@ interface RecommendResultProps {
 const RecommendResult = (props: RecommendResultProps) => {
 
   const nav = useNavigate()
+  const dispatch = useDispatch<AppDispatch>();
 
   const updateFavoriteTeam = async (favoriteTeamId: number) => {
-
+    const userId = 5;
+    const params = { teamId: favoriteTeamId, userId: userId };
+  
     try {
-      const response = await axiosInstance.patch("/api-user/users/favorite-team", {
-        teamId: favoriteTeamId,
-      });
+      const response = await axiosInstance.patch(
+        `/api-user/users/${userId}/favorite-team`,
+        {},
+        {
+          params, // 쿼리 파라미터는 세 번째 인자의 params로 설정
+          headers: {
+            "Content-Type": "application/json"
+          }
+        }
+      );
   
       console.log("응답 결과:", response.data);
     } catch (error) {
@@ -36,9 +49,11 @@ const RecommendResult = (props: RecommendResultProps) => {
       throw error;
     }
   };
+  
 
   const onCheerClick = () => {
     updateFavoriteTeam(ClubId[props.club])
+    dispatch(fetchTeam());
     nav(-1)
   }
 
