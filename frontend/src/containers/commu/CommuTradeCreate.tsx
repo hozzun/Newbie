@@ -20,6 +20,7 @@ const CommuTradeCreate = () => {
   const clearTitle = () => setTitleValue("");
   const clearPrice = () => setPriceValue(null); // 초기화 시 null로 설정
   const clearTag = () => setTagValue("");
+  const clearRegion = () => setRegion("");
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitleValue(e.target.value);
@@ -32,6 +33,10 @@ const CommuTradeCreate = () => {
 
   const handleTagChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTagValue(e.target.value);
+  };
+
+  const handleRegionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setRegion(e.target.value);
   };
 
   const handleTagKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -145,6 +150,8 @@ const CommuTradeCreate = () => {
         text={text}
         images={images}
         errorMessage={errorMessage}
+        region={region}
+        onRegionChange={handleRegionChange}
         onTitleChange={handleTitleChange}
         onPriceChange={handlePriceChange}
         onTagChange={handleTagChange}
@@ -156,6 +163,7 @@ const CommuTradeCreate = () => {
         onClearTitle={clearTitle}
         onClearPrice={clearPrice}
         onClearTag={clearTag}
+        onClearRegion={clearRegion}
       />
 
       <Button
