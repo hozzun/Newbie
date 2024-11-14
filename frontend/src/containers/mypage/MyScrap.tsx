@@ -28,7 +28,6 @@ const MyBoard = () => {
       commentCount: 2
     }
   ]);
-  console.log(setPosts)
 
   const getScrap = async () => {
     
