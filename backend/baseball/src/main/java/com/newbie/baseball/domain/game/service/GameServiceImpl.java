@@ -97,21 +97,25 @@ public class GameServiceImpl implements GameService {
         emitter.onCompletion(() -> emitters.remove(gameId));
         emitter.onTimeout(() -> emitters.remove(gameId));
 
-        // Redis에서 캐시된 데이터 확인
-        SSEResponseDto cachedData = getCachedGameData(gameId);
-        if (cachedData != null) {
-            try {
-                emitter.send(SseEmitter.event().name("gameRecordUpdate").data(cachedData).reconnectTime(3000L));
+        try {
+            // Redis에서 캐시된 데이터 확인
+            SSEResponseDto cachedData = getCachedGameData(gameId);
+            if (cachedData != null) {
+                // 캐시된 데이터가 있으면 전송
+                emitter.send(SseEmitter.event()
+                        .name("gameUpdate")
+                        .data(cachedData)
+                        .reconnectTime(SSE_RECONNECT_TIME));
                 log.info("Sent cached game data for game ID: {}", gameId);
-            } catch (IOException e) {
-                emitters.remove(gameId);
             }
-        } else {
-            try {
-                emitter.send(SseEmitter.event().name("init").data("Connected to game stream for game ID: " + gameId));
-            } catch (IOException e) {
-                emitters.remove(gameId);
-            }
+
+            // 연결 초기화 메시지
+            emitter.send(SseEmitter.event()
+                    .name("init")
+                    .data("Connected to game stream for game ID: " + gameId));
+        } catch (IOException e) {
+            emitters.remove(gameId);
+            log.warn("SSE connection closed for gameId: {}", gameId, e);
         }
 
         return emitter;
