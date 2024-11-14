@@ -12,6 +12,8 @@ interface WatchGameData {
   imageUrl: string;
   date: string;
   team1English: string;
+  team1Korean: string;
+  team2Korean: string;
 }
 
 const WatchGameInfo = () => {
@@ -65,6 +67,9 @@ const WatchGameInfo = () => {
         {watchGames.map(game => (
           <WatchCard
             key={game.id}
+            date={game.date}
+            team1={game.team1Korean}
+            team2={game.team2Korean}
             img={game.imageUrl || Ticket}
             onClick={() => goGameResult(game.id, game.date, game.team1English)}
           />

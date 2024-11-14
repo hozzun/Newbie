@@ -1,46 +1,55 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import CommuFreeItem from "../../components/commu/CommuFreeItem";
+import axiosInstance from '../../util/axiosInstance';
 
-interface Post {
+interface Scrap {
   id: number;
-  title: string;
-  contents: string;
-  writer: string;
-  createTimeStamp: string;
+  boardTitle: string;
+  content: string;
+  username: string;
+  imageUrl: string;
+  createdAt: string;
   viewCount: number;
   likeCount: number;
   commentCount: number;
 }
 
 const MyBoard = () => {
-  const [posts, setPosts] = useState<Post[]>([
-    {
-      id: 1,
-      title: "기본 게시물 제목",
-      contents: "이것은 기본 게시물의 내용입니다. 여기에 설명이 들어갑니다.",
-      writer: "관리자",
-      createTimeStamp: new Date().toLocaleDateString(),
-      viewCount: 10,
-      likeCount: 5,
-      commentCount: 2,
-    },
-  ]);
-  console.log(setPosts)
+  const [scraps, setScraps] = useState<Scrap[]>([]);
+
+  const getScrap = async () => {
+    
+    const params = {
+      userId: 5
+    }
+
+    try {
+      const response = await axiosInstance.get("/api-board/scrap", { params });
+      setScraps(response.data);
+    } catch (error) {
+      console.error("에러 발생:", error);
+    }
+  };
+
+  useEffect(() => {
+    getScrap();
+  }, []);
 
   return (
     <>
-      {posts.map((post, index) => (
-        <div key={post.id}>
+      {scraps.map((scrap, index) => (
+        // TODO: Navigate 설정
+        <div key={scrap.id} onClick={() => console.log("해당 스크랩 페이지로 이동")}>
           <CommuFreeItem
-            title={post.title}
-            contents={post.contents}
-            writer={post.writer}
-            createTimeStamp={post.createTimeStamp}
-            viewCount={post.viewCount}
-            likeCount={post.likeCount}
-            commentCount={post.commentCount}
+            title={scrap.boardTitle}
+            contents={scrap.content}
+            writer={scrap.username}
+            createTimeStamp={scrap.createdAt}
+            viewCount={scrap.viewCount}
+            likeCount={scrap.likeCount}
+            commentCount={scrap.commentCount}
           />
-          {index < posts.length - 1 && <hr className="my-4 border-gray-200" />}
+          {index < scraps.length - 1 && <hr className="my-4 border-gray-200" />}
         </div>
       ))}
     </>

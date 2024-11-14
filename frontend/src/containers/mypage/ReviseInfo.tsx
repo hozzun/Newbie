@@ -6,7 +6,26 @@ import ReviseBox from "../../components/mypage/ReviseBox";
 import Button from "../../components/common/Button";
 import { BUTTON_VARIANTS } from "../../components/common/variants";
 import ImgAdd from "../../components/mypage/ImgAdd";
-import profile from "../../assets/images/karina.jpg"
+
+const base64ToBlob = (base64: string, mimeType: string): Blob => {
+  const byteCharacters = atob(base64);  // atob을 사용해 base64 문자열을 디코딩합니다.
+  const byteNumbers = new Array(byteCharacters.length);
+  
+  // 각 문자를 byte로 변환하여 byteNumbers 배열에 추가
+  for (let i = 0; i < byteCharacters.length; i++) {
+    byteNumbers[i] = byteCharacters.charCodeAt(i);
+  }
+
+  // Blob으로 변환하여 반환
+  return new Blob([new Uint8Array(byteNumbers)], { type: mimeType });
+};
+
+const base64ToFile = (base64: string, fileName: string): File => {
+  // base64 문자열에서 접두사 제거 (예: "data:image/png;base64," 제거)
+  const base64Data = base64.replace(/^data:image\/\w+;base64,/, "");
+  const blob = base64ToBlob(base64Data, "image/png");
+  return new File([blob], fileName, { type: "image/png" });
+};
 
 const ReviseInfo = () => {
 
@@ -39,25 +58,30 @@ const ReviseInfo = () => {
   };
 
   const patchReviseUser = async () => {
-
-    const params = {
-      nickname: name,
-      address: address,
-      profileImg: imageUrl,
-    };
-
+    const formData = new FormData();
+    formData.append("nickname", name);
+    const fullAddress = `${address.si} ${address.gun}`;
+    formData.append("address", fullAddress);
+  
+    // imageUrl이 있는 경우에만 이미지 파일을 FormData에 추가
+    if (imageUrl) {
+      const base64Image = imageUrl.replace(/^data:image\/\w+;base64,/, "");
+      const file = base64ToFile(base64Image, "profile.png");
+      formData.append("profileImage", file);
+    }
+  
     try {
-      // TODO: userId 바꾸기
-      const response = await axiosInstance.patch("/api-user/users/5", { params }
-      );
-      console.log(response.data)
-      console.log(params)
+      const response = await axiosInstance.patch("/api-user/users/5", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      console.log(response.data);
     } catch (error) {
-      console.error('API 요청 중 오류 발생:', error);
+      console.error("API 요청 중 오류 발생:", error);
       throw error;
     }
   };
-
 
   const reviseClick = () => {
     patchReviseUser()
@@ -76,7 +100,7 @@ const ReviseInfo = () => {
 
   return (
     <>
-      <ImgAdd imgUrl={profile} onImageChange={handleImageChange} />
+      <ImgAdd imgUrl={userInfo.profileImage} onImageChange={handleImageChange} />
       <ReviseBox
         onNameChange={handleNameChange}
         onSelectionChange={handleSelectionChange}
