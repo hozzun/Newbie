@@ -1,5 +1,7 @@
 package com.newbie.board.usedBoard.service;
 
+import com.newbie.board.scrap.entity.Activity;
+import com.newbie.board.scrap.repository.ActivityRepository;
 import com.newbie.board.usedBoard.dto.UsedBoardCommentRequestDto;
 import com.newbie.board.usedBoard.dto.UsedBoardCommentResponseDto;
 import com.newbie.board.usedBoard.entity.UsedBoardComment;
@@ -20,6 +22,7 @@ public class UsedBoardCommentService {
 
     private final UsedBoardCommentRepository commentRepository;
     private final UsedBoardRepository usedBoardRepository;
+    private final ActivityRepository activityRepository;
 
     /**
      * 댓글 목록을 계층적으로 가져옵니다.
@@ -60,6 +63,17 @@ public class UsedBoardCommentService {
         }
 
         UsedBoardComment savedComment = commentRepository.save(comment);
+
+        Activity activity = Activity.builder()
+                .userId(userId)
+                .boardType("USED_BOARD")
+                .type("comment")
+                .boardId(requestDto.getBoardId())
+                .content(requestDto.getContent())
+                .createdAt(LocalDateTime.now())
+                .build();
+        activityRepository.save(activity);
+
         return UsedBoardCommentResponseDto.fromEntity(savedComment);
     }
 
