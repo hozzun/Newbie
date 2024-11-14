@@ -17,11 +17,11 @@ public class JwtUtil {
     @Value("${jwt.expiration}")
     private long expiration;
 
-    // JWT 생성 메서드
-    public String generateToken(String userId, String username) {
+    // JWT 생성 메서드 - username 대신 nickname 사용
+    public String generateToken(Long userId, String nickname) {
         return Jwts.builder()
-                .setSubject(userId)
-                .claim("name", username)
+                .setSubject(String.valueOf(userId)) // userId를 String으로 변환
+                .claim("nickname", nickname) // nickname을 claim에 추가
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(SignatureAlgorithm.HS256, secretKey)
@@ -45,13 +45,13 @@ public class JwtUtil {
         }
     }
 
-    // JWT에서 userId 추출 메서드
-    public String getUserIdFromToken(String token) {
-        return getClaimsFromToken(token).getSubject();
+    // JWT에서 userId를 Long 타입으로 추출하는 메서드
+    public Long getUserIdFromToken(String token) {
+        return Long.parseLong(getClaimsFromToken(token).getSubject());
     }
 
-    // JWT에서 name 추출 메서드
-    public String getUsernameFromToken(String token) {
-        return getClaimsFromToken(token).get("name", String.class);
+    // JWT에서 nickname 추출 메서드
+    public String getNicknameFromToken(String token) {
+        return getClaimsFromToken(token).get("nickname", String.class);
     }
 }

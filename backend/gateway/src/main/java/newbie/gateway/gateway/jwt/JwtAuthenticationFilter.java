@@ -36,13 +36,13 @@ public class JwtAuthenticationFilter extends AuthenticationWebFilter {
             if (token != null && token.startsWith("Bearer ")) {
                 token = token.substring(7);
                 if (jwtUtil.validateToken(token)) {
-                    String userId = jwtUtil.getUserIdFromToken(token);
-                    String userName = jwtUtil.getUsernameFromToken(token);
 
-                    // 요청 헤더에 userId와 userName을 추가하여 각 기능 서버로 전달
+                    Long userId = jwtUtil.getUserIdFromToken(token);
+                    String nickname = jwtUtil.getNicknameFromToken(token);
+
                     exchange.getRequest().mutate()
-                            .header("X-User-Id", userId)
-                            .header("X-User-Name", userName)
+                            .header("user-id", userId.toString())
+                            .header("user-nickname", nickname)
                             .build();
 
                     return Mono.just(new UsernamePasswordAuthenticationToken(
@@ -51,5 +51,6 @@ public class JwtAuthenticationFilter extends AuthenticationWebFilter {
             }
             return Mono.empty();
         }
+
     }
 }
