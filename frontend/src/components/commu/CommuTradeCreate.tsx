@@ -10,6 +10,8 @@ interface CommuTradeCreateProps {
   text: string;
   images: File[];
   errorMessage: string | null;
+  region: string;
+
   onTitleChange: (e: ChangeEvent<HTMLInputElement>) => void;
   onPriceChange: (e: ChangeEvent<HTMLInputElement>) => void;
   onTagChange: (e: ChangeEvent<HTMLInputElement>) => void;
@@ -17,10 +19,12 @@ interface CommuTradeCreateProps {
   onTagRemove: (tag: string) => void;
   onTextChange: (e: ChangeEvent<HTMLTextAreaElement>) => void;
   onImageChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  onRegionChange: (e: ChangeEvent<HTMLInputElement>) => void;
   onClearTitle: () => void;
   onClearPrice: () => void;
   onClearTag: () => void;
   onImageRemove: (index: number) => void;
+  onClearRegion: () => void;
 }
 
 const CommuTradeCreate: React.FC<CommuTradeCreateProps> = ({
@@ -31,6 +35,7 @@ const CommuTradeCreate: React.FC<CommuTradeCreateProps> = ({
   text,
   images,
   errorMessage,
+  region,
   onTitleChange,
   onPriceChange,
   onTagChange,
@@ -42,6 +47,8 @@ const CommuTradeCreate: React.FC<CommuTradeCreateProps> = ({
   onClearPrice,
   onClearTag,
   onImageRemove,
+  onRegionChange,
+  onClearRegion,
 }) => {
   return (
     <>
@@ -150,6 +157,22 @@ const CommuTradeCreate: React.FC<CommuTradeCreateProps> = ({
         <div className="absolute bottom-4 font-kbogothiclight right-6 text-xs text-gray-400">
           ( {text.length} / 1000 )
         </div>
+      </div>
+
+      <div className="relative w-full mx-auto">
+        <input
+          type="text"
+          placeholder="지역을 입력해주세요"
+          value={region}
+          onChange={onRegionChange}
+          className="w-full pl-2 pr-12 py-4 border-b-2 font-kbogothiclight border-gray-100 focus:outline-none focus:border-green-900 mb-2"
+        />
+        <CrossCircle
+          onClick={onClearRegion}
+          className={`absolute h-4 w-4 right-2 top-1/2 transform -translate-y-1/2 cursor-pointer ${
+            region ? "text-gray-500" : "text-gray-200"
+          }`}
+        />
       </div>
     </>
   );
