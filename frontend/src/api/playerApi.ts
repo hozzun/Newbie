@@ -22,6 +22,7 @@ export interface GetPlayersResponse {
     physical: string;
     academic: string;
     likeCount: number;
+    imageUrl: string;
 }
 
 export const getPlayers = (request: GetPlayersRequest) => axios.get<{content: Array<GetPlayersResponse>}>(`/api-baseball/players/team/${request.teamId}`, {
@@ -32,6 +33,14 @@ export const getPlayers = (request: GetPlayersRequest) => axios.get<{content: Ar
         size: 30
     }
 })
+
+
+// 선수 정보 조회
+export interface GetPlayerRequest {
+    playerId: number;
+}
+
+export const getPlayer = (request: GetPlayerRequest) => axios.get<GetPlayersResponse>(`/api-baseball/players/player/${request.playerId}`);
 
 // 선수 성적 조회
 export interface GetPlayerRecordRequest {
@@ -83,9 +92,9 @@ export interface GetHitterRecordResponse {
     sf: number;
 }
 
-export const getPitcherRecord = (request: GetPlayerRecordRequest) => axios.get<GetPitcherRecordResponse>(`/api-baseball/stats/pitchers/${request.id}`);
+export const getPitcherRecord = (request: GetPlayerRecordRequest) => axios.get<Array<GetPitcherRecordResponse>>(`/api-baseball/stats/pitchers/${request.id}`);
 
-export const getHitterRecord = (request: GetPlayerRecordRequest) => axios.get<GetHitterRecordResponse>(`/api-baseball/stats/hitters/${request.id}`);
+export const getHitterRecord = (request: GetPlayerRecordRequest) => axios.get<Array<GetHitterRecordResponse>>(`/api-baseball/stats/hitters/${request.id}`);
 
 // 선수 하이라이트 영상 조회
 

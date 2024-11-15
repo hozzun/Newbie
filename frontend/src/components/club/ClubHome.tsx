@@ -1,13 +1,14 @@
 import { ClubCarouselProps } from "../common/ClubCarousel";
 import ClubOverview, { ClubOverviewProps } from "./ClubOverview";
 import ClubRankHistory, { ClubRankHistoryProps } from "./ClubRankHistory";
-import ClubRecord from "./ClubRecord";
+import ClubRecord, { ClubRecordProps } from "./ClubRecord";
 import OtherClubs from "./OtherClubs";
 import PlayerList, { PlayerListProps } from "./PlayerList";
 import UpcomingGame, { UpcomingGameProps } from "./UpcomingGame";
 
 interface ClubHomeProps {
   clubOverviewProps: ClubOverviewProps;
+  clubRecordProps: ClubRecordProps;
   upcomingGameProps: UpcomingGameProps;
   playerListProps: PlayerListProps;
   clubRankHistoryProps: ClubRankHistoryProps;
@@ -36,7 +37,7 @@ const ClubHome = (props: ClubHomeProps) => {
     <div className={clubHomeClass}>
       <ClubOverview {...props.clubOverviewProps} />
       <div className="bg-white w-full rounded-t-2xl pt-6 px-4 mt-6 pb-32">
-        <ClubRecord />
+        <ClubRecord {...props.clubRecordProps} />
         <UpcomingGame {...props.upcomingGameProps} />
         <ClubRankHistory {...props.clubRankHistoryProps} />
         <PlayerList {...props.playerListProps} />

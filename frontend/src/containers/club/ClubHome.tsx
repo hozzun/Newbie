@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react";
-import { GetClubRanksRequest, getClubRanks } from "../../api/baseballApi";
+import {
+  GetClubRanksRequest,
+  getClubHitterRecord,
+  getClubPitcherRecord,
+  getClubRanks,
+} from "../../api/baseballApi";
 import ClubHomeComponent from "../../components/club/ClubHome";
 import ClubId, { getClubIdByNum } from "../../util/ClubId";
 import axios from "axios";
@@ -14,10 +19,29 @@ import { useDispatch } from "react-redux";
 import { clearPlayerListItem, setPlayer } from "../../redux/playerSlice";
 import { ClubRankHistoryProps } from "../../components/club/ClubRankHistory";
 import { ClubCarouselProps } from "../../components/common/ClubCarousel";
+import { ClubRecordItemProps } from "../../components/club/ClubRecordItem";
+import { ClubRecordProps } from "../../components/club/ClubRecord";
 
 export interface ClubRank {
   year: string;
   rank: number;
+}
+
+export interface ClubRecord {
+  year: number;
+  value: number;
+}
+
+export interface ClubRecords {
+  earnedRunAverage: Array<ClubRecord>;
+  strikeOuts: Array<ClubRecord>;
+  baseOnBalls: Array<ClubRecord>;
+  walksPlusHitsPerInningPitched: Array<ClubRecord>;
+  battingAverage: Array<ClubRecord>;
+  runs: Array<ClubRecord>;
+  hits: Array<ClubRecord>;
+  homeRun: Array<ClubRecord>;
+  [key: string]: Array<ClubRecord>;
 }
 
 export interface ClubOverviewData {
@@ -31,11 +55,38 @@ export interface ClubOverviewData {
   winRate: number;
 }
 
+interface ClubPitcherRecord {
+  year: number;
+  earnedRunAverage: number; // 평균자책점
+  strikeOuts: number; // 삼진
+  baseOnBalls: number; // 볼넷
+  walksPlusHitsPerInningPitched: number; // 이닝당 출루율
+}
+
+interface ClubHitterRecord {
+  year: number;
+  battingAverage: number; // 타율
+  runs: number; // 득점
+  hits: number; // 안타
+  homeRun: number; // 홈런
+}
+
 export interface UpcomingGameData {
   stadium: string;
   day: string;
   teamId: string;
 }
+
+const clubRecordLabel: Record<string, string> = {
+  earnedRunAverage: "평균자책점",
+  strikeOuts: "삼진",
+  baseOnBalls: "볼넷",
+  walksPlusHitsPerInningPitched: "이닝당 출루율",
+  battingAverage: "타율",
+  runs: "득점",
+  hits: "안타",
+  homeRun: "홈런",
+};
 
 const ClubHome = () => {
   const nav = useNavigate();
@@ -45,6 +96,8 @@ const ClubHome = () => {
 
   const today = new Date();
 
+  const [clubRecord, setClubRecord] = useState<ClubRecords | null>(null);
+  const [clubRecordItems, setClubRecordItems] = useState<Array<ClubRecordItemProps> | null>(null);
   const [clubRankHistory, setClubRankHistory] = useState<Array<ClubRank> | null>(null);
   const [clubOverview, setClubOverview] = useState<ClubOverviewData | null>(null);
   const [isVisibleButton, setIsVisibleButton] = useState<boolean>(false);
@@ -96,6 +149,110 @@ const ClubHome = () => {
     }
   };
 
+  const fetchClubRecord = async () => {
+    try {
+      if (!id) {
+        throw new CustomError("[ERROR] 구단 ID 없음 by club home");
+      }
+
+      const pitcherResponse = await getClubPitcherRecord({ teamId: ClubId[id] });
+      const pitcherRecordData: Array<ClubPitcherRecord> = pitcherResponse.data.map(d => {
+        return {
+          year: parseInt(d.year),
+          earnedRunAverage: Number(parseFloat(d.era).toFixed(2)),
+          strikeOuts: d.so,
+          baseOnBalls: d.bb,
+          walksPlusHitsPerInningPitched: Number(parseFloat(d.whip).toFixed(2)),
+        };
+      });
+
+      pitcherRecordData.sort((a, b) => a.year - b.year);
+
+      const hitterResponse = await getClubHitterRecord({ teamId: ClubId[id] });
+      const hitterRecordData: Array<ClubHitterRecord> = hitterResponse.data.map(d => {
+        return {
+          year: parseInt(d.year),
+          battingAverage: Number(parseFloat(d.avg).toFixed(3)),
+          runs: d.r,
+          hits: d.h,
+          homeRun: d.homerun,
+        };
+      });
+
+      hitterRecordData.sort((a, b) => a.year - b.year);
+
+      const targetYear = new Date().getFullYear();
+      const clubRecordDatas: ClubRecords = {
+        earnedRunAverage: [],
+        strikeOuts: [],
+        baseOnBalls: [],
+        walksPlusHitsPerInningPitched: [],
+        battingAverage: [],
+        runs: [],
+        hits: [],
+        homeRun: [],
+      };
+      for (let index = 0; index < pitcherRecordData.length; index++) {
+        const pRecord = pitcherRecordData[index];
+        const hRecord = hitterRecordData[index];
+
+        const year = pRecord.year;
+
+        Object.entries(pRecord).forEach(([key, value]) => {
+          if (key === "year") {
+            return;
+          }
+
+          if (clubRecordDatas[key]) {
+            clubRecordDatas[key].push({ year, value });
+          } else {
+            clubRecordDatas[key] = [{ year, value }];
+          }
+        });
+
+        Object.entries(hRecord).forEach(([key, value]) => {
+          if (key === "year") {
+            return;
+          }
+
+          if (clubRecordDatas[key]) {
+            clubRecordDatas[key].push({ year, value });
+          } else {
+            clubRecordDatas[key] = [{ year, value }];
+          }
+        });
+
+        if (year === targetYear) {
+          const clubRecordItemDatas: Array<ClubRecordItemProps> = [];
+          Object.entries(hRecord).forEach(([key, value]) => {
+            if (key === "year") {
+              return;
+            }
+
+            clubRecordItemDatas.push({ key, label: clubRecordLabel[key], value });
+          });
+          Object.entries(pRecord).forEach(([key, value]) => {
+            if (key === "year") {
+              return;
+            }
+
+            clubRecordItemDatas.push({ key, label: clubRecordLabel[key], value });
+          });
+
+          setClubRecordItems(clubRecordItemDatas);
+        }
+      }
+      setClubRecord(clubRecordDatas);
+    } catch (e) {
+      if (axios.isAxiosError(e) && e.response?.status === 404) {
+        console.log("[INFO] 구단 성적 없음  by club home");
+        setClubOverview(null);
+      } else {
+        console.error(e);
+      }
+    }
+  };
+
   const fetchUpcomingGame = async () => {
     try {
       // TODO: GET - 예정된 경기 정보
@@ -109,7 +266,7 @@ const ClubHome = () => {
     } catch (e) {
       if (axios.isAxiosError(e) && e.response?.status === 404) {
         console.log("[INFO] 예정된 경기 없음  by club home");
-        setClubOverview(null);
+        setUpcomingGame(null);
       } else {
         console.error(e);
       }
@@ -143,11 +300,12 @@ const ClubHome = () => {
           birth: d.birth,
           physical: d.physical,
           likeCount: d.likeCount,
+          imageUrl: d.imageUrl,
         };
 
         return {
           id: d.id,
-          imgUrl: "선수 사진 URL", // TODO: GET - 선수 사진 URL
+          imgUrl: d.imageUrl,
           name: d.name,
           likeCount: d.likeCount,
           goDetail: () => goDetail(playerInfo),
@@ -167,6 +325,7 @@ const ClubHome = () => {
 
   useEffect(() => {
     fetchClubOverview();
+    fetchClubRecord();
     fetchUpcomingGame();
     fetchPlayers();
 
@@ -215,6 +374,12 @@ const ClubHome = () => {
     handleRegisterCheerClub: handleRegisterCheerClub,
   };
 
+  const clubRecordProps: ClubRecordProps = {
+    clubId: id ? id : null,
+    items: clubRecordItems,
+    data: clubRecord,
+  };
+
   const playerListProps: PlayerListProps = {
     players: players,
     goMore: goMore,
@@ -233,6 +398,7 @@ const ClubHome = () => {
   return (
     <ClubHomeComponent
       clubOverviewProps={clubOverviewProps}
+      clubRecordProps={clubRecordProps}
       upcomingGameProps={{ upcomingGameData: upcomingGame }}
       playerListProps={playerListProps}
       clubRankHistoryProps={clubRanknHistoryProps}

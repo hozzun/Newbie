@@ -8,66 +8,16 @@ import SectionBox from "../../containers/common/SectionBox";
 import { CircleButtonProps } from "../common/CircleButton";
 import { CIRCLE_BUTTON_VARIANTS } from "../common/variants";
 import Heart from "../../assets/icons/heart-solid.svg?react";
-import Karina from "../../assets/images/karina.jpg";
 import { PlayerInfo } from "../../containers/player/PlayerList";
-import { Video } from "../../containers/player/Player";
+import { HitterRecords, PitcherRecords, Video } from "../../containers/player/Player";
 
 interface PlayerProps {
   playerInfo: PlayerInfo | null;
+  clubId: string | null;
+  playerRecord: PitcherRecords | HitterRecords | null;
   playerSeasonRecordItem: Array<PlayerRecordItemProps> | null;
   playerHighlights: Array<Video> | null;
 }
-
-const playerRecordItems: Array<PlayerRecordItemProps> = [
-  {
-    label: "타율1",
-    value: "0.322",
-  },
-  {
-    label: "타율2",
-    value: "0.322",
-  },
-  {
-    label: "타율3",
-    value: "0.322",
-  },
-  {
-    label: "타율4",
-    value: "0.322",
-  },
-  {
-    label: "타율5",
-    value: "0.322",
-  },
-  {
-    label: "타율6",
-    value: "0.322",
-  },
-  {
-    label: "타율7",
-    value: "0.322",
-  },
-  {
-    label: "타율8",
-    value: "0.322",
-  },
-  {
-    label: "타율9",
-    value: "0.322",
-  },
-  {
-    label: "타율10",
-    value: "0.322",
-  },
-  {
-    label: "타율11",
-    value: "0.322",
-  },
-  {
-    label: "타율12",
-    value: "0.322",
-  },
-];
 
 const rightButtonProps: CircleButtonProps = {
   className: "w-9 h-9",
@@ -80,20 +30,30 @@ const Player = (props: PlayerProps) => {
 
   return (
     <>
-      <SectionBox label="스토어" rightButton={rightButtonProps} />
+      <SectionBox rightButton={rightButtonProps} />
       <Container>
-        <div className="flex flex-col justify-center items-center">
-          <div className="flex flex-row justify-between items-center">
-            <div className="aspect-[2/2.4] w-[45%]">
-              <img src={Karina} alt="인물 사진" className="w-full h-full object-cover rounded-lg" />
+        {props.clubId && (
+          <div className="flex flex-col justify-center items-center">
+            <div className="flex flex-row justify-between items-center w-full">
+              <div className="aspect-[2/2.4] w-[40%]">
+                <img
+                  src={props.playerInfo?.imageUrl}
+                  alt={props.playerInfo ? props.playerInfo.name : "선수 사진"}
+                  className="w-full h-full object-cover rounded-lg"
+                />
+              </div>
+              <PlayerProfile playerInfo={props.playerInfo} />
             </div>
-            <PlayerProfile playerInfo={props.playerInfo} />
+            <PlayerRecord
+              label={`${currentYear} 기록`}
+              clubId={props.clubId}
+              items={props.playerSeasonRecordItem}
+              data={props.playerRecord}
+            />
+            <PlayerMusicController />
+            <PlayerHighlight playerHighlights={props.playerHighlights} />
           </div>
-          <PlayerRecord label={`${currentYear} 기록`} items={props.playerSeasonRecordItem} />
-          <PlayerRecord label="통산 기록" items={playerRecordItems} />
-          <PlayerMusicController />
-          <PlayerHighlight playerHighlights={props.playerHighlights} />
-        </div>
+        )}
       </Container>
     </>
   );
