@@ -1,10 +1,10 @@
 import ChatInput from "../../components/commu/ChatInput";
-import CommuFreeDetailComponent from "../../components/commu/CommuFreeDetail";
+import CommuTradeDetailComponent from "../../components/commu/CommuTradeDetail";
 
 const CommuFreeDetail = () => {
   return (
     <div>
-      <CommuFreeDetailComponent />
+      <CommuTradeDetailComponent />
       <ChatInput />
     </div>
   );
