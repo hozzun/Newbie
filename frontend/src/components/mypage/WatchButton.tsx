@@ -64,7 +64,7 @@ const WatchButton = (props: WatchButtonProps) => {
 
   return (
     <>
-      <div className="flex justify-center items-center flex-row">
+      <div className="flex justify-center items-center flex-row mt-3">
         <Button
           className="flex justify-center items-center w-36 h-10 m-2"
           variant={BUTTON_VARIANTS.primary}

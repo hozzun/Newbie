@@ -34,7 +34,7 @@ const CardDetail = ({ player, image, onClick }: CardDetailProps) => {
         </p>
       </div>
 
-      <div className="grid grid-cols-2 gap-5 m-5 bg-gray-100 rounded-2xl p-10">
+      <div className="grid grid-cols-2 my-4 gap-5 bg-gray-100 rounded-2xl p-5">
         <p className="text-green-900 font-kbogothicmedium">소속구단</p>
         {teamEnglish && <p className="text-gray-600 font-kbogothicmedium">{ClubFullName[teamEnglish]}</p>}
         <p className="text-green-900 font-kbogothicmedium">생년월일</p>

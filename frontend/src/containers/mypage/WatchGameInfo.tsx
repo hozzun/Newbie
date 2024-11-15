@@ -60,10 +60,10 @@ const WatchGameInfo = () => {
   return (
     <div className="my-7">
       <div className="flex flex-row">
-        <Storage className="w-6 h-6 ml-5 text-gray-200" />
-        <p className="font-kbogothicbold text-gray-600 ml-3">나의 직관 경기</p>
+        <Storage className="w-6 h-6 text-gray-200 mr-3" />
+        <p className="font-kbogothicbold text-gray-600"> 나의 직관 경기</p>
       </div>
-      <div className="grid grid-cols-2 justify-center items-center gap-7 mr-10">
+      <div className="grid grid-cols-2 justify-center items-center gap-7">
         {watchGames.map(game => (
           <WatchCard
             key={game.id}
@@ -74,7 +74,7 @@ const WatchGameInfo = () => {
             onClick={() => goGameResult(game.id, game.date, game.team1English)}
           />
         ))}
-        <div className="w-full h-44 rounded-2xl bg-gray-200 mt-7 flex justify-center items-center ml-5">
+        <div className="w-full h-44 rounded-2xl bg-gray-200 mt-7 flex justify-center items-center">
           <Plus className="w-6 h-6 text-gray-500 hover:cursor-pointer" onClick={goCamera} />
         </div>
       </div>
