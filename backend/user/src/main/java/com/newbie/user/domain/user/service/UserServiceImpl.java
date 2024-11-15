@@ -70,7 +70,7 @@ public class UserServiceImpl implements UserService {
                 throw new IllegalArgumentException("허용되지 않은 파일 형식입니다. jpg, jpeg, png 파일만 지원됩니다.");
             }
 
-            String key = "profile/" + user.getId() + "/profile." + fileExtension;
+            String key = "profile/" + user.getEmail() + "/profile." + fileExtension;
             try {
                 // S3 업로드
                 s3Client.putObject(PutObjectRequest.builder()
