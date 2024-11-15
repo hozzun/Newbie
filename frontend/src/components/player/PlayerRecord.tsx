@@ -1,20 +1,10 @@
-import {
-  Area,
-  AreaChart,
-  Bar,
-  BarChart,
-  CartesianGrid,
-  Line,
-  LineChart,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
 import Carousel from "../common/Carousel";
 import PlayerRecordItem, { PlayerRecordItemProps } from "./PlayerRecordItem";
 import { HitterRecords, PitcherRecords, PlayerRecordData } from "../../containers/player/Player";
 import { useState } from "react";
+import LineChart, { ChartProps, ChatTypeProps } from "../common/LineChart";
+import BarChart from "../common/BarChart";
+import AreaChart from "../common/AreaChart";
 
 interface PlayerRecordProps {
   clubId: string;
@@ -22,30 +12,6 @@ interface PlayerRecordProps {
   items: Array<PlayerRecordItemProps> | null;
   data: PitcherRecords | HitterRecords | null;
 }
-
-interface ChatTypeProps {
-  type: string;
-  minY: number;
-  maxY: number;
-}
-
-interface ChartProps extends ChatTypeProps {
-  data: Array<PlayerRecordData>;
-  clubId: string;
-}
-
-const clubColors: Record<string, string> = {
-  kia: "#333333",
-  samsung: "#074CA1",
-  lg: "#C60C30",
-  doosan: "#00234B",
-  kt: "#231F20",
-  ssg: "#D2323F",
-  lotte: "#032C64",
-  hanwha: "#FF6600",
-  nc: "#063E7D",
-  kiwoom: "#6F263D",
-};
 
 const chartType: Record<string, ChatTypeProps> = {
   earnedRunAverage: {
@@ -180,73 +146,6 @@ const chartType: Record<string, ChatTypeProps> = {
   },
 };
 
-const PlayerAreaChart = (props: ChartProps) => {
-  return (
-    <ResponsiveContainer width="100%" height="100%">
-      <AreaChart
-        data={props.data}
-        margin={{
-          top: 10,
-          right: 40,
-          left: 0,
-          bottom: 0,
-        }}
-      >
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="year" />
-        <YAxis domain={[props.minY, props.maxY]} />
-        <Tooltip />
-        <Area
-          type="monotone"
-          dataKey="value"
-          stroke={clubColors[props.clubId ? props.clubId : "#1E633F"]}
-          fill={clubColors[props.clubId ? props.clubId : "#1E633F"]}
-        />
-      </AreaChart>
-    </ResponsiveContainer>
-  );
-};
-
-const PlayerBarChart = (props: ChartProps) => {
-  return (
-    <ResponsiveContainer width="100%" height="100%">
-      <BarChart data={props.data}>
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="year" />
-        <YAxis domain={[props.minY, props.maxY]} />
-        <Tooltip />
-        <Bar dataKey="value" fill={clubColors[props.clubId ? props.clubId : "#1E633F"]} />
-      </BarChart>
-    </ResponsiveContainer>
-  );
-};
-
-const PlayerLineChart = (props: ChartProps) => {
-  return (
-    <ResponsiveContainer width="100%" height="100%">
-      <LineChart
-        data={props.data}
-        margin={{
-          top: 10,
-          right: 40,
-          left: 0,
-          bottom: 0,
-        }}
-      >
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="year" />
-        <YAxis domain={[props.minY, props.maxY]} />
-        <Tooltip />
-        <Line
-          type="monotone"
-          dataKey="value"
-          stroke={clubColors[props.clubId ? props.clubId : "#1E633F"]}
-        />
-      </LineChart>
-    </ResponsiveContainer>
-  );
-};
-
 const PlayerRecord = (props: PlayerRecordProps) => {
   const [isVisibleGraph, setIsVisibleGraph] = useState<boolean>(false);
   const [selectedItem, setSelectedItem] = useState<string>();
@@ -266,7 +165,7 @@ const PlayerRecord = (props: PlayerRecordProps) => {
       return;
     }
 
-    const chartProps: ChartProps = {
+    const chartProps: ChartProps<PlayerRecordData> = {
       type: chartType[dataKey].type,
       data: props.data[dataKey],
       clubId: props.clubId,
@@ -276,11 +175,11 @@ const PlayerRecord = (props: PlayerRecordProps) => {
 
     switch (chartType[dataKey].type) {
       case "bar":
-        return <PlayerBarChart {...chartProps} />;
+        return <BarChart {...chartProps} />;
       case "area":
-        return <PlayerAreaChart {...chartProps} />;
+        return <AreaChart {...chartProps} />;
       case "line":
-        return <PlayerLineChart {...chartProps} />;
+        return <LineChart {...chartProps} />;
     }
   };
 
