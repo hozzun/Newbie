@@ -9,7 +9,7 @@ const ChatInput = () => {
 
   return (
     <div
-      className="bg-white font-kbogothiclight rounded-t-2xl shadow-md w-full p-4 fixed bottom-0 left-1/2 transform -translate-x-1/2 max-w-[600px] min-w-[320px]"
+      className="bg-white font-kbogothiclight rounded-t-2xl shadow-md w-full p-4 pb-8 fixed bottom-0 left-1/2 transform -translate-x-1/2 max-w-[600px] min-w-[320px]"
       style={{
         boxShadow: "0 -4px 6px rgba(0, 0, 0, 0.1)",
       }}

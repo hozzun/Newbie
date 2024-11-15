@@ -23,6 +23,37 @@ export const getGeneralBoard = () => {
   return axios.get<GetGeneralBoardResponse[]>("/api-board/general-board");
 };
 
+export interface PostGeneralBoardRequest {
+  userId: number;
+  userName: string;
+  title: string;
+  content: string;
+  tags: string[];
+  imageFile: string;
+}
+
+export interface PostGeneralBoardResponse {
+  id: number;
+  userId: number;
+  title: string;
+  content: string;
+  imageUrl: string;
+  createdAt: string;
+  updatedAt: string;
+  tags: string[];
+  commentCount: number;
+  likeCount: number;
+  scrapCount: number;
+  viewCount: number;
+}
+
+export const postGeneralBoard = async (data: PostGeneralBoardRequest) => {
+  return axios.post<PostGeneralBoardResponse>("/api-board/general-board/create", data);
+};
+
+export const getUserProfile = () => {
+  return axios.get("/api-user/users/userId"); // userId 수정필요
+};
 //---------------------------------------------------------------------
 
 // 중고거래 게시글 전체 조회
