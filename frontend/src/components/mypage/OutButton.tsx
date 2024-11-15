@@ -2,6 +2,7 @@ import { useState } from "react";
 import Button, {ButtonProps} from "../common/Button"
 import { BUTTON_VARIANTS } from "../common/variants"
 import Dialog from "../common/Dialog";
+import axiosInstance from "../../util/axiosInstance";
 
 const OutButton = () => {
   const [logoutDialog, setLogoutDialog] = useState(false);
@@ -15,7 +16,17 @@ const OutButton = () => {
     setRemoveDialog(true)
   };
 
-  // TODO: 로그아웃, 회원탈퇴 API 연결
+  const patchDelete = async (userId: number) => {
+  
+    try {
+      const response = await axiosInstance.patch("/api-user/users/resign", { userId });
+      console.log(response);
+    } catch (error) {
+      console.error("Error fetching cheer song:", error);
+    }
+  };
+
+  // TODO: 로그아웃 API 연결
   const yesLogout: ButtonProps = {
     variant: BUTTON_VARIANTS.primary,
     children: "네",
@@ -25,7 +36,7 @@ const OutButton = () => {
   const yesRemove: ButtonProps = {
     variant: BUTTON_VARIANTS.primary,
     children: "네",
-    onClick: () => console.log("회원탈퇴"),
+    onClick: () => patchDelete(1), // TODO: userId 수정
   };
 
   const noLogout: ButtonProps = {

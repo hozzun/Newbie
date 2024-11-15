@@ -19,7 +19,6 @@ const CheerSong = (props: CheerSongProps) => {
   const nav = useNavigate()
   const goLyris = () => {
     nav('/cheersong/lyris', { state: { club: props.club, title: props.title, lyrics: props.lyrics, all: props.all } })
-    console.log(props.lyrics)
   }
 
   return (
