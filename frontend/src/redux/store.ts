@@ -5,6 +5,7 @@ import gameReducer from "./gameSlice";
 import playerReducer from "./playerSlice";
 import cardStoreReducer from "./cardStoreSlice";
 import teamReducer from './teamSlice';
+import MyPhotoCardSliceReducer from './myPhotoCardSlice';
 import { fetchTeam } from './teamSlice';
 
 const store = configureStore({
@@ -14,7 +15,8 @@ const store = configureStore({
     game: gameReducer,
     player: playerReducer,
     cardStore: cardStoreReducer,
-    team: teamReducer
+    team: teamReducer,
+    myPhotoCard: MyPhotoCardSliceReducer
   },
 });
 
