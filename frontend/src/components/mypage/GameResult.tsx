@@ -38,7 +38,7 @@ const FullName = (team: string) => {
 const GameResult = (props: GameResultProps) => {
   return (
     <div className="font-kbogothicmedium">
-      <div className="flex flex-row justify-between items-center m-3 px-28">
+      <div className="flex flex-row m-3 justify-between items-center">
         <div className="flex felx-row">
           <ClubSelectItem
             clubColor={props.team1} 
@@ -50,7 +50,7 @@ const GameResult = (props: GameResultProps) => {
         </div>
         <label className="m-3">{props.score1}</label>
       </div>
-      <div className="flex flex-row justify-between items-center m-3 px-28">
+      <div className="flex flex-row justify-between items-center m-3">
         <div className="flex flex-row">
           <ClubSelectItem
             clubColor={props.team2} 

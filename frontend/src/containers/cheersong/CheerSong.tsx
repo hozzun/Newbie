@@ -7,6 +7,10 @@ import CheerSongComponent from "../../components/cheersong/CheerSong";
 import MusicController from "../../components/common/MusicController";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
+import { getIdByNum } from "../../util/ClubId";
+// 나의 팀 정보 가져오기
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 
 type TeamName =
   | "doosan"
@@ -22,7 +26,9 @@ type TeamName =
 
 const CheerSong = () => {
   const navigate = useNavigate();
-  const [club, setClub] = useState<TeamName>("ssg"); // TODO: 나의 팀 정보 받아오기
+  // 나의 응원팀
+  const { team } = useSelector((state: RootState) => state.team);
+  const [club, setClub] = useState<TeamName | null>(getIdByNum(team) as TeamName | null);
   const [count, setCount] = useState<number>(0);
   const [cheerSongs, setCheerSongs] = useState<{ title: string; url: string }[]>([]);
   const [currentIndex, setCurrentIndex] = useState<number | null>(null);
@@ -38,7 +44,6 @@ const CheerSong = () => {
   };
 
   const getCheerSong = async () => {
-
     const teamName = club;
 
     try {
@@ -53,7 +58,7 @@ const CheerSong = () => {
   };
 
   useEffect(() => {
-    if (selectedClub) {
+    if (club && selectedClub) {
       setClub(selectedClub); // 선택된 클럽이 존재할 경우 상태 업데이트
     }
     getCheerSong();
@@ -127,12 +132,28 @@ const CheerSong = () => {
     }
   }, [currentIndex, cheerSongs, playSong]);
 
+  const goRecommend = () => {
+    navigate("/cheerteam");
+  };
+
   return (
     <>
       <PageName label="응원가" />
-      <ClubChangeButton club={club} onClick={goClubSelect} />
+
+      {/* 조건부로 ClubChangeButton 렌더링 */}
+      {club ? (
+        <ClubChangeButton club={club} onClick={goClubSelect} />
+      ) : (
+        <div
+          className="flex justify-center items-center font-kbogothicmedium text-lg border-4 border-green-100 text-green-900 m-5 p-10 rounded-2xl hover:cursor-pointer"
+          onClick={goRecommend}
+        >
+          <p>응원할 팀을 선택해주세요!</p>
+        </div>
+      )}
+
       <div className="mt-5 mb-7 fixed bottom-12 w-full max-w-[600px] min-w-[320px] z-50 flex items-center justify-center pr-8">
-        {currentIndex !== null && (
+        {currentIndex !== null && club && (
           <MusicController
             title={cheerSongs[currentIndex].title}
             club={club}
@@ -145,18 +166,23 @@ const CheerSong = () => {
           />
         )}
       </div>
-      <CountSong count={count} />
-      {cheerSongs.map((song, index) => (
-        <CheerSongComponent
-          key={index}
-          club={club}
-          title={song.title}
-          url={song.url}
-          onSingClick={() => setCurrentIndex(index)}
-          showIcon={true}
-          all={cheerSongs}
-        />
-      ))}
+
+      {club && <CountSong count={count} />}
+
+      {/* cheerSongs 리스트를 매핑하여 CheerSongComponent 렌더링 */}
+      {club &&
+        cheerSongs.length > 0 &&
+        cheerSongs.map((song, index) => (
+          <CheerSongComponent
+            key={index}
+            club={club}
+            title={song.title}
+            url={song.url}
+            onSingClick={() => setCurrentIndex(index)}
+            showIcon={true}
+            all={cheerSongs}
+          />
+        ))}
     </>
   );
 };

@@ -4,6 +4,8 @@ import notiReducer from "./notiSlice";
 import gameReducer from "./gameSlice";
 import playerReducer from "./playerSlice";
 import cardStoreReducer from "./cardStoreSlice";
+import teamReducer from './teamSlice';
+import { fetchTeam } from './teamSlice';
 
 const store = configureStore({
   reducer: {
@@ -11,10 +13,12 @@ const store = configureStore({
     notification: notiReducer,
     game: gameReducer,
     player: playerReducer,
-    cardStore: cardStoreReducer
+    cardStore: cardStoreReducer,
+    team: teamReducer
   },
 });
 
+store.dispatch(fetchTeam()); // 앱 실행 시 응원 구단 정보 저장
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 

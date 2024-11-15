@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom"
 import Container from "../../components/common/Container"
 import SectionBox from "../../components/common/SectionBox"
-import MyScrapContainer from "../../containers/mypage/MyBoard"
+import MyScrapContainer from "../../containers/mypage/MyScrap"
 
 const MyScrap = () => {
 
