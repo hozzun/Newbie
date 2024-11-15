@@ -1,16 +1,14 @@
-interface CheerLyrisProps {
-  lyris?: string;
+interface CheerLyricsProps {
+  lyrics?: string;
 }
 
-const CheerLyris = (props: CheerLyrisProps) => {
+const CheerLyrics = (props: CheerLyricsProps) => {
 
   return (
-    <>
-      <div className="flex justify-center items-center w-full h-96 font-kbogothiclight text-gray-600 bg-gray-100 mt-5 rounded-2xl">
-        {props.lyris}
-      </div>
-    </>
-  )
-}
+    <div className="flex justify-center items-center w-full font-kbogothiclight text-gray-600 bg-gray-100 mt-5 whitespace-pre-line rounded-2xl p-10">
+      {props.lyrics}
+    </div>
+  );
+};
 
-export default CheerLyris
+export default CheerLyrics;

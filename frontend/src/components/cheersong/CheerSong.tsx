@@ -8,6 +8,7 @@ interface CheerSongProps {
   club: "doosan" | "hanwha" | "kia" | "kiwoom" | "kt" | "lg" | "lotte" | "nc" | "samsung" | "ssg";
   title: string;
   url?: string;
+  lyrics?: string;
   showIcon: boolean
   onSingClick?: () => void;
   all?: { title: string; url: string; }[];
@@ -17,7 +18,8 @@ const CheerSong = (props: CheerSongProps) => {
 
   const nav = useNavigate()
   const goLyris = () => {
-    nav('/cheersong/lyris', { state: { club: props.club, title: props.title, all: props.all } })
+    nav('/cheersong/lyris', { state: { club: props.club, title: props.title, lyrics: props.lyrics, all: props.all } })
+    console.log(props.lyrics)
   }
 
   return (
