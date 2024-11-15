@@ -65,10 +65,11 @@ public class CardController {
     }
 
     @Operation(summary = "유저 카드 삭제", description = "사용자가 개인 유저 카드를 삭제합니다.")
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete")
     public ResponseEntity<Void> deleteCard(
-            @PathVariable @Parameter(description = "카드 ID") String id) {
-        cardService.deleteCard(id);
+            @RequestParam @Parameter(description = "카드 ID") String cardId,
+            @RequestParam Long userId) {
+        cardService.deleteCard(cardId, userId);
         return ResponseEntity.noContent().build();
     }
 

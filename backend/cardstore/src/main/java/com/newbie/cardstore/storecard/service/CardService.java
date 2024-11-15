@@ -139,8 +139,24 @@ public class CardService {
                 .collect(Collectors.toList());
     }
 
-    public void deleteCard(String id) {
-        userCardRepository.deleteById(id);
+    public void deleteCard(String cardId, Long userId) {
+        ObjectId objectId;
+        try {
+            objectId = new ObjectId(cardId);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Invalid cardId format: " + cardId, e);
+        }
+
+        UserCard userCard = userCardRepository.findByUserId(userId)
+                .orElseThrow(() -> new IllegalArgumentException("UserCard not found for userId: " + userId));
+
+        if (!userCard.getCardIds().contains(objectId)) {
+            throw new IllegalArgumentException("CardId not found in user's card list: " + cardId);
+        }
+
+        userCard.getCardIds().remove(objectId);
+
+        userCardRepository.save(userCard);
     }
 
     private Set<ObjectId> findUserCardIds(Long userId) {
