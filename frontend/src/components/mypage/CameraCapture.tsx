@@ -59,14 +59,14 @@ const CameraCapture = ({ onCapture }: CameraCaptureProps) => {
       {/* 캡처 버튼 */}
       <button
         onClick={captureImage}
-        onTouchStart={captureImage}  // 모바일에서 터치 이벤트를 처리하도록 추가
+        onTouchStart={captureImage}
         className="absolute bottom-10 bg-white w-16 h-16 rounded-full flex items-center justify-center shadow-lg focus:outline-none z-10"
       >
         <span className="w-12 h-12 bg-red-500 rounded-full"></span>
       </button>
 
       {/* 숨겨진 캔버스 */}
-      <canvas ref={canvasRef} className="hidden" width="1920" height="1080" />
+      <canvas ref={canvasRef} className="hidden max-w-[600px] min-w-[320px]" width="1920" height="1080" />
     </div>
   );
 };
