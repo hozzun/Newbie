@@ -3,7 +3,7 @@ export interface PlayerRecordItemProps {
   label: string;
   value: number | string;
   onClick?: () => void;
-  isSelected: boolean;
+  isSelected?: boolean;
 }
 
 const PlayerRecordItem = (props: PlayerRecordItemProps) => {

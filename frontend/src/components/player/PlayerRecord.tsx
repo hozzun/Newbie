@@ -78,11 +78,6 @@ const chartType: Record<string, ChatTypeProps> = {
     minY: 0,
     maxY: 1,
   },
-  inningsPitched: {
-    type: "bar",
-    minY: 0,
-    maxY: 196,
-  },
   hitsAllowed: {
     type: "bar",
     minY: 0,
@@ -267,7 +262,7 @@ const PlayerRecord = (props: PlayerRecordProps) => {
   };
 
   const renderChart = () => {
-    if (!props.data) {
+    if (!props.data || dataKey === "inningsPitched") {
       return;
     }
 
