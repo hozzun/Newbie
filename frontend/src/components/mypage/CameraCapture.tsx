@@ -1,18 +1,4 @@
-import { useEffect, useState, useRef } from "react";
-
-// ImageCapture 타입을 명시적으로 정의
-interface ImageCapture {
-  takePhoto(): Promise<Blob>;
-}
-
-declare global {
-  interface Window {
-    ImageCapture: {
-      prototype: ImageCapture;
-      new(videoTrack: MediaStreamTrack): ImageCapture;
-    };
-  }
-}
+import { useEffect, useRef } from "react";
 
 interface CameraCaptureProps {
   onCapture: (imageData: string) => void; // 캡처된 이미지 데이터 전달
@@ -20,7 +6,7 @@ interface CameraCaptureProps {
 
 const CameraCapture = ({ onCapture }: CameraCaptureProps) => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
-  const [imageCapture, setImageCapture] = useState<ImageCapture | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null); // 캔버스 참조
 
   // 카메라 시작
   const startCamera = async () => {
@@ -29,20 +15,9 @@ const CameraCapture = ({ onCapture }: CameraCaptureProps) => {
         video: { facingMode: { ideal: "environment" }, width: { ideal: 1920 }, height: { ideal: 1080 } }
       });
 
-      // 카메라 화면을 실시간으로 보여줌
+      // 카메라 화면을 실시간으로 보여줍니다.
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
-      }
-
-      // 첫 번째 비디오 트랙
-      const track = stream.getVideoTracks()[0];
-
-      // ImageCapture 객체 생성
-      if (window.ImageCapture) {
-        const imageCaptureObj = new window.ImageCapture(track);
-        setImageCapture(imageCaptureObj);
-      } else {
-        console.error("ImageCapture API가 지원되지 않는 브라우저입니다.");
       }
     } catch (error) {
       console.error("카메라에 접근할 수 없습니다:", error);
@@ -55,25 +30,24 @@ const CameraCapture = ({ onCapture }: CameraCaptureProps) => {
 
   // 캡처 버튼 눌렀을 때 이미지 저장
   const captureImage = async () => {
-    if (imageCapture) {
-      try {
-        const blob = await imageCapture.takePhoto();
-        const imageData = await new Promise<string>((resolve, reject) => {
-          const reader = new FileReader();
-          reader.onloadend = () => resolve(reader.result as string);
-          reader.onerror = reject;
-          reader.readAsDataURL(blob);
-        });
-        onCapture(imageData);
-      } catch (error) {
-        console.error("사진 캡처에 실패했습니다:", error);
+    if (videoRef.current && canvasRef.current) {
+      const canvas = canvasRef.current;
+      const context = canvas.getContext("2d");
+
+      if (context) {
+        // 비디오에서 현재 프레임을 캡처하여 canvas에 그리기
+        context.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
+
+        // 캡처한 이미지를 base64로 변환
+        const imageData = canvas.toDataURL("image/png");
+        onCapture(imageData); // 캡처된 이미지 데이터를 상위 컴포넌트로 전달
       }
     }
   };
 
   return (
     <div className="relative w-full h-screen flex items-center justify-center bg-black">
-      {/* 카메라 화면을 비디오로 보여줍니다. */}
+      {/* 비디오 프리뷰 화면 */}
       <video
         ref={videoRef}
         className="absolute w-full h-full object-cover"
@@ -90,6 +64,9 @@ const CameraCapture = ({ onCapture }: CameraCaptureProps) => {
       >
         <span className="w-12 h-12 bg-red-500 rounded-full"></span>
       </button>
+
+      {/* 숨겨진 캔버스 */}
+      <canvas ref={canvasRef} className="hidden" width="1920" height="1080" />
     </div>
   );
 };
