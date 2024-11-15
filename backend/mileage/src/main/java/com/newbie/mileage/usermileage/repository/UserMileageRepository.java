@@ -10,5 +10,5 @@ import java.util.Optional;
 
 @Repository
 public interface UserMileageRepository extends MongoRepository<UserMileage, String> {
-    Optional<UserMileage> findFirstByUserIdOrderByCreatedAtDesc(int userId);
+    Optional<UserMileage> findFirstByUserIdOrderByIdDesc(int userId);
 }
