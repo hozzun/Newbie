@@ -17,57 +17,6 @@ interface PlayerProps {
   playerHighlights: Array<Video> | null;
 }
 
-const playerRecordItems: Array<PlayerRecordItemProps> = [
-  {
-    label: "타율1",
-    value: "0.322",
-  },
-  {
-    label: "타율2",
-    value: "0.322",
-  },
-  {
-    label: "타율3",
-    value: "0.322",
-  },
-  {
-    label: "타율4",
-    value: "0.322",
-  },
-  {
-    label: "타율5",
-    value: "0.322",
-  },
-  {
-    label: "타율6",
-    value: "0.322",
-  },
-  {
-    label: "타율7",
-    value: "0.322",
-  },
-  {
-    label: "타율8",
-    value: "0.322",
-  },
-  {
-    label: "타율9",
-    value: "0.322",
-  },
-  {
-    label: "타율10",
-    value: "0.322",
-  },
-  {
-    label: "타율11",
-    value: "0.322",
-  },
-  {
-    label: "타율12",
-    value: "0.322",
-  },
-];
-
 const rightButtonProps: CircleButtonProps = {
   className: "w-9 h-9",
   variant: CIRCLE_BUTTON_VARIANTS.errorLine,
@@ -93,7 +42,6 @@ const Player = (props: PlayerProps) => {
             <PlayerProfile playerInfo={props.playerInfo} />
           </div>
           <PlayerRecord label={`${currentYear} 기록`} items={props.playerSeasonRecordItem} />
-          <PlayerRecord label="통산 기록" items={playerRecordItems} />
           <PlayerMusicController />
           <PlayerHighlight playerHighlights={props.playerHighlights} />
         </div>
