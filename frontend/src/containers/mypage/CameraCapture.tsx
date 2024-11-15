@@ -36,13 +36,13 @@ const CameraCapture = () => {
     setIsModalOpen(true);
 
     // TODO: userId 불러오기
-    const userId = "5";
+    const userId = 5;
+    const params = { userId: userId }
     const file = base64ToFile(imageData, "image.png");
 
     console.log(file);
 
     const formData = new FormData();
-    formData.append("userId", userId);
     formData.append("image", file);
 
     try {
@@ -50,6 +50,7 @@ const CameraCapture = () => {
         headers: {
           "Content-Type": "multipart/form-data",
         },
+        params,
       });
       console.log("OCR 처리 결과:", response.data);
       setDate(response.data.date);
