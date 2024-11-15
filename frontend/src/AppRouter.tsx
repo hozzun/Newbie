@@ -34,6 +34,7 @@ import MyActive from "./pages/mypage/MyActive";
 import CommuFreeCreate from "./pages/commu/CommuFreeCreate";
 import CommuTradeCreate from "./pages/commu/CommuTradeCreate";
 import ScrollToTop from "./components/common/ScrollToTop";
+import CommuTradeDetail from "./pages/commu/CommuTradeDetail";
 import CommuFreeDetail from "./pages/commu/CommuFreeDetail";
 
 // 로그인 하지 않은 사용자는 로그인으로
@@ -295,10 +296,18 @@ const AppRouter = () => {
           }
         />
         <Route
-          path="/commuhome/detail"
+          path="/commuhome/freedetail"
           element={
             <ProtectedRoute>
               <CommuFreeDetail />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/commuhome/tradedetail"
+          element={
+            <ProtectedRoute>
+              <CommuTradeDetail />
             </ProtectedRoute>
           }
         />
