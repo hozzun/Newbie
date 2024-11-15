@@ -102,29 +102,13 @@ const CommuTradeCreate = () => {
     }
   }, [titleValue, priceValue, text, region]);
 
-  const base64ToBlob = (base64: string, mimeType: string): Blob => {
-    const byteCharacters = atob(base64.replace(/^data:image\/\w+;base64,/, ""));
-    const byteNumbers = new Array(byteCharacters.length);
-
-    for (let i = 0; i < byteCharacters.length; i++) {
-      byteNumbers[i] = byteCharacters.charCodeAt(i);
-    }
-
-    return new Blob([new Uint8Array(byteNumbers)], { type: mimeType });
-  };
-
-  const base64ToFile = (base64: string, fileName: string): File => {
-    const blob = base64ToBlob(base64, "image/png");
-    return new File([blob], fileName, { type: "image/png" });
-  };
-
   const handleSubmit = async () => {
     try {
       const formData = new FormData();
 
       // 게시글 정보를 JSON으로 변환하여 추가
       const boardData = {
-        userId: 0, // 실제 사용자 ID로 교체 필요
+        userId: 5, // 실제 사용자 ID로 교체 필요
         title: titleValue,
         content: text,
         tags: tags,
@@ -132,29 +116,19 @@ const CommuTradeCreate = () => {
         region: region || "기본 지역",
       };
 
-      formData.append(
-        "usedBoardDto",
-        new Blob([JSON.stringify(boardData)], {
-          type: "application/json",
-        }),
-      );
+      formData.append("usedBoardDto", new Blob([JSON.stringify(boardData)], {}));
 
-      // 이미지 처리
+      // 이미지 처리: 단일 키로 추가
       if (images.length > 0) {
-        for (let i = 0; i < images.length; i++) {
-          const image = images[i];
+        images.forEach(image => {
+          formData.append("imageFile", image); // 각 이미지를 imageFile로 추가
+        });
+      }
 
-          // 이미지를 base64로 변환
-          const reader = new FileReader();
-          const imageBase64 = await new Promise<string>(resolve => {
-            reader.onloadend = () => resolve(reader.result as string);
-            reader.readAsDataURL(image);
-          });
-
-          // base64를 File 객체로 변환
-          const imageFile = base64ToFile(imageBase64, `image${i + 1}.png`);
-          formData.append("imageFile", imageFile);
-        }
+      // FormData 디버깅
+      console.log("FormData 확인:");
+      for (const [key, value] of formData.entries()) {
+        console.log(key, value);
       }
 
       // API 호출
