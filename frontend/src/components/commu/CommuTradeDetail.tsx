@@ -1,11 +1,12 @@
 import Coin from "../../assets/icons/copyright-solid.svg?react";
 import Location from "../../assets/icons/marker-solid.svg?react";
-import Like from "../../assets/icons/heart-solid.svg?react";
 import Comment from "../../assets/icons/comment-solid.svg?react";
 import View from "../../assets/icons/eye-solid.svg?react";
-import ClubEmblaCarousel from "../common/ClubEmblaCarousel";
+import EmblaCarousel from "../../components/common/EmblaCarousel";
 
-const CommuFreeDetail = () => {
+const CommuTradeDetail = () => {
+  const slides = ["/karina.jpg", "/karina.jpg", "/karina.jpg"];
+
   return (
     <>
       <section className="font-kbogothiclight">
@@ -31,7 +32,7 @@ const CommuFreeDetail = () => {
           </div>
         </div>
         <div>
-          <ClubEmblaCarousel selectedItem="lg" handleClickItem={value => console.log(value)} />
+          <EmblaCarousel slides={slides} />
         </div>
         <div className="py-4">
           응원하는 구단을 바꾸어서 팔아요..
@@ -41,11 +42,6 @@ const CommuFreeDetail = () => {
         <div className="flex justify-end gap-1 items-center mb-2">
           <View className="w-4 h-4" />
           <div className="text-xs">12명이 봤어요.</div>
-        </div>
-        <div className="flex justify-end gap-1 items-center mb-2">
-          <div className="flex border border-gray-300 px-2 rounded-lg items-center gap-1 ">
-            <Like className="w-4 h-4 text-[#FF5168]" /> 4
-          </div>
         </div>
         <div className="border-b-2 text-gray-100 mb-2"></div>
       </section>
@@ -76,4 +72,4 @@ const CommuFreeDetail = () => {
   );
 };
 
-export default CommuFreeDetail;
+export default CommuTradeDetail;
