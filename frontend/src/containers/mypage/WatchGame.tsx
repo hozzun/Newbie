@@ -129,12 +129,12 @@ const WatchGame = () => {
       {ticketInfo && gameData && (
         <>
           <GameLabel time={gameData.time} loc={gameData.stadium} state={gameData.gameResult} />
-          <GameResult
-            team1={teamEnglish(gameData.homeTeamId)}
-            team2={teamEnglish(gameData.awayTeamId)}
-            score1={gameData.homeScore}
-            score2={gameData.awayScore}
-          />
+            <GameResult
+              team1={teamEnglish(gameData.homeTeamId)}
+              team2={teamEnglish(gameData.awayTeamId)}
+              score1={gameData.homeScore}
+              score2={gameData.awayScore}
+            />
           <WatchButton
             onClick={deleteGame}
             state={isModified}
