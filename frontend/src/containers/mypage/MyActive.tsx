@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axiosInstance from "../../util/axiosInstance";
 import MyActiveLike from "../../components/mypage/MyActiveLike";
 import MyActiveComment from "../../components/mypage/MyActiveComment";
+import { useNavigate } from "react-router-dom";
 
 interface LikeData {
   type: "like";
@@ -22,6 +23,7 @@ interface CommentData {
 type ActivityData = LikeData | CommentData;
 
 const MyActive = () => {
+  const nav = useNavigate();
   const [activities, setActivities] = useState<ActivityData[]>([]);
 
   const getActivity = async () => {
@@ -85,7 +87,10 @@ const MyActive = () => {
       {activities.length > 0 ? (
         activities.map(activity =>
           activity.type === "like" ? (
-            <div key={activity.boardId} onClick={() => console.log("해당 좋아요 페이지로 이동")}>
+            <div
+              key={activity.boardId}
+              onClick={() => nav(`/commuhome/freedetail/${activity.boardId}`)}
+            >
               <MyActiveLike
                 time={activity.createdAt}
                 title={(activity as LikeData).title}
@@ -93,7 +98,10 @@ const MyActive = () => {
               />
             </div>
           ) : (
-            <div key={activity.boardId} onClick={() => console.log("해당 댓글 페이지로 이동")}>
+            <div
+              key={activity.boardId}
+              onClick={() => nav(`/commuhome/freedetail/${activity.boardId}`)}
+            >
               <MyActiveComment
                 time={activity.createdAt}
                 comment={(activity as CommentData).content}
