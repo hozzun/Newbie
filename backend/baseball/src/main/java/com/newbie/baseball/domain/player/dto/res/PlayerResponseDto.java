@@ -3,9 +3,14 @@ package com.newbie.baseball.domain.player.dto.res;
 import lombok.Builder;
 import lombok.Data;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 @Builder
 @Data
-public class PlayerResponseDto {
+public class PlayerResponseDto implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     private Integer id;
     private String backNumber;

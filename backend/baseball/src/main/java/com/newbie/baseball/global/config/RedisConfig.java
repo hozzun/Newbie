@@ -52,6 +52,12 @@ public class RedisConfig {
         RedisCacheConfiguration gamesCacheConfig = RedisCacheConfiguration.defaultCacheConfig()
                 .entryTtl(Duration.ofHours(6));
 
+        RedisCacheConfiguration playerCacheConfig = RedisCacheConfiguration.defaultCacheConfig()
+                .entryTtl(Duration.ofHours(6));
+
+        RedisCacheConfiguration rankCacheConfig = RedisCacheConfiguration.defaultCacheConfig()
+                .entryTtl(Duration.ofHours(6));
+
 //        // teamSongsCache: 15시간 TTL
 //        RedisCacheConfiguration teamSongsCacheConfig = RedisCacheConfiguration.defaultCacheConfig()
 //                .entryTtl(Duration.ofHours(15));
@@ -63,6 +69,8 @@ public class RedisConfig {
         // 각 캐시에 대해 설정 매핑
         Map<String, RedisCacheConfiguration> cacheConfigurations = new HashMap<>();
         cacheConfigurations.put("gamesCache", gamesCacheConfig);
+        cacheConfigurations.put("playerCache", playerCacheConfig);
+        cacheConfigurations.put("rankCache", rankCacheConfig);
 //        cacheConfigurations.put("teamSongsCache", teamSongsCacheConfig);
 //        cacheConfigurations.put("playerSongsCache", playerSongsCacheConfig);
 
