@@ -43,10 +43,10 @@ const OutButton = () => {
   return (
     <div className="flex justify-center items-center flex-row">
       <Button 
-      className="flex justify-center items-center w-1/2 h-10 m-2 hover:cursor-pointer"
+      className="flex justify-center items-center w-1/2 h-10 my-2 mr-2 hover:cursor-pointer"
       variant={BUTTON_VARIANTS.primary} children="로그아웃" onClick={goLogout} />
       <Button 
-      className="flex justify-center items-center w-1/2 h-10 m-2 bg-green-50 hover:cursor-pointer"
+      className="flex justify-center items-center w-1/2 h-10 my-2 ml-2 bg-green-50 hover:cursor-pointer"
       variant={BUTTON_VARIANTS.primaryText} children="회원탈퇴" onClick={goDelete} />
       {logoutDialog && (
         <Dialog 

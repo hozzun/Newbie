@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axiosInstance from "../../util/axiosInstance";
 import ClubRecommendComponent from "../../components/cheerteam/ClubRecommend";
 import InputMbtiComponent from "../../components/cheerteam/InputMbti";
@@ -12,9 +12,35 @@ const ClubRecommend = () => {
   const [selectedChoices, setSelectedChoices] = useState<number[]>([]);
   const [mbti, setMbti] = useState<string | null>(null);
   const [region, setRegion] = useState<string>("");
-  // TODO: 유저 Id, 이름, 지역 정보 가져오기
   const [addPage, setAddPage] = useState<number>(1);
   const [myClub, setMyClub] = useState<TeamName>("doosan");
+  const [name, setName] = useState<string>("")
+
+  // TODO: userId 수정
+  const getUser = async () => {
+  
+    const userId = 5
+    const params = { userId: userId}
+      
+    try {
+      const response = await axiosInstance.get(`/api-user/users/${userId}`, { params });
+  
+      if (response.status === 200) {
+        const data = response.data;
+        setName(data.nickname)
+        const address = data.address.split(' ')[0].substring(0, 2)
+        setRegion(address)
+      } else {
+        console.error(`HTTP error! status: ${response.status}`);
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  useEffect(() => {
+    getUser()
+  }, [])
 
   // 추천 알고리즘 연결
   const ClubRecommendAPI = async () => {
@@ -40,8 +66,6 @@ const ClubRecommend = () => {
       console.log(error)
     }
   };
-  
-
 
   const handleMbtiSubmit = (writeMbti: string) => {
     setMbti(writeMbti);
@@ -57,7 +81,8 @@ const ClubRecommend = () => {
     }
 
     else {
-      const choice = selectedChoice == 1 ? "" : "충청";
+      const choice = selectedChoice == 1 ? "" : region;
+      console.log('지역 선택', choice)
       setRegion(choice);
       ClubRecommendAPI();
     }
@@ -77,7 +102,7 @@ const ClubRecommend = () => {
       ) : page <= questions.length ? (
         <ClubRecommendComponent subway={questions[page - 1]} onOkClick={goNextPage} />
       ) : (
-        <RecommendResult club={NameCheck(myClub)} name="김미량" />
+        <RecommendResult club={NameCheck(myClub)} name={name} />
       )}
     </>
   );

@@ -58,10 +58,10 @@ const Calendar = () => {
   return (
     <>
       <div className="flex flex-row">
-        <CalenderIcon className="w-6 h-6 ml-5 text-gray-200" />
-        <p className="font-kbogothicbold text-gray-600 ml-3">경기 일정</p>
+        <CalenderIcon className="w-6 h-6 text-gray-200" />
+        <p className="font-kbogothicbold text-gray-600 ml-3 mb-5">경기 일정</p>
       </div>
-      <div className="m-5 p-5 bg-gray-100 rounded-2xl">
+      <div className="p-5 bg-gray-100 rounded-2xl">
         <div className="flex flex-row justify-between">
           <p className="font-kbogothicbold text-lg mb-5">{year}년 9월</p>
           <div className="flex flex-row items-center">
