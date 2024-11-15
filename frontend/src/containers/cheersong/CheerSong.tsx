@@ -30,7 +30,7 @@ const CheerSong = () => {
   const { team } = useSelector((state: RootState) => state.team);
   const [club, setClub] = useState<TeamName | null>(getIdByNum(team) as TeamName | null);
   const [count, setCount] = useState<number>(0);
-  const [cheerSongs, setCheerSongs] = useState<{ title: string; url: string }[]>([]);
+  const [cheerSongs, setCheerSongs] = useState<{ title: string; url: string; lyrics: string; }[]>([]);
   const [currentIndex, setCurrentIndex] = useState<number | null>(null);
   const [progress, setProgress] = useState<number>(0);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
@@ -178,6 +178,7 @@ const CheerSong = () => {
             club={club}
             title={song.title}
             url={song.url}
+            lyrics={song.lyrics}
             onSingClick={() => setCurrentIndex(index)}
             showIcon={true}
             all={cheerSongs}

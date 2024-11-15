@@ -37,8 +37,6 @@ type TeamName =
 const MyPage = () => {
   const [userInfo, setUserInfo] = useState<UserInfo>();
   const { team } = useSelector((state: RootState) => state.team);
-
-  console.log(setUserInfo);
   const nav = useNavigate();
 
   const goRevise = () => {
