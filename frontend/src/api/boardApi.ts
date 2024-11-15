@@ -2,7 +2,30 @@ import axiosInstance from "../util/axiosInstance";
 
 const axios = axiosInstance;
 
-// 유저 게시글 전체 조회
+// 자유게시판 게시글 전체 조회
+export interface GetGeneralBoardResponse {
+  id: number;
+  userId: number;
+  userName: string;
+  title: string;
+  content: string;
+  imageUrl: string;
+  createdAt: string; // ISO 8601 날짜 문자열 형식
+  updatedAt: string; // ISO 8601 날짜 문자열 형식
+  tags: string[];
+  commentCount: number;
+  likeCount: number;
+  scrapCount: number;
+  viewCount: number;
+}
+
+export const getGeneralBoard = () => {
+  return axios.get<GetGeneralBoardResponse[]>("/api-board/general-board");
+};
+
+//---------------------------------------------------------------------
+
+// 중고거래 게시글 전체 조회
 export interface GetUsedBoardResponse {
   id: number;
   userId: number;
