@@ -7,7 +7,6 @@ import lombok.Data;
 @Data
 public class LineUpResponseDto {
 
-    private Integer gameId;
     private Integer teamId;
     private String teamName;
     private Integer playerId;

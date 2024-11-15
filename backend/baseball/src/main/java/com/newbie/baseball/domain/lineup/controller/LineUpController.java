@@ -1,6 +1,7 @@
 package com.newbie.baseball.domain.lineup.controller;
 
 import com.newbie.baseball.domain.lineup.dto.LineUpResponseDto;
+import com.newbie.baseball.domain.lineup.dto.TeamLineUpResponseDto;
 import com.newbie.baseball.domain.lineup.service.LineUpService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -24,8 +25,8 @@ public class LineUpController {
 
     @Operation(summary = "gameId로 해당 게임 라인업 조회")
     @GetMapping("/{gameId}")
-    public ResponseEntity<List<LineUpResponseDto>> getLineUp(@PathVariable Integer gameId) {
-        List<LineUpResponseDto> lineUps = lineUpService.getLineUpByGameId(gameId);
+    public ResponseEntity<List<TeamLineUpResponseDto>> getLineUp(@PathVariable Integer gameId) {
+        List<TeamLineUpResponseDto> lineUps = lineUpService.getLineUpByGameId(gameId);
         return new ResponseEntity<>(lineUps, HttpStatus.OK);
     }
 }
