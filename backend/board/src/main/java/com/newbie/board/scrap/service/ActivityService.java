@@ -43,6 +43,7 @@ public class ActivityService {
 
         return activities.stream()
                 .map(activity -> ActivityResponseDto.builder()
+                        .activityId(activity.getId())
                         .type(activity.getType())
                         .boardId(activity.getBoardId())
                         .content(activity.getContent())

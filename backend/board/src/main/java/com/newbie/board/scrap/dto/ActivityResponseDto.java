@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 @Builder
 public class ActivityResponseDto {
 
+    private Long activityId;
     private String type;
     private Long boardId;
     private String content;
