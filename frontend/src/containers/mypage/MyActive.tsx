@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 interface LikeData {
   type: "like";
   boardId: number;
+  activityId: number;
   createdAt: string;
   title: string;
   onClick: () => void;
@@ -15,6 +16,7 @@ interface LikeData {
 interface CommentData {
   type: "comment";
   boardId: number;
+  activityId: number;
   content: string;
   createdAt: string;
   onClick: () => void;
@@ -53,15 +55,15 @@ const MyActive = () => {
       );
 
       setActivities(combinedData);
+      console.log(response.data);
     } catch (error) {
       console.error("에러 발생:", error);
     }
   };
 
-  const deleteActivity = async () => {
-    // TODO: userId 수정, activityId가 뭔데 ..
+  const deleteActivity = async (activityId: number) => {
+    // TODO: userId 수정
     const userId = 5;
-    const activityId = 1;
     const params = { userId: userId, activityId: activityId };
 
     try {
@@ -71,11 +73,12 @@ const MyActive = () => {
       console.log(response.data);
     } catch (error) {
       console.error("에러 발생:", error);
+      alert("삭제 중 문제가 발생했습니다. 다시 시도해주세요.");
     }
   };
 
-  const deleteAct = () => {
-    deleteActivity();
+  const deleteAct = async (activityId: number) => {
+    await deleteActivity(activityId);
   };
 
   useEffect(() => {
@@ -94,7 +97,7 @@ const MyActive = () => {
               <MyActiveLike
                 time={activity.createdAt}
                 title={(activity as LikeData).title}
-                onClick={deleteAct}
+                onClick={() => deleteAct(activity.activityId)}
               />
             </div>
           ) : (
@@ -105,7 +108,7 @@ const MyActive = () => {
               <MyActiveComment
                 time={activity.createdAt}
                 comment={(activity as CommentData).content}
-                onClick={deleteAct}
+                onClick={() => deleteAct(activity.activityId)}
               />
             </div>
           ),

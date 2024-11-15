@@ -21,7 +21,7 @@ const PhotoCardDetail = () => {
 
   const nav = useNavigate()
   const location = useLocation();
-  const { id, no, team, imageUrl  } = location.state || {}; // TODO: position 추가
+  const { id, no, team, imageUrl  } = location.state || {};
   
   const [player, setPlayer] = useState<Player | null>(null);
   const [show, setShow] = useState<boolean>(false)
@@ -45,10 +45,11 @@ const PhotoCardDetail = () => {
 
   const deletePlayer = async () => {
 
-    const params = { id: id }
+    const userId = 5
+    const params = { userId: userId, cardId: id }
 
     try {
-      const response = await axiosInstance.delete(`/api-cardstore/cards/${id}`, { params });
+      const response = await axiosInstance.delete("/api-cardstore/cards/delete", { params });
       console.log(response.data)
     } catch (error) {
       console.error("API 요청 중 오류 발생:", error);
