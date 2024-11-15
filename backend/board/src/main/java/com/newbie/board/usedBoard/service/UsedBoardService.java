@@ -78,14 +78,14 @@ public class UsedBoardService {
     }
 
     @Transactional
-    public UsedBoardResponseDto createUsedBoard(UsedBoardRequestDto requestDto, MultipartFile imageFile) throws IOException {
+    public UsedBoardResponseDto createUsedBoard(UsedBoardRequestDto requestDto) throws IOException {
 
         List<UsedBoardTag> usedBoardTags = requestDto.getTags().stream()
                 .map(tagName -> usedBoardTagRepository.findByName(tagName)
                         .orElseGet(() -> usedBoardTagRepository.save(new UsedBoardTag(tagName))))
                 .collect(Collectors.toList());
 
-        String imageUrl = s3Service.uploadFile(imageFile);
+        String imageUrl = s3Service.uploadFile(requestDto.getImageFile());
 
         UsedBoard usedBoard = UsedBoard.builder()
                 .title(requestDto.getTitle())
