@@ -3,9 +3,14 @@ import Location from "../../assets/icons/marker-solid.svg?react";
 import Like from "../../assets/icons/heart-solid.svg?react";
 import Comment from "../../assets/icons/comment-solid.svg?react";
 import View from "../../assets/icons/eye-solid.svg?react";
-import ClubEmblaCarousel from "../common/ClubEmblaCarousel";
+import Scrap from "../../assets/icons/bookmark-solid.svg?react";
+import Siren from "../../assets/icons/exclamation-solid.svg?react";
 
-const CommuFreeDetail = () => {
+interface CommuFreeDetailProps {
+  img?: string[];
+}
+
+const CommuFreeDetail = ({ img }: CommuFreeDetailProps) => {
   return (
     <>
       <section className="font-kbogothiclight">
@@ -17,9 +22,16 @@ const CommuFreeDetail = () => {
               <div className="text-sm text-gray-300">13분 전</div>
             </div>
           </div>
-          <div className="text-right text-red-500 cursor-pointer">신고</div>
+          <div className="flex items-center text-right gap-2">
+            <Scrap className="w-4 h-4 cursor-pointer text-[#FFA600]" />
+            <Siren className="w-4 h-4 cursor-pointer text-[#FF5168]" />
+          </div>
         </div>
         <div className="font-kbogothicmedium py-4">타이거즈 굿즈 판매</div>
+        {img &&
+          img.map((src, index) => (
+            <img key={index} src={src} alt={`상품 이미지 ${index + 1}`} className="py-4" />
+          ))}
         <div className="flex gap-2 pb-2">
           <div className="flex gap-1 items-center">
             <Coin className="w-4 h-4 text-[#FFA600]" />
@@ -30,9 +42,7 @@ const CommuFreeDetail = () => {
             <div>대전 광역시 유성구</div>
           </div>
         </div>
-        <div>
-          <ClubEmblaCarousel selectedItem="lg" handleClickItem={value => console.log(value)} />
-        </div>
+        <div></div>
         <div className="py-4">
           응원하는 구단을 바꾸어서 팔아요..
           <br />

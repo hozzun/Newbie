@@ -95,49 +95,75 @@ const CommuTradeCreate = () => {
 
   // 모든 필드가 채워졌는지 확인
   useEffect(() => {
-    if (titleValue && priceValue !== null && text) {
+    if (titleValue && priceValue !== null && text && region) {
       setButtonVariant(BUTTON_VARIANTS.primary);
     } else {
       setButtonVariant(BUTTON_VARIANTS.second);
     }
-  }, [titleValue, priceValue, text]);
+  }, [titleValue, priceValue, text, region]);
+
+  const base64ToBlob = (base64: string, mimeType: string): Blob => {
+    const byteCharacters = atob(base64.replace(/^data:image\/\w+;base64,/, ""));
+    const byteNumbers = new Array(byteCharacters.length);
+
+    for (let i = 0; i < byteCharacters.length; i++) {
+      byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+
+    return new Blob([new Uint8Array(byteNumbers)], { type: mimeType });
+  };
+
+  const base64ToFile = (base64: string, fileName: string): File => {
+    const blob = base64ToBlob(base64, "image/png");
+    return new File([blob], fileName, { type: "image/png" });
+  };
 
   const handleSubmit = async () => {
     try {
-      // 이미지 파일을 base64로 변환
-      const imageFile = images.length > 0 ? await convertImageToBase64(images[0]) : "";
+      const formData = new FormData();
 
-      const requestData = {
-        usedBoardDto: {
-          userId: 0, // 실제 사용자 ID로 교체 필요
-          title: titleValue,
-          content: text,
-          tags: tags,
-          imageFile: imageFile,
-          price: priceValue || 0,
-          region: region || "기본 지역", // 실제 지역 정보로 교체 필요
-        },
-        imageFile: imageFile,
+      // 게시글 정보를 JSON으로 변환하여 추가
+      const boardData = {
+        userId: 0, // 실제 사용자 ID로 교체 필요
+        title: titleValue,
+        content: text,
+        tags: tags,
+        price: priceValue || 0,
+        region: region || "기본 지역",
       };
 
-      await createUsedBoard(requestData);
-      navigate("/used-board"); // 성공 후 이동할 경로
+      formData.append(
+        "usedBoardDto",
+        new Blob([JSON.stringify(boardData)], {
+          type: "application/json",
+        }),
+      );
+
+      // 이미지 처리
+      if (images.length > 0) {
+        for (let i = 0; i < images.length; i++) {
+          const image = images[i];
+
+          // 이미지를 base64로 변환
+          const reader = new FileReader();
+          const imageBase64 = await new Promise<string>(resolve => {
+            reader.onloadend = () => resolve(reader.result as string);
+            reader.readAsDataURL(image);
+          });
+
+          // base64를 File 객체로 변환
+          const imageFile = base64ToFile(imageBase64, `image${i + 1}.png`);
+          formData.append("imageFile", imageFile);
+        }
+      }
+
+      // API 호출
+      await createUsedBoard(formData);
+      navigate("/commuhome");
     } catch (error) {
       setErrorMessage("게시글 작성에 실패했습니다.");
       console.error("Failed to create post:", error);
     }
-  };
-
-  // 이미지를 base64로 변환하는 유틸리티 함수
-  const convertImageToBase64 = (file: File): Promise<string> => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        resolve(reader.result as string);
-      };
-      reader.onerror = reject;
-      reader.readAsDataURL(file);
-    });
   };
 
   return (
