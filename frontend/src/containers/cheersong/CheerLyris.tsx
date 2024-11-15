@@ -9,14 +9,15 @@ type TeamName = "doosan" | "hanwha" | "kia" | "kiwoom" | "kt" | "lg" | "lotte" |
 interface CheerSongData {
   title: string;
   url: string;
+  lyrics: string
 }
 
 const CheerLyris = () => {
   const location = useLocation();
-  const { club, title, all } = location.state as { club: TeamName; title: string; all: CheerSongData[] };
-
+  const { club, title, lyrics, all } = location.state as { club: TeamName; title: string; lyrics: string; all: CheerSongData[] };
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTitle, setCurrentTitle] = useState(title);
+  const [currentLyrics, setCurrentLyrics] = useState(lyrics)
   const [currentSongIndex, setCurrentSongIndex] = useState<number>(0);
   const [progress, setProgress] = useState(0);
 
@@ -25,6 +26,7 @@ const CheerLyris = () => {
   useEffect(() => {
     if (all && all.length > 0) {
       setCurrentTitle(title);
+      setCurrentLyrics(lyrics)
       const currentIndex = all.findIndex(song => song.title === title);
       setCurrentSongIndex(currentIndex !== -1 ? currentIndex : 0);
     }
@@ -61,6 +63,7 @@ const CheerLyris = () => {
       const newIndex = currentSongIndex - 1;
       setCurrentSongIndex(newIndex);
       setCurrentTitle(all[newIndex].title);
+      setCurrentLyrics(all[newIndex].lyrics)
       setProgress(0);
     }
   };
@@ -71,6 +74,7 @@ const CheerLyris = () => {
       const newIndex = currentSongIndex + 1;
       setCurrentSongIndex(newIndex);
       setCurrentTitle(all[newIndex].title);
+      setCurrentLyrics(all[newIndex].lyrics)
       setProgress(0);
     }
   };
@@ -90,7 +94,7 @@ const CheerLyris = () => {
     <>
       <div className="m-5">
         <CheerSong club={club} title={currentTitle} showIcon={false} />
-        <CheerLyrisComponent lyris="가사" />
+        <CheerLyrisComponent lyrics={currentLyrics} />
         {/* 상태 바 */}
         <div className="w-full bg-gray-200 rounded-full h-1 mt-10">
           <div 
