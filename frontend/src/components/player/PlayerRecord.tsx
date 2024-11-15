@@ -2,18 +2,18 @@ import Carousel from "../common/Carousel";
 import PlayerRecordItem, { PlayerRecordItemProps } from "./PlayerRecordItem";
 import { HitterRecords, PitcherRecords, PlayerRecordData } from "../../containers/player/Player";
 import { useState } from "react";
-import LineChart, { ChartProps, ChatTypeProps } from "../common/LineChart";
+import LineChart, { ChartProps, ChartTypeProps } from "../common/LineChart";
 import BarChart from "../common/BarChart";
 import AreaChart from "../common/AreaChart";
 
 interface PlayerRecordProps {
-  clubId: string;
+  clubId: string | null;
   label: string;
   items: Array<PlayerRecordItemProps> | null;
   data: PitcherRecords | HitterRecords | null;
 }
 
-const chartType: Record<string, ChatTypeProps> = {
+const chartType: Record<string, ChartTypeProps> = {
   earnedRunAverage: {
     type: "line",
     minY: 0,
@@ -161,7 +161,7 @@ const PlayerRecord = (props: PlayerRecordProps) => {
   };
 
   const renderChart = () => {
-    if (!props.data || dataKey === "inningsPitched") {
+    if (!props.data || !props.clubId || dataKey === "inningsPitched") {
       return;
     }
 
@@ -192,13 +192,18 @@ const PlayerRecord = (props: PlayerRecordProps) => {
         <Carousel
           itemCount={4}
           items={props.items}
-          renderItem={item => (
-            <PlayerRecordItem
-              {...item}
-              onClick={() => handleVisibleGraph(item.key)}
-              isSelected={selectedItem === item.key}
-            />
-          )}
+          renderItem={item => {
+            const { key, ...itemProps } = item;
+
+            return (
+              <PlayerRecordItem
+                key={key}
+                {...itemProps}
+                onClick={() => handleVisibleGraph(item.key)}
+                isSelected={selectedItem === item.key}
+              />
+            );
+          }}
         />
       ) : (
         <p className="text-base font-kbogothiclight text-gray-700">이번 시즌 성적이 없습니다...</p>

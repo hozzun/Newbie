@@ -20,6 +20,7 @@ import { clearPlayerListItem, setPlayer } from "../../redux/playerSlice";
 import { ClubRankHistoryProps } from "../../components/club/ClubRankHistory";
 import { ClubCarouselProps } from "../../components/common/ClubCarousel";
 import { ClubRecordItemProps } from "../../components/club/ClubRecordItem";
+import { ClubRecordProps } from "../../components/club/ClubRecord";
 
 export interface ClubRank {
   year: string;
@@ -180,7 +181,7 @@ const ClubHome = () => {
 
       hitterRecordData.sort((a, b) => a.year - b.year);
 
-      const maxYear = pitcherRecordData[pitcherRecordData.length - 1].year;
+      const targetYear = new Date().getFullYear();
       const clubRecordDatas: ClubRecords = {
         earnedRunAverage: [],
         strikeOuts: [],
@@ -221,21 +222,21 @@ const ClubHome = () => {
           }
         });
 
-        if (year === maxYear) {
+        if (year === targetYear) {
           const clubRecordItemDatas: Array<ClubRecordItemProps> = [];
           Object.entries(hRecord).forEach(([key, value]) => {
             if (key === "year") {
               return;
             }
 
-            clubRecordItemDatas.push({ label: clubRecordLabel[key], value });
+            clubRecordItemDatas.push({ key, label: clubRecordLabel[key], value });
           });
           Object.entries(pRecord).forEach(([key, value]) => {
             if (key === "year") {
               return;
             }
 
-            clubRecordItemDatas.push({ label: clubRecordLabel[key], value });
+            clubRecordItemDatas.push({ key, label: clubRecordLabel[key], value });
           });
 
           setClubRecordItems(clubRecordItemDatas);
@@ -373,6 +374,12 @@ const ClubHome = () => {
     handleRegisterCheerClub: handleRegisterCheerClub,
   };
 
+  const clubRecordProps: ClubRecordProps = {
+    clubId: id ? id : null,
+    items: clubRecordItems,
+    data: clubRecord,
+  };
+
   const playerListProps: PlayerListProps = {
     players: players,
     goMore: goMore,
@@ -391,7 +398,7 @@ const ClubHome = () => {
   return (
     <ClubHomeComponent
       clubOverviewProps={clubOverviewProps}
-      clubRecordItems={clubRecordItems}
+      clubRecordProps={clubRecordProps}
       upcomingGameProps={{ upcomingGameData: upcomingGame }}
       playerListProps={playerListProps}
       clubRankHistoryProps={clubRanknHistoryProps}

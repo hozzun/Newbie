@@ -8,13 +8,13 @@ import {
   YAxis,
 } from "recharts";
 
-export interface ChatTypeProps {
+export interface ChartTypeProps {
   type: string;
   minY: number;
   maxY: number;
 }
 
-export interface ChartProps<T> extends ChatTypeProps {
+export interface ChartProps<T> extends ChartTypeProps {
   data: Array<T>;
   clubId: string;
 }
