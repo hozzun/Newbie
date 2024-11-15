@@ -25,7 +25,7 @@ public class MileageService {
     public boolean checkMileage(int userId, double price) {
         log.info("Checking mileage for userId: {} with required price: {}", userId, price);
 
-        Optional<UserMileage> userMileageOpt = userMileageRepository.findFirstByUserIdOrderByCreatedAtDesc(userId);
+        Optional<UserMileage> userMileageOpt = userMileageRepository.findFirstByUserIdOrderByIdDesc(userId);
         if (userMileageOpt.isPresent()) {
             UserMileage userMileage = userMileageOpt.get();
             log.info("유저의 id : {}, 유저의 현재 마일리지 : {}", userId, userMileage.getMileage());
@@ -48,7 +48,7 @@ public class MileageService {
         int userId = mileageDeductionDto.getUserId();
         double amount = mileageDeductionDto.getAmount();
 
-        UserMileage latestMileage = userMileageRepository.findFirstByUserIdOrderByCreatedAtDesc(userId)
+        UserMileage latestMileage = userMileageRepository.findFirstByUserIdOrderByIdDesc(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         if (latestMileage.getMileage() < amount) {
