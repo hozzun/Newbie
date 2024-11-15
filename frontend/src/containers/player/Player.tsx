@@ -16,46 +16,46 @@ import { useParams } from "react-router-dom";
 import { PlayerInfo } from "./PlayerList";
 import { getClubIdByNum } from "../../util/ClubId";
 
-interface PlayerRecord {
+export interface PlayerRecordData {
   year: number;
   value: number;
 }
 
-interface PitcherRecords {
-  earnedRunAverage: Array<PlayerRecord>;
-  game: Array<PlayerRecord>;
-  win: Array<PlayerRecord>;
-  lose: Array<PlayerRecord>;
-  save: Array<PlayerRecord>;
-  hold: Array<PlayerRecord>;
-  winningPercentage: Array<PlayerRecord>;
-  inningsPitched: Array<PlayerRecord>;
-  hitsAllowed: Array<PlayerRecord>;
-  homeRunsAllowed: Array<PlayerRecord>;
-  baseOnBalls: Array<PlayerRecord>;
-  hitByPitch: Array<PlayerRecord>;
-  strikeOuts: Array<PlayerRecord>;
-  runs: Array<PlayerRecord>;
-  earnedRun: Array<PlayerRecord>;
-  walksPlusHitsPerInningPitched: Array<PlayerRecord>;
-  [key: string]: Array<PlayerRecord>;
+export interface PitcherRecords {
+  earnedRunAverage: Array<PlayerRecordData>;
+  game: Array<PlayerRecordData>;
+  win: Array<PlayerRecordData>;
+  lose: Array<PlayerRecordData>;
+  save: Array<PlayerRecordData>;
+  hold: Array<PlayerRecordData>;
+  winningPercentage: Array<PlayerRecordData>;
+  inningsPitched: Array<PlayerRecordData>;
+  hitsAllowed: Array<PlayerRecordData>;
+  homeRunsAllowed: Array<PlayerRecordData>;
+  baseOnBalls: Array<PlayerRecordData>;
+  hitByPitch: Array<PlayerRecordData>;
+  strikeOuts: Array<PlayerRecordData>;
+  runs: Array<PlayerRecordData>;
+  earnedRun: Array<PlayerRecordData>;
+  walksPlusHitsPerInningPitched: Array<PlayerRecordData>;
+  [key: string]: Array<PlayerRecordData>;
 }
 
-interface HitterRecords {
-  battingAverage: Array<PlayerRecord>;
-  game: Array<PlayerRecord>;
-  plateAppearance: Array<PlayerRecord>;
-  atBat: Array<PlayerRecord>;
-  runs: Array<PlayerRecord>;
-  hits: Array<PlayerRecord>;
-  double: Array<PlayerRecord>;
-  triple: Array<PlayerRecord>;
-  homeRun: Array<PlayerRecord>;
-  totalBases: Array<PlayerRecord>;
-  runsBattedIn: Array<PlayerRecord>;
-  sacrificeHit: Array<PlayerRecord>;
-  sacrificeFly: Array<PlayerRecord>;
-  [key: string]: Array<PlayerRecord>;
+export interface HitterRecords {
+  battingAverage: Array<PlayerRecordData>;
+  game: Array<PlayerRecordData>;
+  plateAppearance: Array<PlayerRecordData>;
+  atBat: Array<PlayerRecordData>;
+  runs: Array<PlayerRecordData>;
+  hits: Array<PlayerRecordData>;
+  double: Array<PlayerRecordData>;
+  triple: Array<PlayerRecordData>;
+  homeRun: Array<PlayerRecordData>;
+  totalBases: Array<PlayerRecordData>;
+  runsBattedIn: Array<PlayerRecordData>;
+  sacrificeHit: Array<PlayerRecordData>;
+  sacrificeFly: Array<PlayerRecordData>;
+  [key: string]: Array<PlayerRecordData>;
 }
 
 export interface PitcherRecord {
@@ -175,7 +175,7 @@ const Player = () => {
 
   const playerInfo = useSelector((state: RootState) => state.player.player);
 
-  const { playerId } = useParams<{ playerId: string }>();
+  const { clubId, playerId } = useParams<{ clubId: string; playerId: string }>();
 
   const [subPlayerInfo, setSubPlayerInfo] = useState<PlayerInfo | null>(null);
   const [playerRecord, setPlayerRecord] = useState<PitcherRecords | HitterRecords | null>(null);
@@ -255,9 +255,9 @@ const Player = () => {
             }
 
             if (playerRecordDatas[recordKey]) {
-              playerRecordDatas[recordKey].push({ year, value });
+              playerRecordDatas[recordKey].push({ year, value: value === "-" ? 0 : value });
             } else {
-              playerRecordDatas[recordKey] = [{ year, value }];
+              playerRecordDatas[recordKey] = [{ year, value: value === "-" ? 0 : value }];
             }
           });
 
@@ -269,7 +269,11 @@ const Player = () => {
                 return;
               }
 
-              playerRecordItemData.push({ label: pitcherSeasonRecord[recordKey], value });
+              playerRecordItemData.push({
+                key: recordKey,
+                label: pitcherSeasonRecord[recordKey],
+                value,
+              });
             });
 
             setPlayerSeasonRecordItem(playerRecordItemData);
@@ -311,9 +315,9 @@ const Player = () => {
             }
 
             if (playerRecordDatas[recordKey]) {
-              playerRecordDatas[recordKey].push({ year, value });
+              playerRecordDatas[recordKey].push({ year, value: value === "-" ? 0 : value });
             } else {
-              playerRecordDatas[recordKey] = [{ year, value }];
+              playerRecordDatas[recordKey] = [{ year, value: value === "-" ? 0 : value }];
             }
           });
 
@@ -325,7 +329,11 @@ const Player = () => {
                 return;
               }
 
-              playerRecordItemData.push({ label: hitterSeasonRecord[recordKey], value });
+              playerRecordItemData.push({
+                key: recordKey,
+                label: hitterSeasonRecord[recordKey],
+                value,
+              });
             });
 
             setPlayerSeasonRecordItem(playerRecordItemData);
@@ -377,6 +385,8 @@ const Player = () => {
   return (
     <PlayerComponent
       playerInfo={playerInfo ? playerInfo : subPlayerInfo}
+      clubId={clubId ? clubId : null}
+      playerRecord={playerRecord}
       playerSeasonRecordItem={playerSeasonRecordItem}
       playerHighlights={playerHighlights}
     />
