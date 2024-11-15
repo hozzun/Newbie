@@ -1,6 +1,7 @@
 package com.newbie.baseball.domain.game.controller;
 
 import com.newbie.baseball.domain.game.dto.res.GameResponseDto;
+import com.newbie.baseball.domain.game.dto.res.ScheduledGameResponseDto;
 import com.newbie.baseball.domain.game.service.GameService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -43,9 +44,23 @@ public class GameController {
         return new ResponseEntity<>(games, HttpStatus.OK);
     }
 
+    @Operation(summary = "구단 예정된 경기 조회")
+    @GetMapping("/scheduled/{teamId}")
+    public ResponseEntity<ScheduledGameResponseDto> getScheduledGameByTeamId(@PathVariable Integer teamId) {
+        ScheduledGameResponseDto game = gameService.getScheduledGame(teamId);
+        return new ResponseEntity<>(game, HttpStatus.OK);
+    }
+
     @Operation(summary = "특정 경기 실시간 정보 스트리밍")
     @GetMapping(value = "/real-time/{gameId}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public SseEmitter streamRealTimeGameData(@PathVariable Integer gameId) {
         return gameService.streamRealTimeGameData(gameId);
+    }
+
+    @Operation(summary = "진행 중인 경기목록 조회")
+    @GetMapping("/live")
+    public ResponseEntity<List<GameResponseDto>> getLiveGames() {
+        List<GameResponseDto> games = gameService.getLiveGames();
+        return new ResponseEntity<>(games, HttpStatus.OK);
     }
 }

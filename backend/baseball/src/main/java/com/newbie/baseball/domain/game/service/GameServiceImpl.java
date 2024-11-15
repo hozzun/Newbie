@@ -4,11 +4,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.newbie.baseball.domain.game.dto.res.GameResponseDto;
 import com.newbie.baseball.domain.game.dto.res.SSEResponseDto;
+import com.newbie.baseball.domain.game.dto.res.ScheduledGameResponseDto;
 import com.newbie.baseball.domain.game.entity.Game;
 import com.newbie.baseball.domain.game.exception.GameNotFoundException;
 import com.newbie.baseball.domain.game.repository.GameRepository;
-import com.newbie.baseball.domain.record.dto.res.RecordResponseDto;
-import com.newbie.baseball.domain.record.exception.RecordNotFoundException;
 import com.newbie.baseball.domain.record.service.RecordService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,8 +22,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -34,7 +31,6 @@ import java.util.stream.Collectors;
 public class GameServiceImpl implements GameService {
 
     private final GameRepository gameRepository;
-    private final RecordService recordService;
     private final Map<Integer, SseEmitter> emitters = new ConcurrentHashMap<>();
     private final RedisTemplate<String, Object> redisTemplate;
     private final ObjectMapper objectMapper;
@@ -49,6 +45,27 @@ public class GameServiceImpl implements GameService {
         Game game = gameRepository.findById(id)
                 .orElseThrow(GameNotFoundException::new);
         return convertToDto(game);
+    }
+
+    @Override
+    public ScheduledGameResponseDto getScheduledGame(Integer teamId) {
+        List<Game> games = gameRepository.findNextScheduledGameByHomeTeam(teamId);
+        if (games.isEmpty()) {
+            throw new GameNotFoundException();
+        }
+        Game game = games.get(0);
+        return scheduledConvertToDto(game);
+    }
+
+    @Override
+    public List<GameResponseDto> getLiveGames() {
+        List<Game> games = gameRepository.findLiveGames();
+        if (games.isEmpty()) {
+            throw new GameNotFoundException();
+        }
+        return games.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
     }
 
     @Cacheable(value = "gamesCache", key = "#year + '-' + (#month != null ? #month : '') + '-' + (#day != null ? #day : '') + '-' + (#teamId != null ? #teamId : '')")
@@ -97,21 +114,25 @@ public class GameServiceImpl implements GameService {
         emitter.onCompletion(() -> emitters.remove(gameId));
         emitter.onTimeout(() -> emitters.remove(gameId));
 
-        // Redis에서 캐시된 데이터 확인
-        SSEResponseDto cachedData = getCachedGameData(gameId);
-        if (cachedData != null) {
-            try {
-                emitter.send(SseEmitter.event().name("gameRecordUpdate").data(cachedData).reconnectTime(3000L));
+        try {
+            // Redis에서 캐시된 데이터 확인
+            SSEResponseDto cachedData = getCachedGameData(gameId);
+            if (cachedData != null) {
+                // 캐시된 데이터가 있으면 전송
+                emitter.send(SseEmitter.event()
+                        .name("gameUpdate")
+                        .data(cachedData)
+                        .reconnectTime(SSE_RECONNECT_TIME));
                 log.info("Sent cached game data for game ID: {}", gameId);
-            } catch (IOException e) {
-                emitters.remove(gameId);
             }
-        } else {
-            try {
-                emitter.send(SseEmitter.event().name("init").data("Connected to game stream for game ID: " + gameId));
-            } catch (IOException e) {
-                emitters.remove(gameId);
-            }
+
+            // 연결 초기화 메시지
+            emitter.send(SseEmitter.event()
+                    .name("init")
+                    .data("Connected to game stream for game ID: " + gameId));
+        } catch (IOException e) {
+            emitters.remove(gameId);
+            log.warn("SSE connection closed for gameId: {}", gameId, e);
         }
 
         return emitter;
@@ -214,6 +235,21 @@ public class GameServiceImpl implements GameService {
                 .homeStartingPitcher(
                         game.getRecord() != null ? game.getRecord().getHomeStartingPitcher() : "미정"
                 )
+                .build();
+    }
+
+    private ScheduledGameResponseDto scheduledConvertToDto(Game game) {
+        return ScheduledGameResponseDto.builder()
+                .gameId(game.getId())
+                .date(game.getDate())
+                .time(game.getTime())
+                .homeTeamName(game.getHomeTeam().getTeamName())
+                .awayTeamName(game.getAwayTeam().getTeamName())
+                .homeTeamId(game.getHomeTeam().getId())
+                .awayTeamId(game.getAwayTeam().getId())
+                .gameResult(game.getGameResult())
+                .stadium(game.getStadium())
+                .season(game.getSeason())
                 .build();
     }
 }
