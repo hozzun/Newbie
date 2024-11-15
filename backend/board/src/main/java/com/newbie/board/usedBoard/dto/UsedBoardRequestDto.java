@@ -19,7 +19,6 @@ public class UsedBoardRequestDto {
 
     @Builder.Default
     private List<String> tags = new ArrayList<>();
-    private MultipartFile imageFile;
     private Integer price;
     private String region;
     private Long userId;
