@@ -103,7 +103,7 @@ const ClubRecord = (props: ClubRecordProps) => {
                 key={key}
                 {...itemProps}
                 onClick={() => handleVisibleGraph(item.key)}
-                isSelected={selectedItem === key}
+                isSelected={isVisibleGraph && selectedItem === key}
               />
             );
           })}

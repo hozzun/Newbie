@@ -200,7 +200,7 @@ const PlayerRecord = (props: PlayerRecordProps) => {
                 key={key}
                 {...itemProps}
                 onClick={() => handleVisibleGraph(item.key)}
-                isSelected={selectedItem === item.key}
+                isSelected={isVisibleGraph && selectedItem === item.key}
               />
             );
           }}
