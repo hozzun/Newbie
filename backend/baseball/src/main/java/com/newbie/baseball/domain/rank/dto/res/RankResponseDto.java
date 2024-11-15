@@ -3,9 +3,14 @@ package com.newbie.baseball.domain.rank.dto.res;
 import lombok.Builder;
 import lombok.Data;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 @Builder
 @Data
-public class RankResponseDto {
+public class RankResponseDto implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     private String year;
     private Integer rank;
