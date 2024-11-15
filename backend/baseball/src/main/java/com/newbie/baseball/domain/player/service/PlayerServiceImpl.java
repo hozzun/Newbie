@@ -5,6 +5,7 @@ import com.newbie.baseball.domain.player.entity.Player;
 import com.newbie.baseball.domain.player.exception.PlayerNotFoundException;
 import com.newbie.baseball.domain.player.repository.PlayerRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,7 @@ public class PlayerServiceImpl implements PlayerService {
                 return convertToDto(player);
     }
 
+    @Cacheable(value = "playerCache", key = "#teamId + '-' + (#position != null ? #position : '') + '-' + (#sortBy != null ? #sortBy : '') + '-' + (#pageable != null ? #pageable : '')")
     @Override
     public Page<PlayerResponseDto> getPlayersByTeam(Integer teamId, String position, String sortBy, Pageable pageable) {
         Page<Player> players;
