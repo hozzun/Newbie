@@ -4,6 +4,7 @@ import MyActiveLike from "../../components/mypage/MyActiveLike";
 import MyActiveComment from "../../components/mypage/MyActiveComment";
 
 interface LikeData {
+  type: 'like'
   boardId: number;
   createdAt: string;
   title: string;
@@ -11,15 +12,17 @@ interface LikeData {
 }
 
 interface CommentData {
+  type: 'comment'
   boardId: number;
   content: string;
   createdAt: string;
   onClick: () => void;
 }
 
+type ActivityData = LikeData | CommentData;
+
 const MyActive = () => {
-  const [likes, setLikes] = useState<LikeData[]>([]);
-  const [comments, setComments] = useState<CommentData[]>([]);
+  const [activities, setActivities] = useState<ActivityData[]>([]);
 
   const getActivity = async () => {
 
@@ -29,11 +32,24 @@ const MyActive = () => {
   
     try {
       const response = await axiosInstance.get(`/api-board/user-activity/${userId}`, { params });
-      if (response.data.type === 'like') {
-        setLikes(response.data)
-      } else if (response.data.type === 'comment') {
-        setComments(response.data)
-      }
+      const likesData: LikeData[] = response.data.filter((item: { type: string }) => item.type === 'like')
+      .map((like: Omit<LikeData, 'type'>) => ({
+        ...like,
+        type: 'like',
+      }));
+    
+    const commentsData: CommentData[] = response.data.filter((item: { type: string }) => item.type === 'comment')
+      .map((comment: Omit<CommentData, 'type'>) => ({
+        ...comment,
+        type: 'comment',
+      }));
+
+      // 병합 후 createdAt 기준으로 내림차순 정렬
+      const combinedData: ActivityData[] = [...likesData, ...commentsData].sort(
+        (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
+
+      setActivities(combinedData);
       
     } catch (error) {
       console.error("에러 발생:", error);
@@ -44,31 +60,30 @@ const MyActive = () => {
       getActivity();
     }, []);
 
-  return (
-    <>
-      {/* TODO: Navigate 설정 */}
-      <div onClick={() => console.log("해당 좋아요 페이지로 이동")}>
-        {likes.map((like) => (
-          <MyActiveLike
-            key={like.boardId}
-            time={like.createdAt}
-            title={like.title}
-            onClick={like.onClick}
-          />
-        ))}
-      </div>
-      <div onClick={() => console.log("해당 댓글 페이지로 이동")}>
-        {comments.map((comment) => (
-          <MyActiveComment
-            key={comment.boardId}
-            time={comment.createdAt}
-            comment={comment.content}
-            onClick={comment.onClick}
-          />
-        ))}
-      </div>
-    </>
-  );
+    return (
+      <>
+        {activities.length > 0 ? (activities.map((activity) =>
+          activity.type === 'like' ? (
+            <div key={activity.boardId} onClick={() => console.log("해당 좋아요 페이지로 이동")}>
+              <MyActiveLike
+                time={activity.createdAt}
+                title={(activity as LikeData).title}
+                onClick={activity.onClick}
+              />
+            </div>
+          ) : (
+            <div key={activity.boardId} onClick={() => console.log("해당 댓글 페이지로 이동")}>
+              <MyActiveComment
+                time={activity.createdAt}
+                comment={(activity as CommentData).content}
+                onClick={activity.onClick}
+              />
+            </div>
+          )
+        )):
+        <p className='font-kbogothicmedium flex justify-center items-center text-gray-600'>아직 활동한 기록이 없습니다.</p>}
+      </>
+    );
 };
 
 export default MyActive;

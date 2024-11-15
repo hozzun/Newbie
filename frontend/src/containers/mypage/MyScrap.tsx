@@ -14,7 +14,7 @@ interface Scrap {
   commentCount: number;
 }
 
-const MyBoard = () => {
+const MyScrap = () => {
   const [scraps, setScraps] = useState<Scrap[]>([]);
 
   const getScrap = async () => {
@@ -26,6 +26,7 @@ const MyBoard = () => {
     try {
       const response = await axiosInstance.get("/api-board/scrap", { params });
       setScraps(response.data);
+      console.log(response.data)
     } catch (error) {
       console.error("에러 발생:", error);
     }
@@ -37,7 +38,7 @@ const MyBoard = () => {
 
   return (
     <>
-      {scraps.map((scrap, index) => (
+      {scraps.length > 0 ? (scraps.map((scrap, index) => (
         // TODO: Navigate 설정
         <div key={scrap.id} onClick={() => console.log("해당 스크랩 페이지로 이동")}>
           <CommuFreeItem
@@ -51,9 +52,10 @@ const MyBoard = () => {
           />
           {index < scraps.length - 1 && <hr className="my-4 border-gray-200" />}
         </div>
-      ))}
+      ))):
+      <p className='font-kbogothicmedium flex justify-center items-center text-gray-600'>아직 스크랩한 게시물이 없습니다.</p>}
     </>
   );
 };
 
-export default MyBoard;
+export default MyScrap;
