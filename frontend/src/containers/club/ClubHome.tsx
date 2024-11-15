@@ -4,7 +4,6 @@ import {
   getClubHitterRecord,
   getClubPitcherRecord,
   getClubRanks,
-  getClubRecordRequest,
 } from "../../api/baseballApi";
 import ClubHomeComponent from "../../components/club/ClubHome";
 import ClubId, { getClubIdByNum } from "../../util/ClubId";
@@ -159,10 +158,10 @@ const ClubHome = () => {
       const pitcherRecordData: Array<ClubPitcherRecord> = pitcherResponse.data.map(d => {
         return {
           year: parseInt(d.year),
-          earnedRunAverage: parseFloat(d.era).toFixed(2),
+          earnedRunAverage: Number(parseFloat(d.era).toFixed(2)),
           strikeOuts: d.so,
           baseOnBalls: d.bb,
-          walksPlusHitsPerInningPitched: parseFloat(d.whip).toFixed(2),
+          walksPlusHitsPerInningPitched: Number(parseFloat(d.whip).toFixed(2)),
         };
       });
 
@@ -172,7 +171,7 @@ const ClubHome = () => {
       const hitterRecordData: Array<ClubHitterRecord> = hitterResponse.data.map(d => {
         return {
           year: parseInt(d.year),
-          battingAverage: parseFloat(d.avg).toFixed(3),
+          battingAverage: Number(parseFloat(d.avg).toFixed(3)),
           runs: d.r,
           hits: d.h,
           homeRun: d.homerun,
