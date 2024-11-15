@@ -93,6 +93,57 @@ export interface TeamScoreDetailResponse {
 
 export const getGameResult = (request: GetGameResultRequest) => axios.get<GameResultResponse>(`/api-baseball/records/${request.id}`);
 
+// 구단 성적 조회
+export interface getClubRecordRequest {
+    teamId: number;
+}
+
+export interface getClubPitcherRecordResponse {
+    rank: number;
+    year: string;
+    teamId: number;
+    teamName: string;
+    era: string;
+    gameCount: number;
+    win: number;
+    lose: number;
+    save: number;
+    hld: number;
+    wpct: string;
+    ip: string;
+    h: number;
+    hr: number;
+    bb: number;
+    so: number;
+    r: number;
+    er: number;
+    whip: string;
+}
+
+export interface getClubHitterRecordResponse {
+    rank: number;
+    year: string;
+    teamId: number;
+    teamName: string;
+    avg: string;
+    gameCount: number;
+    pa: number;
+    ab: number;
+    r: number;
+    h: number;
+    two: number;
+    three: number;
+    homerun: number;
+    tb: number;
+    rbi: number;
+    sac: number;
+    sf: number;
+}
+
+export const getClubPitcherRecord = (request: getClubRecordRequest) => axios.get<Array<getClubPitcherRecordResponse>>(`/api-baseball/team/stats/pitcher/${request.teamId}`);
+
+export const getClubHitterRecord = (request: getClubRecordRequest) => axios.get<Array<getClubHitterRecordResponse>>(`/api-baseball/team/stats/hitter/${request.teamId}`);
+
 // 포토 카드 선수 정보 조회
 export interface GetPhotoCardPlayerInfoRequest {
     teamId: number;
