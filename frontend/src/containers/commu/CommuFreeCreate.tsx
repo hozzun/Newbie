@@ -1,9 +1,13 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Button from "../../components/common/Button";
 import CommuFreeCreateComponent from "../../components/commu/CommuFreeCreate";
 import { BUTTON_VARIANTS } from "../../components/common/variants";
+import { postGeneralBoard } from "../../api/boardApi";
 
 const CommuFreeCreate = () => {
+  const nav = useNavigate();
+
   const [titleValue, setTitleValue] = useState("");
   const [tagValue, setTagValue] = useState("");
   const [tags, setTags] = useState<string[]>([]);
@@ -79,6 +83,41 @@ const CommuFreeCreate = () => {
     }
   }, [titleValue, text]);
 
+  // api 호출 및 데이터 제출
+  const handleSubmit = async () => {
+    const params = { userId: 5 };
+    if (titleValue && text) {
+      try {
+        const formData = new FormData();
+        formData.append(
+          "generalBoardDto",
+          JSON.stringify({
+            userId: 1, // 실제로는 로그인된 사용자 ID를 사용
+            userName: "사용자", // 실제로는 로그인된 사용자 이름을 사용
+            title: titleValue,
+            content: text,
+            tags: tags,
+          }),
+        );
+
+        if (image) {
+          formData.append("imageFile", image);
+          console.log(formData.get("imageFile"));
+          console.log(formData.get("generalBoardDto"));
+        }
+
+        const response = await postGeneralBoard(formData, params);
+        console.log(response);
+        if (response.data) {
+          nav(`/commuhome/freedetail/${response.data.id}`);
+        }
+      } catch (error) {
+        setErrorMessage("게시글 작성에 실패했어요");
+        console.error(error);
+      }
+    }
+  };
+
   return (
     <div>
       <CommuFreeCreateComponent
@@ -99,7 +138,7 @@ const CommuFreeCreate = () => {
         onClearImage={clearImage}
       />
 
-      <Button variant={buttonVariant} className="w-full">
+      <Button variant={buttonVariant} className="w-full" onClick={handleSubmit}>
         완료
       </Button>
     </div>

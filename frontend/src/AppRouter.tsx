@@ -296,7 +296,7 @@ const AppRouter = () => {
           }
         />
         <Route
-          path="/commuhome/freedetail"
+          path="/commuhome/freedetail/:id"
           element={
             <ProtectedRoute>
               <CommuFreeDetail />

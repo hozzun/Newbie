@@ -1,32 +1,15 @@
 import { useState, useEffect, useRef } from "react";
 import CommuTradeItem from "../../components/commu/CommuTradeItem";
-import { getUsedBoard } from "../../api/boardApi";
-
-// GetUsedBoardResponse를 확장하여 추가 필드 정의
-interface TradePost {
-  id: number;
-  userId: number;
-  userName: string;
-  title: string;
-  content: string;
-  price: number;
-  region: string;
-  imageUrl: string;
-  createdAt: string;
-  tags: string[];
-  likeCount: number;
-  commentCount: number;
-  scrapCount: number;
-}
+import { getUsedBoard, GetUsedBoardResponse } from "../../api/boardApi";
 
 const CommuTrade = ({ searchQuery }: { searchQuery: string }) => {
-  const [tradePosts, setTradePosts] = useState<TradePost[]>([]);
+  const [tradeBoards, setTradeBoards] = useState<GetUsedBoardResponse[]>([]);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
-  const lastPostRef = useRef<HTMLDivElement | null>(null);
+  const lastBoardRef = useRef<HTMLDivElement | null>(null);
 
   // 게시물 로드 함수
-  const loadPosts = async () => {
+  const loadBoards = async () => {
     if (loading || !hasMore) return;
 
     setLoading(true);
@@ -38,10 +21,10 @@ const CommuTrade = ({ searchQuery }: { searchQuery: string }) => {
         return;
       }
 
-      setTradePosts(response.data);
+      setTradeBoards(response.data);
       setHasMore(false);
     } catch (error) {
-      console.error("Trade posts loading error:", error);
+      console.error("Trade boards loading error:", error);
     } finally {
       setLoading(false);
     }
@@ -60,13 +43,13 @@ const CommuTrade = ({ searchQuery }: { searchQuery: string }) => {
     const observer = new IntersectionObserver(
       entries => {
         if (entries[0].isIntersecting && !loading) {
-          loadPosts();
+          loadBoards();
         }
       },
       { threshold: 0.1 },
     );
 
-    const currentElement = lastPostRef.current;
+    const currentElement = lastBoardRef.current;
     if (currentElement) {
       observer.observe(currentElement);
     }
@@ -80,28 +63,26 @@ const CommuTrade = ({ searchQuery }: { searchQuery: string }) => {
 
   // 초기 데이터 로드
   useEffect(() => {
-    loadPosts();
+    loadBoards();
   }, []);
-
-  console.log(tradePosts);
 
   return (
     <>
       <div className="flex flex-col gap-4">
-        {tradePosts.map((post, index) => (
-          <div key={post.id} ref={index === tradePosts.length - 1 ? lastPostRef : null}>
+        {tradeBoards.map((board, index) => (
+          <div key={board.id} ref={index === tradeBoards.length - 1 ? lastBoardRef : null}>
             <CommuTradeItem
-              title={post.title}
-              contents={post.content}
-              writer={post.userName}
-              createTimeStamp={new Date(post.createdAt).toLocaleDateString()}
-              price={post.price}
-              location={post.region}
-              viewCount={post.likeCount}
-              commentCount={post.commentCount}
-              imageUrl={post.imageUrl}
+              title={board.title}
+              contents={board.content}
+              writer={board.userName}
+              createTimeStamp={new Date(board.createdAt).toLocaleDateString()}
+              price={board.price}
+              location={board.region}
+              viewCount={board.likeCount}
+              commentCount={board.commentCount}
+              imageUrl={board.imageUrl}
             />
-            {index < tradePosts.length - 1 && <hr className="my-4 border-gray-200" />}
+            {index < tradeBoards.length - 1 && <hr className="my-4 border-gray-200" />}
           </div>
         ))}
         {loading && <div className="text-center py-4">로딩 중...</div>}

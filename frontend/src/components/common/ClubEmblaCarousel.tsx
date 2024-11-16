@@ -31,7 +31,7 @@ const ClubEmblaCarouselItem: React.FC<ClubEmblaCarouselItemProps> = ({
   isSelected,
   onClick,
 }) => {
-  const clubCarouselItemClass = `flex box-border hover:box-content py-2 m-0.5 content-center justify-center rounded-lg transition-colors duration-300 shadow-sm ${
+  const clubCarouselItemClass = `flex box-border hover:box-content py-2 content-center justify-center rounded-lg transition-colors duration-300 shadow-sm ${
     isSelected ? clubColors[clubId] : "bg-gray-100"
   }`;
 
@@ -77,9 +77,9 @@ const ClubEmblaCarousel: React.FC<ClubEmblaCarouselProps> = ({ selectedItem, han
 
   return (
     <div className="overflow-hidden w-full rounded-lg border-gray-300" ref={emblaRef}>
-      <div className="flex gap-2">
+      <div className="flex mx-2">
         {Object.keys(clubColors).map(clubId => (
-          <div className="flex-[0_0_calc(20%-8px)]" key={clubId}>
+          <div className="flex-[0_0_calc(20%-8px)] px-2 box-content" key={clubId}>
             <ClubEmblaCarouselItem
               clubId={clubId}
               isSelected={clubId === selected}
