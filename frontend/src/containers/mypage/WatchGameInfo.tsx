@@ -4,7 +4,6 @@ import axiosInstance from "../../util/axiosInstance";
 import Storage from "../../assets/icons/storage.svg?react";
 import WatchCard from "../../components/mypage/WatchCard";
 import Plus from "../../assets/icons/plus.svg?react";
-import Ticket from "../../assets/images/직관경기티켓.jpg";
 import ClubId from "../../util/ClubId";
 
 interface WatchGameData {
@@ -61,7 +60,7 @@ const WatchGameInfo = () => {
     <div className="my-7">
       <div className="flex flex-row">
         <Storage className="w-6 h-6 text-gray-200 mr-3" />
-        <p className="font-kbogothicbold text-gray-600"> 나의 직관 경기</p>
+        <p className="font-kbogothicbold text-gray-600 mb-3"> 나의 직관 경기</p>
       </div>
       <div className="grid grid-cols-2 justify-center items-center gap-7">
         {watchGames.map(game => (
@@ -70,7 +69,7 @@ const WatchGameInfo = () => {
             date={game.date}
             team1={game.team1Korean}
             team2={game.team2Korean}
-            img={game.imageUrl || Ticket}
+            img={game.imageUrl}
             onClick={() => goGameResult(game.id, game.date, game.team1English)}
           />
         ))}
