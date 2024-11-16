@@ -18,6 +18,7 @@ public class Ticket {
     private String id;
     private int userId;
     private String date;
+    private String time;
     private String team1English;
     private String team2English;
     private String team1Korean;
