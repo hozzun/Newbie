@@ -1,10 +1,6 @@
-import axiosInstance from "../../util/axiosInstance";
 import CalenderIcon from "../../assets/icons/calender.svg?react";
-import { useState, useEffect } from "react";
 import ClubLogos from "../../util/ClubLogos";
-import { getClubIdByNum } from "../../util/ClubId";
-import { useSelector } from "react-redux";
-import { RootState } from "../../redux/store";
+import { getIdByNum } from "../../util/ClubId";
 
 interface Game {
   date: string;
@@ -13,33 +9,15 @@ interface Game {
   stadium: string;
 }
 
-const Calendar = () => {
+interface CalendarProps {
+  team: number;
+  games: Game[]
+}
+
+const Calendar = ({ games, team }: CalendarProps) => {
   // TODO: 월 데이터 수정
-  const [games, setGames] = useState<Game[]>([]);
   const year = new Date().getFullYear();
-  const month = 8; // 9월로 고정(현재 경기 없음 이슈)
-  const formattedMonth = month.toString().padStart(2, "0");
-  const { team } = useSelector((state: RootState) => state.team);
-
-  const getGameInfo = async () => {
-    const params = {
-      year: year.toString(),
-      month: formattedMonth,
-      teamId: team,
-    };
-
-    try {
-      const response = await axiosInstance.get("/api-baseball/games", { params });
-      setGames(response.data);
-    } catch (error) {
-      console.error("에러 발생:", error);
-    }
-  };
-
-  useEffect(() => {
-    getGameInfo();
-  }, []);
-
+  const month = 8; // 9월 고정
   const firstDay = new Date(year, month, 1);
   const lastDay = new Date(year, month + 1, 0);
   const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
@@ -103,7 +81,14 @@ const Calendar = () => {
             // game이 있는 경우
             const isHomeGame = game.homeTeamId === team;
             const opponentTeamId = isHomeGame ? game.awayTeamId : game.homeTeamId;
-            const opponentTeamName = getClubIdByNum(opponentTeamId);
+            const opponentTeamKey = getIdByNum(opponentTeamId);
+
+            if (!opponentTeamKey) {
+              console.warn(`[WARN] 상대팀 로고를 찾을 수 없습니다. 팀 ID: ${opponentTeamId}`);
+              return null; // 예외 처리: 로고가 없는 경우
+            }
+
+            const opponentTeamLogo = ClubLogos[opponentTeamKey];
   
             return (
               <div key={date.getDate()} className="flex flex-col justify-center items-center">
@@ -117,7 +102,7 @@ const Calendar = () => {
                 >
                   <img
                     className="w-6 h-6"
-                    src={ClubLogos[opponentTeamName]}
+                    src={opponentTeamLogo}
                     alt="팀 로고"
                   />
                 </div>
