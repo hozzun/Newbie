@@ -64,7 +64,7 @@ const ReviseInfo = () => {
     formData.append("address", fullAddress);
   
     // imageUrl이 있는 경우에만 이미지 파일을 FormData에 추가
-    if (imageUrl) {
+    if (imageUrl !== userInfo.profileImage) {
       const base64Image = imageUrl.replace(/^data:image\/\w+;base64,/, "");
       const file = base64ToFile(base64Image, "profile.png");
       formData.append("profileImage", file);

@@ -42,15 +42,11 @@ type TeamName =
   | "ssg";
 
 const MyPage = () => {
-  const [userInfo, setUserInfo] = useState<UserInfo>();
+  const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
   const [games, setGames] = useState<Game[]>([]);
   const { team } = useSelector((state: RootState) => state.team);
   const nav = useNavigate();
-
-  useEffect(() => {
-    getUserInfo();
-  }, []);
-
+  
   const goRevise = () => {
     nav("/mypage/revise", { state: { userInfo } });
   };
@@ -78,6 +74,7 @@ const MyPage = () => {
   const getUserInfo = async () => {
     // TODO: userId 삭제 예정
     const userId = 5
+    setUserInfo(null);
 
     try {
       const response = await axiosInstance.get(`/api-user/users/${userId}`, {
@@ -89,6 +86,10 @@ const MyPage = () => {
       console.error("에러 발생:", error);
     }
   };
+
+  useEffect(() => {
+    getUserInfo();
+  }, []);
 
   const getGameInfo = async () => {
     const year = new Date().getFullYear();
@@ -105,7 +106,7 @@ const MyPage = () => {
   };
 
   useEffect(() => {
-    getGameInfo()
+    getGameInfo();
   }, [team])
 
   if (userInfo) {
@@ -119,7 +120,7 @@ const MyPage = () => {
         </div>
         {userInfo && (
           <div>
-            <Profile img={userInfo.profileImage} name={userInfo.nickname} email={userInfo.email} />
+            <Profile img={`${userInfo.profileImage}?t${new Date().getTime()}`} name={userInfo.nickname} email={userInfo.email} />
             {teamName ? (
               <ClubChangeButton
                 logo={ClubLogos[teamName]}
