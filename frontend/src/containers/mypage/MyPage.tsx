@@ -47,6 +47,10 @@ const MyPage = () => {
   const { team } = useSelector((state: RootState) => state.team);
   const nav = useNavigate();
 
+  useEffect(() => {
+    getUserInfo();
+  }, []);
+
   const goRevise = () => {
     nav("/mypage/revise", { state: { userInfo } });
   };
@@ -99,10 +103,6 @@ const MyPage = () => {
       console.error("경기 데이터를 불러오는 중 오류 발생:", error);
     }
   };
-
-  useEffect(() => {
-    getUserInfo();
-  }, []);
 
   useEffect(() => {
     getGameInfo()
