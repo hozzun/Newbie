@@ -9,6 +9,9 @@ import WatchButton from "../../components/mypage/WatchButton";
 import GameResult from "../../components/mypage/GameResult";
 import GameLabel from "../../components/mypage/GameLabel";
 import ClubId from "../../util/ClubId";
+import Dialog from "../../components/common/Dialog";
+import { BUTTON_VARIANTS } from "../../components/common/variants";
+import { ButtonProps } from "../../components/common/Button";
 
 interface GameData {
   id: number;
@@ -47,6 +50,7 @@ const WatchGame = () => {
   const [ticketInfo, setTicketInfo] = useState<TicketInfoData | null>(null);
   const [isModified, setIsModified] = useState<boolean>(false);
   const [write, setWrite] = useState<string>("");
+  const [show, setShow] = useState<boolean>(false)
 
   const nav = useNavigate();
 
@@ -107,13 +111,27 @@ const WatchGame = () => {
   }, []);
 
   const deleteGame = () => {
-    deleteGameAPI();
-    nav("/mypage");
+    setShow(true)
   };
 
   const teamEnglish = (teamId: number): TeamName | "doosan" => {
     const teamName = Object.keys(ClubId).find(key => ClubId[key] === teamId);
     return teamName ? (teamName as TeamName) : "doosan";
+  };
+
+  const yesButton: ButtonProps = {
+    variant: BUTTON_VARIANTS.primary,
+    children: "네",
+    onClick: () => {
+      deleteGameAPI();
+      nav("/mypage");
+    },
+  };
+
+  const noButton: ButtonProps = {
+    variant: BUTTON_VARIANTS.yellowGreen,
+    children: "아니오",
+    onClick: () => setShow(false),
   };
 
   return (
@@ -144,6 +162,7 @@ const WatchGame = () => {
           />
         </>
       )}
+      {show && <Dialog title="삭제하기" body="정말 삭제하시겠습니까?" yesButton={yesButton} noButton={noButton} />}
     </>
   );
 };
