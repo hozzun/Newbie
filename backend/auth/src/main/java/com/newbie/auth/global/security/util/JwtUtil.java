@@ -69,7 +69,7 @@ public class JwtUtil {
         Claims claims = Jwts.claims();
         claims.put("memberId", member.getMemberId());
         claims.put("email", member.getEmail());
-//        claims.put("nickname", member.getNickname());
+        claims.put("nickname", member.getNickname());
 //        claims.put("address", member.getAddress());
 
         ZonedDateTime nowTime = ZonedDateTime.now();
