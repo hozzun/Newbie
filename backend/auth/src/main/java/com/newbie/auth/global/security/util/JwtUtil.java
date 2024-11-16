@@ -70,7 +70,7 @@ public class JwtUtil {
         claims.put("memberId", member.getMemberId());
         claims.put("email", member.getEmail());
 //        claims.put("nickname", member.getNickname());
-//        claims.put("role", member.getAddress());
+//        claims.put("address", member.getAddress());
 
         ZonedDateTime nowTime = ZonedDateTime.now();
         ZonedDateTime tokenValidityTime = nowTime.plusSeconds(expirationTime);
