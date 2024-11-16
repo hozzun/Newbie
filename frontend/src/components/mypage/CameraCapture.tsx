@@ -12,7 +12,7 @@ const CameraCapture = ({ onCapture }: CameraCaptureProps) => {
   const startCamera = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: { ideal: "environment" }, width: { ideal: 1920 }, height: { ideal: 1080 } }
+        video: { facingMode: { ideal: "environment" } }
       });
 
       // 카메라 화면을 실시간으로 보여줍니다.
@@ -66,7 +66,7 @@ const CameraCapture = ({ onCapture }: CameraCaptureProps) => {
       </button>
 
       {/* 숨겨진 캔버스 */}
-      <canvas ref={canvasRef} className="hidden max-w-[600px] min-w-[320px]" width="1920" height="1080" />
+      <canvas ref={canvasRef} className="hidden max-w-[600px] min-w-[320px]"/>
     </div>
   );
 };

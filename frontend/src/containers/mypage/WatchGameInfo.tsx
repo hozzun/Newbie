@@ -74,7 +74,7 @@ const WatchGameInfo = () => {
             onClick={() => goGameResult(game.id, game.date, game.team1English)}
           />
         ))}
-        <div className="w-full h-44 rounded-2xl bg-gray-200 mt-7 flex justify-center items-center">
+        <div className="w-full h-44 rounded-2xl bg-gray-200 flex justify-center items-center">
           <Plus className="w-6 h-6 text-gray-500 hover:cursor-pointer" onClick={goCamera} />
         </div>
       </div>
