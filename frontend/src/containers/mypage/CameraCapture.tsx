@@ -54,7 +54,8 @@ const CameraCapture = () => {
     // TODO: userId 불러오기
     const userId = 5;
     const params = { userId: userId }
-    const file = base64ToFile(imageData, "image.png");
+    const fileName = `image_${Date.now()}.png`;
+    const file = base64ToFile(imageData, fileName);
 
     const formData = new FormData();
     formData.append("image", file);

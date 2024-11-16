@@ -11,7 +11,7 @@ const WatchCard = (props: WatchCardProps) => {
   const team2 = props.team2.split(' ')[0];
 
   return (
-    <div className="relative w-full mt-7 hover:cursor-pointer" onClick={props.onClick}>
+    <div className="relative w-full hover:cursor-pointer" onClick={props.onClick}>
       <img src={props.img} alt="ticket" className="w-full h-44 object-cover rounded-2xl" />
 
       <div className="absolute bottom-0 left-0 w-full h-14 bg-gray-700 bg-opacity-70 rounded-2xl flex flex-col justify-center items-center text-white font-kbogothicbold">

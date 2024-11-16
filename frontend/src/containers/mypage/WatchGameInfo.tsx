@@ -60,7 +60,7 @@ const WatchGameInfo = () => {
     <div className="my-7">
       <div className="flex flex-row">
         <Storage className="w-6 h-6 text-gray-200 mr-3" />
-        <p className="font-kbogothicbold text-gray-600"> 나의 직관 경기</p>
+        <p className="font-kbogothicbold text-gray-600 mb-3"> 나의 직관 경기</p>
       </div>
       <div className="grid grid-cols-2 justify-center items-center gap-7">
         {watchGames.map(game => (
