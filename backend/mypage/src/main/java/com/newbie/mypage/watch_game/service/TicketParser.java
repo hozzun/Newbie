@@ -1,5 +1,6 @@
 package com.newbie.mypage.watch_game.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONArray;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -7,9 +8,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 public class TicketParser {
 
     private static final Map<String, String> teamMapping = Map.ofEntries(
+            // 영어 키
             Map.entry("K", "키움 히어로즈"),
             Map.entry("KIWOOM", "키움 히어로즈"),
             Map.entry("KIA", "KIA 타이거즈"),
@@ -20,10 +23,18 @@ public class TicketParser {
             Map.entry("KT", "KT 위즈"),
             Map.entry("HANWHA", "한화 이글스"),
             Map.entry("LG", "LG 트윈스"),
-            Map.entry("DOOSAN", "두산 베어스")
+            Map.entry("DOOSAN", "두산 베어스"),
+            // 한글 키
+            Map.entry("키움", "키움 히어로즈"),
+            Map.entry("기아", "KIA 타이거즈"),
+            Map.entry("삼성", "삼성 라이온즈"),
+            Map.entry("롯데", "롯데 자이언츠"),
+            Map.entry("한화", "한화 이글스"),
+            Map.entry("두산", "두산 베어스")
     );
 
     private static final Map<String, String> teamEnglishNameMap = Map.ofEntries(
+            // 영어 키
             Map.entry("K", "kiwoom"),
             Map.entry("KIWOOM", "kiwoom"),
             Map.entry("KIA", "kia"),
@@ -34,8 +45,16 @@ public class TicketParser {
             Map.entry("KT", "kt"),
             Map.entry("HANWHA", "hanwha"),
             Map.entry("LG", "lg"),
-            Map.entry("DOOSAN", "doosan")
+            Map.entry("DOOSAN", "doosan"),
+            // 한글 키
+            Map.entry("키움", "kiwoom"),
+            Map.entry("기아", "kia"),
+            Map.entry("삼성", "samsung"),
+            Map.entry("롯데", "lotte"),
+            Map.entry("한화", "hanwha"),
+            Map.entry("두산", "doosan")
     );
+
 
     public Map<String, Object> parseTicketInfo(JSONArray ticketData) throws ParseException {
         String datePattern = "\\d{4}\\.\\d{1,2}\\.\\d{1,2}";
@@ -57,6 +76,9 @@ public class TicketParser {
                 teamKoreanList.add(teamMapping.get(text));
             }
         }
+
+        log.info(teamEnglishList.toString());
+        log.info(teamKoreanList.toString());
 
         if (ticketDate == null) {
             throw new IllegalArgumentException("날짜 정보가 누락되었습니다.");
