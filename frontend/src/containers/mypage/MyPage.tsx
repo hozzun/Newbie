@@ -89,7 +89,7 @@ const MyPage = () => {
       <>
         <div className="flex justify-between items-center">
           <PageName label="마이페이지" />
-          <Pencil className="w-6 h-6 text-gray-500 hover:cursor-pointer" onClick={goRevise} />
+          <Pencil className="w-6 h-6 mb-2 text-gray-500 hover:cursor-pointer" onClick={goRevise} />
         </div>
         {userInfo && (
           <div>
