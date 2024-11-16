@@ -90,7 +90,6 @@ const Signup = () => {
       onNameChange={handleNameChange}
       onSelectionChange={handleSelectionChange}
       onButtonClick={handleButtonClick}
-      signUpPath="/login"
     />
   );
 };

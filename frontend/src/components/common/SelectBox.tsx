@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 interface SelectBoxProps {
   label?: string;
@@ -316,7 +316,7 @@ const SelectBox: React.FC<SelectBoxProps> = ({
         <select
           value={selectedSi}
           onChange={handleSiChange}
-          className="border border-gray-200 p-2 rounded-lg w-1/2"
+          className="border border-gray-200 p-2 rounded-lg w-1/2 focus:border-green-900"
         >
           <option value="" disabled>
             {placeholder1 || "지역을 선택하세요"}
@@ -330,7 +330,7 @@ const SelectBox: React.FC<SelectBoxProps> = ({
         <select
           value={selectedGun}
           onChange={handleGunChange}
-          className="border border-gray-200 p-2 rounded-lg w-1/2"
+          className="border border-gray-200 p-2 rounded-lg w-1/2 focus:border-green-900"
           disabled={!selectedSi}
         >
           <option value="" disabled>
