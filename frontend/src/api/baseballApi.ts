@@ -31,6 +31,26 @@ export const getGames = (request: GetGamesRequest) => axios.get<Array<GetGamesRe
     params: {...request}
 })
 
+// 예정된 경기 조회
+export interface GetUpcomingGameRequest {
+    teamId: number;
+}
+
+export interface GetUpcomingGameResponse {
+    gameId: number;
+    date: string;
+    time: string;
+    homeTeamName: string;
+    awayTeamName: string;
+    homeTeamId: number;
+    awayTeamId: number;
+    gameResult: string;
+    stadium: string;
+    season: string;
+}
+
+export const getUpcomingGame = (request: GetUpcomingGameRequest) => axios.get<GetUpcomingGameResponse>(`/api-baseball/games/scheduled/${request.teamId}`);
+
 // 구단 순위 조회
 export interface GetClubRanksRequest {
     year?: string;
