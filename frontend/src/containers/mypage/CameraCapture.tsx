@@ -50,7 +50,6 @@ const CameraCapture = () => {
   };
 
   const handleCapture = async (imageData: string) => {
-    setCapturedImage(imageData);
 
     // TODO: userId 불러오기
     const userId = 5;
@@ -67,10 +66,10 @@ const CameraCapture = () => {
         },
         params,
       });
-      console.log("OCR 처리 결과:", response.data);
       setDate(response.data.date);
       setTeamKorea(response.data.teamKorean);
       setTicketId(response.data.ticketId);
+      setCapturedImage(response.data.imageUrl)
       setIsModalOpen(true);
     } catch (error) {
       setIsDialogOpen(true)
