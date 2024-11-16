@@ -10,6 +10,7 @@ import org.hibernate.annotations.ColumnDefault;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.UUID;
 
 @Getter
 @Entity
@@ -74,7 +75,7 @@ public class User {
 
     public void updateIsResigned(Boolean isResigned) {
         this.isResigned = isResigned;
-        this.email = "알수없음";
-        this.nickname = "알수없음";
+        this.email = "unknown-" + UUID.randomUUID();
+        this.nickname = "unknown-" + UUID.randomUUID().toString().substring(0, 19);
     }
 }
