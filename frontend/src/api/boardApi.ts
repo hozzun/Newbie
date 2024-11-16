@@ -29,7 +29,7 @@ export interface PostGeneralBoardRequest {
   title: string;
   content: string;
   tags: string[];
-  imageFile: string;
+  imageFile?: File;
 }
 
 export interface PostGeneralBoardResponse {
@@ -47,8 +47,8 @@ export interface PostGeneralBoardResponse {
   viewCount: number;
 }
 
-export const postGeneralBoard = async (data: PostGeneralBoardRequest) => {
-  return axios.post<PostGeneralBoardResponse>("/api-board/general-board/create", data);
+export const postGeneralBoard = async (data: FormData, params: { userId: number }) => {
+  return axios.post<PostGeneralBoardResponse>("/api-board/general-board/create", data, { params });
 };
 
 export const getUserProfile = () => {

@@ -85,37 +85,37 @@ const CommuFreeCreate = () => {
 
   // api 호출 및 데이터 제출
   const handleSubmit = async () => {
+    const params = { userId: 5 };
     if (titleValue && text) {
       try {
-        // 이미지 처리는 실제 구현 시 FormData를 사용하여 처리해야 합니다
-        const imageString = image ? await convertImageToBase64(image) : "";
+        const formData = new FormData();
+        formData.append(
+          "generalBoardDto",
+          JSON.stringify({
+            userId: 1, // 실제로는 로그인된 사용자 ID를 사용
+            userName: "사용자", // 실제로는 로그인된 사용자 이름을 사용
+            title: titleValue,
+            content: text,
+            tags: tags,
+          }),
+        );
 
-        const response = await postGeneralBoard({
-          userId: 1, // 실제로는 로그인된 사용자 ID를 사용
-          userName: "사용자", // 실제로는 로그인된 사용자 이름을 사용
-          title: titleValue,
-          content: text,
-          tags: tags,
-          imageFile: imageString,
-        });
+        if (image) {
+          formData.append("imageFile", image);
+          console.log(formData.get("imageFile"));
+          console.log(formData.get("generalBoardDto"));
+        }
 
+        const response = await postGeneralBoard(formData, params);
+        console.log(response);
         if (response.data) {
           nav(`/commuhome/freedetail/${response.data.id}`);
         }
       } catch (error) {
-        setErrorMessage("게시글 작성에 실패했습니다.");
-        console.log("에러확인:", error);
+        setErrorMessage("게시글 작성에 실패했어요");
+        console.error(error);
       }
     }
-  };
-
-  const convertImageToBase64 = (file: File): Promise<string> => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result as string);
-      reader.onerror = error => reject(error);
-    });
   };
 
   return (
