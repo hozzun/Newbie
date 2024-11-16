@@ -61,13 +61,14 @@ public class OcrService {
 
         // 파싱된 정보에서 필요한 데이터를 추출
         String date = (String) ticketInfo.get("date");
+        String time = (String) ticketInfo.get("time");
         String team1English = ((List<String>) ticketInfo.get("teamEnglish")).get(0);
         String team2English = ((List<String>) ticketInfo.get("teamEnglish")).get(1);
         String team1Korean = ((List<String>) ticketInfo.get("teamKorean")).get(0);
         String team2Korean = ((List<String>) ticketInfo.get("teamKorean")).get(1);
 
         // S3에 이미지 업로드 및 URL 반환
-        Ticket ticket = s3Service.saveFile(image, userId, date, team1English, team2English, team1Korean, team2Korean);
+        Ticket ticket = s3Service.saveFile(image, userId, date, time, team1English, team2English, team1Korean, team2Korean);
 
         // 이미지 URL을 포함한 티켓 정보를 반환
         ticketInfo.put("ticketId", ticket.getId());
