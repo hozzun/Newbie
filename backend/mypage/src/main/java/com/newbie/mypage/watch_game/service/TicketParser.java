@@ -57,7 +57,7 @@ public class TicketParser {
 
 
     public Map<String, Object> parseTicketInfo(JSONArray ticketData) throws ParseException {
-        String datePattern = "\\d{4}\\.\\d{1,2}\\.\\d{1,2}(\\(.+?\\))?";
+        String datePattern = "\\d{4}[-./]\\d{1,2}[-./]\\d{1,2}(\\(.+?\\))?";
         String timePattern = "\\d{1,2}시( \\d{1,2}분)?";
 
         String ticketDate = null;
