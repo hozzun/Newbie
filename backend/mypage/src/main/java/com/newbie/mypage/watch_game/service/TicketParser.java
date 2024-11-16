@@ -57,41 +57,60 @@ public class TicketParser {
 
 
     public Map<String, Object> parseTicketInfo(JSONArray ticketData) throws ParseException {
-        String datePattern = "\\d{4}\\.\\d{1,2}\\.\\d{1,2}";
+        String datePattern = "\\d{4}\\.\\d{1,2}\\.\\d{1,2}(\\(.+?\\))?";
+        String timePattern = "\\d{1,2}시( \\d{1,2}분)?";
+
         String ticketDate = null;
+        String ticketTime = null;
+
         List<String> teamKoreanList = new ArrayList<>();
         List<String> teamEnglishList = new ArrayList<>();
 
         for (Object obj : ticketData) {
-            String text = (String) obj;
+            String text = ((String) obj).trim();
+            String cleanedText = text.replaceAll("\\s+", ""); // 공백 제거
 
-            // 첫 번째로 나오는 날짜를 ticketDate로 설정
-            if (ticketDate == null && text.matches(datePattern)) {
-                ticketDate = text;
+            // 날짜 추출
+            if (ticketDate == null && cleanedText.matches(datePattern)) {
+                // 괄호 제거
+                ticketDate = cleanedText.replaceAll("\\(.+?\\)", "");
+            }
+
+            // 시간 추출
+            if (ticketTime == null && text.matches(timePattern)) {
+                ticketTime = text;
             }
 
             // 구단명 추출
             if (teamMapping.containsKey(text)) {
-                teamEnglishList.add(teamEnglishNameMap.get(text));
                 teamKoreanList.add(teamMapping.get(text));
+                teamEnglishList.add(teamEnglishNameMap.get(text));
             }
         }
 
-        log.info(teamEnglishList.toString());
-        log.info(teamKoreanList.toString());
+        log.info("Extracted Date: {}", ticketDate);
+        log.info("Extracted Time: {}", ticketTime);
+        log.info("Team English List: {}", teamEnglishList);
+        log.info("Team Korean List: {}", teamKoreanList);
 
         if (ticketDate == null) {
             throw new IllegalArgumentException("날짜 정보가 누락되었습니다.");
         }
-        if (teamEnglishList.size() < 2 || teamKoreanList.size() < 2) {
+        if (ticketTime == null) {
+            throw new IllegalArgumentException("시간 정보가 누락되었습니다.");
+        }
+        if (teamKoreanList.size() < 2 || teamEnglishList.size() < 2) {
             throw new IllegalArgumentException("팀 이름 정보가 누락되었거나 부족합니다.");
         }
 
         Map<String, Object> response = new HashMap<>();
         response.put("date", ticketDate);
-        response.put("teamEnglish", teamEnglishList);
+        response.put("time", ticketTime);
         response.put("teamKorean", teamKoreanList);
+        response.put("teamEnglish", teamEnglishList);
 
         return response;
     }
+
+
 }
