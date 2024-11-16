@@ -34,7 +34,6 @@ export const getPlayers = (request: GetPlayersRequest) => axios.get<{content: Ar
     }
 })
 
-
 // 선수 정보 조회
 export interface GetPlayerRequest {
     playerId: number;
@@ -97,7 +96,6 @@ export const getPitcherRecord = (request: GetPlayerRecordRequest) => axios.get<A
 export const getHitterRecord = (request: GetPlayerRecordRequest) => axios.get<Array<GetHitterRecordResponse>>(`/api-baseball/stats/hitters/${request.id}`);
 
 // 선수 하이라이트 영상 조회
-
 export interface GetPlayerHighlightsRequest {
     name: string;
 }
@@ -107,3 +105,23 @@ export const getPlayerHightlights = (request: GetPlayerHighlightsRequest) => axi
         playerName: request.name
     }
 })
+
+// 선수 좋아요 여부 조회
+// TODO: 유저 ID 삭제
+export interface GetPlayerLikedStatusRequest {
+    playerId: number;
+}
+
+export interface GetPlayerLikedStatusResponse {
+    playerId: number;
+    isLiked: boolean;
+}
+
+export const getPlayerLikedStatus = (request: GetPlayerLikedStatusRequest) => axios.get<GetPlayerLikedStatusResponse>(`/api-baseball/players/like/1/${request.playerId}`);
+
+// 선수 좋아요/좋아요 취소
+export interface UpdatePlayerLikedStatusRequest {
+    playerId: number;
+}
+
+export const updatePlayerLikedStatus = (request: UpdatePlayerLikedStatusRequest) => axios.post(`/api-baseball/players/like/${request.playerId}`);
