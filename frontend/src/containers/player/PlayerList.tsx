@@ -26,6 +26,7 @@ export interface PlayerInfo {
   birth: string;
   physical: string;
   likeCount: number;
+  imageUrl: string;
 }
 
 const sortItem: Record<string, string> = {
@@ -83,11 +84,12 @@ const PlayerList = () => {
           birth: d.birth,
           physical: d.physical,
           likeCount: d.likeCount,
+          imageUrl: d.imageUrl,
         };
 
         return {
           id: d.id,
-          imgUrl: "선수 사진 URL", // TODO: GET - 선수 사진 URL
+          imgUrl: d.imageUrl,
           name: d.name,
           likeCount: d.likeCount,
           goDetail: () => goDetail(playerInfo),
