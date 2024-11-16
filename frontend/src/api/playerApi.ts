@@ -118,3 +118,10 @@ export interface GetPlayerLikedStatusResponse {
 }
 
 export const getPlayerLikedStatus = (request: GetPlayerLikedStatusRequest) => axios.get<GetPlayerLikedStatusResponse>(`/api-baseball/players/like/1/${request.playerId}`);
+
+// 선수 좋아요/좋아요 취소
+export interface UpdatePlayerLikedStatusRequest {
+    playerId: number;
+}
+
+export const updatePlayerLikedStatus = (request: UpdatePlayerLikedStatusRequest) => axios.post(`/api-baseball/players/like/${request.playerId}`);

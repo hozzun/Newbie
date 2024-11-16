@@ -13,6 +13,7 @@ import { HitterRecords, PitcherRecords, Video } from "../../containers/player/Pl
 
 interface PlayerProps {
   isPlayerLiked: boolean;
+  handlePlayerLikedStatus: () => void;
   playerInfo: PlayerInfo | null;
   clubId: string | null;
   playerRecord: PitcherRecords | HitterRecords | null;
@@ -29,6 +30,7 @@ const Player = (props: PlayerProps) => {
       ? CIRCLE_BUTTON_VARIANTS.errorLine
       : CIRCLE_BUTTON_VARIANTS.grayLine,
     item: { img: Heart },
+    onClick: props.handlePlayerLikedStatus,
   };
 
   return (

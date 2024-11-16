@@ -11,6 +11,7 @@ import {
   getPlayer,
   getPlayerHightlights,
   getPlayerLikedStatus,
+  updatePlayerLikedStatus,
 } from "../../api/playerApi";
 import { PlayerRecordItemProps } from "../../components/player/PlayerRecordItem";
 import { useParams } from "react-router-dom";
@@ -404,9 +405,27 @@ const Player = () => {
     };
   }, []);
 
+  const handlePlayerLikedStatus = async () => {
+    try {
+      if (!playerId) {
+        throw new CustomError("[ERROR] 선수 ID 없음 by player");
+      }
+
+      const response = await updatePlayerLikedStatus({ playerId: parseInt(playerId) });
+      if (response.status === 200) {
+        setIsPlayerLiked(!isPlayerLiked);
+        // TODO: 선수 좋아요 변경 성공 stack bar로 보여주기
+        alert(isPlayerLiked ? "선수 좋아요 취소 성공" : "선수 좋아요 성공");
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   return (
     <PlayerComponent
       isPlayerLiked={isPlayerLiked}
+      handlePlayerLikedStatus={handlePlayerLikedStatus}
       playerInfo={playerInfo ? playerInfo : subPlayerInfo}
       clubId={clubId ? clubId : null}
       playerRecord={playerRecord}
