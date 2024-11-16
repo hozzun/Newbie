@@ -17,7 +17,4 @@ public class PlayerDetailDto {
     private String imageUrl;
     private String position;
     private String createdAt;
-    private String birthday;
-    private String physical;
-    private String career;
 }

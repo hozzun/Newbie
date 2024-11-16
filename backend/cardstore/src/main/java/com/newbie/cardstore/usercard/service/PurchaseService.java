@@ -2,6 +2,8 @@ package com.newbie.cardstore.usercard.service;
 
 import com.newbie.cardstore.config.CustomException;
 import com.newbie.cardstore.config.ErrorCode;
+import com.newbie.cardstore.storecard.entity.PlayerCard;
+import com.newbie.cardstore.storecard.repository.PlayerCardRepository;
 import com.newbie.cardstore.usercard.dto.MileageDeductionDto;
 import com.newbie.cardstore.usercard.dto.PurchaseDto;
 import com.newbie.cardstore.usercard.entity.UserCard;
@@ -18,6 +20,7 @@ import org.springframework.web.client.RestTemplate;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +30,7 @@ public class PurchaseService {
     private final RabbitTemplate rabbitTemplate;
     private final UserCardRepository userCardRepository;
     private final RestTemplate restTemplate = new RestTemplate();
+    private final PlayerCardRepository playerCardRepository;
 
     @Value("${rabbitmq.exchange.name}")
     private String exchangeName;
@@ -41,7 +45,8 @@ public class PurchaseService {
     private String mileageServerPath;
 
     public boolean checkMileage(Long userId, double price) {
-        String url = milesServerName + mileageServerPath + "/check-mileage?userId=" + userId + "&price=" + price;
+        String url = milesServerName + ":" + mileageServerPath + "/check-mileage?userId=" + userId + "&price=" + price;
+        log.info(url);
         log.info("Sending request to check mileage for userId: {}, price: {}", userId, price);
 
         ResponseEntity<Boolean> response = restTemplate.getForEntity(url, Boolean.class);
@@ -74,9 +79,13 @@ public class PurchaseService {
             throw new CustomException(ErrorCode.CARD_ALREADY_PURCHASED);
         }
 
+        PlayerCard playerCard = playerCardRepository.findById(purchaseDto.getCardId())
+                .orElseThrow(() -> new IllegalArgumentException("Card not found"));
+
+        double price = playerCard.getPrice();
         // 마일리지 확인 후 구매 처리
-        if (checkMileage(purchaseDto.getUserId(), purchaseDto.getPrice())) {
-            if (sendMileageDeductionRequest(purchaseDto.getUserId(), purchaseDto.getPrice())) {
+        if (checkMileage(purchaseDto.getUserId(), price)) {
+            if (sendMileageDeductionRequest(purchaseDto.getUserId(), price)) {
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 String createdAt = dateFormat.format(new Date());
 
@@ -100,7 +109,7 @@ public class PurchaseService {
                 throw new CustomException(ErrorCode.MILEAGE_CHECK_FAILED);
             }
         } else {
-            log.error("Insufficient mileage for userId: {}, purchase price: {}", purchaseDto.getUserId(), purchaseDto.getPrice());
+            log.error("Insufficient mileage for userId: {}, purchase price: {}", purchaseDto.getUserId(), price);
             throw new CustomException(ErrorCode.INSUFFICIENT_MILEAGE);
         }
     }

@@ -2,6 +2,7 @@ package com.newbie.board.usedBoard.controller;
 
 
 import com.newbie.board.generalBoard.dto.GeneralBoardResponseDto;
+import com.newbie.board.usedBoard.dto.UsedBoardCommentResponseDto;
 import com.newbie.board.usedBoard.dto.UsedBoardRequestDto;
 import com.newbie.board.usedBoard.dto.UsedBoardResponseDto;
 import com.newbie.board.usedBoard.dto.UsedBoardUpdateRequestDto;
@@ -31,13 +32,12 @@ public class UsedBoardController {
      * 유저가 게시글을 생성합니다.
      *
      * @param usedBoardDto 사용자가 입력한 게시글 정보
-     * @param imageFile    업로드할 이미지 파일
      */
     @Operation(summary = "유저 게시글 생성", description = "유저가 게시글을 생성합니다.")
     @PostMapping("/create")
     public ResponseEntity<UsedBoardResponseDto> createUsedBoard(
             @ModelAttribute @Parameter(description = "userId, title, content, tagList, price, region") UsedBoardRequestDto usedBoardDto,
-            @RequestPart("imageFile") MultipartFile imageFile) throws IOException {
+            @RequestPart @Parameter(description = "imageFile") MultipartFile imageFile) throws IOException {
         return ResponseEntity.status(HttpStatus.CREATED).body(usedBoardService.createUsedBoard(usedBoardDto, imageFile));
     }
 
@@ -48,7 +48,12 @@ public class UsedBoardController {
     @Operation(summary = "유저 게시글 전체 조회", description = "유저가 모든 게시글을 조회합니다.")
     @GetMapping()
     public ResponseEntity<List<UsedBoardResponseDto>> getUsedBoardList() {
-        return ResponseEntity.ok(usedBoardService.getUsedBoardList());
+        List<UsedBoardResponseDto> responseDto = usedBoardService.getUsedBoardList();
+        if (responseDto != null) {
+            return ResponseEntity.ok(responseDto);
+        } else {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
     }
 
 

@@ -5,7 +5,8 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import Select
+from selenium.webdriver.support.ui import Select, WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 def crawl_team_hitter_stats():
     chrome_options = Options()
@@ -22,7 +23,8 @@ def crawl_team_hitter_stats():
     service = Service(executable_path=driver_path)
     
     team_hitter_stats = []
-    current_year = datetime.now().year
+    # current_year = datetime.now().year
+    year_list = ["2020", "2021", "2022", "2023", "2024"]
 
     try:
         driver = webdriver.Chrome(service=service, options=chrome_options)
@@ -34,30 +36,39 @@ def crawl_team_hitter_stats():
         dropdown.select_by_value("0")
         time.sleep(2)
         
-        rows = driver.find_elements(By.CSS_SELECTOR, "#cphContents_cphContents_cphContents_udpContent > div.record_result > table > tbody > tr")
+        # 여기
+        for year in year_list:
+            year_select = WebDriverWait(driver, 10).until(
+                    EC.presence_of_element_located((By.ID, "cphContents_cphContents_cphContents_ddlSeason_ddlSeason"))
+                )
+            Select(year_select).select_by_value(year)
+            time.sleep(2)
+            #까지
         
-        for row in rows:
-            columns = row.find_elements(By.TAG_NAME, "td")
+            rows = driver.find_elements(By.CSS_SELECTOR, "#cphContents_cphContents_cphContents_udpContent > div.record_result > table > tbody > tr")
             
-            team_stats = {
-                "year": str(current_year),
-                "rank": columns[0].text,
-                "team_name": columns[1].text,
-                "avg": columns[2].text,
-                "game_count": columns[3].text,
-                "pa": columns[4].text,
-                "ab": columns[5].text,
-                "r": columns[6].text,
-                "h": columns[7].text,
-                "two": columns[8].text,
-                "three": columns[9].text,
-                "homerun": columns[10].text,
-                "tb": columns[11].text,
-                "rbi": columns[12].text,
-                "sac": columns[13].text,
-                "sf": columns[14].text,
-            }
-            team_hitter_stats.append(team_stats)
+            for row in rows:
+                columns = row.find_elements(By.TAG_NAME, "td")
+                
+                team_stats = {
+                    "year": str(year),
+                    "rank": columns[0].text,
+                    "team_name": columns[1].text,
+                    "avg": columns[2].text,
+                    "game_count": columns[3].text,
+                    "pa": columns[4].text,
+                    "ab": columns[5].text,
+                    "r": columns[6].text,
+                    "h": columns[7].text,
+                    "two": columns[8].text,
+                    "three": columns[9].text,
+                    "homerun": columns[10].text,
+                    "tb": columns[11].text,
+                    "rbi": columns[12].text,
+                    "sac": columns[13].text,
+                    "sf": columns[14].text,
+                }
+                team_hitter_stats.append(team_stats)
 
     except Exception as e:
         print(f"크롤링 중 오류 발생: {e}")

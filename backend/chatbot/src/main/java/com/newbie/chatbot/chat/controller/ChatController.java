@@ -27,16 +27,24 @@ public class ChatController {
         return chatRoomService.getOrCreateRoom(userId);
     }
 
-    @MessageMapping("/chat/{roomId}")
+    @MessageMapping("/chatbot/{roomId}")
     public MessageDto handleMessage(ChatRequestDto chatRequestDto, @DestinationVariable String roomId) {
         chatRoomService.saveMessage(roomId, chatRequestDto);
 
         return aiService.generateAnswer(chatRequestDto.getMessage(), roomId);
     }
 
-    @GetMapping("/chat/{roomId}/history")
-    public List<ChatRequestDto> getMessageHistory(@PathVariable String roomId) {
-        log.info("Get message history for room: {}", roomId);
+    @GetMapping("/chatbot/{userId}/history")
+    public List<ChatRequestDto> getMessageHistory(@PathVariable int userId) {
+        String roomId = chatRoomService.getRoomIdByUserId(userId);
+
+        if (roomId == null) {
+            log.warn("Room not found for userId: {}", userId);
+            return List.of();
+        }
+
+        log.info("Get message history for userId: {} in room: {}", userId, roomId);
         return chatRoomService.getMessages(roomId);
     }
+
 }

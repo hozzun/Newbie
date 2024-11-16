@@ -29,4 +29,14 @@ public class ActivityController {
         List<ActivityResponseDto> userActivities = userActivityService.getUserActivities(userId);
         return ResponseEntity.ok(userActivities);
     }
+
+    @Operation(summary = "사용자 활동 삭제", description = "사용자의 활동을 삭제합니다.")
+    @DeleteMapping("{activityId}")
+    public ResponseEntity<Void> deleteActivity(
+            @PathVariable @Parameter(description = "활동 ID") Long activityId,
+            Long userId) {
+
+        userActivityService.deleteActivity(activityId, userId);
+        return ResponseEntity.noContent().build();
+    }
 }

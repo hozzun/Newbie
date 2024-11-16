@@ -8,6 +8,15 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
 
+def wait_for_loading_to_finish(driver):
+    try:
+        WebDriverWait(driver, 10).until(
+            EC.invisibility_of_element((By.CLASS_NAME, "bx-loading"))
+        )
+        print("로딩 화면이 사라졌습니다.")
+    except TimeoutException:
+        print("로딩 화면이 사라지지 않았습니다. 계속 진행합니다.")
+
 def crawl_game_record():
     chrome_options = Options()
     chrome_options.add_argument("--headless")
@@ -31,7 +40,8 @@ def crawl_game_record():
 
         current_date_str = driver.find_element(By.ID, "nowDate").get_attribute("value")
         current_date = datetime.strptime(current_date_str, "%Y%m%d")
-        end_date = current_date - timedelta(days=1)
+        end_date = current_date - timedelta(days=10)
+        # end_date = datetime(2023, 1, 1)
 
         while current_date >= end_date:
             games = driver.find_elements(By.CSS_SELECTOR, ".game-cont")
@@ -40,6 +50,12 @@ def crawl_game_record():
                 return []
             else:
                 for game in games:
+                    is_canceled = "cancel" in game.get_attribute("class")
+                    
+                    if is_canceled:
+                        print(f"경기 취소됨: {game.get_attribute('g_dt')} - {game.get_attribute('s_nm')}")
+                        continue  # 취소된 경기는 건너뛰기
+                    
                     game_date_raw = game.get_attribute("g_dt")
                     game_date = datetime.strptime(game_date_raw, '%Y%m%d').strftime('%Y-%m-%d')
                     stadium = game.get_attribute("s_nm")
@@ -61,23 +77,40 @@ def crawl_game_record():
                     # away와 home 팀의 선발 투수를 각 경기에 맞게 가져오기
                     away_starting_pitcher = get_pitcher_name(game, ".team.away")
                     home_starting_pitcher = get_pitcher_name(game, ".team.home")
+                    
+                    # 로딩 화면 대기
+                    # wait_for_loading_to_finish(driver)
 
-                    game.click()
-                    time.sleep(2)
+                    # 경기 클릭 가능 여부 확인 후 클릭
+                    if game.is_displayed() and game.is_enabled():
+                        game.click()
+                        time.sleep(2)
+                    else:
+                        print(f"경기를 클릭할 수 없습니다: {game_date} - {stadium}")
+                        continue
 
                     review_tab = driver.find_elements(By.LINK_TEXT, "리뷰")
                     if review_tab:
-                        review_tab[0].click()
-                        time.sleep(2)
-
                         try:
+                            WebDriverWait(driver, 10).until(
+                                EC.element_to_be_clickable((By.LINK_TEXT, "리뷰"))
+                            )
+                            review_tab[0].click()
+                            print(f"{game_date} 날짜 리뷰 탭 누름")
+
+                            WebDriverWait(driver, 10).until(
+                                EC.presence_of_element_located((By.ID, "txtStadium"))
+                            )
+                            print("리뷰 데이터 로드 완료")
+
                             stadium = driver.find_element(By.ID, "txtStadium").text.replace("구장 : ", "").strip()
                             crowd = driver.find_element(By.ID, "txtCrowd").text.replace("관중 : ", "").strip()
                             start_time = driver.find_element(By.ID, "txtStartTime").text.replace("개시 : ", "").strip()
                             end_time = driver.find_element(By.ID, "txtEndTime").text.replace("종료 : ", "").strip()
                             run_time = driver.find_element(By.ID, "txtRunTime").text.replace("경기시간 : ", "").strip()
                         except:
-                            pass
+                            print(f"{game_date} - 리뷰 데이터 로드 실패")
+                            continue
 
                         # 실제 경기 진행된 이닝 수 계산
                         innings = driver.find_elements(By.CSS_SELECTOR, "#tblScordboard2 tbody tr")

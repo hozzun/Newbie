@@ -36,10 +36,10 @@ public class OpenAIService {
         userMessage.put("content", question);
 
         Map<String, Object> requestBody = new HashMap<>();
-        requestBody.put("model", "ft:gpt-4o-mini-2024-07-18:personal::AQQbnB1n");
+        requestBody.put("model", "ft:gpt-4o-mini-2024-07-18:personal:baseball-chatbot:ATM9t8zG");
         requestBody.put("messages", List.of(userMessage));
-        requestBody.put("temperature", 0.7);
-        requestBody.put("max_tokens", 150);
+        requestBody.put("temperature", 0.8);
+        requestBody.put("max_tokens", 200);
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + apiKey);

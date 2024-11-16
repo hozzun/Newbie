@@ -26,7 +26,6 @@ public class MileageService {
         log.info("Checking mileage for userId: {} with required price: {}", userId, price);
 
         Optional<UserMileage> userMileageOpt = userMileageRepository.findFirstByUserIdOrderByIdDesc(userId);
-
         if (userMileageOpt.isPresent()) {
             UserMileage userMileage = userMileageOpt.get();
             log.info("유저의 id : {}, 유저의 현재 마일리지 : {}", userId, userMileage.getMileage());

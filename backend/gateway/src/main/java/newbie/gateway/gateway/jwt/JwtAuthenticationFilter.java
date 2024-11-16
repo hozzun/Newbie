@@ -36,21 +36,19 @@ public class JwtAuthenticationFilter extends AuthenticationWebFilter {
             if (token != null && token.startsWith("Bearer ")) {
                 token = token.substring(7);
                 if (jwtUtil.validateToken(token)) {
-
-                    Long userId = jwtUtil.getUserIdFromToken(token);
-                    String nickname = jwtUtil.getNicknameFromToken(token);
+                    Long memberId = jwtUtil.getMemberIdFromToken(token);
+                    String email = jwtUtil.getEmailFromToken(token);
 
                     exchange.getRequest().mutate()
-                            .header("user-id", userId.toString())
-                            .header("user-nickname", nickname)
+                            .header("id", memberId.toString())
+                            .header("email", email)
                             .build();
 
                     return Mono.just(new UsernamePasswordAuthenticationToken(
-                            userId, null, new ArrayList<>()));
+                            memberId, null, new ArrayList<>()));
                 }
             }
             return Mono.empty();
         }
-
     }
 }

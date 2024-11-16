@@ -10,6 +10,9 @@ import com.newbie.baseball.domain.playerStats.repository.PitcherStatsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class StatsServiceImpl implements StatsService {
@@ -18,15 +21,37 @@ public class StatsServiceImpl implements StatsService {
     private final PitcherStatsRepository pitcherStatsRepository;
 
     @Override
-    public HitterStatsResponseDto getHitterStats(Integer playerId) {
-        HitterStats hitterStats = hitterStatsRepository.findByPlayerId(playerId)
+    public List<HitterStatsResponseDto> getHitterStats(Integer playerId) {
+        List<HitterStats> hitterStats = hitterStatsRepository.findByPlayerId(playerId);
+        if (hitterStats.isEmpty()) {
+            throw new StatsNotFoundException();
+        }
+        return hitterStats.stream()
+                .map(this::convertToHitterStatsResponseDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public HitterStatsResponseDto getHittersStatsByYear(Integer playerId, String year) {
+        HitterStats hitterStats = hitterStatsRepository.findByPlayerIdAndYear(playerId, year)
                 .orElseThrow(StatsNotFoundException::new);
         return convertToHitterStatsResponseDto(hitterStats);
     }
 
     @Override
-    public PitcherStatsResponseDto getPitcherStats(Integer playerId) {
-        PitcherStats pitcherStats = pitcherStatsRepository.findByPlayerId(playerId)
+    public List<PitcherStatsResponseDto> getPitcherStats(Integer playerId) {
+        List<PitcherStats> pitcherStats = pitcherStatsRepository.findByPlayerId(playerId);
+        if (pitcherStats.isEmpty()) {
+            throw new StatsNotFoundException();
+        }
+        return pitcherStats.stream()
+                .map(this::convertToPitcherStatsResponseDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public PitcherStatsResponseDto getPitchersStatsByYear(Integer playerId, String year) {
+        PitcherStats pitcherStats = pitcherStatsRepository.findByPlayerIdAndYear(playerId, year)
                 .orElseThrow(StatsNotFoundException::new);
         return convertToPitcherStatsResponseDto(pitcherStats);
     }

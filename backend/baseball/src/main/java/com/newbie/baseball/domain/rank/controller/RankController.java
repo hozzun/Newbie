@@ -23,7 +23,7 @@ public class RankController {
     @Operation(summary = "팀 순위 및 성적 조회 (옵션: 연도, 팀ID)")
     @GetMapping
     public ResponseEntity<List<RankResponseDto>> getRanks(
-            @Parameter(description = "조회할 연도 (옵션) [ 2021 ~ 2024 ]", example = "2024") @RequestParam(value = "year", required = false) String year,
+            @Parameter(description = "조회할 연도 (옵션) [ 2020 ~ 2024 ]", example = "2024") @RequestParam(value = "year", required = false) String year,
             @Parameter(description = "조회할 팀 ID (옵션)", example = "1") @RequestParam(value = "teamId", required = false) Integer teamId) {
         List<RankResponseDto> ranks = rankService.getRanks(year, teamId);
         return new ResponseEntity<>(ranks, HttpStatus.OK);
