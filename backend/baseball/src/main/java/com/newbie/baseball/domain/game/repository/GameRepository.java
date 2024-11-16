@@ -34,7 +34,7 @@ public interface GameRepository extends JpaRepository<Game, Integer> {
     List<Game> findByDateAndTeam(@Param("date") String date, @Param("teamId") Integer teamId);
 
     @Query("SELECT g FROM Game g " +
-            "WHERE g.homeTeam.id = :teamId " +
+            "WHERE (g.homeTeam.id = :teamId OR g.awayTeam.id = :teamId) " +
             "AND CAST(g.date AS date) >= CURRENT_DATE " +
             "AND g.gameResult = '경기 예정' " +
             "ORDER BY g.date ASC, g.time ASC")
@@ -42,4 +42,7 @@ public interface GameRepository extends JpaRepository<Game, Integer> {
 
     @Query("SELECT g FROM Game g WHERE g.gameResult = '진행 중'")
     List<Game> findLiveGames();
+
+    @Query("SELECT g FROM Game g WHERE g.gameResult = '경기 종료' ORDER BY g.date DESC LIMIT 1")
+    Optional<Game> findMostRecentFinishedGame();
 }
