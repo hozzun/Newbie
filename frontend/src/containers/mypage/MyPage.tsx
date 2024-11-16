@@ -22,6 +22,13 @@ interface UserInfo {
   profileImage: string;
 }
 
+interface Game {
+  date: string;
+  homeTeamId: number;
+  awayTeamId: number;
+  stadium: string;
+}
+
 type TeamName =
   | "doosan"
   | "hanwha"
@@ -36,8 +43,13 @@ type TeamName =
 
 const MyPage = () => {
   const [userInfo, setUserInfo] = useState<UserInfo>();
+  const [games, setGames] = useState<Game[]>([]);
   const { team } = useSelector((state: RootState) => state.team);
   const nav = useNavigate();
+
+  useEffect(() => {
+    getUserInfo();
+  }, []);
 
   const goRevise = () => {
     nav("/mypage/revise", { state: { userInfo } });
@@ -78,9 +90,23 @@ const MyPage = () => {
     }
   };
 
+  const getGameInfo = async () => {
+    const year = new Date().getFullYear();
+    const month = 8; // 9월로 고정
+    const formattedMonth = month.toString().padStart(2, "0");
+    const params = { year: year.toString(), month: formattedMonth, teamId: team };
+
+    try {
+      const response = await axiosInstance.get("/api-baseball/games", { params });
+      setGames(response.data);
+    } catch (error) {
+      console.error("경기 데이터를 불러오는 중 오류 발생:", error);
+    }
+  };
+
   useEffect(() => {
-    getUserInfo();
-  }, []);
+    getGameInfo()
+  }, [team])
 
   if (userInfo) {
     const teamName = getIdByNum(team) as TeamName | 0;
@@ -89,7 +115,7 @@ const MyPage = () => {
       <>
         <div className="flex justify-between items-center">
           <PageName label="마이페이지" />
-          <Pencil className="w-6 h-6 text-gray-500 hover:cursor-pointer" onClick={goRevise} />
+          <Pencil className="w-6 h-6 mb-2 text-gray-500 hover:cursor-pointer" onClick={goRevise} />
         </div>
         {userInfo && (
           <div>
@@ -115,7 +141,7 @@ const MyPage = () => {
               activeClick={goActive}
               scrapClick={goScrap}
             />
-            <Calendar />
+            <Calendar games={games} team={team} />
             <WatchGame />
             <OutButton />
           </div>

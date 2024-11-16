@@ -57,8 +57,6 @@ const CameraCapture = () => {
     const params = { userId: userId }
     const file = base64ToFile(imageData, "image.png");
 
-    console.log(file);
-
     const formData = new FormData();
     formData.append("image", file);
 
