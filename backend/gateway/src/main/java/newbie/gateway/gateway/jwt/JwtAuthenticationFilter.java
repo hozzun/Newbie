@@ -36,12 +36,8 @@ public class JwtAuthenticationFilter extends AuthenticationWebFilter {
             if (token != null && token.startsWith("Bearer ")) {
                 token = token.substring(7);
                 if (jwtUtil.validateToken(token)) {
-
                     Long memberId = jwtUtil.getMemberIdFromToken(token);
                     String email = jwtUtil.getEmailFromToken(token);
-
-                    System.out.println("Extracted memberId: " + memberId);
-                    System.out.println("Extracted email: " + email);
 
                     exchange.getRequest().mutate()
                             .header("id", memberId.toString())
