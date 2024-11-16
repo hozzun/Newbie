@@ -1,22 +1,19 @@
 import { useRef, useState } from "react";
-// import { useNavigate } from "react-router-dom";
-import IntroCarousel from "../../components/intro/IntroCarousel";
+import IntroCarousel, { CarouselRef } from "../../components/intro/IntroCarousel";
 import Button from "../../components/common/Button";
 import { BUTTON_VARIANTS } from "../../components/common/variants";
-import Slider from "react-slick";
 
 export interface IntroProps {
   goNext: () => void;
 }
 
 const Intro = (props: IntroProps) => {
-  const sliderRef = useRef<Slider>(null);
-  // const navigate = useNavigate();
+  const sliderRef = useRef<CarouselRef>(null);
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const handleNextSlide = () => {
     if (sliderRef.current) {
-      sliderRef.current.slickNext();
+      sliderRef.current.EmblaNext();
     }
   };
 
@@ -41,7 +38,7 @@ const Intro = (props: IntroProps) => {
         onClick={handleButtonClick}
         className="w-full mt-[10%] mb-8"
       >
-        {currentSlide === 2 ? "시작하기" : "다음"} {/* 버튼 텍스트 변경 */}
+        {currentSlide === 2 ? "시작하기" : "다음"}
       </Button>
     </div>
   );

@@ -17,9 +17,9 @@ interface IntroCarouselProps {
 
 // Slider 메서드들을 위한 ref 타입 정의
 export interface CarouselRef {
-  slickNext: () => void;
-  slickPrev: () => void;
-  slickGoTo: (slide: number) => void;
+  EmblaNext: () => void;
+  EmblaPrev: () => void;
+  EmblaGoTo: (slide: number) => void;
 }
 
 const slides: SlideData[] = [
@@ -66,9 +66,9 @@ const IntroCarousel = forwardRef<CarouselRef, IntroCarouselProps>(({ onSlideChan
 
   // ref를 통해 외부에서 사용할 수 있는 메서드들 정의
   useImperativeHandle(ref, () => ({
-    slickNext: () => emblaApi?.scrollNext(),
-    slickPrev: () => emblaApi?.scrollPrev(),
-    slickGoTo: (slide: number) => emblaApi?.scrollTo(slide),
+    EmblaNext: () => emblaApi?.scrollNext(),
+    EmblaPrev: () => emblaApi?.scrollPrev(),
+    EmblaGoTo: (slide: number) => emblaApi?.scrollTo(slide),
   }));
 
   return (
