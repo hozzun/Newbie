@@ -5,9 +5,13 @@ import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.youtube.YouTube;
 import com.google.api.services.youtube.model.SearchListResponse;
 import com.google.api.services.youtube.model.SearchResult;
+import com.newbie.baseball.domain.game.entity.Game;
+import com.newbie.baseball.domain.game.repository.GameRepository;
 import com.newbie.baseball.domain.youtube.dto.res.YouTubeResponseDto;
 import com.newbie.baseball.domain.youtube.exception.YoutubeNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +25,10 @@ import java.util.Date;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class YouTubeServiceImpl implements YouTubeService {
+
+    private final GameRepository gameRepository;
 
     private static final Logger logger = LoggerFactory.getLogger(YouTubeServiceImpl.class);
 
@@ -128,5 +135,20 @@ public class YouTubeServiceImpl implements YouTubeService {
             logger.error("Error occurred while parsing the date format", e);
             throw new IllegalArgumentException("Invalid date format. Please use 'yyyy-MM-dd'.");
         }
+    }
+
+    @Cacheable(value = "recentHilightCache", key = "'recentGame'")
+    public YouTubeResponseDto searchMostRecentGameHighlights() {
+        // 최근 "경기 종료" 경기 조회
+        Game recentGame = gameRepository.findMostRecentFinishedGame()
+                .orElseThrow(YoutubeNotFoundException::new);
+
+        // 팀 이름과 날짜 가져오기
+        String date = recentGame.getDate(); // yyyy-MM-dd 형식으로 저장되어 있다고 가정
+        String teamName1 = recentGame.getHomeTeam().getTeamName();
+        String teamName2 = recentGame.getAwayTeam().getTeamName();
+
+        // YouTube 하이라이트 검색
+        return searchGameHighlights(date, teamName1, teamName2).get(0);
     }
 }
