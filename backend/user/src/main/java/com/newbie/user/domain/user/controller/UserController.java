@@ -31,7 +31,7 @@ public class UserController {
 
     @Operation(summary = "유저 프로필 조회")
     @GetMapping("/{userId}")
-    public ResponseEntity<UserResponseDto> getUserProfile(@PathVariable Long userId) {
+    public ResponseEntity<UserResponseDto> getUserProfile(@PathVariable("userId") Long userId) {
         UserResponseDto userProfile = userService.getUserProfile(userId);
         return new ResponseEntity<>(userProfile, HttpStatus.OK);
     }
