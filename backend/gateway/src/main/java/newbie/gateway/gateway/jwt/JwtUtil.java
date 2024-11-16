@@ -47,7 +47,7 @@ public class JwtUtil {
 
     // JWT에서 memberId를 Long 타입으로 추출하는 메서드
     public Long getMemberIdFromToken(String token) {
-        return Long.parseLong(getClaimsFromToken(token).getSubject());
+        return getClaimsFromToken(token).get("memberId", Long.class);
     }
 
     // JWT에서 email 추출 메서드
