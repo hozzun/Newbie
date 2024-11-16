@@ -10,6 +10,7 @@ import {
   getPitcherRecord,
   getPlayer,
   getPlayerHightlights,
+  getPlayerLikedStatus,
 } from "../../api/playerApi";
 import { PlayerRecordItemProps } from "../../components/player/PlayerRecordItem";
 import { useParams } from "react-router-dom";
@@ -177,11 +178,31 @@ const Player = () => {
 
   const { clubId, playerId } = useParams<{ clubId: string; playerId: string }>();
 
+  const [isPlayerLiked, setIsPlayerLiked] = useState<boolean>(false);
   const [subPlayerInfo, setSubPlayerInfo] = useState<PlayerInfo | null>(null);
   const [playerRecord, setPlayerRecord] = useState<PitcherRecords | HitterRecords | null>(null);
   const [playerSeasonRecordItem, setPlayerSeasonRecordItem] =
     useState<Array<PlayerRecordItemProps> | null>(null);
   const [playerHighlights, setPlayerHighlights] = useState<Array<Video> | null>(null);
+
+  const fetchPlayerLikeStatus = async () => {
+    try {
+      if (!playerId) {
+        throw new CustomError("[ERROR] 선수 ID 없음 by player");
+      }
+
+      const response = await getPlayerLikedStatus({ playerId: parseInt(playerId) });
+      const isPlayerLikedData = response.data.isLiked;
+
+      setIsPlayerLiked(isPlayerLikedData);
+    } catch (e) {
+      if (axios.isAxiosError(e) && e.response?.status === 404) {
+        console.log("[INFO] 사용자 선수 좋아요 여부 정보 없음 by player");
+      } else {
+        console.error(e);
+      }
+    }
+  };
 
   const fetchPlayerInfo = async () => {
     try {
@@ -374,6 +395,7 @@ const Player = () => {
     if (!playerInfo) {
       fetchPlayerInfo();
     }
+    fetchPlayerLikeStatus();
     fetchPlayerRecord();
     fetchPlayerHighlights();
 
@@ -384,6 +406,7 @@ const Player = () => {
 
   return (
     <PlayerComponent
+      isPlayerLiked={isPlayerLiked}
       playerInfo={playerInfo ? playerInfo : subPlayerInfo}
       clubId={clubId ? clubId : null}
       playerRecord={playerRecord}
