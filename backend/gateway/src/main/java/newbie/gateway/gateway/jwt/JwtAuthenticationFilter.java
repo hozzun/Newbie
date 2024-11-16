@@ -1,7 +1,5 @@
 package newbie.gateway.gateway.jwt;
 
-import io.netty.util.concurrent.ImmediateEventExecutor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
@@ -15,7 +13,6 @@ import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
 
-@Slf4j
 @Component
 public class JwtAuthenticationFilter extends AuthenticationWebFilter {
 
@@ -41,14 +38,10 @@ public class JwtAuthenticationFilter extends AuthenticationWebFilter {
 
                 if (jwtUtil.validateToken(token)) {
                     Long memberId = jwtUtil.getMemberIdFromToken(token);
-                    String email = jwtUtil.getEmailFromToken(token);
+                    String nickname = jwtUtil.getNicknameFromToken(token);
 
-                    log.info(memberId.toString());
-                    log.info(email);
-
-                    // 사용자 정보를 컨텍스트에 저장
                     exchange.getAttributes().put("userId", memberId.toString());
-                    exchange.getAttributes().put("email", email);
+//                    exchange.getAttributes().put("nickname", nickname);
 
                     return Mono.just(new UsernamePasswordAuthenticationToken(
                             memberId, null, new ArrayList<>()));
@@ -57,5 +50,4 @@ public class JwtAuthenticationFilter extends AuthenticationWebFilter {
             return Mono.empty();
         }
     }
-
 }
