@@ -4,6 +4,7 @@ import {
   getClubHitterRecord,
   getClubPitcherRecord,
   getClubRanks,
+  getUpcomingGame,
 } from "../../api/baseballApi";
 import ClubHomeComponent from "../../components/club/ClubHome";
 import ClubId, { getClubIdByNum } from "../../util/ClubId";
@@ -87,6 +88,8 @@ const clubRecordLabel: Record<string, string> = {
   hits: "안타",
   homeRun: "홈런",
 };
+
+const daysOfWeek: Array<string> = ["일", "월", "화", "수", "목", "금", "토"];
 
 const ClubHome = () => {
   const nav = useNavigate();
@@ -255,11 +258,20 @@ const ClubHome = () => {
 
   const fetchUpcomingGame = async () => {
     try {
-      // TODO: GET - 예정된 경기 정보
+      if (!id) {
+        throw new CustomError("[ERROR] 구단 ID 없음 by club home");
+      }
+
+      const teamId = ClubId[id];
+      console.log(teamId);
+      const response = await getUpcomingGame({ teamId: teamId });
+      const upcomingGameDate = new Date(response.data.date);
+      const opponentClubId =
+        response.data.homeTeamId === teamId ? response.data.awayTeamId : response.data.homeTeamId;
       const upcomingGameData: UpcomingGameData = {
-        stadium: "수원",
-        day: "2024.10.01 (화) 17:00",
-        teamId: getClubIdByNum(2),
+        stadium: response.data.stadium,
+        day: `${response.data.date.replace(/-/g, ".")} (${daysOfWeek[upcomingGameDate.getDay()]}) ${response.data.time}`,
+        teamId: getClubIdByNum(opponentClubId),
       };
 
       setUpcomingGame(upcomingGameData);

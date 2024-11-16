@@ -12,6 +12,8 @@ import { PlayerInfo } from "../../containers/player/PlayerList";
 import { HitterRecords, PitcherRecords, Video } from "../../containers/player/Player";
 
 interface PlayerProps {
+  isPlayerLiked: boolean;
+  handlePlayerLikedStatus: () => void;
   playerInfo: PlayerInfo | null;
   clubId: string | null;
   playerRecord: PitcherRecords | HitterRecords | null;
@@ -19,14 +21,17 @@ interface PlayerProps {
   playerHighlights: Array<Video> | null;
 }
 
-const rightButtonProps: CircleButtonProps = {
-  className: "w-9 h-9",
-  variant: CIRCLE_BUTTON_VARIANTS.errorLine,
-  item: { img: Heart },
-};
-
 const Player = (props: PlayerProps) => {
   const currentYear = new Date().getFullYear();
+
+  const rightButtonProps: CircleButtonProps = {
+    className: "w-9 h-9",
+    variant: props.isPlayerLiked
+      ? CIRCLE_BUTTON_VARIANTS.errorLine
+      : CIRCLE_BUTTON_VARIANTS.grayLine,
+    item: { img: Heart },
+    onClick: props.handlePlayerLikedStatus,
+  };
 
   return (
     <>
