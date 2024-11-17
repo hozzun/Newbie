@@ -13,7 +13,7 @@ import { AppDispatch } from "../../redux/store";
 import Dialog from '../../components/common/Dialog';
 
 const base64ToBlob = (base64: string, mimeType: string): Blob => {
-  const byteCharacters = atob(base64);  // atob을 사용해 base64 문자열을 디코딩합니다.
+  const byteCharacters = atob(base64);  // atob을 사용해 base64 문자열 디코딩
   const byteNumbers = new Array(byteCharacters.length);
   
   // 각 문자를 byte로 변환하여 byteNumbers 배열에 추가
@@ -80,7 +80,7 @@ const ReviseInfo = () => {
   }
   
     try {
-      const response = await axiosInstance.patch("/api-user/users/5", formData, {
+      const response = await axiosInstance.patch("/api/v1/users", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

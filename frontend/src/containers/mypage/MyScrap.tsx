@@ -24,7 +24,7 @@ const MyScrap = () => {
   const getScrap = async () => {
 
     try {
-      const response = await axiosInstance.get("/api-board/scrap");
+      const response = await axiosInstance.get("/api/v1/scrap");
       setScraps(response.data);
     } catch (error) {
       console.error("에러 발생:", error);

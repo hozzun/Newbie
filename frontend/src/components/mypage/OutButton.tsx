@@ -19,7 +19,7 @@ const OutButton = () => {
   const patchDelete = async () => {
   
     try {
-      const response = await axiosInstance.patch("/api-user/users/resign");
+      const response = await axiosInstance.patch("/api/v1/users/resign");
       console.log(response);
     } catch (error) {
       console.error("Error fetching cheer song:", error);

@@ -73,7 +73,7 @@ const MyPage = () => {
     const params = { year: year.toString(), month: formattedMonth, teamId: team };
 
     try {
-      const response = await axiosInstance.get("/api-baseball/games", { params });
+      const response = await axiosInstance.get("/api/v1/games", { params });
       setGames(response.data);
     } catch (error) {
       console.error("경기 데이터를 불러오는 중 오류 발생:", error);
