@@ -41,7 +41,7 @@ public class JwtAuthenticationFilter extends AuthenticationWebFilter {
                     String nickname = jwtUtil.getNicknameFromToken(token);
 
                     exchange.getAttributes().put("userId", memberId.toString());
-//                    exchange.getAttributes().put("nickname", nickname);
+                    exchange.getAttributes().put("nickname", nickname);
 
                     return Mono.just(new UsernamePasswordAuthenticationToken(
                             memberId, null, new ArrayList<>()));
