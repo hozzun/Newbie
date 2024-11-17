@@ -36,7 +36,7 @@ const Redirect = () => {
         let response: AxiosResponse<AuthResponse>;
 
         if (platform === "kakao" && code) {
-          response = await axiosInstance.post(`/api-auth/login/kakao/${code}`);
+          response = await axiosInstance.post(`/api/v1/login/kakao/${code}`);
           // Redux store에 사용자 정보 저장
           dispatch(
             setUserInfo({
@@ -46,9 +46,7 @@ const Redirect = () => {
             }),
           );
         } else if (platform === "google" && accessToken) {
-          response = await axiosInstance.post<AuthResponse>(
-            `/api-auth/login/google/${accessToken}`,
-          );
+          response = await axiosInstance.post<AuthResponse>(`/api/v1/login/google/${accessToken}`);
           dispatch(
             setUserInfo({
               email: response.data.email,
