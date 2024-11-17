@@ -29,10 +29,10 @@ const CardStore = () => {
   const dispatch = useDispatch();
 
   const cardStoreListItem = useSelector((state: RootState) => state.cardStore.cardStoreListItem);
+  const { team } = useSelector((state: RootState) => state.team);
 
-  // TODO: 사용자 응원 구단으로 지정하기
   const [selectedClubOption, setSelectedClubOption] = useState<string>(
-    cardStoreListItem.club === "" ? "kia" : cardStoreListItem.club,
+    cardStoreListItem.club === "" ? getClubIdByNum(team !== 0 ? team : 1) : cardStoreListItem.club,
   );
   const [selectedPositionOption, setSelectedPositionOption] = useState<string>(
     cardStoreListItem.position,

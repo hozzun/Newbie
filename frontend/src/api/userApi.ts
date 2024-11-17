@@ -14,6 +14,9 @@ export const getUserProfile = () => {
   return axios.get<getUserProfileResponse[]>("/api-user/users/:id");
 };
 
+// 응원 구단 조회
+export const getCheeringClub = () => axios.get<number>("/api-user/users/5/favorite-team");
+
 // 최신 직관 경기 조회
 export interface GetLatestAttendedGameResponse {
   id: string;

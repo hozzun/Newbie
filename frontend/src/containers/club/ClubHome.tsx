@@ -16,12 +16,13 @@ import CustomError from "../../util/CustomError";
 import { PlayerListProps } from "../../components/club/PlayerList";
 import { GetPlayersRequest, getPlayers } from "../../api/playerApi";
 import { PlayerInfo, PlayerItemProps } from "../player/PlayerList";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { clearPlayerListItem, setPlayer } from "../../redux/playerSlice";
 import { ClubRankHistoryProps } from "../../components/club/ClubRankHistory";
 import { ClubCarouselProps } from "../../components/common/ClubCarousel";
 import { ClubRecordItemProps } from "../../components/club/ClubRecordItem";
 import { ClubRecordProps } from "../../components/club/ClubRecord";
+import { RootState } from "../../redux/store";
 
 export interface ClubRank {
   year: string;
@@ -96,6 +97,8 @@ const ClubHome = () => {
   const dispatch = useDispatch();
 
   const { id } = useParams<{ id: string }>();
+
+  const { team } = useSelector((state: RootState) => state.team);
 
   const today = new Date();
 
@@ -346,18 +349,20 @@ const ClubHome = () => {
 
   useEffect(() => {
     if (id) {
-      // TODO: GET - 사용자 응원 구단 ID
-      setIsVisibleButton(1 !== ClubId[id]);
+      setIsVisibleButton(team !== ClubId[id]);
     } else {
       throw new CustomError("[ERROR] 구단 ID 없음 by club home");
     }
-  }, [id]);
+  }, [team, id]);
 
   const handleRegisterCheerClub = async () => {
-    // TODO: GET - 사용자 응원 구단 ID
     // TODO: 응원 구단 등록 완료 시 stackbar 표시하기
     try {
-      const response = await registerCheerClub({ teamId: 1 });
+      if (!id) {
+        throw new CustomError("[ERROR] 구단 ID 없음 by club home");
+      }
+
+      const response = await registerCheerClub({ teamId: ClubId[id] });
 
       if (response.status === 200) {
         alert("응원 구단 등록 성공");
