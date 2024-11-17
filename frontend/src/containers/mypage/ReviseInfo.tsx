@@ -10,6 +10,7 @@ import { RootState } from "../../redux/store";
 import { useDispatch } from 'react-redux';
 import { fetchMyInfo } from '../../redux/myInfoSlice';
 import { AppDispatch } from "../../redux/store";
+import Dialog from '../../components/common/Dialog';
 
 const base64ToBlob = (base64: string, mimeType: string): Blob => {
   const byteCharacters = atob(base64);  // atob을 사용해 base64 문자열을 디코딩합니다.
@@ -41,6 +42,7 @@ const ReviseInfo = () => {
   const [newAddress, setAddress] = useState<{ si: string; gun: string }>({ si: '', gun: '' })
   const [disabled, setDisabled] = useState<boolean>(true);
   const [imageUrl, setImageUrl] = useState<string>(`${profileImage}?cacheBust=${Date.now()}`);
+  const [show, setShow] = useState<boolean>(false)
 
   useEffect(() => {
     const [si, ...gunParts] = address.split(' ');
@@ -91,7 +93,9 @@ const ReviseInfo = () => {
 
   const reviseClick = () => {
     patchReviseUser()
+    setShow(true)
     setTimeout(() => {
+      setShow(false)
       nav('/mypage', { state: { imageUrl }})
     }, 3000)
   }
@@ -125,6 +129,7 @@ const ReviseInfo = () => {
           onClick={reviseClick}
         />
       </div>
+      {show && <Dialog title='프로필 수정' body="프로필 수정 중입니다! 잠시만 기다려주세요😊" />}
     </>
   );
 };

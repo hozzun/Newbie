@@ -3,8 +3,8 @@ import Button, { ButtonProps } from "./Button";
 export interface DialogProps {
   title: string; // 제목
   body: React.ReactNode; // 본문
-  yesButton: ButtonProps; // 네 버튼
-  noButton: ButtonProps; // 아니오 버튼
+  yesButton?: ButtonProps; // 네 버튼
+  noButton?: ButtonProps; // 아니오 버튼
 }
 
 const Dialog = (props: DialogProps) => {
@@ -16,20 +16,24 @@ const Dialog = (props: DialogProps) => {
           <p className="text-base font-kbogothicbold text-green-900">{props.title}</p>
           <div className="mt-8 font-kbogothicmedium">{props.body}</div>
           <div className="flex flex-row mt-8 w-full gap-3">
-            <Button
-              className="w-1/2"
-              variant={props.yesButton.variant}
-              onClick={props.yesButton.onClick}
-            >
-              {props.yesButton.children}
-            </Button>
-            <Button
-              className="w-1/2"
-              variant={props.noButton.variant}
-              onClick={props.noButton.onClick}
-            >
-              {props.noButton.children}
-            </Button>
+            {props.yesButton && props.noButton && (
+              <>
+                <Button
+                  className="w-1/2"
+                  variant={props.yesButton.variant}
+                  onClick={props.yesButton.onClick}
+                >
+                  {props.yesButton.children}
+                </Button>
+                <Button
+                  className="w-1/2"
+                  variant={props.noButton.variant}
+                  onClick={props.noButton.onClick}
+                >
+                  {props.noButton.children}
+                </Button>
+              </>
+            )}
           </div>
         </div>
       </div>
