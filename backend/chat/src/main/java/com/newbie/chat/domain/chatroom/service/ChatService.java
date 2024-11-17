@@ -11,9 +11,9 @@ public interface ChatService {
 
     List<ChatMessage> getMessages(String roomId);
 
-    void addParticipant(String roomId, String userName);
+    void addParticipant(String roomId, String userEmail);
 
-    void removeParticipant(String roomId, String userName);
+    void removeParticipant(String roomId, String userEmail);
 
     Set<String> getParticipants(String roomId);
 

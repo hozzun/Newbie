@@ -9,5 +9,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ReportRequest {
 
-    private String reportedUser;
+    private String reportedUserEmail;
 }
