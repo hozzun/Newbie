@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 public class GeneralBoardRequestDto {
 
-    private Long userId;
+    private int userId;
     private String userName;
     private String title;
     private String content;
