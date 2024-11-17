@@ -55,7 +55,6 @@ const BaseballDict = () => {
     fetchRoomAndHistory();
   }, [fetchRoomAndHistory]);
 
-  // WebSocket 메시지 핸들러를 컴포넌트 외부로 분리
   const handleWebSocketMessage = useCallback(
     (messageBody: string) => {
       try {
@@ -68,7 +67,6 @@ const BaseballDict = () => {
             timestamp: Date.now(),
           };
 
-          // 상태 업데이트를 함수형으로 변경하여 최신 상태 보장
           setMessages(prevMessages => [...prevMessages, formattedMessage]);
         }
       } catch (error) {
@@ -120,10 +118,8 @@ const BaseballDict = () => {
       };
 
       try {
-        // 먼저 UI를 업데이트
         setMessages(prevMessages => [...prevMessages, newMessage]);
 
-        // 그 다음 메시지 전송
         stompClient.publish({
           destination: `/app/chatbot/${roomId}`,
           body: JSON.stringify(newMessage),
@@ -133,8 +129,8 @@ const BaseballDict = () => {
       } catch (error) {
         console.error("Error sending message:", error);
         setError("Failed to send message. Please try again.");
-        // 에러 발생 시 마지막 메시지 제거
-        setMessages(prevMessages => prevMessages.slice(0, -1));
+
+        setMessages(prevMessages => prevMessages.slice(0, -1)); // 에러발생시 마지막메세지제거
       }
     }
   }, [stompClient, connected, comment, roomId, userId]);
