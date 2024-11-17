@@ -38,14 +38,10 @@ const WatchGameInfo = () => {
     });
   };
 
-  // TODO: userId 수정
   const getWatchList = async () => {
-    const params = {
-      userId: 5,
-    };
 
     try {
-      const response = await axiosInstance.get("/api-mypage/ticket/list", { params });
+      const response = await axiosInstance.get("/api-mypage/ticket/list");
       setWatchGames(response.data);
     } catch (error) {
       console.error("Error fetching cheer song:", error);

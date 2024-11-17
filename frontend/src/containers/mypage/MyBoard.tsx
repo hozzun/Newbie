@@ -20,11 +20,9 @@ const MyBoard = () => {
   const [posts, setPosts] = useState<Post[]>([]);
 
   const getBoard = async () => {
-    // TODO: userId 수정
-    const params = { userId: 5 };
 
     try {
-      const response = await axiosInstance.get("/api-board/mypage/board", { params });
+      const response = await axiosInstance.get("/api-board/mypage/board");
 
       const allPosts = [
         ...response.data.generalBoards.map((post: Post) => ({ ...post, type: "general" })),

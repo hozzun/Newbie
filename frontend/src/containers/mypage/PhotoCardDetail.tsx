@@ -45,8 +45,7 @@ const PhotoCardDetail = () => {
 
   const deletePlayer = async () => {
 
-    const userId = 5
-    const params = { userId: userId, cardId: id }
+    const params = { cardId: id }
 
     try {
       const response = await axiosInstance.delete("/api-cardstore/cards/delete", { params });

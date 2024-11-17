@@ -16,14 +16,10 @@ const ClubRecommend = () => {
   const [myClub, setMyClub] = useState<TeamName>("doosan");
   const [name, setName] = useState<string>("")
 
-  // TODO: userId 수정
   const getUser = async () => {
-  
-    const userId = 5
-    const params = { userId: userId}
       
     try {
-      const response = await axiosInstance.get(`/api-user/users/${userId}`, { params });
+      const response = await axiosInstance.get(`/api-user/users`);
   
       if (response.status === 200) {
         const data = response.data;
@@ -45,7 +41,7 @@ const ClubRecommend = () => {
   // 추천 알고리즘 연결
   const ClubRecommendAPI = async () => {
     const UserData = {
-      "userId": 5,
+      "userId": 0,
       "mbti": mbti,
       "responses": selectedChoices,
       "region": region,

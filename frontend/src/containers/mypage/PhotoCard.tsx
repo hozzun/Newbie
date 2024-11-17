@@ -43,11 +43,9 @@ const PhotoCard = () => {
   };
 
   const getPhotoCard = async () => {
-    // TODO: userId 수정
-    const params = { userId: 5 };
 
     try {
-      const response = await axiosInstance.get("/api-cardstore/cards/users", { params });
+      const response = await axiosInstance.get("/api-cardstore/cards/users");
       setPhotos(response.data);
     } catch (error) {
       console.error("API 요청 중 오류 발생:", error);

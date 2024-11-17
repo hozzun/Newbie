@@ -16,14 +16,11 @@ const initialState: MyInfoState = {
   address: ""
 };
 
-// TODO: userId 수정
-const params = { userId: 5 }
-
 // 비동기 API 호출 액션 생성자
 export const fetchMyInfo = createAsyncThunk(
   'myInfo/fetchMyInfo',
   async () => {
-    const response = await axiosInstance.get('/api-user/users/5', { params });
+    const response = await axiosInstance.get('/api-user/users');
     console.log(response.data)
     return response.data;
   }

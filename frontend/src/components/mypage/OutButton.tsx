@@ -16,10 +16,10 @@ const OutButton = () => {
     setRemoveDialog(true)
   };
 
-  const patchDelete = async (userId: number) => {
+  const patchDelete = async () => {
   
     try {
-      const response = await axiosInstance.patch("/api-user/users/resign", { userId });
+      const response = await axiosInstance.patch("/api-user/users/resign");
       console.log(response);
     } catch (error) {
       console.error("Error fetching cheer song:", error);
@@ -36,7 +36,7 @@ const OutButton = () => {
   const yesRemove: ButtonProps = {
     variant: BUTTON_VARIANTS.primary,
     children: "네",
-    onClick: () => patchDelete(1), // TODO: userId 수정
+    onClick: () => patchDelete()
   };
 
   const noLogout: ButtonProps = {
