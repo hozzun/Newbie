@@ -1,8 +1,12 @@
+import { useNavigate } from "react-router-dom";
 import Logo from "../../assets/images/LOGO.png";
 import Chat from "../../assets/icons/chat.svg?react";
 
 const AppBar = () => {
-  const onClick = () => {};
+  const nav = useNavigate();
+  const onClick = () => {
+    nav("/teamchat");
+  };
 
   return (
     <div className="max-w-[600px] min-w-[320px] mx-auto flex justify-between items-center bg-white font-kbogothiclight border-b border-gray-200/50 w-full">
