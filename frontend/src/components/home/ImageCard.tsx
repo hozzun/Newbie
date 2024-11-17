@@ -2,7 +2,7 @@ import ImageCardItem from "./ImageCardItem";
 
 export interface ImageCardProps {
   photoCardImage: string | null;
-  watchedGameImage: string | null;
+  attendedGameImage: string | null;
   goPhotoCardMore: () => void;
   goWatchedGameMore: () => void;
 }
@@ -16,7 +16,7 @@ const ImageCard = (props: ImageCardProps) => {
         goMore={props.goPhotoCardMore}
       />
       <ImageCardItem
-        url={props.watchedGameImage}
+        url={props.attendedGameImage}
         fallbackText="직관 경기 사진을 모아보세요"
         goMore={props.goWatchedGameMore}
       />

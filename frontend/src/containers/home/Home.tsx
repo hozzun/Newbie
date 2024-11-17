@@ -22,6 +22,7 @@ import { useDispatch } from "react-redux";
 import { clearCardStoreListItem, setPhotoCardInfo } from "../../redux/cardStoreSlice";
 import { getLatestMyPhotoCard, getTopSellingCards } from "../../api/cardStoreApi";
 import { PhotoCardInfo } from "../cardstore/CardStore";
+import { getLatestAttendedGame } from "../../api/userApi";
 
 export interface ClubProps {
   id: string;
@@ -80,7 +81,7 @@ const Home = () => {
   const [hasCheeringClub, setHasCheeringClub] = useState<boolean>(false);
   const [todayGame, setTodayGame] = useState<GameProps | null>(null);
   const [photoCardImage, setPhotoCardImage] = useState<string | null>(null);
-  const [watchedGameImage, setWatchedGameImage] = useState<string | null>(null);
+  const [attendedGameImage, setAttendedGameImage] = useState<string | null>(null);
   const [clubRanks, setClubRanks] = useState<Array<ClubRankItemProps> | null>(null);
   const [highlightUrl, setHighlightUrl] = useState<string | null>(null);
   const [cards, setCards] = useState<Array<CardStoreItemProps> | null>(null);
@@ -153,15 +154,21 @@ const Home = () => {
     }
   };
 
-  const fetchImage = async () => {
+  const fetchPhotoCardImage = async () => {
     try {
       const photoCardResponse = await getLatestMyPhotoCard();
       const photoCardData: string = photoCardResponse.data.imageUrl;
       setPhotoCardImage(photoCardData);
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
-      // TODO: GET - 최신 나의 직관경기 이미지 url
-      const watchedGameImageData: string | null = "/src/assets/images/직관경기사진.jpeg";
-      setWatchedGameImage(watchedGameImageData);
+  const fetchAttendedGameImage = async () => {
+    try {
+      const attendedGameResponse = await getLatestAttendedGame();
+      const attendedGameData: string = attendedGameResponse.data.imageUrl;
+      setAttendedGameImage(attendedGameData);
     } catch (e) {
       console.log(e);
     }
@@ -189,7 +196,6 @@ const Home = () => {
 
   const fetchHighlightUrl = async () => {
     try {
-      // TODO: GET - 하이라이트 영상 TOP 1
       const response = await getLatestGameHightlight();
       const latestGameHighlightUrlData: string = response.data.url;
 
@@ -230,7 +236,8 @@ const Home = () => {
 
   useEffect(() => {
     fetchTodayGame();
-    fetchImage();
+    fetchPhotoCardImage();
+    fetchAttendedGameImage();
     fetchClubRanks();
     fetchHighlightUrl();
     fetchCards();
@@ -262,7 +269,7 @@ const Home = () => {
 
   const imageCardProps: ImageCardProps = {
     photoCardImage,
-    watchedGameImage,
+    attendedGameImage,
     goPhotoCardMore,
     goWatchedGameMore,
   };
