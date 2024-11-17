@@ -38,13 +38,13 @@ public class RateLimitingService {
         return true;
     }
 
-    public void blockUser(String userId) {
-        String blockKey = "blocked_user:" + userId;
+    public void blockUser(String userEmail) {
+        String blockKey = "blocked_user:" + userEmail;
         stringRedisTemplate.opsForValue().set(blockKey, "blocked", BLOCK_TIME, TimeUnit.SECONDS);
     }
 
-    public boolean isBlocked(String userId) {
-        String blockKey = "blocked_user:" + userId;
+    public boolean isBlocked(String userEmail) {
+        String blockKey = "blocked_user:" + userEmail;
         Boolean isBlocked = stringRedisTemplate.hasKey(blockKey);
         return isBlocked != null && isBlocked;
     }

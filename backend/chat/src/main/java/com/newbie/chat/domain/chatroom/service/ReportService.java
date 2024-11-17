@@ -17,9 +17,9 @@ public class ReportService {
     private static final String USER_REPORTS_KEY_PREFIX = "user:reports:"; // 신고한 유저 목록
 
     // 신고 횟수 증가 및 중복 신고 방지
-    public boolean incrementReportCount(String reporterUserId, String reportedUserId) {
-        String userReportsKey = USER_REPORTS_KEY_PREFIX + reporterUserId;
-        Long added = redisTemplate.opsForSet().add(userReportsKey, reportedUserId);
+    public boolean incrementReportCount(String reporterUserEmail, String reportedUserEmail) {
+        String userReportsKey = USER_REPORTS_KEY_PREFIX + reporterUserEmail;
+        Long added = redisTemplate.opsForSet().add(userReportsKey, reportedUserEmail);
 
         boolean isAdded = (added != null && added > 0);
 
@@ -29,14 +29,14 @@ public class ReportService {
         }
 
         // 신고 횟수 증가
-        String reportCountKey = REPORT_COUNT_KEY_PREFIX + reportedUserId;
+        String reportCountKey = REPORT_COUNT_KEY_PREFIX + reportedUserEmail;
         Long count = redisTemplate.opsForValue().increment(reportCountKey);
         if (count == null) {
             count = 1L;
         }
 
         if (count >= 3) {
-            banUser(reportedUserId);
+            banUser(reportedUserEmail);
             redisTemplate.delete(reportCountKey); // 신고 횟수 초기화
             redisTemplate.delete(userReportsKey); // 신고한 유저 목록 초기화
         } else {
@@ -48,8 +48,8 @@ public class ReportService {
     }
 
     // 사용자 차단
-    public void banUser(String userId) {
-        String key = BAN_INFO_KEY_PREFIX + userId;
+    public void banUser(String userEmail) {
+        String key = BAN_INFO_KEY_PREFIX + userEmail;
         LocalDateTime banUntil = LocalDateTime.now().plusDays(3);
         redisTemplate.opsForValue().set(key, banUntil.toString());
         // 차단 정보의 TTL 설정
@@ -57,8 +57,8 @@ public class ReportService {
     }
 
     // 사용자 차단 여부 확인
-    public boolean isUserBanned(String userId) {
-        String key = BAN_INFO_KEY_PREFIX + userId;
+    public boolean isUserBanned(String userEmail) {
+        String key = BAN_INFO_KEY_PREFIX + userEmail;
         String banUntilStr = (String) redisTemplate.opsForValue().get(key);
         if (banUntilStr != null) {
             LocalDateTime banUntil = LocalDateTime.parse(banUntilStr);
@@ -72,8 +72,8 @@ public class ReportService {
     }
 
     // 차단 만료 시간 조회
-    public LocalDateTime getBanExpiry(String userId) {
-        String key = BAN_INFO_KEY_PREFIX + userId;
+    public LocalDateTime getBanExpiry(String userEmail) {
+        String key = BAN_INFO_KEY_PREFIX + userEmail;
         String banUntilStr = (String) redisTemplate.opsForValue().get(key);
         if (banUntilStr != null) {
             return LocalDateTime.parse(banUntilStr);
