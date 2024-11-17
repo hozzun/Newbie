@@ -9,14 +9,14 @@ interface SelectBoxProps {
 
 const regionData = {
   regions: [
-    "서울시",
-    "부산시",
-    "대구시",
-    "인천시",
-    "광주시",
-    "대전시",
-    "울산시",
-    "세종시",
+    "서울특별시",
+    "부산광역시",
+    "대구광역시",
+    "인천광역시",
+    "광주광역시",
+    "대전광역시",
+    "울산광역시",
+    "세종특별자치시",
     "경기도",
     "강원도",
     "충청북도",
@@ -25,10 +25,10 @@ const regionData = {
     "전라남도",
     "경상북도",
     "경상남도",
-    "제주도",
+    "제주특별자치도",
   ],
   cities: {
-    서울시: [
+    서울특별시: [
       "강남구",
       "강동구",
       "강북구",
@@ -55,7 +55,7 @@ const regionData = {
       "중구",
       "중랑구",
     ],
-    부산시: [
+    부산광역시: [
       "강서구",
       "금정구",
       "기장군",
@@ -73,8 +73,8 @@ const regionData = {
       "중구",
       "해운대구",
     ],
-    대구시: ["남구", "달서구", "달성군", "동구", "북구", "서구", "수성구"],
-    인천시: [
+    대구광역시: ["남구", "달서구", "달성군", "동구", "북구", "서구", "수성구"],
+    인천광역시: [
       "강화군",
       "계양구",
       "남동구",
@@ -86,10 +86,10 @@ const regionData = {
       "옹진군",
       "중구",
     ],
-    광주시: ["광산구", "남구", "동구", "북구", "서구"],
-    대전시: ["대덕구", "동구", "서구", "유성구", "중구"],
-    울산시: ["남구", "동구", "북구", "울주군", "중구"],
-    세종시: ["세종시"],
+    광주광역시: ["광산구", "남구", "동구", "북구", "서구"],
+    대전광역시: ["대덕구", "동구", "서구", "유성구", "중구"],
+    울산광역시: ["남구", "동구", "북구", "울주군", "중구"],
+    세종특별자치시: ["세종특별자치시"],
     경기도: [
       "가평군",
       "고양시 덕양구",
@@ -281,7 +281,7 @@ const regionData = {
       "함양군",
       "합천군",
     ],
-    제주도: ["서귀포시", "제주시"],
+    제주특별자치도: ["서귀포시", "제주시"],
   },
 };
 
@@ -311,12 +311,12 @@ const SelectBox: React.FC<SelectBoxProps> = ({
 
   return (
     <div className="flex flex-col m-3">
-      {label && <label className="text-gray-500 font-medium text-sm mb-1 ml-2">{label}</label>}
-      <div className="flex space-x-2 text-sm">
+      {label && <label className="text-gray-500 font-kbogothicmedium text-sm mb-1 ml-2">{label}</label>}
+      <div className="flex space-x-2 text-sm font-kbogothiclight">
         <select
           value={selectedSi}
           onChange={handleSiChange}
-          className="border border-gray-200 p-2 rounded-lg w-1/2 focus:border-green-900"
+          className="p-2 rounded-lg w-1/2 focus:border-green-900 outline-none"
         >
           <option value="" disabled>
             {placeholder1 || "지역을 선택하세요"}
@@ -330,7 +330,7 @@ const SelectBox: React.FC<SelectBoxProps> = ({
         <select
           value={selectedGun}
           onChange={handleGunChange}
-          className="border border-gray-200 p-2 rounded-lg w-1/2 focus:border-green-900"
+          className="p-2 rounded-lg w-1/2 focus:border-green-900 outline-none"
           disabled={!selectedSi}
         >
           <option value="" disabled>
