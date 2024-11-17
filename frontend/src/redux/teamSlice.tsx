@@ -10,13 +10,11 @@ const initialState: TeamState = {
   team: 0,
 };
 
-const params = { userId: 5 }
-
 // 비동기 API 호출 액션 생성자
 export const fetchTeam = createAsyncThunk(
   'team/fetchTeam',
   async () => {
-    const response = await axiosInstance.get('/api-user/users/5/favorite-team', { params });
+    const response = await axiosInstance.get('/api-user/users/favorite-team');
     return response.data;
   }
 );

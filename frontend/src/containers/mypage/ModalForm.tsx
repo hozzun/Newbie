@@ -37,7 +37,7 @@ const ModalForm = (props: ModalFormProps) => {
     };
 
     try {
-      const response = await axiosInstance.put("/api-mypage/ticket/text", TextData);
+      const response = await axiosInstance.put("/api/v1/ticket/text", TextData);
       console.log(response.data);
       return response.data;
     } catch (error) {

@@ -17,13 +17,11 @@ const CheerTeam = () => {
 
   const updateFavoriteTeam = async (favoriteTeamId: number) => {
 
-    // TODO: userId 수정
-    const userId = 5;
-    const params = { teamId: favoriteTeamId, userId: userId };
+    const params = { teamId: favoriteTeamId };
 
     try {
       const response = await axiosInstance.patch(
-        `/api-user/users/${userId}/favorite-team`,
+        `/api/v1/users/favorite-team`,
         {},
         {
           params,

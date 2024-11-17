@@ -31,7 +31,7 @@ const PhotoCardDetail = () => {
     const params = { teamId: team, backNumber: no }
 
     try {
-      const response = await axiosInstance.get(`/api-baseball/players/photos/${team}/${no}`, { params });
+      const response = await axiosInstance.get(`/api/v1/players/photos/${team}/${no}`, { params });
       setPlayer(response.data)
     } catch (error) {
       console.error("API 요청 중 오류 발생:", error);
@@ -45,11 +45,10 @@ const PhotoCardDetail = () => {
 
   const deletePlayer = async () => {
 
-    const userId = 5
-    const params = { userId: userId, cardId: id }
+    const params = { cardId: id }
 
     try {
-      const response = await axiosInstance.delete("/api-cardstore/cards/delete", { params });
+      const response = await axiosInstance.delete("/api/v1/cards/delete", { params });
       console.log(response.data)
     } catch (error) {
       console.error("API 요청 중 오류 발생:", error);

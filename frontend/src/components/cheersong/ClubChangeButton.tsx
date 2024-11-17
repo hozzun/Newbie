@@ -8,7 +8,6 @@ interface ClubChangeButtonProps {
 }
 
 const ClubChangeButton = (props: ClubChangeButtonProps) => {
-  // TODO: 유저 정보 가져오기
 
   return (
     <>
