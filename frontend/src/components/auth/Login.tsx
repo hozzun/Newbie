@@ -1,18 +1,23 @@
-import karina from "../../../src/assets/images/karina.jpg";
+import karina from "../../../src/assets/images/LOGO.png";
 import kakao from "../.././assets/images/auth/kakao_login.png";
 import google from "../../assets/images/auth/google_login.png";
 
 type LoginProps = {
   onKakaoLoginClick: () => void;
   onGoogleLoginClick: () => void;
-  signUpPath: string;
 };
 
-const Login = ({ onKakaoLoginClick, onGoogleLoginClick, signUpPath }: LoginProps) => {
+const Login = ({ onKakaoLoginClick, onGoogleLoginClick }: LoginProps) => {
   return (
-    <div className="flex flex-col items-center justify-center h-full pt-12">
-      <img src={karina} alt="Karina" className="w-60 h-60 rounded-xl object-cover mb-36" />
-
+    <div className="flex flex-col items-center justify-center h-full">
+      <img src={karina} alt="Karina" className="w-70 h-80 rounded-xl object-cover" />
+      <div className="font-kbogothiclight text-xl pb-8">
+        <div className="text-center text-gray-900">
+          처음 만나는 야구
+          <br />
+          함께 즐기는 첫걸음!
+        </div>
+      </div>
       <img
         src={kakao}
         alt="카카오 로그인 버튼"
@@ -22,16 +27,9 @@ const Login = ({ onKakaoLoginClick, onGoogleLoginClick, signUpPath }: LoginProps
       <img
         src={google}
         alt="구글 로그인 버튼"
-        className="w-full cursor-pointer mb-12"
+        className="w-full cursor-pointer"
         onClick={onGoogleLoginClick}
       />
-
-      <div className="font-kbogothiclight mb-4 text-center">
-        아직 회원이 아니신가요?
-        <a href={signUpPath} className="text-green-900">
-          회원가입
-        </a>
-      </div>
     </div>
   );
 };

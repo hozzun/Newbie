@@ -57,7 +57,6 @@ const Login = () => {
         <LoginComponent
           onKakaoLoginClick={handleKakaoLoginClick}
           onGoogleLoginClick={handleGoogleLoginClick}
-          signUpPath="/signup"
         />
 
         {showBottomSheet && (
