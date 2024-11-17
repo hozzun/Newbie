@@ -2,6 +2,7 @@ package com.newbie.board.usedBoard.repository;
 
 import com.newbie.board.usedBoard.entity.UsedBoard;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -37,4 +38,8 @@ public interface UsedBoardRepository extends JpaRepository<UsedBoard, Long> {
 
     @Query("SELECT u FROM UsedBoard u WHERE u.userId = :userId AND u.isDeleted = 'N'")
     List<UsedBoard> findActiveByUserId(@Param("userId") Long userId);
+
+    @Modifying
+    @Query("UPDATE UsedBoard ub SET ub.isDeleted = 'Y' WHERE ub.userId = :userId AND ub.isDeleted = 'N'")
+    void updatePostsAsDeletedByUserId(Long userId);
 }

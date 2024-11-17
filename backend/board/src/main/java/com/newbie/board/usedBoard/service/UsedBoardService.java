@@ -105,6 +105,7 @@ public class UsedBoardService {
         return toUsedBoardResponseDto(usedBoard);
     }
 
+    @Transactional
     public void updateUsedBoard(UsedBoardUpdateRequestDto requestDto, Long id) {
         Optional<UsedBoard> board = usedBoardRepository.findById(id);
         if (board.isPresent()) {
@@ -122,6 +123,7 @@ public class UsedBoardService {
         }
     }
 
+    @Transactional
     public void deleteUsedBoard(Long id) {
         Optional<UsedBoard> board = usedBoardRepository.findById(id);
         if (board.isPresent()) {
@@ -130,6 +132,11 @@ public class UsedBoardService {
                     .build();
             usedBoardRepository.save(updatedBoard);
         }
+    }
+
+    @Transactional
+    public void markPostsAsDeletedByUserId(Long userId) {
+        usedBoardRepository.updatePostsAsDeletedByUserId(userId);
     }
 
     private UsedBoardResponseDto toUsedBoardResponseDto(UsedBoard usedBoard) {

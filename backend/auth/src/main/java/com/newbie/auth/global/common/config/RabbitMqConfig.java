@@ -1,4 +1,4 @@
-package com.newbie.board.config;
+package com.newbie.auth.global.common.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.core.Binding;
@@ -16,18 +16,9 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @RequiredArgsConstructor
-public class RabbitMQConfig {
+public class RabbitMqConfig {
 
     private final RabbitMqProperties rabbitMqProperties;
-
-    @Value("${rabbitmq.board.queue.name}")
-    private String boardQueueName;
-
-    @Value("${rabbitmq.exchange.name}")
-    private String exchangeName;
-
-    @Value("${rabbitmq.board.routing.key}")
-    private String boardRoutingKey;
 
     @Value("${rabbitmq.auth.queue.name}")
     private String authQueueName;
@@ -35,34 +26,25 @@ public class RabbitMQConfig {
     @Value("${rabbitmq.auth.routing.key}")
     private String authRoutingKey;
 
-    // 큐 정의
-    @Bean
-    public Queue boardQueue() {
-        return new Queue(boardQueueName, true); // Durable 설정
-    }
+    @Value("${rabbitmq.auth.exchange}")
+    private String authExchangeName;
 
-    // 회원 탈퇴 관련 큐 정의
+    // Auth 관련 큐 정의
     @Bean
     public Queue authQueue() {
-        return new Queue(authQueueName, true);
+        return new Queue(authQueueName, true); // Durable 설정
     }
 
-    // Direct Exchange 정의
+    // Auth 관련 Direct Exchange 정의
     @Bean
-    public DirectExchange directExchange() {
-        return new DirectExchange(exchangeName);
+    public DirectExchange authExchange() {
+        return new DirectExchange(authExchangeName);
     }
 
     // 큐와 교환기를 라우팅 키로 바인딩
     @Bean
-    public Binding boardBinding(Queue boardQueue, DirectExchange directExchange) {
-        return BindingBuilder.bind(boardQueue).to(directExchange).with(boardRoutingKey);
-    }
-
-    // 회원 탈퇴 관련 큐와 교환기를 바인딩
-    @Bean
-    public Binding authBinding(Queue authQueue, DirectExchange directExchange) {
-        return BindingBuilder.bind(authQueue).to(directExchange).with(authRoutingKey);
+    public Binding authBinding(Queue authQueue, DirectExchange authExchange) {
+        return BindingBuilder.bind(authQueue).to(authExchange).with(authRoutingKey);
     }
 
     // RabbitMQ 연결 설정

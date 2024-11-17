@@ -2,6 +2,7 @@ package com.newbie.board.generalBoard.repository;
 
 import com.newbie.board.generalBoard.entity.GeneralBoard;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -37,5 +38,8 @@ public interface GeneralBoardRepository extends JpaRepository<GeneralBoard, Long
     @Query("SELECT u FROM GeneralBoard u WHERE u.userId = :userId AND u.isDeleted = 'N'")
     List<GeneralBoard> findActiveByUserId(@Param("userId") Long userId);
 
+    @Modifying
+    @Query("UPDATE GeneralBoard gb SET gb.isDeleted = 'Y' WHERE gb.userId = :userId AND gb.isDeleted = 'N'")
+    void updatePostsAsDeletedByUserId(Long userId);
 
 }
