@@ -2,6 +2,23 @@ import axiosInstance from "../util/axiosInstance";
 
 const axios = axiosInstance;
 
+// 최신 카드 조회
+export interface GetLatestMyPhotoCardResponse {
+  id: string;
+  name: string; 
+  no: string;
+  team: number;
+  price: number;
+  imageUrl: string;
+  position: string;
+  createAt: string;
+}
+
+// TODO: 사용자 ID 삭제
+export const getLatestMyPhotoCard = () => axios.get<GetLatestMyPhotoCardResponse>("/api-cardstore/cards/mycard", {
+  params: {userId: 5}
+})
+
 // 카드 목록 조회
 export interface GetPhotoCardsRequest {
   team: number;

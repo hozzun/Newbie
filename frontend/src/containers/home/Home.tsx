@@ -15,6 +15,7 @@ import { calculateWeather } from "../../util/Weather";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { clearCardStoreListItem } from "../../redux/cardStoreSlice";
+import { getLatestMyPhotoCard } from "../../api/cardStoreApi";
 
 export interface ClubProps {
   id: string;
@@ -147,9 +148,9 @@ const Home = () => {
 
   const fetchImage = async () => {
     try {
-      // TODO: GET - 최신 나의 포토카드 이미지 url
-      const photoCardImageData: string | null = null;
-      setPhotoCardImage(photoCardImageData);
+      const photoCardResponse = await getLatestMyPhotoCard();
+      const photoCardData: string = photoCardResponse.data.imageUrl;
+      setPhotoCardImage(photoCardData);
 
       // TODO: GET - 최신 나의 직관경기 이미지 url
       const watchedGameImageData: string | null = "/src/assets/images/직관경기사진.jpeg";
@@ -233,8 +234,7 @@ const Home = () => {
   };
 
   const goPhotoCardMore = () => {
-    // TODO: MOVE - 나의 포토카드 페이지
-    console.log("나의 포토카드 페이지로 이동");
+    nav("/mypage/photocard");
   };
 
   const goWatchedGameMore = () => {
