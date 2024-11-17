@@ -9,10 +9,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -31,12 +28,18 @@ public class TeamStatsController {
         return new ResponseEntity<>(teamStats, HttpStatus.OK);
     }
 
-    @Operation(summary = "teamId로 해당 팀 타자(전체) 성적 조회")
+    @Operation(summary = "teamId로 해당 팀 타자 성적 조회")
     @GetMapping("/hitter/{teamId}")
-    public ResponseEntity<TeamHitterStatsResponseDto> getTeamHitterStats(
-            @Parameter(description = "팀 ID [ 1 ~ 10 ]", example = "1") @PathVariable("teamId") Integer teamId) {
-        TeamHitterStatsResponseDto teamStat = teamStatsService.getTeamHitterStatsByTeamId(teamId);
-        return new ResponseEntity<>(teamStat, HttpStatus.OK);
+    public ResponseEntity<List<TeamHitterStatsResponseDto>> getTeamHitterStats(
+            @Parameter(description = "팀 ID [ 1 ~ 10 ]", example = "1") @PathVariable("teamId") Integer teamId,
+            @Parameter(description = "연도 [ 2020 ~ 2024 ] (옵션)", example = "2024") @RequestParam(required = false) String year) {
+        if (year != null) {
+            TeamHitterStatsResponseDto teamHitterStat = teamStatsService.getTeamHitterStatsByIdAndYear(teamId, year);
+            return new ResponseEntity<>(List.of(teamHitterStat), HttpStatus.OK);
+        } else {
+            List<TeamHitterStatsResponseDto> teamHitterStats = teamStatsService.getTeamHitterStatsByTeamId(teamId);
+            return new ResponseEntity<>(teamHitterStats, HttpStatus.OK);
+        }
     }
 
     @Operation(summary = "전체 팀 투수 성적 조회")
@@ -46,11 +49,17 @@ public class TeamStatsController {
         return new ResponseEntity<>(teamStats, HttpStatus.OK);
     }
 
-    @Operation(summary = "teamId로 해당 팀 투수(전체) 성적 조회")
+    @Operation(summary = "teamId로 해당 팀 투수 성적 조회")
     @GetMapping("/pitcher/{teamId}")
-    public ResponseEntity<TeamPitcherStatsResponseDto> getTeamPitcherStats(
-            @Parameter(description = "팀 ID [ 1 ~ 10 ]", example = "1") @PathVariable("teamId") Integer teamId) {
-        TeamPitcherStatsResponseDto teamStat = teamStatsService.getTeamPitcherStatsByTeamId(teamId);
-        return new ResponseEntity<>(teamStat, HttpStatus.OK);
+    public ResponseEntity<List<TeamPitcherStatsResponseDto>> getTeamPitcherStats(
+            @Parameter(description = "팀 ID [ 1 ~ 10 ]", example = "1") @PathVariable("teamId") Integer teamId,
+            @Parameter(description = "연도 [ 2020 ~ 2024 ]", example = "2024") @RequestParam(required = false) String year) {
+        if (year != null) {
+            TeamPitcherStatsResponseDto teamPitcherStat = teamStatsService.getTeamPitcherStatsByIdAndYear(teamId, year);
+            return new ResponseEntity<>(List.of(teamPitcherStat), HttpStatus.OK);
+        } else {
+            List<TeamPitcherStatsResponseDto> teamPitcherStats = teamStatsService.getTeamPitcherStatsByTeamId(teamId);
+            return new ResponseEntity<>(teamPitcherStats, HttpStatus.OK);
+        }
     }
 }

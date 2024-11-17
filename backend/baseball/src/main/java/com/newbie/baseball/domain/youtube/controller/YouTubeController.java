@@ -43,4 +43,10 @@ public class YouTubeController {
             @Parameter(description = "선수 이름", example = "이정후") @RequestParam String playerName) {
         return youTubeService.searchPlayerHighlights(playerName);
     }
+
+    @Operation(summary = "최근 경기 하이라이트 조회")
+    @GetMapping("/recent")
+    public YouTubeResponseDto getRecentGameHighlights() {
+        return youTubeService.searchMostRecentGameHighlights();
+    }
 }

@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -19,6 +20,16 @@ public class GlobalExceptionHandler {
     })
     public ResponseEntity<Map<String, Object>> handleNotFoundExceptions(RuntimeException  ex, HttpServletRequest request) {
         return buildErrorResponse(ex.getMessage(), "Not Found", request.getRequestURI(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public ResponseEntity<Map<String, Object>> handleMaxUploadSizeException(MaxUploadSizeExceededException ex, HttpServletRequest request) {
+        return buildErrorResponse(
+                "업로드 파일 크기가 최대 허용 크기를 초과했습니다.",
+                "Payload Too Large",
+                request.getRequestURI(),
+                HttpStatus.PAYLOAD_TOO_LARGE
+        );
     }
 
     private ResponseEntity<Map<String, Object>> buildErrorResponse(String message, String error, String path, HttpStatus status) {

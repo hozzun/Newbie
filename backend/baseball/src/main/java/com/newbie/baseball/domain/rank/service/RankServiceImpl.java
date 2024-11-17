@@ -5,6 +5,7 @@ import com.newbie.baseball.domain.rank.entity.Rank;
 import com.newbie.baseball.domain.rank.exception.RankNotFoundException;
 import com.newbie.baseball.domain.rank.repository.RankRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +17,7 @@ public class RankServiceImpl implements RankService {
 
     private final RankRepository rankRepository;
 
+    @Cacheable(value = "ranksCache", key = "(#year != null ? #year : '') + '-' + (#teamId != null ? #teamId : '')")
     @Override
     public List<RankResponseDto> getRanks(String year, Integer teamId) {
         List<Rank> ranks;
@@ -44,7 +46,6 @@ public class RankServiceImpl implements RankService {
 
     private RankResponseDto convertToDto(Rank rank) {
         return RankResponseDto.builder()
-                .id(rank.getId())
                 .year(rank.getYear())
                 .rank(rank.getRank())
                 .teamId(rank.getTeam().getId())

@@ -6,6 +6,8 @@ import com.newbie.board.generalBoard.repository.GeneralBoardCommentRepository;
 import com.newbie.board.generalBoard.repository.GeneralBoardLikeRepository;
 import com.newbie.board.generalBoard.repository.GeneralBoardRepository;
 import com.newbie.board.scrap.dto.ActivityResponseDto;
+import com.newbie.board.scrap.entity.Activity;
+import com.newbie.board.scrap.repository.ActivityRepository;
 import com.newbie.board.usedBoard.entity.UsedBoard;
 import com.newbie.board.usedBoard.entity.UsedBoardComment;
 import com.newbie.board.usedBoard.repository.UsedBoardCommentRepository;
@@ -28,6 +30,7 @@ public class ActivityService {
     private final UsedBoardCommentRepository usedCommentRepository;
     private final UsedBoardLikeRepository usedLikeRepository;
     private final UsedBoardRepository usedBoardRepository;
+    private final ActivityRepository activityRepository;
 
     /**
      * 사용자 활동(댓글, 좋아요)을 합쳐 반환합니다.
@@ -36,52 +39,22 @@ public class ActivityService {
      */
     @Transactional
     public List<ActivityResponseDto> getUserActivities(Long userId) {
-        List<ActivityResponseDto> activities = new ArrayList<>();
+        List<Activity> activities = activityRepository.findByUserId(userId);
 
-        // GeneralBoard의 댓글 정보 가져오기
-        List<GeneralBoardComment> generalComments = generalCommentRepository.findByUserIdAndIsDeleted(userId);
-        activities.addAll(generalComments.stream()
-                .map(comment -> ActivityResponseDto.builder()
-                        .type("comment")
-                        .boardId(comment.getGeneralBoard().getId())
-                        .content(comment.getContent())
-                        .createdAt(comment.getCreatedAt())
+        return activities.stream()
+                .map(activity -> ActivityResponseDto.builder()
+                        .activityId(activity.getId())
+                        .type(activity.getType())
+                        .boardId(activity.getBoardId())
+                        .content(activity.getContent())
+                        .createdAt(activity.getCreatedAt())
                         .build())
-                .collect(Collectors.toList()));
+                .collect(Collectors.toList());
 
-        // GeneralBoard의 좋아요 정보 가져오기
-        List<GeneralBoard> likedGeneralBoards = generalLikeRepository.findBoardsLikedByUser(userId);
-        activities.addAll(likedGeneralBoards.stream()
-                .map(board -> ActivityResponseDto.builder()
-                        .type("like")
-                        .boardId(board.getId())
-                        .title(board.getTitle())
-                        .createdAt(board.getCreatedAt())
-                        .build())
-                .collect(Collectors.toList()));
+    }
 
-        // UsedBoard의 댓글 정보 가져오기
-        List<UsedBoardComment> usedComments = usedCommentRepository.findByUserIdAndIsDeleted(userId);
-        activities.addAll(usedComments.stream()
-                .map(comment -> ActivityResponseDto.builder()
-                        .type("comment")
-                        .boardId(comment.getUsedBoard().getId())
-                        .content(comment.getContent())
-                        .createdAt(comment.getCreatedAt())
-                        .build())
-                .collect(Collectors.toList()));
-
-        // UsedBoard의 좋아요 정보 가져오기
-        List<UsedBoard> likedUsedBoards = usedLikeRepository.findBoardsLikedByUser(userId);
-        activities.addAll(likedUsedBoards.stream()
-                .map(board -> ActivityResponseDto.builder()
-                        .type("like")
-                        .boardId(board.getId())
-                        .title(board.getTitle())
-                        .createdAt(board.getCreatedAt())
-                        .build())
-                .collect(Collectors.toList()));
-
-        return activities;
+    @Transactional
+    public void deleteActivity(Long activityId, Long userId) {
+        activityRepository.deleteByIdAndUserId(activityId, userId);
     }
 }

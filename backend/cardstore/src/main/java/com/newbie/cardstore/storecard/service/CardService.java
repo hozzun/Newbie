@@ -111,6 +111,11 @@ public class CardService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * 유저의 최신 선수 카드 한 개 조회
+     * @param userId
+     * @return
+     */
     public PlayerCardDto getMyLatestCard(Long userId) {
         Set<ObjectId> cardIds = findUserCardIds(userId);
 
@@ -123,11 +128,35 @@ public class CardService {
         return sortedCards.isEmpty() ? null : convertToDTO(sortedCards.get(0));
     }
 
+    /**
+     * 판매순 TOP3 카드 조회
+     * @return
+     */
     public List<PlayerCardDto> getTopSalesCards() {
         List<PlayerCard> cards = playerCardRepository.findTop3ByOrderBySalesCountDesc();
         return cards.stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
+    }
+
+    public void deleteCard(String cardId, Long userId) {
+        ObjectId objectId;
+        try {
+            objectId = new ObjectId(cardId);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Invalid cardId format: " + cardId, e);
+        }
+
+        UserCard userCard = userCardRepository.findByUserId(userId)
+                .orElseThrow(() -> new IllegalArgumentException("UserCard not found for userId: " + userId));
+
+        if (!userCard.getCardIds().contains(objectId)) {
+            throw new IllegalArgumentException("CardId not found in user's card list: " + cardId);
+        }
+
+        userCard.getCardIds().remove(objectId);
+
+        userCardRepository.save(userCard);
     }
 
     private Set<ObjectId> findUserCardIds(Long userId) {

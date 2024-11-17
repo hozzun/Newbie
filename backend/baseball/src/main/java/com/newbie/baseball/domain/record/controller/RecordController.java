@@ -24,7 +24,7 @@ public class RecordController {
     @Operation(summary = "gameId로 경기결과 조회")
     @GetMapping("/{gameId}")
     public ResponseEntity<RecordResponseDto> getRecord(
-            @Parameter(description = "게임 ID", example = "3291") @PathVariable("gameId") Integer gameId) {
+            @Parameter(description = "게임 ID", example = "4093") @PathVariable("gameId") Integer gameId) {
         RecordResponseDto record = recordService.getRecordByGameId(gameId);
         return new ResponseEntity<>(record, HttpStatus.OK);
     }

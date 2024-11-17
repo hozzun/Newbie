@@ -3,11 +3,13 @@ package com.newbie.auth.member.service;
 import com.newbie.auth.global.security.util.JwtUtil;
 import com.newbie.auth.member.domain.ExceptionMessages;
 import com.newbie.auth.member.domain.Member;
+import com.newbie.auth.member.domain.Platform;
 import com.newbie.auth.member.dto.MemberDto;
 import com.newbie.auth.member.dto.request.MemberSignUpRequestDto;
 import com.newbie.auth.member.dto.request.UserProfileRequestDto;
 import com.newbie.auth.member.exception.MemberDuplicateException;
 import com.newbie.auth.member.repository.MemberRepository;
+import io.jsonwebtoken.Claims;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +33,9 @@ public class MemberServiceImpl implements MemberService{
     @Value("${register.api}")
     private String registerApi;
 
+    @Value("${resign.api}")
+    private String resignApi;
+
     @Override
     @Transactional
     public String signUp(MemberSignUpRequestDto signUpMemberDto) {
@@ -52,14 +57,16 @@ public class MemberServiceImpl implements MemberService{
         );
         restTemplate.postForObject(registerApi, userProfileRequest, Void.class);
 
-        return jwtUtil.createAccessToken(mapper.map(savedMember, MemberDto.class));
+        MemberDto memberDto = mapper.map(savedMember, MemberDto.class);
+        memberDto.setNickname(signUpMemberDto.getNickname());
+
+        return jwtUtil.createAccessToken(memberDto);
     }
 
     @Override
     @Transactional
     public void resignMember(Long memberId) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new IllegalArgumentException(ExceptionMessages.NOT_FOUND.getMessage()));
-        member.resign();
+        memberRepository.deleteById(memberId);
+        restTemplate.patchForObject(resignApi, memberId, Void.class);
     }
 }

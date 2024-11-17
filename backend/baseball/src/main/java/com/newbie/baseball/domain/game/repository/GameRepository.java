@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface GameRepository extends JpaRepository<Game, Integer> {
 
@@ -32,6 +33,16 @@ public interface GameRepository extends JpaRepository<Game, Integer> {
     @Query("SELECT g FROM Game g WHERE g.date = :date AND (g.homeTeam.id = :teamId OR g.awayTeam.id = :teamId)")
     List<Game> findByDateAndTeam(@Param("date") String date, @Param("teamId") Integer teamId);
 
-    @Query("SELECT g FROM Game g WHERE g.gameResult IS NULL OR g.gameResult = '진행 중'")
+    @Query("SELECT g FROM Game g " +
+            "WHERE (g.homeTeam.id = :teamId OR g.awayTeam.id = :teamId) " +
+            "AND CAST(g.date AS date) >= CURRENT_DATE " +
+            "AND g.gameResult = '경기 예정' " +
+            "ORDER BY g.date ASC, g.time ASC")
+    List<Game> findNextScheduledGameByHomeTeam(@Param("teamId") Integer teamId);
+
+    @Query("SELECT g FROM Game g WHERE g.gameResult = '진행 중'")
     List<Game> findLiveGames();
+
+    @Query("SELECT g FROM Game g WHERE g.gameResult = '경기 종료' ORDER BY g.date DESC LIMIT 1")
+    Optional<Game> findMostRecentFinishedGame();
 }

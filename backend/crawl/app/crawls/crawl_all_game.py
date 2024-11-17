@@ -26,7 +26,7 @@ def crawl_all_game():
 
     driver = None
     game_all_list = []
-    year_list = ["2021", "2022", "2023", "2024"]
+    year_list = ["2020", "2021", "2022", "2023", "2024"]
     month_list = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"]
     season_dict = {
         "3,4,5,7": "포스트시즌",
@@ -83,7 +83,7 @@ def crawl_all_game():
                                 game_result = "진행 예정"
                     
                             else:                                                           
-                                game_result = "우천 취소"
+                                game_result = "경기 취소"
 
                             stadium = columns[7].text
 
@@ -124,7 +124,7 @@ def crawl_all_game():
                                 game_result = "진행 예정"
                     
                             else:                                                           
-                                game_result = "우천 취소"
+                                game_result = "경기 취소"
 
                             stadium = columns[6].text
 

@@ -10,6 +10,7 @@ public class MemberDto {
 
     private Long memberId;
     private String email;
+    private String nickname;
     private Platform platform;
     private LocalDate createTime;
 }
