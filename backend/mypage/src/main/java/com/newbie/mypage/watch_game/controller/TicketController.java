@@ -80,6 +80,16 @@ public class TicketController {
         return ResponseEntity.ok(result);
     }
 
+    @Operation(summary = "최근 직관 경기 확인", description = "사용자의 최근 직관 경기를 확인합니다.")
+    @GetMapping()
+    public ResponseEntity<TicketResponseDto> getLatestTicket(@RequestParam int userId) {
+        TicketResponseDto result = ticketService.getLatestTicket(userId);
+        if (result == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(result);
+    }
+
     @Operation(summary = "직관 경기 삭제", description = "사용자가 직관간 경기를 삭제합니다.")
     @DeleteMapping("/delete")
     public ResponseEntity<?> deleteTicket(@RequestParam @Parameter(description = "티켓 ID") String id) {
