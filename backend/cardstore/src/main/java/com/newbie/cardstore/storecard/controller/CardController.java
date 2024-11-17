@@ -45,7 +45,7 @@ public class CardController {
 
     @Operation(summary = "내 최신 카드 조회", description = "사용자가 가지고 있는 카드 중 최근 카드 하나를 조회합니다.")
     @GetMapping("/mycard")
-    public ResponseEntity<PlayerCardDto> getMyLatestCard(@RequestParam Long userId) {
+    public ResponseEntity<PlayerCardDto> getMyLatestCard(@RequestHeader("X-User-ID") Long userId) {
         PlayerCardDto myLatestCard = cardService.getMyLatestCard(userId);
         return ResponseEntity.ok(myLatestCard);
     }
@@ -59,7 +59,7 @@ public class CardController {
 
     @Operation(summary = "카드 확인", description = "사용자가 구매한 카드 목록을 조회합니다.")
     @GetMapping("/users")
-    public ResponseEntity<List<PlayerCardDto>> getCardsByUserId(@RequestParam Long userId) {
+    public ResponseEntity<List<PlayerCardDto>> getCardsByUserId(@RequestHeader("X-User-ID") Long userId) {
         List<PlayerCardDto> cardsByUserId = cardService.getCardsByUserId(userId);
         return ResponseEntity.ok(cardsByUserId);
     }
