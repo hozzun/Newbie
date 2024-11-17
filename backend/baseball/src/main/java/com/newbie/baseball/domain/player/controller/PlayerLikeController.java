@@ -24,11 +24,12 @@ public class PlayerLikeController {
     @PostMapping("/{playerId}")
     public ResponseEntity<String> likePlayer(
             // 추후 서블렛 리퀘스트 추가
-            @Parameter(description = "선수 ID", example = "1") @PathVariable Integer playerId) {
+            @Parameter(description = "선수 ID", example = "1") @PathVariable Integer playerId,
+            @RequestHeader("X-User-ID") Long contextUserId) {
         // JWT 토큰에서 memberId를 추출하는 로직
 //        Long memberId = extractMemberIdFromToken(request);
-        Long memberId = 1L;
-        playerLikeService.toggleLike(memberId, playerId);
+//        Long memberId = 1L;
+        playerLikeService.toggleLike(contextUserId, playerId);
         return ResponseEntity.ok("좋아요 상태가 변경되었습니다.");
     }
 
