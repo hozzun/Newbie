@@ -12,16 +12,16 @@ const CommuFree = ({ searchQuery }: { searchQuery: string }) => {
   const loadBoards = async () => {
     if (loading || !hasMore) return;
 
-    setLoading(true);
     try {
       const response = await getGeneralBoard();
+      setLoading(true);
       // response.data로 실제 데이터에 접근
       if (!response.data || response.data.length === 0) {
         setHasMore(false);
         return;
       }
-
-      setFreeBoards(prev => [...prev, ...response.data]);
+      setLoading(false);
+      setFreeBoards(response.data);
     } catch (error) {
       console.error("Free boards loading error:", error);
     } finally {
