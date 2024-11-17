@@ -4,6 +4,10 @@ import { Client } from "@stomp/stompjs";
 import axiosInstance from "../../util/axiosInstance";
 import ChatMessages from "../../components/baseballdict/ChatMessages";
 import ChatInput from "../../components/baseballdict/ChatInput";
+import AIBOT from "../../assets/images/aibot.png";
+
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 
 interface Message {
   userId: number;
@@ -21,6 +25,8 @@ const BaseballDict = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const userId = 1;
+
+  const userProfileImage = useSelector((state: RootState) => state.myInfo.profileImage);
 
   const fetchRoomAndHistory = useCallback(async () => {
     try {
@@ -142,8 +148,8 @@ const BaseballDict = () => {
           <ChatMessages
             messages={messages}
             currentUserId={userId}
-            userImage="/path/to/user-image.png"
-            aiImage="/path/to/ai-image.png"
+            userImage={userProfileImage}
+            aiImage={AIBOT}
           />
           <ChatInput
             onSendMessage={handleSendMessage}
