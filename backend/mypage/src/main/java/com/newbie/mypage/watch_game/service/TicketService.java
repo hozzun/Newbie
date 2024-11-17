@@ -4,7 +4,9 @@ import com.newbie.mypage.watch_game.dto.TicketResponseDto;
 import com.newbie.mypage.watch_game.entity.Ticket;
 import com.newbie.mypage.watch_game.repository.TicketRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,13 +30,14 @@ public class TicketService {
     }
 
     public TicketResponseDto getTicket(String id) {
-        Ticket ticket = ticketRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Ticket not found"));
+        Ticket ticket = ticketRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Ticket not found"));
         return convertToDto(ticket);
     }
 
     public TicketResponseDto getLatestTicket(int userId) {
         Ticket latestTicket = ticketRepository.findFirstByUserIdOrderByIdDesc(userId)
-               .orElseThrow(() -> new IllegalArgumentException("Ticket not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Ticket not found"));
         return convertToDto(latestTicket);
     }
 
