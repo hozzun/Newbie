@@ -2,11 +2,9 @@ package newbie.gateway.gateway.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-@Slf4j
 @Component
 public class JwtUtil {
 
@@ -15,14 +13,10 @@ public class JwtUtil {
 
     // JWT 검증 메서드
     public Claims getClaimsFromToken(String token) {
-        Claims claims = Jwts.parser()
+        return Jwts.parser()
                 .setSigningKey(secretKey)
                 .parseClaimsJws(token)
                 .getBody();
-
-        log.info("Full Claims: {}", claims);
-
-        return claims;
     }
 
     public boolean validateToken(String token) {
