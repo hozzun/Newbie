@@ -68,7 +68,7 @@ public class GeneralBoardCommentService {
         mileageProducer.sendMileageUpdate(userId, 100, "댓글 작성");
 
         Activity activity = Activity.builder()
-                .userId(userId)
+                .userId((long) userId)
                 .boardId(requestDto.getBoardId())
                 .boardType("GENERAL_BOARD")
                 .type("comment")
