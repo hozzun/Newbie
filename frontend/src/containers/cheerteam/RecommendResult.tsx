@@ -54,7 +54,7 @@ const RecommendResult = (props: RecommendResultProps) => {
 
   const onCheerClick = () => {
     updateFavoriteTeam(ClubId[props.club])
-    nav(-1)
+    nav(-2)
   }
 
   const onReClick = () => {
