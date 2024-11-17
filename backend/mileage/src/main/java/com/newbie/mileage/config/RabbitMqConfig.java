@@ -21,40 +21,51 @@ public class RabbitMqConfig {
     private final RabbitMqProperties rabbitMqProperties;
 
     @Value("${rabbitmq.queue.name}")
-    private String queueName;
+    private String queueName; // 기존 큐 이름
 
     @Value("${rabbitmq.exchange.name}")
-    private String exchangeName;
+    private String exchangeName; // 공유 교환기 이름
 
     @Value("${rabbitmq.routing.key}")
-    private String routingKey;
+    private String routingKey; // 기존 라우팅 키
 
-    // org.springframework.amqp.core.Queue
+    @Value("${rabbitmq.board.queue.name}") // board 서버를 위한 큐
+    private String boardQueueName;
+
+    @Value("${rabbitmq.board.routing.key}") // board 서버를 위한 라우팅 키
+    private String boardRoutingKey;
+
+    // 기존 큐
     @Bean
     public Queue queue() {
         return new Queue(queueName);
     }
 
-    /**
-     * 지정된 Exchange 이름으로 Direct Exchange Bean 을 생성
-     */
+    // board 서버 큐
+    @Bean
+    public Queue boardQueue() {
+        return new Queue(boardQueueName);
+    }
+
+    // Direct Exchange
     @Bean
     public DirectExchange directExchange() {
         return new DirectExchange(exchangeName);
     }
 
-    /**
-     * 주어진 Queue 와 Exchange 을 Binding 하고 Routing Key 을 이용하여 Binding Bean 생성
-     * Exchange 에 Queue 을 등록한다고 이해하자
-     **/
+    // 기존 큐와 라우팅 키를 바인딩
     @Bean
     public Binding binding(Queue queue, DirectExchange exchange) {
         return BindingBuilder.bind(queue).to(exchange).with(routingKey);
     }
 
-    /**
-     * RabbitMQ 연동을 위한 ConnectionFactory 빈을 생성하여 반환
-     **/
+    // board 큐와 라우팅 키를 바인딩
+    @Bean
+    public Binding boardBinding(Queue boardQueue, DirectExchange exchange) {
+        return BindingBuilder.bind(boardQueue).to(exchange).with(boardRoutingKey);
+    }
+
+    // RabbitMQ 연결 설정
     @Bean
     public CachingConnectionFactory connectionFactory() {
         CachingConnectionFactory connectionFactory = new CachingConnectionFactory();
@@ -65,10 +76,7 @@ public class RabbitMqConfig {
         return connectionFactory;
     }
 
-    /**
-     * RabbitTemplate
-     * ConnectionFactory 로 연결 후 실제 작업을 위한 Template
-     */
+    // RabbitTemplate 설정
     @Bean
     public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
         RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
@@ -76,9 +84,7 @@ public class RabbitMqConfig {
         return rabbitTemplate;
     }
 
-    /**
-     * 직렬화(메세지를 JSON 으로 변환하는 Message Converter)
-     */
+    // JSON 직렬화 Message Converter
     @Bean
     public MessageConverter jackson2JsonMessageConverter() {
         return new Jackson2JsonMessageConverter();
