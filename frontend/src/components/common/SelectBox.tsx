@@ -316,7 +316,7 @@ const SelectBox: React.FC<SelectBoxProps> = ({
         <select
           value={selectedSi}
           onChange={handleSiChange}
-          className="p-2 rounded-lg w-1/2 focus:border-green-900 outline-none"
+          className="p-2 rounded-lg w-1/2 focus:border-green-900 border border-gray-300 outline-none"
         >
           <option value="" disabled>
             {placeholder1 || "지역을 선택하세요"}
@@ -330,7 +330,7 @@ const SelectBox: React.FC<SelectBoxProps> = ({
         <select
           value={selectedGun}
           onChange={handleGunChange}
-          className="p-2 rounded-lg w-1/2 focus:border-green-900 outline-none"
+          className="p-2 rounded-lg w-1/2 focus:border-green-900 border border-gray-300 outline-none"
           disabled={!selectedSi}
         >
           <option value="" disabled>
