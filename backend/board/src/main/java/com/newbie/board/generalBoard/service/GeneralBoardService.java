@@ -1,5 +1,6 @@
 package com.newbie.board.generalBoard.service;
 
+import com.newbie.board.config.BoardMileageProducer;
 import com.newbie.board.generalBoard.dto.GeneralBoardRequestDto;
 import com.newbie.board.generalBoard.dto.GeneralBoardResponseDto;
 import com.newbie.board.generalBoard.dto.GeneralBoardUpdateRequestDto;
@@ -35,6 +36,7 @@ public class GeneralBoardService {
     private final GeneralBoardLikeRepository likeRepository;
     private final ScrapRepository scrapRepository;
     private final S3Service s3Service;
+    private final BoardMileageProducer mileageProducer;
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -94,13 +96,15 @@ public class GeneralBoardService {
                 .content(requestDto.getContent())
                 .imageUrl(imageUrl)
                 .createdAt(LocalDateTime.now())
-                .userId(requestDto.getUserId())
+                .userId(Long.valueOf(requestDto.getUserId()))
                 .userName(requestDto.getUserName())
                 .isDeleted("N")
                 .build();
 
         generalBoardTags.forEach(generalBoard::addTag);
         generalBoardRepository.save(generalBoard);
+
+        mileageProducer.sendMileageUpdate(requestDto.getUserId(), 500, "게시글 작성");
 
         return toGeneralBoardResponseDto(generalBoard);
     }

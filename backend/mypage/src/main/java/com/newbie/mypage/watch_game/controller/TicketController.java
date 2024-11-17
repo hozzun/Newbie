@@ -81,7 +81,7 @@ public class TicketController {
     }
 
     @Operation(summary = "최근 직관 경기 확인", description = "사용자의 최근 직관 경기를 확인합니다.")
-    @GetMapping()
+    @GetMapping("/latest")
     public ResponseEntity<TicketResponseDto> getLatestTicket(@RequestParam int userId) {
         TicketResponseDto result = ticketService.getLatestTicket(userId);
         if (result == null) {

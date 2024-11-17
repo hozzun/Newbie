@@ -1,5 +1,6 @@
 package com.newbie.board.generalBoard.service;
 
+import com.newbie.board.config.BoardMileageProducer;
 import com.newbie.board.generalBoard.dto.GeneralBoardCommentRequestDto;
 import com.newbie.board.generalBoard.dto.GeneralBoardCommentResponseDto;
 import com.newbie.board.generalBoard.entity.GeneralBoard;
@@ -22,6 +23,7 @@ public class GeneralBoardCommentService {
 
     private final GeneralBoardCommentRepository commentRepository;
     private final GeneralBoardRepository generalBoardRepository;
+    private final BoardMileageProducer mileageProducer;
     private final ActivityRepository activityRepository;
 
     /**
@@ -44,14 +46,14 @@ public class GeneralBoardCommentService {
      * @return
      */
     @Transactional
-    public GeneralBoardCommentResponseDto createComment(GeneralBoardCommentRequestDto requestDto, Long userId) {
+    public GeneralBoardCommentResponseDto createComment(GeneralBoardCommentRequestDto requestDto, int userId) {
         GeneralBoard generalBoard = generalBoardRepository.findById(requestDto.getBoardId())
                 .orElseThrow(() -> new RuntimeException("Board not found"));
 
         GeneralBoardComment comment = GeneralBoardComment.builder()
                 .content(requestDto.getContent())
                 .createdAt(LocalDateTime.now())
-                .userId(userId)
+                .userId((long) userId)
                 .generalBoard(generalBoard)
                 .isDeleted("N")
                 .build();
@@ -63,9 +65,10 @@ public class GeneralBoardCommentService {
         }
 
         GeneralBoardComment savedComment = commentRepository.save(comment);
+        mileageProducer.sendMileageUpdate(userId, 100, "댓글 작성");
 
         Activity activity = Activity.builder()
-                .userId(userId)
+                .userId((long) userId)
                 .boardId(requestDto.getBoardId())
                 .boardType("GENERAL_BOARD")
                 .type("comment")
