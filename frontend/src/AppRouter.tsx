@@ -44,7 +44,7 @@ function ProtectedRoute({ children }: { children: JSX.Element }) {
 
   useEffect(() => {
     if (!token) {
-      navigate("/login", { replace: true });
+      navigate("/login");
     }
   }, [token, navigate]);
 
