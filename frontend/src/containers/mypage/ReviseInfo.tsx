@@ -69,13 +69,15 @@ const ReviseInfo = () => {
     const fullAddress = `${newAddress.si} ${newAddress.gun}`;
     formData.append("address", fullAddress);
   
-    // imageUrl이 있는 경우에만 이미지 파일을 FormData에 추가
-    if (imageUrl !== profileImage) {
-      const base64Image = imageUrl.replace(/^data:image\/\w+;base64,/, "");
-      const fileName = `image_${Date.now()}.png`;
-      const file = base64ToFile(base64Image, fileName);
-      formData.append("profileImage", file);
-    }
+  // imageUrl이 Base64 형식인지 확인
+  if (imageUrl !== profileImage && imageUrl.startsWith("data:image/")) {
+    const base64Image = imageUrl.replace(/^data:image\/\w+;base64,/, "");
+    const fileName = `image_${Date.now()}.png`;
+    const file = base64ToFile(base64Image, fileName);
+    formData.append("profileImage", file);
+  } else if (imageUrl !== profileImage) {
+    console.warn("imageUrl is not a Base64 encoded string:", imageUrl);
+  }
   
     try {
       const response = await axiosInstance.patch("/api-user/users/5", formData, {
