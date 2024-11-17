@@ -51,7 +51,7 @@ public class MileageService {
 
         log.info("Received mileage addition request: userId={}, amount={}, reason={}", userId, amount, reason);
 
-        UserMileage latestMileage = userMileageRepository.findFirstByUserIdOrderByCreatedAtDesc(userId)
+        UserMileage latestMileage = userMileageRepository.findFirstByUserIdOrderByIdDesc(userId)
                 .orElse(UserMileage.builder()
                         .userId(userId)
                         .mileage(0)
