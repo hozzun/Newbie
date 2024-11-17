@@ -48,8 +48,18 @@ export interface PostGeneralBoardResponse {
 }
 
 export const postGeneralBoard = async (data: FormData, params: { userId: number }) => {
-  return axios.post<PostGeneralBoardResponse>("/api-board/general-board/create", data, { params });
+  return axios.post<PostGeneralBoardResponse>(
+    "/api-board/general-board/create",
+    data,
+    {
+      params,
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }
+  );
 };
+
 
 export const getUserProfile = () => {
   return axios.get("/api-user/users/userId"); // userId 수정필요

@@ -85,7 +85,7 @@ const CommuFreeCreate: React.FC<CommuFreeCreateProps> = ({
           />
         </div>
         <span
-          className={`absolute left-2 bottom-1 text-[9px] ${errorMessage ? "text-red-400" : "text-gray-400"}`}
+          className={`absolute left-2 bottom-1 text-[9px] font-kbogothiclight ${errorMessage ? "text-red-400" : "text-gray-400"}`}
         >
           {errorMessage || "태그를 입력 후, 엔터를 입력하면 등록됩니다."}
         </span>

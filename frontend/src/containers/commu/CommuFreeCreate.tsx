@@ -92,8 +92,8 @@ const CommuFreeCreate = () => {
         formData.append(
           "generalBoardDto",
           JSON.stringify({
-            userId: 1, // 실제로는 로그인된 사용자 ID를 사용
-            userName: "사용자", // 실제로는 로그인된 사용자 이름을 사용
+            userId: 5, // 실제로는 로그인된 사용자 ID를 사용
+            userName: "김진우", // 실제로는 로그인된 사용자 이름을 사용
             title: titleValue,
             content: text,
             tags: tags,
