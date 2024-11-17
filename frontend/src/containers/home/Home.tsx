@@ -7,7 +7,12 @@ import { HighlightProps } from "../../components/home/Highlight";
 import { CardStoreItemProps } from "../../components/home/CardStoreItem";
 import { CardStoreProps } from "../../components/home/CardStore";
 import { useNavigate } from "react-router-dom";
-import { GetGamesRequest, getClubRanks, getGames } from "../../api/baseballApi";
+import {
+  GetGamesRequest,
+  getClubRanks,
+  getGames,
+  getLatestGameHightlight,
+} from "../../api/baseballApi";
 import { getClubIdByNum } from "../../util/ClubId";
 import { GetWeatherRequest, getWeather } from "../../api/weatherApi";
 import Stadiums from "../../util/Stadiums";
@@ -185,9 +190,10 @@ const Home = () => {
   const fetchHighlightUrl = async () => {
     try {
       // TODO: GET - 하이라이트 영상 TOP 1
-      const highlightUrlData: string = "highlight video url";
+      const response = await getLatestGameHightlight();
+      const latestGameHighlightUrlData: string = response.data.url;
 
-      setHighlightUrl(highlightUrlData);
+      setHighlightUrl(latestGameHighlightUrlData);
     } catch (e) {
       console.log(e);
     }
@@ -241,7 +247,6 @@ const Home = () => {
   };
 
   const goWatchedGameMore = () => {
-    // TODO: MOVE - 나의 직관경기 페이지
     nav("/mypage");
   };
 

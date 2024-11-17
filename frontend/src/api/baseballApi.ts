@@ -178,3 +178,11 @@ export interface GetPhotoCardPlayerInfoResponse {
 }
 
 export const getPhotoCardPlayerInfo = (request: GetPhotoCardPlayerInfoRequest) => axios.get<GetPhotoCardPlayerInfoResponse>(`/api-baseball/players/photos/${request.teamId}/${request.backNumber}`);
+
+// 최근 경기 하이라이트 조회
+export interface GetLatestGameHighlightResponse {
+    title: string;
+    url: string;
+}
+
+export const getLatestGameHightlight = () => axios.get<GetLatestGameHighlightResponse>("/api-baseball/highlights/recent");
