@@ -1,5 +1,6 @@
 package com.newbie.auth.member.service;
 
+import com.newbie.auth.global.common.config.RabbitMqPublisher;
 import com.newbie.auth.global.security.util.JwtUtil;
 import com.newbie.auth.member.domain.ExceptionMessages;
 import com.newbie.auth.member.domain.Member;
@@ -29,6 +30,7 @@ public class MemberServiceImpl implements MemberService{
     private final JwtUtil jwtUtil;
     private final ModelMapper mapper;
     private final RestTemplate restTemplate;
+    private final RabbitMqPublisher rabbitMqPublisher;
 
     @Value("${register.api}")
     private String registerApi;
@@ -67,6 +69,7 @@ public class MemberServiceImpl implements MemberService{
     @Transactional
     public void resignMember(Long memberId) {
         memberRepository.deleteById(memberId);
+        rabbitMqPublisher.sendResignEvent(memberId);
         restTemplate.patchForObject(resignApi, memberId, Void.class);
     }
 }
