@@ -21,15 +21,19 @@ export const fetchRoomAndHistory = async (
     setIsLoading(true);
     setError(null);
 
-    const { data: fetchedRoomId } = await axiosInstance.post("/api-chatbot/create-room", null, {
-      params: { userId },
-    });
+    // 임의로 userId를 1로 설정
+    const testUserId = 1;
 
+    // create-room API는 호출하지 않고 임의로 roomId 설정
+    const fetchedRoomId = `${testUserId}`; // 테스트로 userId를 Room ID로 가정
     setRoomId(fetchedRoomId);
 
+    // userId 기반으로 chat history 조회
     const { data: chatHistory } = await axiosInstance.get<Message[]>(
-      `/api-chatbot/chat/${fetchedRoomId}/history`,
+      `/api-chatbot/chatbot/${testUserId}/history`, // userId를 경로에 사용
     );
+
+    // 응답 데이터를 메시지 리스트에 설정
     setMessages(chatHistory);
   } catch (error) {
     console.error("Error fetching room or chat history:", error);
@@ -51,7 +55,7 @@ export const initializeWebSocket = (
       setConnected(true);
       setError(null);
 
-      client.subscribe(`/topic/chat/${roomId}`, message => {
+      client.subscribe(`/topic/chatbot/${roomId}`, message => {
         try {
           const receivedMessage = JSON.parse(message.body);
           if (receivedMessage.content) {
@@ -59,7 +63,6 @@ export const initializeWebSocket = (
               ...prevMessages,
               { ...receivedMessage, message: receivedMessage.content },
             ]);
-            console.log("Received AI response:", receivedMessage.content);
           }
         } catch (error) {
           console.error("Error parsing message:", error);
@@ -100,7 +103,7 @@ export const sendMessage = (
     setMessages((prevMessages: Message[]) => [...prevMessages, newMessage]);
 
     stompClient.publish({
-      destination: `/app/chat/${roomId}`,
+      destination: `/app-chatbot/chatbot/${roomId}`,
       body: JSON.stringify(newMessage),
     });
   } catch (error) {
