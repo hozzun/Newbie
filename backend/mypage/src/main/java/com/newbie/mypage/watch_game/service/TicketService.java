@@ -32,6 +32,12 @@ public class TicketService {
         return convertToDto(ticket);
     }
 
+    public TicketResponseDto getLatestTicket(int userId) {
+        Ticket latestTicket = ticketRepository.findFirstByUserIdOrderByIdDesc(userId)
+               .orElseThrow(() -> new IllegalArgumentException("Ticket not found"));
+        return convertToDto(latestTicket);
+    }
+
     public void deleteTicket(String id) {
         ticketRepository.deleteById(id);
     }
