@@ -12,7 +12,6 @@ const BaseballDictionaryFAB = () => {
   };
 
   const goBaseballDistionary = () => {
-    // TODO: MOVE - 야구 사전
     nav("/baseballdict");
   };
 

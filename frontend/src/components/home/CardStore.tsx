@@ -16,7 +16,7 @@ const CardStore = (props: CardStoreProps) => {
       <div className="flex justify-between space-x-4 w-[98%] mt-3">
         {props.cardStoreItems &&
           props.cardStoreItems.map(cardStoreItem => (
-            <CardStoreItem key={cardStoreItem.id} {...cardStoreItem} />
+            <CardStoreItem key={cardStoreItem.photoCardInfo.id} {...cardStoreItem} />
           ))}
       </div>
     </div>

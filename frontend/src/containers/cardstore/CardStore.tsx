@@ -34,7 +34,6 @@ const CardStore = () => {
   const [selectedClubOption, setSelectedClubOption] = useState<string>(
     cardStoreListItem.club === "" ? "kia" : cardStoreListItem.club,
   );
-  // TODO: 카드 목록 조회 시 포지션도 반영
   const [selectedPositionOption, setSelectedPositionOption] = useState<string>(
     cardStoreListItem.position,
   );
