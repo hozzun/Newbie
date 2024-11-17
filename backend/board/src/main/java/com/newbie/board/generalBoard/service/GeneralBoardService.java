@@ -132,6 +132,11 @@ public class GeneralBoardService {
         });
     }
 
+    @Transactional
+    public void markPostsAsDeletedByUserId(Long userId) {
+        generalBoardRepository.updatePostsAsDeletedByUserId(userId);
+    }
+
     private GeneralBoardResponseDto toGeneralBoardResponseDto(GeneralBoard generalBoard) {
         int commentCount = commentRepository.countByGeneralBoardIdAndIsDeleted(generalBoard.getId(), "N");
         int likeCount = likeRepository.countByGeneralBoardId(generalBoard.getId());
