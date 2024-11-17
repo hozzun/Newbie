@@ -14,10 +14,7 @@ export interface GetLatestMyPhotoCardResponse {
   createAt: string;
 }
 
-// TODO: 사용자 ID 삭제
-export const getLatestMyPhotoCard = () => axios.get<GetLatestMyPhotoCardResponse>("/api-cardstore/cards/mycard", {
-  params: {userId: 5}
-})
+export const getLatestMyPhotoCard = () => axios.get<GetLatestMyPhotoCardResponse>("/api-cardstore/cards/mycard")
 
 // 카드 목록 조회
 export interface GetPhotoCardsRequest {
@@ -38,15 +35,13 @@ export interface GetPhotoCardsResponse {
   createAt: string;
 }
 
-// TODO: 사용자 ID 삭제
 export const getPhotoCards = (request: GetPhotoCardsRequest) =>
   axios.get<Array<GetPhotoCardsResponse>>("/api-cardstore/cards/team", {
     params: {
       team: request.team,
       position: request.position,
       sortType: request.sortType,
-      includeCard: request.includeCard,
-      userId: 5,
+      includeCard: request.includeCard
     },
   });
 

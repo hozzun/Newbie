@@ -73,7 +73,6 @@ const GameResult = () => {
 
   const fetchGameResult = async () => {
     try {
-      // TODO: GET - 경기 결과 상세정보
       if (!id) {
         throw new CustomError("[ERROR] 경기 ID 없음 by game result");
       }

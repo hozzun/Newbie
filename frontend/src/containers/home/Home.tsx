@@ -242,7 +242,7 @@ const Home = () => {
 
   const goWatchedGameMore = () => {
     // TODO: MOVE - 나의 직관경기 페이지
-    console.log("나의 직관경기 페이지로 이동");
+    nav("/mypage");
   };
 
   const goCardStoreMore = () => {
