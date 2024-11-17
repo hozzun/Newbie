@@ -49,3 +49,18 @@ export const getPhotoCards = (request: GetPhotoCardsRequest) =>
       userId: 5,
     },
   });
+
+
+// 카드 판매 TOP3 조회
+export interface GetTopSellingCardsResponse {
+  id: string;
+  name: string;
+  no: string;
+  team: number;
+  price: number;
+  imageUrl: string;
+  position: string;
+  createAt: string;
+}
+
+export const getTopSellingCards = () => axios.get<Array<GetTopSellingCardsResponse>>("/api-cardstore/cards/top-sales");

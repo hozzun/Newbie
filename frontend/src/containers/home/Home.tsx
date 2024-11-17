@@ -14,8 +14,9 @@ import Stadiums from "../../util/Stadiums";
 import { calculateWeather } from "../../util/Weather";
 import axios from "axios";
 import { useDispatch } from "react-redux";
-import { clearCardStoreListItem } from "../../redux/cardStoreSlice";
-import { getLatestMyPhotoCard } from "../../api/cardStoreApi";
+import { clearCardStoreListItem, setPhotoCardInfo } from "../../redux/cardStoreSlice";
+import { getLatestMyPhotoCard, getTopSellingCards } from "../../api/cardStoreApi";
+import { PhotoCardInfo } from "../cardstore/CardStore";
 
 export interface ClubProps {
   id: string;
@@ -54,15 +55,16 @@ export interface ClubRankItemProps {
   rankDifference: number;
 }
 
-// 더미 데이터
-// const gameSituationData: GameSituation = {
-//   isPlaying: true,
-//   scores: {
-//     samsung: 2,
-//     kia: 1,
-//   },
-// };
-// ---
+const getRamdomItems = <T,>(arr: Array<T>, count: number): Array<T> => {
+  const result = new Set<T>();
+
+  while (result.size < count) {
+    const randomIndex = Math.floor(Math.random() * arr.length);
+    result.add(arr[randomIndex]);
+  }
+
+  return Array.from(result);
+};
 
 const Home = () => {
   const nav = useNavigate();
@@ -193,27 +195,28 @@ const Home = () => {
 
   const fetchCards = async () => {
     try {
-      // TODO: GET - 선수 포토카드 TOP 3
-      // TODO: MOVE - 선수 포토카드마다 스토어 상세 페이지
-      const cardsData: Array<CardStoreItemProps> = [
-        {
-          id: 1,
-          url: "/src/assets/images/직관경기사진.jpeg",
-          goDetail: () => console.log("1 직관경기사진으로 이동"),
-        },
-        {
-          id: 2,
-          url: "/src/assets/images/직관경기사진.jpeg",
-          goDetail: () => console.log("2 직관경기사진으로 이동"),
-        },
-        {
-          id: 3,
-          url: "/src/assets/images/직관경기사진.jpeg",
-          goDetail: () => console.log("3 직관경기사진으로 이동"),
-        },
-      ];
+      const response = await getTopSellingCards();
+      const cardDatas: Array<CardStoreItemProps> = getRamdomItems(response.data, 3).map(d => {
+        const photoCardInfo: PhotoCardInfo = {
+          id: d.id,
+          title: "2024",
+          imageUrl: d.imageUrl,
+          name: d.name,
+          teamId: getClubIdByNum(d.team),
+          backNumber: d.no,
+          price: d.price,
+        };
 
-      setCards(cardsData);
+        return {
+          photoCardInfo: photoCardInfo,
+          goDetail: () => {
+            dispatch(setPhotoCardInfo(photoCardInfo));
+            nav(`/cardstore/${d.id}`);
+          },
+        };
+      });
+
+      setCards(cardDatas);
     } catch (e) {
       console.log(e);
     }
