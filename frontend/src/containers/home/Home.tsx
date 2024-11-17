@@ -7,14 +7,22 @@ import { HighlightProps } from "../../components/home/Highlight";
 import { CardStoreItemProps } from "../../components/home/CardStoreItem";
 import { CardStoreProps } from "../../components/home/CardStore";
 import { useNavigate } from "react-router-dom";
-import { GetGamesRequest, getClubRanks, getGames } from "../../api/baseballApi";
+import {
+  GetGamesRequest,
+  getClubRanks,
+  getGames,
+  getLatestGameHightlight,
+} from "../../api/baseballApi";
 import { getClubIdByNum } from "../../util/ClubId";
 import { GetWeatherRequest, getWeather } from "../../api/weatherApi";
 import Stadiums from "../../util/Stadiums";
 import { calculateWeather } from "../../util/Weather";
 import axios from "axios";
 import { useDispatch } from "react-redux";
-import { clearCardStoreListItem } from "../../redux/cardStoreSlice";
+import { clearCardStoreListItem, setPhotoCardInfo } from "../../redux/cardStoreSlice";
+import { getLatestMyPhotoCard, getTopSellingCards } from "../../api/cardStoreApi";
+import { PhotoCardInfo } from "../cardstore/CardStore";
+import { getLatestAttendedGame } from "../../api/userApi";
 
 export interface ClubProps {
   id: string;
@@ -53,15 +61,16 @@ export interface ClubRankItemProps {
   rankDifference: number;
 }
 
-// 더미 데이터
-// const gameSituationData: GameSituation = {
-//   isPlaying: true,
-//   scores: {
-//     samsung: 2,
-//     kia: 1,
-//   },
-// };
-// ---
+const getRamdomItems = <T,>(arr: Array<T>, count: number): Array<T> => {
+  const result = new Set<T>();
+
+  while (result.size < count) {
+    const randomIndex = Math.floor(Math.random() * arr.length);
+    result.add(arr[randomIndex]);
+  }
+
+  return Array.from(result);
+};
 
 const Home = () => {
   const nav = useNavigate();
@@ -72,7 +81,7 @@ const Home = () => {
   const [hasCheeringClub, setHasCheeringClub] = useState<boolean>(false);
   const [todayGame, setTodayGame] = useState<GameProps | null>(null);
   const [photoCardImage, setPhotoCardImage] = useState<string | null>(null);
-  const [watchedGameImage, setWatchedGameImage] = useState<string | null>(null);
+  const [attendedGameImage, setAttendedGameImage] = useState<string | null>(null);
   const [clubRanks, setClubRanks] = useState<Array<ClubRankItemProps> | null>(null);
   const [highlightUrl, setHighlightUrl] = useState<string | null>(null);
   const [cards, setCards] = useState<Array<CardStoreItemProps> | null>(null);
@@ -145,15 +154,21 @@ const Home = () => {
     }
   };
 
-  const fetchImage = async () => {
+  const fetchPhotoCardImage = async () => {
     try {
-      // TODO: GET - 최신 나의 포토카드 이미지 url
-      const photoCardImageData: string | null = null;
-      setPhotoCardImage(photoCardImageData);
+      const photoCardResponse = await getLatestMyPhotoCard();
+      const photoCardData: string = photoCardResponse.data.imageUrl;
+      setPhotoCardImage(photoCardData);
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
-      // TODO: GET - 최신 나의 직관경기 이미지 url
-      const watchedGameImageData: string | null = "/src/assets/images/직관경기사진.jpeg";
-      setWatchedGameImage(watchedGameImageData);
+  const fetchAttendedGameImage = async () => {
+    try {
+      const attendedGameResponse = await getLatestAttendedGame();
+      const attendedGameData: string = attendedGameResponse.data.imageUrl;
+      setAttendedGameImage(attendedGameData);
     } catch (e) {
       console.log(e);
     }
@@ -181,10 +196,10 @@ const Home = () => {
 
   const fetchHighlightUrl = async () => {
     try {
-      // TODO: GET - 하이라이트 영상 TOP 1
-      const highlightUrlData: string = "highlight video url";
+      const response = await getLatestGameHightlight();
+      const latestGameHighlightUrlData: string = response.data.url;
 
-      setHighlightUrl(highlightUrlData);
+      setHighlightUrl(latestGameHighlightUrlData);
     } catch (e) {
       console.log(e);
     }
@@ -192,27 +207,28 @@ const Home = () => {
 
   const fetchCards = async () => {
     try {
-      // TODO: GET - 선수 포토카드 TOP 3
-      // TODO: MOVE - 선수 포토카드마다 스토어 상세 페이지
-      const cardsData: Array<CardStoreItemProps> = [
-        {
-          id: 1,
-          url: "/src/assets/images/직관경기사진.jpeg",
-          goDetail: () => console.log("1 직관경기사진으로 이동"),
-        },
-        {
-          id: 2,
-          url: "/src/assets/images/직관경기사진.jpeg",
-          goDetail: () => console.log("2 직관경기사진으로 이동"),
-        },
-        {
-          id: 3,
-          url: "/src/assets/images/직관경기사진.jpeg",
-          goDetail: () => console.log("3 직관경기사진으로 이동"),
-        },
-      ];
+      const response = await getTopSellingCards();
+      const cardDatas: Array<CardStoreItemProps> = getRamdomItems(response.data, 3).map(d => {
+        const photoCardInfo: PhotoCardInfo = {
+          id: d.id,
+          title: "2024",
+          imageUrl: d.imageUrl,
+          name: d.name,
+          teamId: getClubIdByNum(d.team),
+          backNumber: d.no,
+          price: d.price,
+        };
 
-      setCards(cardsData);
+        return {
+          photoCardInfo: photoCardInfo,
+          goDetail: () => {
+            dispatch(setPhotoCardInfo(photoCardInfo));
+            nav(`/cardstore/${d.id}`);
+          },
+        };
+      });
+
+      setCards(cardDatas);
     } catch (e) {
       console.log(e);
     }
@@ -220,7 +236,8 @@ const Home = () => {
 
   useEffect(() => {
     fetchTodayGame();
-    fetchImage();
+    fetchPhotoCardImage();
+    fetchAttendedGameImage();
     fetchClubRanks();
     fetchHighlightUrl();
     fetchCards();
@@ -233,13 +250,11 @@ const Home = () => {
   };
 
   const goPhotoCardMore = () => {
-    // TODO: MOVE - 나의 포토카드 페이지
-    console.log("나의 포토카드 페이지로 이동");
+    nav("/mypage/photocard");
   };
 
   const goWatchedGameMore = () => {
-    // TODO: MOVE - 나의 직관경기 페이지
-    console.log("나의 직관경기 페이지로 이동");
+    nav("/mypage");
   };
 
   const goCardStoreMore = () => {
@@ -254,7 +269,7 @@ const Home = () => {
 
   const imageCardProps: ImageCardProps = {
     photoCardImage,
-    watchedGameImage,
+    attendedGameImage,
     goPhotoCardMore,
     goWatchedGameMore,
   };

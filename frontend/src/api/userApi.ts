@@ -13,3 +13,19 @@ export interface getUserProfileResponse {
 export const getUserProfile = () => {
   return axios.get<getUserProfileResponse[]>("/api-user/users/:id");
 };
+
+// 최신 직관 경기 조회
+export interface GetLatestAttendedGameResponse {
+  id: string;
+  userId: number;
+  date: string;
+  time: string;
+  team1English: string;
+  team2English: string;
+  team1Korean: string;
+  team2Korean: string;
+  imageUrl: string;
+  text: string;
+}
+
+export const getLatestAttendedGame = () => axios.get<GetLatestAttendedGameResponse>("/api-mypage/ticket/latest");

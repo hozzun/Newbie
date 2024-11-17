@@ -15,13 +15,6 @@ import { getIdByNum } from "../../util/ClubId";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 
-interface UserInfo {
-  email: string;
-  nickname: string;
-  address: string;
-  profileImage: string;
-}
-
 interface Game {
   date: string;
   homeTeamId: number;
@@ -42,13 +35,15 @@ type TeamName =
   | "ssg";
 
 const MyPage = () => {
-  const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
   const [games, setGames] = useState<Game[]>([]);
   const { team } = useSelector((state: RootState) => state.team);
+  const { nickname, email, profileImage } = useSelector((state: RootState) => state.myInfo);
+  const imageUrl = `${profileImage}?cacheBust=${Date.now()}`;
+
   const nav = useNavigate();
-  
+
   const goRevise = () => {
-    nav("/mypage/revise", { state: { userInfo } });
+    nav("/mypage/revise");
   };
 
   const goRecommend = () => {
@@ -71,26 +66,6 @@ const MyPage = () => {
     nav("/mypage/scrap");
   };
 
-  const getUserInfo = async () => {
-    // TODO: userId 삭제 예정
-    const userId = 5
-    setUserInfo(null);
-
-    try {
-      const response = await axiosInstance.get(`/api-user/users/${userId}`, {
-        params: { userId: userId },
-      });
-      const userData: UserInfo = response.data;
-      setUserInfo(userData);
-    } catch (error) {
-      console.error("에러 발생:", error);
-    }
-  };
-
-  useEffect(() => {
-    getUserInfo();
-  }, []);
-
   const getGameInfo = async () => {
     const year = new Date().getFullYear();
     const month = 8; // 9월로 고정
@@ -98,7 +73,7 @@ const MyPage = () => {
     const params = { year: year.toString(), month: formattedMonth, teamId: team };
 
     try {
-      const response = await axiosInstance.get("/api-baseball/games", { params });
+      const response = await axiosInstance.get("/api/v1/games", { params });
       setGames(response.data);
     } catch (error) {
       console.error("경기 데이터를 불러오는 중 오류 발생:", error);
@@ -108,8 +83,9 @@ const MyPage = () => {
   useEffect(() => {
     getGameInfo();
   }, [team])
+  
 
-  if (userInfo) {
+  if (imageUrl) {
     const teamName = getIdByNum(team) as TeamName | 0;
 
     return (
@@ -118,9 +94,9 @@ const MyPage = () => {
           <PageName label="마이페이지" />
           <Pencil className="w-6 h-6 mb-2 text-gray-500 hover:cursor-pointer" onClick={goRevise} />
         </div>
-        {userInfo && (
+        {imageUrl && (
           <div>
-            <Profile img={`${userInfo.profileImage}?t${new Date().getTime()}`} name={userInfo.nickname} email={userInfo.email} />
+            <Profile img={imageUrl} name={nickname} email={email} />
             {teamName ? (
               <ClubChangeButton
                 logo={ClubLogos[teamName]}

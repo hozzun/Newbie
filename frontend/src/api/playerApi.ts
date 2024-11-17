@@ -107,7 +107,6 @@ export const getPlayerHightlights = (request: GetPlayerHighlightsRequest) => axi
 })
 
 // 선수 좋아요 여부 조회
-// TODO: 유저 ID 삭제
 export interface GetPlayerLikedStatusRequest {
     playerId: number;
 }
@@ -117,7 +116,7 @@ export interface GetPlayerLikedStatusResponse {
     isLiked: boolean;
 }
 
-export const getPlayerLikedStatus = (request: GetPlayerLikedStatusRequest) => axios.get<GetPlayerLikedStatusResponse>(`/api-baseball/players/like/1/${request.playerId}`);
+export const getPlayerLikedStatus = (request: GetPlayerLikedStatusRequest) => axios.get<GetPlayerLikedStatusResponse>(`/api-baseball/players/like/${request.playerId}`);
 
 // 선수 좋아요/좋아요 취소
 export interface UpdatePlayerLikedStatusRequest {
