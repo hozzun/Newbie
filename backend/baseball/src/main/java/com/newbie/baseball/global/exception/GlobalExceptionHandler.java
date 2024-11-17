@@ -4,6 +4,7 @@ import com.newbie.baseball.domain.game.exception.GameNotFoundException;
 import com.newbie.baseball.domain.lineup.exception.LineUpNotFoundException;
 import com.newbie.baseball.domain.player.exception.LikeEventException;
 import com.newbie.baseball.domain.player.exception.LikeNotFoundException;
+import com.newbie.baseball.domain.player.exception.MissingHeaderException;
 import com.newbie.baseball.domain.player.exception.PlayerNotFoundException;
 import com.newbie.baseball.domain.playerStats.exception.StatsNotFoundException;
 import com.newbie.baseball.domain.rank.exception.RankNotFoundException;
@@ -40,6 +41,11 @@ public class GlobalExceptionHandler {
     })
     public ResponseEntity<Map<String, Object>> handleNotFoundExceptions(RuntimeException  ex, HttpServletRequest request) {
         return buildErrorResponse(ex.getMessage(), "Not Found", request.getRequestURI(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(MissingHeaderException.class)
+    public ResponseEntity<Map<String, Object>> headerIllegalStateException(RuntimeException ex, HttpServletRequest request) {
+        return buildErrorResponse(ex.getMessage(), "Bad Request", request.getRequestURI(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(IllegalStateException.class)
