@@ -1,4 +1,4 @@
-package com.newbie.mileage.config;
+package com.newbie.board.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.core.Binding;
@@ -14,60 +14,42 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-@RequiredArgsConstructor
 @Configuration
-public class RabbitMqConfig {
+@RequiredArgsConstructor
+public class RabbitMQConfig {
 
     private final RabbitMqProperties rabbitMqProperties;
 
-    @Value("${rabbitmq.queue.name}")
-    private String queueName; // 기존 큐 이름
-
-    @Value("${rabbitmq.exchange.name}")
-    private String exchangeName; // 공유 교환기 이름
-
-    @Value("${rabbitmq.routing.key}")
-    private String routingKey; // 기존 라우팅 키
-
-    @Value("${rabbitmq.board.queue.name}") // board 서버를 위한 큐
+    @Value("${rabbitmq.board.queue.name}")
     private String boardQueueName;
 
-    @Value("${rabbitmq.board.routing.key}") // board 서버를 위한 라우팅 키
+    @Value("${rabbitmq.exchange.name}")
+    private String exchangeName;
+
+    @Value("${rabbitmq.board.routing.key}")
     private String boardRoutingKey;
 
-    // 기존 큐
-    @Bean
-    public Queue queue() {
-        return new Queue(queueName);
-    }
-
-    // board 서버 큐
+    // 큐 정의
     @Bean
     public Queue boardQueue() {
-        return new Queue(boardQueueName);
+        return new Queue(boardQueueName, true); // Durable 설정
     }
 
-    // Direct Exchange
+    // Direct Exchange 정의
     @Bean
     public DirectExchange directExchange() {
         return new DirectExchange(exchangeName);
     }
 
-    // 기존 큐와 라우팅 키를 바인딩
+    // 큐와 교환기를 라우팅 키로 바인딩
     @Bean
-    public Binding binding(Queue queue, DirectExchange exchange) {
-        return BindingBuilder.bind(queue).to(exchange).with(routingKey);
-    }
-
-    // board 큐와 라우팅 키를 바인딩
-    @Bean
-    public Binding boardBinding(Queue boardQueue, DirectExchange exchange) {
-        return BindingBuilder.bind(boardQueue).to(exchange).with(boardRoutingKey);
+    public Binding boardBinding(Queue boardQueue, DirectExchange directExchange) {
+        return BindingBuilder.bind(boardQueue).to(directExchange).with(boardRoutingKey);
     }
 
     // RabbitMQ 연결 설정
     @Bean
-    public CachingConnectionFactory connectionFactory() {
+    public ConnectionFactory connectionFactory() {
         CachingConnectionFactory connectionFactory = new CachingConnectionFactory();
         connectionFactory.setHost(rabbitMqProperties.getHost());
         connectionFactory.setPort(rabbitMqProperties.getPort());
