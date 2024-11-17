@@ -28,12 +28,12 @@ const RecommendResult = (props: RecommendResultProps) => {
   const dispatch = useDispatch<AppDispatch>();
 
   const updateFavoriteTeam = async (favoriteTeamId: number) => {
-    const userId = 5;
-    const params = { teamId: favoriteTeamId, userId: userId };
+
+    const params = { teamId: favoriteTeamId };
   
     try {
       const response = await axiosInstance.patch(
-        `/api-user/users/${userId}/favorite-team`,
+        `/api/v1/users/favorite-team`,
         {},
         {
           params,
@@ -54,7 +54,7 @@ const RecommendResult = (props: RecommendResultProps) => {
 
   const onCheerClick = () => {
     updateFavoriteTeam(ClubId[props.club])
-    nav(-1)
+    nav(-2)
   }
 
   const onReClick = () => {

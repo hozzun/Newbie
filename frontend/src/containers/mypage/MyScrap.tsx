@@ -22,14 +22,10 @@ const MyScrap = () => {
   const [scraps, setScraps] = useState<Scrap[]>([]);
 
   const getScrap = async () => {
-    const params = {
-      userId: 5,
-    };
 
     try {
-      const response = await axiosInstance.get("/api-board/scrap", { params });
+      const response = await axiosInstance.get("/api/v1/scrap");
       setScraps(response.data);
-      console.log(response.data);
     } catch (error) {
       console.error("에러 발생:", error);
     }

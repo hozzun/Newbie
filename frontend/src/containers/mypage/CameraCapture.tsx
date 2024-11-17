@@ -51,9 +51,6 @@ const CameraCapture = () => {
 
   const handleCapture = async (imageData: string) => {
 
-    // TODO: userId 불러오기
-    const userId = 5;
-    const params = { userId: userId }
     const fileName = `image_${Date.now()}.png`;
     const file = base64ToFile(imageData, fileName);
 
@@ -61,11 +58,10 @@ const CameraCapture = () => {
     formData.append("image", file);
 
     try {
-      const response = await axiosInstance.post("/api-mypage/ticket/naverOcr", formData, {
+      const response = await axiosInstance.post("/api/v1/ticket/naverOcr", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
-        params,
       });
       setDate(response.data.date);
       setTeamKorea(response.data.teamKorean);
