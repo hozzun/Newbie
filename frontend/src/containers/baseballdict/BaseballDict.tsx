@@ -19,7 +19,7 @@ const BaseballDict = () => {
   const [roomId, setRoomId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const userId = 5;
+  const userId = 1;
 
   const fetchRoomAndChatHistory = useCallback(() => {
     fetchRoomAndHistory(userId, setRoomId, setMessages, setError, setIsLoading);
