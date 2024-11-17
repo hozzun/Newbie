@@ -29,10 +29,22 @@ public class RabbitMQConfig {
     @Value("${rabbitmq.board.routing.key}")
     private String boardRoutingKey;
 
+    @Value("${rabbitmq.auth.queue.name}")
+    private String authQueueName;
+
+    @Value("${rabbitmq.auth.routing.key}")
+    private String authRoutingKey;
+
     // 큐 정의
     @Bean
     public Queue boardQueue() {
         return new Queue(boardQueueName, true); // Durable 설정
+    }
+
+    // 회원 탈퇴 관련 큐 정의
+    @Bean
+    public Queue authQueue() {
+        return new Queue(authQueueName, true);
     }
 
     // Direct Exchange 정의
@@ -45,6 +57,12 @@ public class RabbitMQConfig {
     @Bean
     public Binding boardBinding(Queue boardQueue, DirectExchange directExchange) {
         return BindingBuilder.bind(boardQueue).to(directExchange).with(boardRoutingKey);
+    }
+
+    // 회원 탈퇴 관련 큐와 교환기를 바인딩
+    @Bean
+    public Binding authBinding(Queue authQueue, DirectExchange directExchange) {
+        return BindingBuilder.bind(authQueue).to(directExchange).with(authRoutingKey);
     }
 
     // RabbitMQ 연결 설정
