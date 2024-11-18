@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import Stomp from "stompjs";
+import { Client } from "@stomp/stompjs"; // Stomp.Client 사용
 import axiosInstance from "../../util/axiosInstance";
 import ChatMessages from "../../components/baseballdict/ChatMessages";
 import ChatInput from "../../components/baseballdict/ChatInput";
@@ -15,7 +15,7 @@ interface Message {
 }
 
 const BaseballDict = () => {
-  const [stompClient, setStompClient] = useState<Stomp.Client | null>(null);
+  const [stompClient, setStompClient] = useState<Client | null>(null);
   const [connected, setConnected] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [comment, setComment] = useState("");
@@ -30,14 +30,13 @@ const BaseballDict = () => {
   const fetchRoomAndHistory = async () => {
     try {
       const { data: fetchedRoomId } = await axiosInstance.post("/api/v1/chatbot/create-room");
-
       setRoomId(fetchedRoomId);
+
       // 채팅 히스토리 가져오기
       const { data: chatHistory } = await axiosInstance.get(`/api/v1/chatbot/chatbot/history`);
-
       setMessages(chatHistory);
     } catch (error) {
-      console.log(error);
+      console.log("Error fetching room and history:", error);
     }
   };
 
@@ -63,29 +62,32 @@ const BaseballDict = () => {
 
   useEffect(() => {
     if (roomId) {
-      const socket = new WebSocket(`${import.meta.env.VITE_API_SOCKET_URL}/api-chatbot/chatbot/ws`);
-      const client = Stomp.over(socket);
-      client.connect(
-        () => {
+      const client = new Client({
+        brokerURL: `${import.meta.env.VITE_API_SOCKET_URL}/api-chatbot/chatbot/ws`,
+        debug: str => console.log(`STOMP Debug: ${str}`),
+        reconnectDelay: 5000, // 5초 후 자동 재연결
+        onConnect: () => {
           setConnected(true);
+          console.log("Connected to WebSocket server");
 
           client.subscribe(`/topic/chatbot/${roomId}`, message => {
-            console.log(message);
             handleWebSocketMessage(message.body);
           });
         },
-        error => {
-          console.error("STOMP connection error:", error);
+        onDisconnect: () => {
+          setConnected(false);
+          console.log("Disconnected from WebSocket server");
         },
-      );
+        onStompError: frame => {
+          console.error("STOMP Error: ", frame);
+        },
+      });
 
+      client.activate(); // 연결 활성화
       setStompClient(client);
 
       return () => {
-        client.disconnect(() => {
-          console.log("WebSocket 연결이 끊어졌습니다.");
-          setConnected(false);
-        });
+        client.deactivate(); // 연결 종료
         setStompClient(null);
       };
     }
@@ -102,7 +104,10 @@ const BaseballDict = () => {
       try {
         setMessages(prevMessages => [...prevMessages, newMessage]);
 
-        stompClient.send(`/app/chatbot/${roomId}`, {}, JSON.stringify(newMessage));
+        stompClient.publish({
+          destination: `/app/chatbot/${roomId}`,
+          body: JSON.stringify(newMessage),
+        });
 
         setComment("");
       } catch (error) {
