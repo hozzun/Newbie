@@ -61,7 +61,7 @@ const MyBoard = () => {
               title={post.title}
               contents={post.content}
               writer={post.userName}
-              createTimeStamp={post.createdAt}
+              createTimeStamp={post.createdAt.substring(0, 10)}
               viewCount={post.viewCount}
               likeCount={post.likeCount}
               commentCount={post.commentCount}
