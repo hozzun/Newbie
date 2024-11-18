@@ -133,7 +133,7 @@ const MyPage = () => {
               />
             ) : (
               <div
-                className="flex justify-center items-center font-kbogothicmedium text-lg border-4 border-green-100 text-green-900 m-5 p-10 rounded-2xl hover:cursor-pointer"
+                className="flex justify-center items-center font-kbogothicmedium text-lg border-4 w-full border-green-100 text-green-900 p-10 rounded-2xl hover:cursor-pointer"
                 onClick={goRecommend}
               >
                 <p>응원할 팀을 선택해주세요!</p>
