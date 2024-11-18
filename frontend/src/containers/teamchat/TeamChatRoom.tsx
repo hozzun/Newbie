@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import axiosInstance from "../../util/axiosInstance";
+import axiosSocketInstance from "../../util/axiosSocketInstance";
 import SockJS from "sockjs-client";
 import Stomp from "stompjs";
 import { useSelector } from "react-redux";
@@ -36,7 +36,7 @@ const TeamChatRoomContainer: React.FC<TeamChatRoomContainerProps> = ({ setPartic
   useEffect(() => {
     if (!id) return;
 
-    const socket = new SockJS(`${axiosInstance.defaults.baseURL}/api/v1/chat/ws/chat`);
+    const socket = new SockJS(`${axiosSocketInstance.defaults.baseURL}/api/v1/chat/ws/chat`);
     const stomp = Stomp.over(socket);
 
     const authorization = sessionStorage.getItem("access_token") || "";
