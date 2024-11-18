@@ -25,7 +25,7 @@ public class SecurityConfig {
 
                 // 경로에 따른 접근 권한 설정
                 .authorizeExchange(exchange -> exchange
-                        .pathMatchers("/api/v1/auth/login/**", "/api/v1/auth/signup/**").permitAll() // 인증 없이 접근 가능 경로
+                        .pathMatchers("/api/v1/auth/login/**", "/api/v1/auth/members/signup/**").permitAll() // 인증 없이 접근 가능 경로
                         .anyExchange().permitAll()
                 )
 
