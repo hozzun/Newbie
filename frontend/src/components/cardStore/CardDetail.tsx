@@ -10,6 +10,9 @@ import { PlayerInfo } from "../../containers/cardstore/CardDetail";
 export interface CardDetailProps {
   photoCardInfo: PhotoCardInfo | null;
   playerInfo: PlayerInfo | null;
+  isOpenedDialog: boolean;
+  handleOpenDialog: () => void;
+  handleCancle: () => void;
   isVisibleResult: boolean;
   isBuySuccess: boolean;
   handleBuyPhotoCard: () => void;
@@ -99,18 +102,9 @@ const CardDialogBody = (props: PhotoCardInfo) => {
 
 const CardDetail = (props: CardDetailProps) => {
   const [isFlipped, setIsFlipped] = useState<boolean>(false);
-  const [isOpenedDialog, setIsOpenedDialog] = useState<boolean>(false);
 
   const handleFlip = () => {
     setIsFlipped(!isFlipped);
-  };
-
-  const onOpenModelClick = () => {
-    setIsOpenedDialog(true);
-  };
-
-  const onNoClick = () => {
-    setIsOpenedDialog(false);
   };
 
   const yesButton: ButtonProps = {
@@ -122,7 +116,7 @@ const CardDetail = (props: CardDetailProps) => {
   const noButton: ButtonProps = {
     variant: BUTTON_VARIANTS.second,
     children: "취소",
-    onClick: () => onNoClick(),
+    onClick: () => props.handleCancle(),
   };
 
   if (!props.photoCardInfo || !props.playerInfo) {
@@ -168,12 +162,12 @@ const CardDetail = (props: CardDetailProps) => {
         <Button
           className="w-[80%] mt-8"
           variant={BUTTON_VARIANTS.primary}
-          onClick={onOpenModelClick}
+          onClick={props.handleOpenDialog}
         >
           구매하기
         </Button>
       </div>
-      {isOpenedDialog && <Dialog {...cardDialog} />}
+      {props.isOpenedDialog && <Dialog {...cardDialog} />}
       {props.isVisibleResult && <Dialog {...resultDialog} />}
     </>
   );

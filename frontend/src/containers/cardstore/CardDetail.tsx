@@ -18,6 +18,7 @@ export interface PlayerInfo {
 const CardDetail = () => {
   const photoCardInfo = useSelector((state: RootState) => state.cardStore.photoCardInfo);
   const [playerInfo, setPlayerInfo] = useState<PlayerInfo | null>(null);
+  const [isOpenedDialog, setIsOpenedDialog] = useState<boolean>(false);
   const [isBuySuccess, setIsBuySuccess] = useState<boolean>(false);
   const [isVisibleResult, setIsVisibleResult] = useState<boolean>(false);
 
@@ -57,6 +58,7 @@ const CardDetail = () => {
 
       const response = await getBuyPhotoCard({ cardId: photoCardInfo.id });
       if (response.status === 200) {
+        setIsOpenedDialog(false);
         setIsBuySuccess(true);
         setIsVisibleResult(true);
         setTimeout(() => {
@@ -65,8 +67,9 @@ const CardDetail = () => {
       }
     } catch (e) {
       console.log(e);
+      setIsOpenedDialog(false);
       setIsBuySuccess(false);
-      setIsVisibleResult(false);
+      setIsVisibleResult(true);
       setTimeout(() => {
         setIsVisibleResult(false);
       }, 3000);
@@ -77,10 +80,21 @@ const CardDetail = () => {
     fetchPlayerInfos();
   }, []);
 
+  const handleOpenDialog = () => {
+    setIsOpenedDialog(true);
+  };
+
+  const handleCancle = () => {
+    setIsOpenedDialog(false);
+  };
+
   return (
     <CardDetailComponent
       photoCardInfo={photoCardInfo}
       playerInfo={playerInfo}
+      isOpenedDialog={isOpenedDialog}
+      handleOpenDialog={handleOpenDialog}
+      handleCancle={handleCancle}
       isBuySuccess={isBuySuccess}
       isVisibleResult={isVisibleResult}
       handleBuyPhotoCard={handleBuyPhotoCard}
