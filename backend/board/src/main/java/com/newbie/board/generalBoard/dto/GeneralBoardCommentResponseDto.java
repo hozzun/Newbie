@@ -15,6 +15,7 @@ public class GeneralBoardCommentResponseDto {
     private Long id;
     private String content;
     private String userName;
+    private String profile;
     private LocalDateTime createdAt;
     private List<GeneralBoardCommentResponseDto> replies;
 
@@ -23,6 +24,7 @@ public class GeneralBoardCommentResponseDto {
                 .id(generalBoardComment.getId())
                 .content(generalBoardComment.getContent())
                 .userName(generalBoardComment.getUserName())
+                .profile(generalBoardComment.getProfile())
                 .createdAt(generalBoardComment.getCreatedAt())
                 .replies(generalBoardComment.getReplies().stream()
                         .filter(reply -> "N".equals(reply.getIsDeleted()))

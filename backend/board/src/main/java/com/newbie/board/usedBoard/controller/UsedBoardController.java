@@ -40,15 +40,14 @@ public class UsedBoardController {
     public ResponseEntity<UsedBoardResponseDto> createUsedBoard(
             @RequestPart("usedBoard") String usedBoardJson,
             @RequestPart(value = "imageFile", required = false) MultipartFile imageFile,
-            @RequestHeader("X-Member-ID") String userId,
-            @RequestHeader("X-Nickname") String nickname) throws IOException {
+            @RequestHeader("X-Member-ID") String userId) throws IOException {
 
         // JSON 문자열을 DTO로 변환
         ObjectMapper objectMapper = new ObjectMapper();
         UsedBoardRequestDto usedBoardDto = objectMapper.readValue(usedBoardJson, UsedBoardRequestDto.class);
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(usedBoardService.createUsedBoard(usedBoardDto, imageFile, userId, nickname));
+                .body(usedBoardService.createUsedBoard(usedBoardDto, imageFile, userId));
     }
 
 
@@ -82,8 +81,9 @@ public class UsedBoardController {
      */
     @Operation(summary = "유저 게시글 조회", description = "유저가 특정 게시글을 조회합니다.")
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<UsedBoardResponseDto>> getUsedBoard(@PathVariable @Parameter(description = "boardId") Long id) {
-        return ResponseEntity.status(HttpStatus.OK).body(usedBoardService.getUsedBoardById(id));
+    public ResponseEntity<Optional<UsedBoardResponseDto>> getUsedBoard(@PathVariable @Parameter(description = "boardId") Long id,
+                                                                       @RequestHeader("X-Member-ID") String userId) {
+        return ResponseEntity.status(HttpStatus.OK).body(usedBoardService.getUsedBoardById(id, userId));
     }
 
     /**

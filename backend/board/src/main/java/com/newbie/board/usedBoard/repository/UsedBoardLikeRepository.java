@@ -15,4 +15,7 @@ public interface UsedBoardLikeRepository extends JpaRepository<UsedBoardLike, Lo
     int countByUsedBoardId(Long usedBoardId);
     @Query("SELECT l.usedBoard FROM UsedBoardLike l WHERE l.userId = :userId")
     List<UsedBoard> findBoardsLikedByUser(@Param("userId") Long userId);
+    boolean existsByUsedBoardIdAndUserId(Long usedBoardId, Long userId);
+
+
 }

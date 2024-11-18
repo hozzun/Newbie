@@ -1,5 +1,6 @@
 package com.newbie.board.usedBoard.service;
 
+import com.newbie.board.mypage.dto.UserResponseDto;
 import com.newbie.board.scrap.entity.Activity;
 import com.newbie.board.scrap.repository.ActivityRepository;
 import com.newbie.board.usedBoard.dto.UsedBoardCommentRequestDto;
@@ -10,7 +11,10 @@ import com.newbie.board.usedBoard.repository.UsedBoardCommentRepository;
 import com.newbie.board.usedBoard.repository.UsedBoardRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -23,7 +27,13 @@ public class UsedBoardCommentService {
     private final UsedBoardCommentRepository commentRepository;
     private final UsedBoardRepository usedBoardRepository;
     private final ActivityRepository activityRepository;
+    private final RestTemplate restTemplate = new RestTemplate();
 
+    @Value("${user.server.domain}")
+    private String userServerDomain;
+
+    @Value("${user.server.port}")
+    private String userPort;
     /**
      * 댓글 목록을 계층적으로 가져옵니다.
      * @param boardId
@@ -40,18 +50,21 @@ public class UsedBoardCommentService {
     /**
      * 댓글을 생성합니다.
      * @param requestDto
-     * @param memberID
      * @return
      */
     @Transactional
-    public UsedBoardCommentResponseDto createComment(UsedBoardCommentRequestDto requestDto, String memberId, String nickname) {
+    public UsedBoardCommentResponseDto createComment(UsedBoardCommentRequestDto requestDto, String memberId) {
         Long userId = Long.valueOf(memberId);
         UsedBoard usedBoard = usedBoardRepository.findById(requestDto.getBoardId())
                 .orElseThrow(() -> new RuntimeException("Board not found"));
 
+        ResponseEntity<UserResponseDto> responseDto = getUserProfile(userId);
+
         UsedBoardComment comment = UsedBoardComment.builder()
                 .content(requestDto.getContent())
                 .createdAt(LocalDateTime.now())
+                .profile(responseDto.getBody().getProfileImage())
+                .userName(responseDto.getBody().getNickname())
                 .userId(userId)
                 .usedBoard(usedBoard)
                 .isDeleted("N")
@@ -98,5 +111,10 @@ public class UsedBoardCommentService {
                 .build();
 
         commentRepository.save(updatedUsedBoardComment);
+    }
+
+    private ResponseEntity<UserResponseDto> getUserProfile(Long userId) {
+        String url = userServerDomain + ":" + userPort + "/api/v1/user/users/" + userId;
+        return restTemplate.getForEntity(url, UserResponseDto.class);
     }
 }
