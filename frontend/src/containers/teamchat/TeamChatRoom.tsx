@@ -39,33 +39,41 @@ const TeamChatRoomContainer: React.FC<TeamChatRoomContainerProps> = ({ setPartic
     const socket = new SockJS(`${axiosInstance.defaults.baseURL}/api/v1/chat/ws/chat`);
     const stomp = Stomp.over(socket);
 
-    stomp.connect({ Authorization: sessionStorage.getItem("authorization") }, () => {
-      setConnected(true);
-      console.log("WebSocket 연결 성공");
+    const authorization = sessionStorage.getItem("authorization") || "";
 
-      const joinMessage = {
-        sender: nickname,
-        type: "JOIN",
-        roomId: id,
-        message: `${nickname}님이 입장하셨습니다.`,
-        timestamp: new Date().toISOString(),
-        profileImageUrl: "/path/to/profile.jpg",
-      };
+    stomp.connect(
+      { Authorization: `Bearer ${authorization}` },
+      () => {
+        setConnected(true);
+        console.log("WebSocket 연결 성공");
 
-      stomp.send(`/app/chat/${id}/join`, {}, JSON.stringify(joinMessage));
+        const joinMessage = {
+          sender: nickname,
+          type: "JOIN",
+          roomId: id,
+          message: `${nickname}님이 입장하셨습니다.`,
+          timestamp: new Date().toISOString(),
+          profileImageUrl: "/path/to/profile.jpg",
+        };
 
-      stomp.subscribe(`/topic/chatroom/${id}`, message => {
-        const newMessage = JSON.parse(message.body);
-        setMessages(prev => [...prev, newMessage]);
-      });
+        stomp.send(`/app/chat/${id}/join`, {}, JSON.stringify(joinMessage));
 
-      stomp.subscribe(`/topic/chatroom/${id}/participants`, message => {
-        const count = parseInt(message.body, 10);
-        setParticipantCount(count);
-      });
+        stomp.subscribe(`/topic/chatroom/${id}`, message => {
+          const newMessage = JSON.parse(message.body);
+          setMessages(prev => [...prev, newMessage]);
+        });
 
-      setStompClient(stomp);
-    });
+        stomp.subscribe(`/topic/chatroom/${id}/participants`, message => {
+          const count = parseInt(message.body, 10);
+          setParticipantCount(count);
+        });
+
+        setStompClient(stomp);
+      },
+      error => {
+        console.error("WebSocket 연결 실패:", error);
+      },
+    );
 
     return () => {
       if (stompClient) {

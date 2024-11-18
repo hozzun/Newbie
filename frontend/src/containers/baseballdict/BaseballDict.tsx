@@ -41,7 +41,7 @@ const BaseballDict = () => {
         {
           params: { userId },
           headers: {
-            Authorization: authorization,
+            Authorization: `Bearer ${authorization}`,
           },
         },
       );
@@ -52,7 +52,7 @@ const BaseballDict = () => {
         `/api/v1/chatbot/chatbot/${userId}/history`,
         {
           headers: {
-            Authorization: authorization,
+            Authorization: `Bearer ${authorization}`,
           },
         },
       );
