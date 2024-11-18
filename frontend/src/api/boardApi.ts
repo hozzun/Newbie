@@ -10,6 +10,7 @@ export interface GetGeneralBoardResponse {
   title: string;
   content: string;
   imageUrl: string;
+  profile: string;
   createdAt: string; // ISO 8601 날짜 문자열 형식
   updatedAt: string; // ISO 8601 날짜 문자열 형식
   tags: string[];
@@ -17,6 +18,8 @@ export interface GetGeneralBoardResponse {
   likeCount: number;
   scrapCount: number;
   viewCount: number;
+  scrapedByUser: boolean;
+  likedByUser: boolean;
 }
 
 export interface GetGeneralComment {
@@ -91,6 +94,9 @@ export interface GetUsedBoardResponse {
   commentCount: number;
   scrapCount: number;
   viewCount: number;
+  scrapedByUser: boolean;
+  likedByUser: boolean;
+  profile: string;
 }
 
 export interface GetUsedComment {

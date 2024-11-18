@@ -8,15 +8,13 @@ import { getGeneralComment, GetGeneralComment } from "../../api/boardApi";
 import axiosInstance from "../../util/axiosInstance";
 import ChatInput from "../../components/commu/ChatInput";
 
-interface PostDetail extends GetGeneralBoardResponse {
-  userImage?: string;
-}
-
 const CommuFreeDetail = () => {
   const { id } = useParams();
   const numericId = Number(id);
-  const [post, setPost] = useState<PostDetail | null>(null);
+  const [post, setPost] = useState<GetGeneralBoardResponse | null>(null);
   const [comments, setComments] = useState<GetGeneralComment[] | null>(null);
+  const [good, setGood] = useState<boolean | null>(null)
+  const [scrap, setScrap] = useState<boolean | null>(null)
 
   // 게시물 상세 로드 함수
   const loadBoards = async () => {
@@ -25,6 +23,8 @@ const CommuFreeDetail = () => {
       setPost({
         ...response.data,
       });
+      setGood(response.data.likedByUser)
+      setScrap(response.data.scrapedByUser)
     } catch (error) {
       console.error("Free boards loading error:", error);
     }
@@ -46,7 +46,22 @@ const CommuFreeDetail = () => {
       const response = await axiosInstance.post(`/api/v1/board/general-board/${boardId}/like`, {
         params,
       });
+      setGood(!good)
       console.log(response.data); // TODO: API 완성되면 테스트
+    } catch (error) {
+      console.error("에러 발생:", error);
+    }
+  };
+
+  const postScrap = async (boardId: number) => {
+    const params = { boardId: boardId, boardType: "general" };
+
+    try {
+      const response = await axiosInstance.post("/api/v1/board/scrap", {
+        params,
+      });
+      setScrap(!scrap)
+      return response.data
     } catch (error) {
       console.error("에러 발생:", error);
     }
@@ -71,15 +86,15 @@ const CommuFreeDetail = () => {
         <section className="font-kbogothiclight">
           <div className="flex justify-between items-center">
             <div className="flex items-center">
-              <div className="mr-2">유저사진</div>
+              <div className="mr-2">{post.profile}</div>
               <div>
                 <div className="font-kbogothicmedium">{post.userName}</div>
                 <div className="text-sm text-gray-300">{post.createdAt.substring(0, 10)}</div>
               </div>
             </div>
             <div className="flex items-center text-right gap-2">
-              <Scrap className="w-4 h-4 cursor-pointer text-[#FFA600]" />
-              {/* TODO: 조건부 렌더링 <Scrap className="w-4 h-4 cursor-pointer text-gray-200" /> */}
+              {scrap ? (<Scrap className="w-4 h-4 cursor-pointer text-[#FFA600]" onClick={() => postScrap(numericId)} />):
+              (<Scrap className="w-4 h-4 cursor-pointer text-gray-200" onClick={() => postScrap(numericId)} />)}
             </div>
           </div>
           <div className="font-kbogothicmedium py-4">{post.title}</div>
@@ -91,15 +106,15 @@ const CommuFreeDetail = () => {
           </div>
           <div className="flex justify-end gap-1 items-center mb-2">
             <div className="flex border border-gray-300 px-2 rounded-lg items-center gap-1 hover:cursor-pointer">
-              <Like
+              {good? (<Like
                 className="w-4 h-4 text-gray-200"
                 onClick={() => postGood(numericId)}
-              />{" "}
-              {/* TODO: 조건부 렌더링 <Like
+              />):
+              (<Like
                 className="w-4 h-4 text-[#FF5168]"
                 onClick={() => postGood(numericId)}
-              />{" "} */}
-              {post.likeCount}
+              />)}
+              {" "}{post.likeCount}
             </div>
           </div>
           {post.tags.map((tag, index) => (
