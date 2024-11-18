@@ -1,4 +1,3 @@
-import React from "react";
 import CircleButton, { CircleButtonItem } from "../common/CircleButton";
 import { CIRCLE_BUTTON_VARIANTS } from "../common/variants";
 import ArrowSmallUp from "../../assets/icons/arrow-small-up.svg?react";
