@@ -12,7 +12,7 @@ const MyActiveLike = ({ time, title, onClick }: LikeProps) => {
     <div className="flex flex-col m-3">
       <p className="font-kbogothicmedium text-gray-600 text-sm">{time}</p>
       <div className="flex flex-row justify-between justify-center items-center">
-        <div className="flex flex-row justify-center items-center">
+        <div className="flex flex-row justify-center items-center hover:cursor-pointer">
           <div className="my-3">
             <Like className="w-6 h-6 text-[#FF5168]" />
             <p className="font-kbogothicmedium text-gray-600 text-sm">공감</p>
