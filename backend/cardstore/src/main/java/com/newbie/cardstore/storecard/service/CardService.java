@@ -11,7 +11,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
+
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -25,6 +29,13 @@ public class CardService {
     private final UserCardRepository userCardRepository;
     private final RabbitTemplate rabbitTemplate;
     private static final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    private final RestTemplate restTemplate = new RestTemplate();
+
+    @Value("${mileage.server.domain}")
+    private String milesServerName;
+
+    @Value("${server.path}")
+    private String mileageServerPath;
 
     @Value("${rabbitmq.exchange.name}")
     private String exchangeName;
@@ -162,6 +173,27 @@ public class CardService {
 
         userCardRepository.save(userCard);
     }
+
+    public Double getMileage(String userId) {
+        String url = milesServerName + ":" + mileageServerPath + "/mileage?userId=" + userId;
+        log.info(url);
+
+        try {
+            ResponseEntity<Double> response = restTemplate.getForEntity(url, Double.class);
+
+            if (response.getBody() != null) {
+                log.info("Successfully fetched mileage for userId: {}, mileage: {}", userId, response.getBody());
+                return response.getBody();
+            } else {
+                log.warn("Mileage response is null for userId: {}", userId);
+                return 0.0;
+            }
+        } catch (Exception e) {
+            log.error("Failed to fetch mileage for userId: {}", userId, e);
+            throw new RuntimeException("Failed to fetch mileage for userId: " + userId, e);
+        }
+    }
+
 
     private Set<ObjectId> findUserCardIds(Long userId) {
         Set<ObjectId> objectIds = userCardRepository.findByUserId(userId)
