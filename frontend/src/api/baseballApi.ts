@@ -27,7 +27,7 @@ export interface GetGamesResponse {
     homeStartingPitcher: string
 }
 
-export const getGames = (request: GetGamesRequest) => axios.get<Array<GetGamesResponse>>("/api-baseball/games", {
+export const getGames = (request: GetGamesRequest) => axios.get<Array<GetGamesResponse>>("/api/v1/baseball/games", {
     params: {...request}
 })
 
@@ -49,7 +49,7 @@ export interface GetUpcomingGameResponse {
     season: string;
 }
 
-export const getUpcomingGame = (request: GetUpcomingGameRequest) => axios.get<GetUpcomingGameResponse>(`/api-baseball/games/scheduled/${request.teamId}`);
+export const getUpcomingGame = (request: GetUpcomingGameRequest) => axios.get<GetUpcomingGameResponse>(`/api/v1/baseball/games/scheduled/${request.teamId}`);
 
 // 구단 순위 조회
 export interface GetClubRanksRequest {
@@ -74,7 +74,7 @@ export interface GetClubRanksResponse {
     rankChange: number;
 }
 
-export const getClubRanks = (request: GetClubRanksRequest) => axios.get<Array<GetClubRanksResponse>>("/api-baseball/ranks", {
+export const getClubRanks = (request: GetClubRanksRequest) => axios.get<Array<GetClubRanksResponse>>("/api/v1/baseball/ranks", {
     params: {...request}
 })
 
@@ -111,7 +111,7 @@ export interface TeamScoreDetailResponse {
     gameResultDetails: GameResultDetailsResponse;
 }
 
-export const getGameResult = (request: GetGameResultRequest) => axios.get<GameResultResponse>(`/api-baseball/records/${request.id}`);
+export const getGameResult = (request: GetGameResultRequest) => axios.get<GameResultResponse>(`/api/v1/baseball/records/${request.id}`);
 
 // 구단 성적 조회
 export interface getClubRecordRequest {
@@ -160,9 +160,9 @@ export interface getClubHitterRecordResponse {
     sf: number;
 }
 
-export const getClubPitcherRecord = (request: getClubRecordRequest) => axios.get<Array<getClubPitcherRecordResponse>>(`/api-baseball/team/stats/pitcher/${request.teamId}`);
+export const getClubPitcherRecord = (request: getClubRecordRequest) => axios.get<Array<getClubPitcherRecordResponse>>(`/api/v1/baseball/team/stats/pitcher/${request.teamId}`);
 
-export const getClubHitterRecord = (request: getClubRecordRequest) => axios.get<Array<getClubHitterRecordResponse>>(`/api-baseball/team/stats/hitter/${request.teamId}`);
+export const getClubHitterRecord = (request: getClubRecordRequest) => axios.get<Array<getClubHitterRecordResponse>>(`/api/v1/baseball/team/stats/hitter/${request.teamId}`);
 
 // 포토 카드 선수 정보 조회
 export interface GetPhotoCardPlayerInfoRequest {
@@ -177,7 +177,7 @@ export interface GetPhotoCardPlayerInfoResponse {
     academic: string;
 }
 
-export const getPhotoCardPlayerInfo = (request: GetPhotoCardPlayerInfoRequest) => axios.get<GetPhotoCardPlayerInfoResponse>(`/api-baseball/players/photos/${request.teamId}/${request.backNumber}`);
+export const getPhotoCardPlayerInfo = (request: GetPhotoCardPlayerInfoRequest) => axios.get<GetPhotoCardPlayerInfoResponse>(`/api/v1/baseball/players/photos/${request.teamId}/${request.backNumber}`);
 
 // 최근 경기 하이라이트 조회
 export interface GetLatestGameHighlightResponse {
@@ -185,4 +185,4 @@ export interface GetLatestGameHighlightResponse {
     url: string;
 }
 
-export const getLatestGameHightlight = () => axios.get<GetLatestGameHighlightResponse>("/api-baseball/highlights/recent");
+export const getLatestGameHightlight = () => axios.get<GetLatestGameHighlightResponse>("/api/v1/baseball/highlights/recent");

@@ -25,7 +25,7 @@ export interface GetPlayersResponse {
     imageUrl: string;
 }
 
-export const getPlayers = (request: GetPlayersRequest) => axios.get<{content: Array<GetPlayersResponse>}>(`/api-baseball/players/team/${request.teamId}`, {
+export const getPlayers = (request: GetPlayersRequest) => axios.get<{content: Array<GetPlayersResponse>}>(`/api/v1/baseball/players/team/${request.teamId}`, {
     params: {
         position: request.position,
         sortBy: request.sortBy,
@@ -39,7 +39,7 @@ export interface GetPlayerRequest {
     playerId: number;
 }
 
-export const getPlayer = (request: GetPlayerRequest) => axios.get<GetPlayersResponse>(`/api-baseball/players/player/${request.playerId}`);
+export const getPlayer = (request: GetPlayerRequest) => axios.get<GetPlayersResponse>(`/api/v1/baseball/players/player/${request.playerId}`);
 
 // 선수 성적 조회
 export interface GetPlayerRecordRequest {
@@ -91,16 +91,16 @@ export interface GetHitterRecordResponse {
     sf: number;
 }
 
-export const getPitcherRecord = (request: GetPlayerRecordRequest) => axios.get<Array<GetPitcherRecordResponse>>(`/api-baseball/stats/pitchers/${request.id}`);
+export const getPitcherRecord = (request: GetPlayerRecordRequest) => axios.get<Array<GetPitcherRecordResponse>>(`/api/v1/baseball/stats/pitchers/${request.id}`);
 
-export const getHitterRecord = (request: GetPlayerRecordRequest) => axios.get<Array<GetHitterRecordResponse>>(`/api-baseball/stats/hitters/${request.id}`);
+export const getHitterRecord = (request: GetPlayerRecordRequest) => axios.get<Array<GetHitterRecordResponse>>(`/api/v1/baseball/stats/hitters/${request.id}`);
 
 // 선수 하이라이트 영상 조회
 export interface GetPlayerHighlightsRequest {
     name: string;
 }
 
-export const getPlayerHightlights = (request: GetPlayerHighlightsRequest) => axios.get<Array<Video>>("/api-baseball/highlights/player", {
+export const getPlayerHightlights = (request: GetPlayerHighlightsRequest) => axios.get<Array<Video>>("/api/v1/baseball/highlights/player", {
     params: {
         playerName: request.name
     }
@@ -116,11 +116,11 @@ export interface GetPlayerLikedStatusResponse {
     isLiked: boolean;
 }
 
-export const getPlayerLikedStatus = (request: GetPlayerLikedStatusRequest) => axios.get<GetPlayerLikedStatusResponse>(`/api-baseball/players/like/${request.playerId}`);
+export const getPlayerLikedStatus = (request: GetPlayerLikedStatusRequest) => axios.get<GetPlayerLikedStatusResponse>(`/api/v1/baseball/players/like/${request.playerId}`);
 
 // 선수 좋아요/좋아요 취소
 export interface UpdatePlayerLikedStatusRequest {
     playerId: number;
 }
 
-export const updatePlayerLikedStatus = (request: UpdatePlayerLikedStatusRequest) => axios.post(`/api-baseball/players/like/${request.playerId}`);
+export const updatePlayerLikedStatus = (request: UpdatePlayerLikedStatusRequest) => axios.post(`/api/v1/baseball/players/like/${request.playerId}`);
