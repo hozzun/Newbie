@@ -32,7 +32,7 @@ public class UsedBoardCommentService {
     @Value("${user.server.domain}")
     private String userServerDomain;
 
-    @Value("${server.port}")
+    @Value("${server.path}")
     private String userPort;
     /**
      * 댓글 목록을 계층적으로 가져옵니다.
