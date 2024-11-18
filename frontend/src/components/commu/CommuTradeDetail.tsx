@@ -2,6 +2,7 @@ import Coin from "../../assets/icons/copyright-solid.svg?react";
 import Location from "../../assets/icons/marker-solid.svg?react";
 import Like from "../../assets/icons/heart-solid.svg?react";
 import View from "../../assets/icons/eye-solid.svg?react";
+import Pencil from "../../assets/icons/pencil-solid.svg?react"
 // import EmblaCarousel from "../../components/common/EmblaCarousel";
 import ChatInput from "./ChatInput";
 import Scrap from "../../assets/icons/bookmark-solid.svg?react";
@@ -97,6 +98,9 @@ const CommuTradeDetail = () => {
             <div className="flex items-center text-right gap-2">
               {scrap? (<Scrap className="w-4 h-4 cursor-pointer text-[#FFA600]" onClick={() => postScrap(numericId)} />) :
               (<Scrap className="w-4 h-4 cursor-pointer text-gray-200" onClick={() => postScrap(numericId)} />)}
+            </div>
+            <div className="flex items-center text-right gap-2">
+              <Pencil className="w-4 h-4 cursor-pointer text-success-200" onClick={() => console.log('중고 게시글 수정 페이지로 이동')} />
             </div>
           </div>
           <div className="font-kbogothicmedium py-4">{post.title}</div>

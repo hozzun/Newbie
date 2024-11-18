@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import Like from "../../assets/icons/heart-solid.svg?react";
 import View from "../../assets/icons/eye-solid.svg?react";
 import Scrap from "../../assets/icons/bookmark-solid.svg?react";
+import Pencil from "../../assets/icons/pencil-solid.svg?react";
 import { getGeneralBoardDetail, GetGeneralBoardResponse } from "../../api/boardApi";
 import { getGeneralComment, GetGeneralComment } from "../../api/boardApi";
 import axiosInstance from "../../util/axiosInstance";
@@ -11,10 +12,11 @@ import ChatInput from "../../components/commu/ChatInput";
 const CommuFreeDetail = () => {
   const { id } = useParams();
   const numericId = Number(id);
+  const nav = useNavigate();
   const [post, setPost] = useState<GetGeneralBoardResponse | null>(null);
   const [comments, setComments] = useState<GetGeneralComment[] | null>(null);
-  const [good, setGood] = useState<boolean | null>(null)
-  const [scrap, setScrap] = useState<boolean | null>(null)
+  const [good, setGood] = useState<boolean | null>(null);
+  const [scrap, setScrap] = useState<boolean | null>(null);
 
   // 게시물 상세 로드 함수
   const loadBoards = async () => {
@@ -23,8 +25,8 @@ const CommuFreeDetail = () => {
       setPost({
         ...response.data,
       });
-      setGood(response.data.likedByUser)
-      setScrap(response.data.scrapedByUser)
+      setGood(response.data.likedByUser);
+      setScrap(response.data.scrapedByUser);
     } catch (error) {
       console.error("Free boards loading error:", error);
     }
@@ -46,7 +48,7 @@ const CommuFreeDetail = () => {
       const response = await axiosInstance.post(`/api/v1/board/general-board/${boardId}/like`, {
         params,
       });
-      setGood(!good)
+      setGood(!good);
       console.log(response.data); // TODO: API 완성되면 테스트
     } catch (error) {
       console.error("에러 발생:", error);
@@ -60,8 +62,8 @@ const CommuFreeDetail = () => {
       const response = await axiosInstance.post("/api/v1/board/scrap", {
         params,
       });
-      setScrap(!scrap)
-      return response.data
+      setScrap(!scrap);
+      return response.data;
     } catch (error) {
       console.error("에러 발생:", error);
     }
@@ -93,8 +95,25 @@ const CommuFreeDetail = () => {
               </div>
             </div>
             <div className="flex items-center text-right gap-2">
-              {scrap ? (<Scrap className="w-4 h-4 cursor-pointer text-[#FFA600]" onClick={() => postScrap(numericId)} />):
-              (<Scrap className="w-4 h-4 cursor-pointer text-gray-200" onClick={() => postScrap(numericId)} />)}
+              {scrap ? (
+                <Scrap
+                  className="w-4 h-4 cursor-pointer text-[#FFA600]"
+                  onClick={() => postScrap(numericId)}
+                />
+              ) : (
+                <Scrap
+                  className="w-4 h-4 cursor-pointer text-gray-200"
+                  onClick={() => postScrap(numericId)}
+                />
+              )}
+            </div>
+            <div className="flex items-center text-right gap-2">
+              <Pencil
+                className="w-4 h-4 text-success-200 cursor-pointer"
+                onClick={() =>
+                  nav(`/commuhome/freedetail/${numericId}/revise`, { state: { post } })
+                }
+              />
             </div>
           </div>
           <div className="font-kbogothicmedium py-4">{post.title}</div>
@@ -106,15 +125,12 @@ const CommuFreeDetail = () => {
           </div>
           <div className="flex justify-end gap-1 items-center mb-2">
             <div className="flex border border-gray-300 px-2 rounded-lg items-center gap-1 hover:cursor-pointer">
-              {good? (<Like
-                className="w-4 h-4 text-gray-200"
-                onClick={() => postGood(numericId)}
-              />):
-              (<Like
-                className="w-4 h-4 text-[#FF5168]"
-                onClick={() => postGood(numericId)}
-              />)}
-              {" "}{post.likeCount}
+              {good ? (
+                <Like className="w-4 h-4 text-gray-200" onClick={() => postGood(numericId)} />
+              ) : (
+                <Like className="w-4 h-4 text-[#FF5168]" onClick={() => postGood(numericId)} />
+              )}{" "}
+              {post.likeCount}
             </div>
           </div>
           {post.tags.map((tag, index) => (
@@ -146,7 +162,7 @@ const CommuFreeDetail = () => {
             <div className="py-2 ml-16">{comment.content}</div>
           </section>
         ))}
-        <ChatInput boardId={numericId} onPostComment={handlePostComment} />
+      <ChatInput boardId={numericId} onPostComment={handlePostComment} />
     </>
   );
 };
