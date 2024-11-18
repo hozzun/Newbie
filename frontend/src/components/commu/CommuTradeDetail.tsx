@@ -94,7 +94,7 @@ const CommuTradeDetail = () => {
         <section className="font-kbogothiclight">
           <div className="flex justify-between items-center">
             <div className="flex items-center">
-              <div className="mr-2">
+              <div className="mr-2 w-10 h-10">
                 <img src={post.profile} alt="profile" />
               </div>
               <div>
@@ -159,7 +159,7 @@ const CommuTradeDetail = () => {
           <section key={index} className="font-kbogothiclight">
             <div className="flex justify-between items-center">
               <div className="flex items-center">
-                <div className="mr-2">
+                <div className="mr-2 w-8 h-8">
                   <img src={comment.profile} alt="profile" />
                 </div>
                 <div>
