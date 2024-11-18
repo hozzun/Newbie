@@ -34,7 +34,7 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({ messages, userImage, aiImag
   return (
     <div className="flex-1 overflow-y-auto space-y-4">
       {messages.map((msg, index) => {
-        const isUser = msg.userEmail === currentUserEmail;
+        const isUser = msg.roomId === "";
         return (
           <div
             key={index}
