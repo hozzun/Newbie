@@ -37,6 +37,7 @@ public class JwtAuthenticationFilter implements WebFilter {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
+        log.info("Incoming request: {}", request.getURI());
 
         // OPTIONS 요청은 필터를 통과
         if (request.getMethod() == HttpMethod.OPTIONS) {
@@ -57,44 +58,36 @@ public class JwtAuthenticationFilter implements WebFilter {
             return onError(exchange, CustomException.INVALID_TOKEN);
         }
 
-        // Body 캐싱 처리
-        return DataBufferUtils.join(request.getBody())
-                .flatMap(dataBuffer -> {
-                    // 요청 본문 읽기
-                    byte[] bytes = new byte[dataBuffer.readableByteCount()];
-                    dataBuffer.read(bytes);
-                    DataBufferUtils.release(dataBuffer); // DataBuffer 해제
+        try {
+            String token = authHeader.get(0).substring(7); // Bearer 제거
+            Map<String, Object> userInfo = jwtUtil.validateToken(token);
 
-                    String body = new String(bytes);
-                    log.info("Request Body: {}", body);
+            Long userId = (Long) userInfo.get("memberId");
+            String nickname = (String) userInfo.get("nickname");
+            String email = (String) userInfo.get("email");
+            log.info("JWT validation successful. UserID: {}, Nickname: {}, Email: {}", userId, nickname, email);
 
-                    // JWT 토큰 검증
-                    try {
-                        String token = authHeader.get(0).substring(7); // Bearer 제거
-                        Map<String, Object> userInfo = jwtUtil.validateToken(token);
+            // 본문이 없는 요청 처리 (GET, DELETE, 본문이 없는 POST/PUT/PATCH)
+            if (request.getHeaders().getContentLength() == 0 || !hasRequestBody(request)) {
+                ServerHttpRequest mutatedRequest = addHeaders(request, userId, nickname, email);
+                ServerWebExchange mutatedExchange = exchange.mutate().request(mutatedRequest).build();
+                return chain.filter(mutatedExchange);
+            }
 
-                        Long userId = (Long) userInfo.get("memberId");
-                        String nickname = (String) userInfo.get("nickname");
-                        String email = (String) userInfo.get("email");
-                        log.info("JWT validation successful. UserID: {}, Nickname: {}, Email: {}", userId, nickname, email);
+            // 본문이 있는 요청 처리
+            return DataBufferUtils.join(request.getBody())
+                    .flatMap(dataBuffer -> {
+                        byte[] bytes = new byte[dataBuffer.readableByteCount()];
+                        dataBuffer.read(bytes);
+                        DataBufferUtils.release(dataBuffer); // DataBuffer 해제
 
-                        // 요청을 Decorator로 래핑하여 헤더 추가
+                        String body = new String(bytes);
+                        log.info("Request Body: {}", body);
+
                         ServerHttpRequest mutatedRequest = new ServerHttpRequestDecorator(request) {
                             @Override
                             public HttpHeaders getHeaders() {
-                                HttpHeaders headers = new HttpHeaders();
-                                headers.putAll(super.getHeaders());
-
-                                // 중복 방지: 기존 헤더 제거
-                                headers.remove(MEMBER_ID_HEADER);
-                                headers.remove(NICKNAME_HEADER);
-                                headers.remove(EMAIL_HEADER);
-
-                                // 새로운 헤더 추가
-                                headers.add(MEMBER_ID_HEADER, String.valueOf(userId));
-                                headers.add(NICKNAME_HEADER, nickname);
-                                headers.add(EMAIL_HEADER, email);
-                                return headers;
+                                return addHeaders(request, userId, nickname, email).getHeaders();
                             }
 
                             @Override
@@ -105,16 +98,45 @@ public class JwtAuthenticationFilter implements WebFilter {
 
                         ServerWebExchange mutatedExchange = exchange.mutate().request(mutatedRequest).build();
                         return chain.filter(mutatedExchange);
-                    } catch (MainException e) {
-                        log.error("JWT validation failed: {}", e.getMessage());
-                        return onError(exchange, CustomException.INVALID_TOKEN);
-                    }
-                })
-                .onErrorResume(e -> {
-                    log.error("Error processing request body: {}", e.getMessage());
-                    return onError(exchange, CustomException.INVALID_TOKEN);
-                });
+                    });
+        } catch (MainException e) {
+            log.error("JWT validation failed: {}", e.getMessage());
+            return onError(exchange, CustomException.INVALID_TOKEN);
+        } catch (Exception e) {
+            log.error("Unexpected error during JWT validation.", e);
+            return onError(exchange, CustomException.INVALID_TOKEN);
+        }
     }
+
+    private ServerHttpRequest addHeaders(ServerHttpRequest request, Long userId, String nickname, String email) {
+        return new ServerHttpRequestDecorator(request) {
+            @Override
+            public HttpHeaders getHeaders() {
+                HttpHeaders headers = new HttpHeaders();
+                headers.putAll(super.getHeaders());
+
+                // 중복 방지: 기존 헤더 제거
+                headers.remove(MEMBER_ID_HEADER);
+                headers.remove(NICKNAME_HEADER);
+                headers.remove(EMAIL_HEADER);
+
+                // 새로운 헤더 추가
+                headers.add(MEMBER_ID_HEADER, String.valueOf(userId));
+                headers.add(NICKNAME_HEADER, nickname);
+                headers.add(EMAIL_HEADER, email);
+                return headers;
+            }
+        };
+    }
+
+    private boolean hasRequestBody(ServerHttpRequest request) {
+        // Transfer-Encoding 또는 Content-Length를 확인하여 본문 유무 판단
+        HttpHeaders headers = request.getHeaders();
+        return headers.containsKey(HttpHeaders.TRANSFER_ENCODING) ||
+                (headers.containsKey(HttpHeaders.CONTENT_LENGTH) && headers.getContentLength() > 0);
+    }
+
+
 
 
     private boolean isAllowedPath(String path) {

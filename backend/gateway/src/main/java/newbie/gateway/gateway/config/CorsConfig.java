@@ -14,17 +14,12 @@ public class CorsConfig {
     @Bean
     public CorsWebFilter corsWebFilter() {
         CorsConfiguration config = new CorsConfiguration();
-
-        // 허용할 Origins: 로컬 주소 및 서버 배포 주소 추가
-        config.setAllowedOrigins(Arrays.asList(
+        config.setAllowedOriginPatterns(Arrays.asList(
                 "http://localhost:5173",
-                "https://k11b304.p.ssafy.io"));
-
-        // 모든 헤더와 메서드 허용
+                "https://k11b304.p.ssafy.io"
+        ));
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
-
-        // 자격 증명 허용 (JWT 쿠키나 인증 정보를 허용할 경우)
         config.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
@@ -33,3 +28,4 @@ public class CorsConfig {
         return new CorsWebFilter(source);
     }
 }
+
