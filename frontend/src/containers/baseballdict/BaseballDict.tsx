@@ -33,11 +33,16 @@ const BaseballDict = () => {
       setIsLoading(true);
       setError(null);
 
+      const authorization = window.sessionStorage.getItem("authorization") || "";
+
       const { data: fetchedRoomId } = await axiosInstance.post(
         "/api/v1/chatbot/create-room",
         null,
         {
           params: { userId },
+          headers: {
+            Authorization: authorization,
+          },
         },
       );
 
@@ -45,7 +50,13 @@ const BaseballDict = () => {
 
       const { data: chatHistory } = await axiosInstance.get(
         `/api/v1/chatbot/chatbot/${userId}/history`,
+        {
+          headers: {
+            Authorization: authorization,
+          },
+        },
       );
+
       setMessages(chatHistory);
     } catch (error) {
       console.error("Error fetching room or chat history:", error);
@@ -84,6 +95,9 @@ const BaseballDict = () => {
     if (roomId) {
       const client = new Client({
         webSocketFactory: () => new SockJS(`${axiosInstance.defaults.baseURL}/api/v1/chatbot/ws`),
+        connectHeaders: {
+          Authorization: window.sessionStorage.getItem("authorization") || "",
+        },
         onConnect: () => {
           setConnected(true);
           setError(null);
