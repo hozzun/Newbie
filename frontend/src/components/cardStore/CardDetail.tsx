@@ -10,6 +10,8 @@ import { PlayerInfo } from "../../containers/cardstore/CardDetail";
 export interface CardDetailProps {
   photoCardInfo: PhotoCardInfo | null;
   playerInfo: PlayerInfo | null;
+  isVisibleResult: boolean;
+  isBuySuccess: boolean;
   handleBuyPhotoCard: () => void;
 }
 
@@ -140,6 +142,13 @@ const CardDetail = (props: CardDetailProps) => {
     noButton: noButton,
   };
 
+  const resultDialog: DialogProps = {
+    title: props.isBuySuccess ? "카드 구매 성공!" : "카드 구매 실패!",
+    body: props.isBuySuccess
+      ? "축하합니다! 선택하신 카드를 성공적으로 구매하였습니다. 지금 바로 카드를 확인하고 이용해보세요. 😊"
+      : "죄송합니다. 선택하신 카드의 구매가 실패하였습니다. 이미 구매한 카드이거나 마일리지가 부족할 수 있습니다. 상세 내용을 확인하시고 다시 시도해주세요. 문제가 지속될 경우 고객센터로 문의해주시면 빠르게 도와드리겠습니다. 🙏",
+  };
+
   return (
     <>
       <div className="flex flex-col justify-center items-center">
@@ -165,6 +174,7 @@ const CardDetail = (props: CardDetailProps) => {
         </Button>
       </div>
       {isOpenedDialog && <Dialog {...cardDialog} />}
+      {props.isVisibleResult && <Dialog {...resultDialog} />}
     </>
   );
 };
