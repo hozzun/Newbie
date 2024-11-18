@@ -121,24 +121,29 @@ const Home = () => {
             },
           ],
         };
+        console.log(gameInfoData);
 
         // 구장 기준 날씨 정보 가져오기
         const getWeatherRequest: GetWeatherRequest = {
-          nx: Stadiums[gameInfoData.place].logitude,
+          nx: Stadiums[gameInfoData.place].longitude,
           ny: Stadiums[gameInfoData.place].latitude,
         };
         const responseAboutWeather = await getWeather(getWeatherRequest);
         const items = responseAboutWeather.data.response.body.items.item;
         gameInfoData.weather = calculateWeather(items);
+        console.log(items);
+        console.log(calculateWeather(items));
+        console.log(gameInfoData.weather);
 
         // TODO: GET - 경기 진행 상황
         const gameSituationData: GameSituation = {
           isPlaying: true,
           scores: {
-            samsung: 2,
-            kia: 1,
+            [homeClubId]: responseAbotGetGames.data[0].homeScore,
+            [awayClubId]: responseAbotGetGames.data[0].awayScore,
           },
         };
+        console.log(gameSituationData);
 
         const todayGameData: GameProps = {
           gameInfo: gameInfoData,
