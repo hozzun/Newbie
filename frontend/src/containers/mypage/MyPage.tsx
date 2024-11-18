@@ -82,10 +82,14 @@ const MyPage = () => {
 
   useEffect(() => {
     getGameInfo();
-  }, [team]);
+  }, [cheeringClub]);
 
   if (imageUrl) {
-    const teamName = getIdByNum(team) as TeamName | 0;
+    const teamName = cheeringClub
+      ? cheeringClub > 0
+        ? (getIdByNum(cheeringClub) as TeamName)
+        : 0
+      : 0;
 
     return (
       <>
