@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from "react";
 
 interface Message {
-  userId: number;
+  userEmail: string;
   message: string;
   roomId: string | null;
   timestamp: number;
@@ -9,14 +9,14 @@ interface Message {
 
 interface ChatMessagesProps {
   messages: Message[];
-  currentUserId: number;
+  currentUserEmail: string;
   userImage?: string;
   aiImage?: string;
 }
 
 const ChatMessages: React.FC<ChatMessagesProps> = ({
   messages,
-  currentUserId,
+  currentUserEmail,
   userImage,
   aiImage,
 }) => {
@@ -41,7 +41,7 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({
   return (
     <div className="flex-1 overflow-y-auto space-y-4">
       {messages.map((msg, index) => {
-        const isUser = msg.userId === currentUserId;
+        const isUser = msg.userEmail === currentUserEmail;
         return (
           <div
             key={index}
