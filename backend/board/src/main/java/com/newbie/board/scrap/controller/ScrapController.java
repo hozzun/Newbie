@@ -29,17 +29,17 @@ public class ScrapController {
     @Operation(summary = "게시글 스크랩 생성", description = "게시글 스크랩을 추가합니다.")
     @PostMapping
     public ResponseEntity<String> createScrap(
-            @RequestParam Long userId,
+            @RequestHeader("X-Member-ID") String userId,
             @RequestParam Long boardId,
             @RequestParam @Parameter(description = "general / used") String boardType) {
-        String response = scrapService.toggleScrap(userId, boardId, boardType);
+        String response = scrapService.toggleScrap(Long.valueOf(userId), boardId, boardType);
         return ResponseEntity.ok().body(response);
     }
 
     @Operation(summary = "스크랩 목록 조회", description = "사용자의 스크랩 목록을 조회합니다.")
     @GetMapping
-    public ResponseEntity<List<ScrapResponseDto>> getScrapList(@RequestParam Long userId) {
-        List<ScrapResponseDto> scrapList = scrapService.getScrapList(userId);
+    public ResponseEntity<List<ScrapResponseDto>> getScrapList(@RequestHeader("X-Member-ID") String userId) {
+        List<ScrapResponseDto> scrapList = scrapService.getScrapList(Long.valueOf(userId));
         return ResponseEntity.ok(scrapList);
     }
 }
