@@ -4,11 +4,9 @@ import Like from "../../assets/icons/heart-solid.svg?react";
 import Comment from "../../assets/icons/comment-solid.svg?react";
 import View from "../../assets/icons/eye-solid.svg?react";
 import Scrap from "../../assets/icons/bookmark-solid.svg?react";
-import Siren from "../../assets/icons/exclamation-solid.svg?react";
 import { getGeneralBoardDetail, GetGeneralBoardResponse } from "../../api/boardApi";
 import { getGeneralComment, GetGeneralComment } from "../../api/boardApi";
 import axiosInstance from "../../util/axiosInstance";
-
 interface PostDetail extends GetGeneralBoardResponse {
   userImage?: string;
 }
@@ -47,7 +45,7 @@ const CommuFreeDetail = () => {
       const response = await axiosInstance.post(`/api/v1/board/general-board/${boardId}/like`, {
         params,
       });
-      console.log("좋아요", response.data);
+      console.log(response.data); // TODO: API 완성되면 테스트
     } catch (error) {
       console.error("에러 발생:", error);
     }
@@ -72,7 +70,7 @@ const CommuFreeDetail = () => {
             </div>
             <div className="flex items-center text-right gap-2">
               <Scrap className="w-4 h-4 cursor-pointer text-[#FFA600]" />
-              <Siren className="w-4 h-4 cursor-pointer text-[#FF5168]" />
+              {/* TODO: 조건부 렌더링 <Scrap className="w-4 h-4 cursor-pointer text-gray-200" /> */}
             </div>
           </div>
           <div className="font-kbogothicmedium py-4">{post.title}</div>
@@ -83,11 +81,15 @@ const CommuFreeDetail = () => {
             <div className="text-xs">{post.viewCount}명이 봤어요.</div>
           </div>
           <div className="flex justify-end gap-1 items-center mb-2">
-            <div className="flex border border-gray-300 px-2 rounded-lg items-center gap-1">
+            <div className="flex border border-gray-300 px-2 rounded-lg items-center gap-1 hover:cursor-pointer">
               <Like
-                className="w-4 h-4 text-[#FF5168] hover:cursor-pointer"
+                className="w-4 h-4 text-gray-200"
                 onClick={() => postGood(numericId)}
               />{" "}
+              {/* TODO: 조건부 렌더링 <Like
+                className="w-4 h-4 text-[#FF5168]"
+                onClick={() => postGood(numericId)}
+              />{" "} */}
               {post.likeCount}
             </div>
           </div>
