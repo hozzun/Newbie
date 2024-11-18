@@ -71,7 +71,7 @@ const CommuFreeDetail = () => {
         <section className="font-kbogothiclight">
           <div className="flex justify-between items-center">
             <div className="flex items-center">
-              <div className="mr-2">{post.userImage}</div>
+              <div className="mr-2">유저사진</div>
               <div>
                 <div className="font-kbogothicmedium">{post.userName}</div>
                 <div className="text-sm text-gray-300">{post.createdAt.substring(0, 10)}</div>

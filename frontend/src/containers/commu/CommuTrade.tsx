@@ -1,12 +1,18 @@
 import { useState, useEffect, useRef } from "react";
 import CommuTradeItem from "../../components/commu/CommuTradeItem";
 import { getUsedBoard, GetUsedBoardResponse } from "../../api/boardApi";
+import { useNavigate } from "react-router-dom";
 
 const CommuTrade = ({ searchQuery }: { searchQuery: string }) => {
   const [tradeBoards, setTradeBoards] = useState<GetUsedBoardResponse[]>([]);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const lastBoardRef = useRef<HTMLDivElement | null>(null);
+  const nav = useNavigate()
+
+  const goDetail = (id: number) => {
+    nav(`/commuhome/useddetail/${id}`)
+  }
 
   // 게시물 로드 함수
   const loadBoards = async () => {
@@ -25,8 +31,6 @@ const CommuTrade = ({ searchQuery }: { searchQuery: string }) => {
       setHasMore(false);
     } catch (error) {
       console.error("Trade boards loading error:", error);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -70,7 +74,7 @@ const CommuTrade = ({ searchQuery }: { searchQuery: string }) => {
     <>
       <div className="flex flex-col gap-4">
         {tradeBoards.map((board, index) => (
-          <div key={board.id} ref={index === tradeBoards.length - 1 ? lastBoardRef : null}>
+          <div key={board.id} ref={index === tradeBoards.length - 1 ? lastBoardRef : null} onClick={() => goDetail(board.id)}>
             <CommuTradeItem
               title={board.title}
               contents={board.content}
@@ -85,8 +89,8 @@ const CommuTrade = ({ searchQuery }: { searchQuery: string }) => {
             {index < tradeBoards.length - 1 && <hr className="my-4 border-gray-200" />}
           </div>
         ))}
-        {loading && <div className="text-center py-4">로딩 중...</div>}
-        {!hasMore && <div className="text-center py-4">더 이상 게시물이 없습니다.</div>}
+        {loading && <div className="text-center py-4 font-kbogothicmedium">로딩 중...</div>}
+        {!hasMore && <div className="text-center py-4 font-kbogothicmedium">더 이상 게시물이 없습니다.</div>}
       </div>
     </>
   );

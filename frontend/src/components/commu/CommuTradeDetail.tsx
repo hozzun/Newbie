@@ -1,73 +1,143 @@
 import Coin from "../../assets/icons/copyright-solid.svg?react";
 import Location from "../../assets/icons/marker-solid.svg?react";
-import Comment from "../../assets/icons/comment-solid.svg?react";
+import Like from "../../assets/icons/heart-solid.svg?react";
 import View from "../../assets/icons/eye-solid.svg?react";
-import EmblaCarousel from "../../components/common/EmblaCarousel";
+// import EmblaCarousel from "../../components/common/EmblaCarousel";
+import ChatInput from "./ChatInput";
+import Scrap from "../../assets/icons/bookmark-solid.svg?react";
+import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { getUsedBoardDetail, GetUsedBoardResponse } from "../../api/boardApi";
+import { getUsedComment, GetUsedComment } from "../../api/boardApi";
+import axiosInstance from "../../util/axiosInstance";
+
+interface PostDetail extends GetUsedBoardResponse {
+  userImage?: string;
+}
 
 const CommuTradeDetail = () => {
-  const slides = ["/karina.jpg", "/karina.jpg", "/karina.jpg"];
+  const { id } = useParams();
+  const numericId = Number(id);
+  const [post, setPost] = useState<PostDetail | null>(null);
+  const [comments, setComments] = useState<GetUsedComment[] | null>(null);
+
+  const loadBoards = async () => {
+    try {
+      const response = await getUsedBoardDetail(numericId);
+      setPost({
+        ...response.data,
+      });
+    } catch (error) {
+      console.error("Free boards loading error:", error);
+    }
+  };
+
+  const loadComments = async () => {
+    try {
+      const response = await getUsedComment(numericId);
+      setComments(response.data);
+    } catch (error) {
+      console.error("Free boards loading error:", error);
+    }
+  };
+
+  const postGood = async (boardId: number) => {
+    const params = { boardId: boardId };
+
+    try {
+      const response = await axiosInstance.post(`/api/v1/board/used-board/${boardId}/like`, {
+        params,
+      });
+      console.log(response.data); // TODO: API 완성되면 테스트
+    } catch (error) {
+      console.error("에러 발생:", error);
+    }
+  };
+
+  useEffect(() => {
+    loadBoards();
+    loadComments();
+  }, []);
+
+  const handlePostComment = (isSuccess: boolean) => {
+    if (isSuccess) {
+      // 댓글 전송이 성공하면 새 댓글 목록을 불러옴
+      loadComments();
+    }
+    // 실패 시에는 아무 것도 하지 않음
+  };
 
   return (
     <>
-      <section className="font-kbogothiclight">
-        <div className="flex justify-between items-center">
-          <div className="flex items-center">
-            <div className="mr-2">유저사진</div>
-            <div>
-              <div className="font-kbogothicmedium">개복이</div>
-              <div className="text-sm text-gray-300">13분 전</div>
+      {post && (
+        <section className="font-kbogothiclight">
+          <div className="flex justify-between items-center">
+            <div className="flex items-center">
+              <div className="mr-2">유저사진</div>
+              <div>
+                <div className="font-kbogothicmedium">{post.userName}</div>
+                <div className="text-sm text-gray-300">{post.createdAt.substring(0, 10)}</div>
+              </div>
+            </div>
+            <div className="flex items-center text-right gap-2">
+              <Scrap className="w-4 h-4 cursor-pointer text-[#FFA600]" />
+              {/* TODO: 조건부 렌더링 <Scrap className="w-4 h-4 cursor-pointer text-gray-200" /> */}
             </div>
           </div>
-          <div className="text-right text-red-500 cursor-pointer">신고</div>
-        </div>
-        <div className="font-kbogothicmedium py-4">타이거즈 굿즈 판매</div>
-        <div className="flex gap-2 pb-2">
-          <div className="flex gap-1 items-center">
-            <Coin className="w-4 h-4 text-[#FFA600]" />
-            <div>5,000원</div>
+          <div className="font-kbogothicmedium py-4">{post.title}</div>
+          <div className="flex gap-2 pb-2">
+            <div className="flex gap-1 items-center">
+              <Coin className="w-4 h-4 text-[#FFA600]" />
+              <div>{post.price}원</div>
+            </div>
+            <div className="flex gap-1 items-center">
+              <Location className="w-4 h-4 text-[#FFAEC5]" />
+              <div>{post.region}</div>
+            </div>
           </div>
-          <div className="flex gap-1 items-center">
-            <Location className="w-4 h-4 text-[#FFAEC5]" />
-            <div>대전 광역시 유성구</div>
+          <div>
+            {/* <EmblaCarousel slides={slides} /> */}
+            <img src={post.imageUrl} alt="게시글 이미지" className="py-4" />
           </div>
-        </div>
-        <div>
-          <EmblaCarousel slides={slides} />
-        </div>
-        <div className="py-4">
-          응원하는 구단을 바꾸어서 팔아요..
-          <br />
-          정말 고이 모셔놓고 만지지 않아서 깨끗해요
-        </div>
-        <div className="flex justify-end gap-1 items-center mb-2">
-          <View className="w-4 h-4" />
-          <div className="text-xs">12명이 봤어요.</div>
-        </div>
-        <div className="border-b-2 text-gray-100 mb-2"></div>
-      </section>
+          <div className="py-4">
+            {post.content}
+          </div>
+          <div className="flex justify-end gap-1 items-center mb-2">
+            <View className="w-4 h-4" />
+            <div className="text-xs">{post.viewCount}명이 봤어요.</div>
+          </div>
+          <div className="flex justify-end gap-1 items-center mb-2">
+            <div className="flex border border-gray-300 px-2 rounded-lg items-center gap-1 hover:cursor-pointer">
+              <Like className="w-4 h-4 text-gray-200" onClick={() => postGood(numericId)} />{" "}
+              {/* TODO: 조건부 렌더링 <Like
+                className="w-4 h-4 text-[#FF5168]"
+                onClick={() => postGood(numericId)}
+              />{" "} */}
+              {post.likeCount}
+            </div>
+          </div>
+          <div className="border-b-2 text-gray-100 mb-2"></div>
+          <div className="font-kbogothicmedium pt-2 pb-4">댓글 {post.commentCount}</div>
+        </section>
+      )}
 
-      <section className="font-kbogothiclight">
-        <div className="font-kbogothicmedium pt-2 pb-4">댓글 1</div>
-        <div className="flex justify-between items-center">
-          <div className="flex items-center">
-            <div className="mr-2">유저사진</div>
-            <div>
-              <div className="font-kbogothicmedium">천재칼치</div>
-              <div className="text-sm text-gray-300">13분 전</div>
+      {comments && comments.length > 0 && comments.map((comment, index) => (
+        <section key={index} className="font-kbogothiclight">
+          <div className="flex justify-between items-center">
+            <div className="flex items-center">
+              <div className="mr-2">유저사진</div>
+              <div>
+                <div className="font-kbogothicmedium">{comment.userName}</div>
+                <div className="text-sm text-gray-300">{comment.createdAt.substring(0, 10)}</div>
+              </div>
             </div>
           </div>
-        </div>
-        <div className="py-2 ml-16">
-          오늘은 이 글을 읽으면서 많은 동기부여를 받았어요. 고맙습니다!
-        </div>
-        <div className="flex justify-between items-center ml-16">
-          <div className="flex items-center">
-            <Comment className="w-4 h-4 text-[#7FAAFF] mr-2" />
-            <div>답글 쓰기</div>
+          <div className="py-2 ml-16">
+            {comment.content}
           </div>
-          <div className="text-right text-gray-300 cursor-pointer">신고하기</div>
-        </div>
-      </section>
+        </section>
+      ))}
+      <ChatInput boardId={numericId} onPostComment={handlePostComment} />
     </>
   );
 };
