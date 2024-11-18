@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { Client } from "@stomp/stompjs"; // Stomp.Client 사용
+import Stomp from "stompjs";
 import axiosInstance from "../../util/axiosInstance";
 import ChatMessages from "../../components/baseballdict/ChatMessages";
 import ChatInput from "../../components/baseballdict/ChatInput";
@@ -15,11 +15,12 @@ interface Message {
 }
 
 const BaseballDict = () => {
-  const [stompClient, setStompClient] = useState<Client | null>(null);
+  const [stompClient, setStompClient] = useState<Stomp.Client | null>(null);
   const [connected, setConnected] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [comment, setComment] = useState("");
-  const [roomId, setRoomId] = useState<string>("");
+  // const [roomId, setRoomId] = useState<string>("");
+  const roomId = "149743c8-93c9-4802-b17b-8cf7048c34da";
 
   const userProfileImage = useSelector((state: RootState) => state.myInfo.profileImage);
 
@@ -30,13 +31,14 @@ const BaseballDict = () => {
   const fetchRoomAndHistory = async () => {
     try {
       const { data: fetchedRoomId } = await axiosInstance.post("/api/v1/chatbot/create-room");
-      setRoomId(fetchedRoomId);
 
+      // setRoomId(fetchedRoomId);
       // 채팅 히스토리 가져오기
       const { data: chatHistory } = await axiosInstance.get(`/api/v1/chatbot/chatbot/history`);
+
       setMessages(chatHistory);
     } catch (error) {
-      console.log("Error fetching room and history:", error);
+      console.log(error);
     }
   };
 
@@ -62,38 +64,36 @@ const BaseballDict = () => {
 
   useEffect(() => {
     if (roomId) {
-      const client = new Client({
-        brokerURL: `${import.meta.env.VITE_API_SOCKET_URL}/api-chatbot/chatbot/ws`,
-        debug: str => console.log(`STOMP Debug: ${str}`),
-        reconnectDelay: 5000, // 5초 후 자동 재연결
-        onConnect: () => {
+      const socket = new WebSocket(`${import.meta.env.VITE_API_SOCKET_URL}/api-chatbot/chatbot/ws`);
+      const client = Stomp.over(socket);
+      client.connect(
+        {},
+        () => {
           setConnected(true);
-          console.log("Connected to WebSocket server");
 
           client.subscribe(`/topic/chatbot/${roomId}`, message => {
-            handleWebSocketMessage(message.body);
+            const newMessage = JSON.parse(message.body);
+            setMessages(prev => [...prev, newMessage]);
           });
-        },
-        onDisconnect: () => {
-          setConnected(false);
-          console.log("Disconnected from WebSocket server");
-        },
-        onStompError: frame => {
-          console.error("STOMP Error: ", frame);
-        },
-      });
 
-      client.activate(); // 연결 활성화
-      setStompClient(client);
+          setStompClient(client);
+        },
+        error => {
+          console.error("STOMP connection error:", error);
+        },
+      );
 
       return () => {
-        client.deactivate(); // 연결 종료
+        client.disconnect(() => {
+          console.log("WebSocket 연결이 끊어졌습니다.");
+          setConnected(false);
+        });
         setStompClient(null);
       };
     }
   }, [roomId, handleWebSocketMessage]);
 
-  const handleSendMessage = useCallback(() => {
+  const handleSendMessage = () => {
     if (stompClient && connected && comment.trim()) {
       const newMessage: Message = {
         message: comment.trim(),
@@ -104,10 +104,7 @@ const BaseballDict = () => {
       try {
         setMessages(prevMessages => [...prevMessages, newMessage]);
 
-        stompClient.publish({
-          destination: `/app/chatbot/${roomId}`,
-          body: JSON.stringify(newMessage),
-        });
+        stompClient.send(`/app/chatbot/${roomId}`, {}, JSON.stringify(newMessage));
 
         setComment("");
       } catch (error) {
@@ -115,7 +112,7 @@ const BaseballDict = () => {
         setMessages(prevMessages => prevMessages.slice(0, -1));
       }
     }
-  }, [stompClient, connected, comment, roomId]);
+  };
 
   return (
     <>
