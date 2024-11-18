@@ -34,7 +34,7 @@ public class GeneralBoardCommentService {
     @Value("${user.server.domain}")
     private String userServerDomain;
 
-    @Value("${user.server.port}")
+    @Value("${server.port}")
     private String userPort;
 
     /**
@@ -115,7 +115,7 @@ public class GeneralBoardCommentService {
     }
 
     private ResponseEntity<UserResponseDto> getUserProfile(Long userId) {
-        String url = userServerDomain + ":" + userPort + "/api/v1/user/users/" + userId;
+        String url = userServerDomain + ":" + userPort + "/user/users/" + userId;
         return restTemplate.getForEntity(url, UserResponseDto.class);
     }
 }
