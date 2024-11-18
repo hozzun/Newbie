@@ -33,7 +33,7 @@ const BaseballDict = () => {
       setIsLoading(true);
       setError(null);
 
-      const authorization = window.sessionStorage.getItem("authorization") || "";
+      const authorization = window.sessionStorage.getItem("access_token") || "";
 
       const { data: fetchedRoomId } = await axiosInstance.post(
         "/api/v1/chatbot/create-room",
@@ -48,14 +48,11 @@ const BaseballDict = () => {
 
       setRoomId(fetchedRoomId);
 
-      const { data: chatHistory } = await axiosInstance.get(
-        `/api/v1/chatbot/chatbot/${userId}/history`,
-        {
-          headers: {
-            Authorization: `Bearer ${authorization}`,
-          },
+      const { data: chatHistory } = await axiosInstance.get(`/api/v1/chatbot/${userId}/history`, {
+        headers: {
+          Authorization: `Bearer ${authorization}`,
         },
-      );
+      });
 
       setMessages(chatHistory);
     } catch (error) {
