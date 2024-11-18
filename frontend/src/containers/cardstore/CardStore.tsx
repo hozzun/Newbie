@@ -18,7 +18,6 @@ export interface PhotoCardInfo {
   price: number;
 }
 
-// TODO: 정렬 기준 추가
 const sortItem: Record<string, string> = {
   가나다순: "DEFAULT",
   최신순: "LATEST",
