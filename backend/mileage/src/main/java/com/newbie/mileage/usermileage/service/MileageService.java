@@ -25,6 +25,11 @@ public class MileageService {
 
     private final UserMileageRepository userMileageRepository;
 
+    public Double getMileageByUserId(String userId) {
+        Optional<UserMileage> userMileageOpt = userMileageRepository.findFirstByUserIdOrderByIdDesc(Integer.parseInt(userId));
+        return userMileageOpt.map(UserMileage::getMileage).orElse(0.0);
+    }
+
     public boolean checkMileage(int userId, double price) {
         log.info("Checking mileage for userId: {} with required price: {}", userId, price);
 
