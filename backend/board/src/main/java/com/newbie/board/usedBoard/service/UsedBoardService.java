@@ -78,8 +78,8 @@ public class UsedBoardService {
     }
 
     @Transactional
-    public UsedBoardResponseDto createUsedBoard(UsedBoardRequestDto requestDto, MultipartFile imageFile) throws IOException {
-
+    public UsedBoardResponseDto createUsedBoard(UsedBoardRequestDto requestDto, MultipartFile imageFile, String memberId, String username) throws IOException {
+        Long userId = Long.valueOf(memberId);
         List<UsedBoardTag> usedBoardTags = requestDto.getTags().stream()
                 .map(tagName -> usedBoardTagRepository.findByName(tagName)
                         .orElseGet(() -> usedBoardTagRepository.save(new UsedBoardTag(tagName))))
@@ -94,8 +94,8 @@ public class UsedBoardService {
                 .price(requestDto.getPrice())
                 .createdAt(LocalDateTime.now())
                 .region(requestDto.getRegion())
-                .userId(requestDto.getUserId())
-                .userName(requestDto.getUserName())
+                .userId(userId)
+                .userName(username)
                 .isDeleted("N")
                 .build();
 

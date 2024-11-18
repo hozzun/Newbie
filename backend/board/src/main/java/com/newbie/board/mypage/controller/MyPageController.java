@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,7 +21,7 @@ public class MyPageController {
 
     @Operation(summary = "마이페이지 나의 게시글 목록 확인", description = "나의 게시글 목록을 확인합니다.")
     @GetMapping("/board")
-    public ResponseEntity<MyPageBoardResponseDto> getMyPageBoardList(Long userId) {
+    public ResponseEntity<MyPageBoardResponseDto> getMyPageBoardList(@RequestHeader("X-Member-ID") String userId) {
         return ResponseEntity.ok(myPageService.getMyPageBoardList(userId));
     }
 }

@@ -40,11 +40,12 @@ public class UsedBoardCommentService {
     /**
      * 댓글을 생성합니다.
      * @param requestDto
-     * @param userId
+     * @param memberID
      * @return
      */
     @Transactional
-    public UsedBoardCommentResponseDto createComment(UsedBoardCommentRequestDto requestDto, Long userId) {
+    public UsedBoardCommentResponseDto createComment(UsedBoardCommentRequestDto requestDto, String memberId, String nickname) {
+        Long userId = Long.valueOf(memberId);
         UsedBoard usedBoard = usedBoardRepository.findById(requestDto.getBoardId())
                 .orElseThrow(() -> new RuntimeException("Board not found"));
 
@@ -80,10 +81,11 @@ public class UsedBoardCommentService {
     /**
      * 댓글을 삭제합니다.
      * @param commentId
-     * @param userId
+     * @param memberId
      */
     @Transactional
-    public void deleteComment(Long commentId, Long userId) {
+    public void deleteComment(Long commentId, String memberId) {
+        Long userId = Long.valueOf(memberId);
         UsedBoardComment usedBoardComment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new RuntimeException("Comment not found"));
 

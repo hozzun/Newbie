@@ -29,14 +29,16 @@ public class UsedBoardCommentController {
     @PostMapping("/{boardId}")
     public ResponseEntity<UsedBoardCommentResponseDto> createComment(
             @RequestBody @Parameter(description = "boardId, content") UsedBoardCommentRequestDto requestDto,
-            @RequestParam Long userId) {
-        UsedBoardCommentResponseDto createdComment = commentService.createComment(requestDto, userId);
+            @RequestHeader("X-Member-ID") String userId,
+            @RequestHeader("X-Nickname") String nickname) {
+        UsedBoardCommentResponseDto createdComment = commentService.createComment(requestDto, userId, nickname);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdComment);
     }
 
     @Operation(summary = "유저 댓글 삭제", description = "유저가 댓글을 삭제합니다.")
     @DeleteMapping("/{commentId}")
-    public ResponseEntity<Void> deleteComment(@PathVariable @Parameter(description = "commentId") Long commentId, @RequestParam Long userId) {
+    public ResponseEntity<Void> deleteComment(@PathVariable @Parameter(description = "commentId") Long commentId,
+                                              @RequestHeader("X-Member-ID") String userId) {
         commentService.deleteComment(commentId, userId);
         return ResponseEntity.noContent().build();
     }

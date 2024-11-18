@@ -7,7 +7,6 @@ import com.newbie.board.generalBoard.service.GeneralBoardService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,9 +26,11 @@ public class GeneralBoardController {
     @Operation(summary = "유저 게시글 생성", description = "유저가 게시글을 생성합니다.")
     @PostMapping("/create")
     public ResponseEntity<GeneralBoardResponseDto> createGeneralBoard(
-            @ModelAttribute @Parameter(description = "userId, title, content, tags") GeneralBoardRequestDto generalBoardDto,
-            @RequestPart(value = "imageFile", required = false) MultipartFile imageFile) throws IOException {
-        return ResponseEntity.status(HttpStatus.CREATED).body(generalBoardService.createGeneralBoard(generalBoardDto, imageFile));
+            @ModelAttribute @Parameter(description = "title, content, tags") GeneralBoardRequestDto generalBoardDto,
+            @RequestPart(value = "imageFile", required = false) MultipartFile imageFile,
+            @RequestHeader("X-Member-ID") String userId,
+            @RequestHeader("X-Nickname") String nickName) throws IOException {
+        return ResponseEntity.status(HttpStatus.CREATED).body(generalBoardService.createGeneralBoard(generalBoardDto, imageFile, userId, nickName));
     }
 
     @Operation(summary = "유저 게시글 전체 조회", description = "유저가 모든 게시글을 조회합니다.")

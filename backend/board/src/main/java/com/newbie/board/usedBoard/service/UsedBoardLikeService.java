@@ -26,7 +26,8 @@ public class UsedBoardLikeService {
     private final ActivityRepository activityRepository;
 
     @Transactional
-    public String toggleLike(Long userId, Long boardId) {
+    public String toggleLike(String memberId, Long boardId) {
+        Long userId = Long.valueOf(memberId);
         UsedBoard board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new RuntimeException("Board not found"));
 
