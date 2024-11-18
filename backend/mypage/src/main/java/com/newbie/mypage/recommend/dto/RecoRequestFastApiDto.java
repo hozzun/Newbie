@@ -9,9 +9,9 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @Builder
-public class RecoRequestDto {
-
+public class RecoRequestFastApiDto {
     private String mbti;
     private List<Integer> responses;
     private String region;
+    private String userId; // 추가
 }
