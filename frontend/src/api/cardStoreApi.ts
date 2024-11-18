@@ -14,7 +14,7 @@ export interface GetLatestMyPhotoCardResponse {
   createAt: string;
 }
 
-export const getLatestMyPhotoCard = () => axios.get<GetLatestMyPhotoCardResponse>("/api-cardstore/cards/mycard")
+export const getLatestMyPhotoCard = () => axios.get<GetLatestMyPhotoCardResponse>("/api/v1/cardstore/cards/mycard")
 
 // 카드 목록 조회
 export interface GetPhotoCardsRequest {
@@ -36,7 +36,7 @@ export interface GetPhotoCardsResponse {
 }
 
 export const getPhotoCards = (request: GetPhotoCardsRequest) =>
-  axios.get<Array<GetPhotoCardsResponse>>("/api-cardstore/cards/team", {
+  axios.get<Array<GetPhotoCardsResponse>>("/api/v1/cardstore/cards/team", {
     params: {
       team: request.team,
       position: request.position,
@@ -58,4 +58,4 @@ export interface GetTopSellingCardsResponse {
   createAt: string;
 }
 
-export const getTopSellingCards = () => axios.get<Array<GetTopSellingCardsResponse>>("/api-cardstore/cards/top-sales");
+export const getTopSellingCards = () => axios.get<Array<GetTopSellingCardsResponse>>("/api/v1/cardstore/cards/top-sales");
