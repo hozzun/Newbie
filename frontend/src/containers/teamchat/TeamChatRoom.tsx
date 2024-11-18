@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import axiosSocketInstance from "../../util/axiosSocketInstance";
+// import axiosSocketInstance from "../../util/axiosSocketInstance";
 // import axiosInstance from "../../util/axiosInstance";
 import SockJS from "sockjs-client";
 import Stomp from "stompjs";
@@ -34,10 +34,10 @@ const TeamChatRoomContainer: React.FC<TeamChatRoomContainerProps> = ({ setPartic
   const userProfileImage = useSelector((state: RootState) => state.myInfo.profileImage);
   const nickname = useSelector((state: RootState) => state.myInfo.nickname) || "Anonymous";
 
+  const SOCKET_URL = import.meta.env.VITE_API_SOCKET_URL;
   useEffect(() => {
     if (!id) return;
-
-    const socket = new SockJS(`${axiosSocketInstance.defaults.baseURL}/api/v1/chat/ws/chat`);
+    const socket = new SockJS(`${SOCKET_URL}/api/v1/chat/ws/chat`);
     const stomp = Stomp.over(socket);
 
     const authorization = sessionStorage.getItem("access_token") || "";
