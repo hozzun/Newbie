@@ -1,14 +1,19 @@
 import ClubSelectItem from "../../components/cheerteam/ClubSelectItem";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import Dialog from "../../components/common/Dialog";
 
 const CheerTeam = () => {
-  const [selectedClub, setSelectedClub] = useState<string>(""); // 선택된 클럽을 상태로 저장
+  const [selectedClub, setSelectedClub] = useState<string>("");
   const nav = useNavigate();
+  const [show, setShow] = useState<boolean>(false)
 
   const goCheerSong = () => {
-    console.log("Selected Club:", selectedClub);
-    nav("/cheersong", { state: { selectedClub } });
+    setShow(true)
+    setTimeout(() => {
+      setShow(false)
+      nav("/cheersong", { state: { selectedClub } });
+    }, 2000)
   };
 
   return (
@@ -19,6 +24,7 @@ const CheerTeam = () => {
       <div className="mt-5">
         <ClubSelectItem onClick={goCheerSong} onSelectClub={setSelectedClub} />
       </div>
+      {show && <Dialog title="구단 변경" body="구단 변경 중입니다! 잠시만 기다려주세요⚾" />}
     </div>
   );
 };

@@ -31,7 +31,7 @@ const MyActive = () => {
   const getActivity = async () => {
 
     try {
-      const response = await axiosInstance.get(`/api/v1/user-activity`);
+      const response = await axiosInstance.get(`/api/v1/board/user-activity`);
       const likesData: LikeData[] = response.data
         .filter((item: { type: string }) => item.type === "like")
         .map((like: Omit<LikeData, "type">) => ({

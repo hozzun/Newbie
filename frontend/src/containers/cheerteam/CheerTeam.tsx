@@ -6,10 +6,12 @@ import ClubSelectItemComponents from "../../components/cheerteam/ClubSelectItem"
 import ClubId from "../../util/ClubId";
 import { useDispatch } from "react-redux";
 import { setCheeringClub } from "../../redux/teamSlice";
+import Dialog from "../../components/common/Dialog";
 
 const CheerTeam = () => {
   const [selectedClub, setSelectedClub] = useState<number>(0);
   console.log(selectedClub);
+  const [show, setShow] = useState<boolean>(false)
 
   const dispatch = useDispatch();
   const nav = useNavigate();
@@ -40,13 +42,18 @@ const CheerTeam = () => {
   const handleClubSelect = (club: string) => {
     setSelectedClub(ClubId[club]);
     updateFavoriteTeam(ClubId[club]);
-    nav(-1);
+    setShow(true)
+    setTimeout(() => {
+      setShow(false)
+      nav(-1);
+    }, 3000)
   };
 
   return (
     <>
       <CheerTeamComponents />
       <ClubSelectItemComponents onClick={handleClubSelect} />
+      {show && <Dialog title="구단 변경" body="구단 변경 중입니다! 잠시만 기다려주세요⚾" />}
     </>
   );
 };
