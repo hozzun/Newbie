@@ -26,7 +26,7 @@ public class UsedBoardLikeController {
     @Operation(summary = "좋아요 토글", description = "게시글에 대한 좋아요 상태를 토글합니다.")
     @PostMapping("/{boardId}")
     public ResponseEntity<String> toggleLike(
-            @RequestParam @Parameter(description = "사용자 ID") Long userId,
+            @RequestHeader("X-Member-ID") String userId,
             @PathVariable @Parameter(description = "게시글 ID") Long boardId) {
 
         String result = usedBoardLikeService.toggleLike(userId, boardId);

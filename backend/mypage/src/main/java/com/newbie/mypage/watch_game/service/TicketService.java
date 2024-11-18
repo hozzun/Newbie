@@ -19,10 +19,11 @@ public class TicketService {
 
     /**
      * 사용자의 경기 관람 리스트 반환
-     * @param userId
+     * @param memberId
      * @return
      */
-    public List<TicketResponseDto> getTicketList(int userId) {
+    public List<TicketResponseDto> getTicketList(String memberId) {
+        int userId = Integer.parseInt(memberId);
         List<Ticket> tickets = ticketRepository.findByUserId(userId);
         return tickets.stream()
                 .map(this::convertToDto)
@@ -35,8 +36,8 @@ public class TicketService {
         return convertToDto(ticket);
     }
 
-    public TicketResponseDto getLatestTicket(int userId) {
-        Ticket latestTicket = ticketRepository.findFirstByUserIdOrderByIdDesc(userId)
+    public TicketResponseDto getLatestTicket(String userId) {
+        Ticket latestTicket = ticketRepository.findFirstByUserIdOrderByIdDesc(Integer.parseInt(userId))
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Ticket not found"));
         return convertToDto(latestTicket);
     }

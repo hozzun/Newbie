@@ -81,7 +81,7 @@ public class GeneralBoardService {
     }
 
     @Transactional
-    public GeneralBoardResponseDto createGeneralBoard(GeneralBoardRequestDto requestDto, MultipartFile imageFile) throws IOException {
+    public GeneralBoardResponseDto createGeneralBoard(GeneralBoardRequestDto requestDto, MultipartFile imageFile, String userId, String nickName) throws IOException {
         List<GeneralBoardTag> generalBoardTags = Optional.ofNullable(requestDto.getTags())
                 .orElse(Collections.emptyList())
                 .stream()
@@ -96,15 +96,15 @@ public class GeneralBoardService {
                 .content(requestDto.getContent())
                 .imageUrl(imageUrl)
                 .createdAt(LocalDateTime.now())
-                .userId(Long.valueOf(requestDto.getUserId()))
-                .userName(requestDto.getUserName())
+                .userId(Long.valueOf(userId))
+                .userName(nickName)
                 .isDeleted("N")
                 .build();
 
         generalBoardTags.forEach(generalBoard::addTag);
         generalBoardRepository.save(generalBoard);
 
-        mileageProducer.sendMileageUpdate(requestDto.getUserId(), 500, "게시글 작성");
+        mileageProducer.sendMileageUpdate(Integer.parseInt(userId), 500, "게시글 작성");
 
         return toGeneralBoardResponseDto(generalBoard);
     }

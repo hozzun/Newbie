@@ -23,7 +23,7 @@ public class ChatController {
     private final SimpMessagingTemplate messagingTemplate;
 
     @PostMapping("/create-room")
-    public String createRoom(@RequestParam int userId) {
+    public String createRoom(@RequestHeader("X-Member-ID") String userId) {
         return chatRoomService.getOrCreateRoom(userId);
     }
 
@@ -34,8 +34,8 @@ public class ChatController {
         return aiService.generateAnswer(chatRequestDto.getMessage(), roomId);
     }
 
-    @GetMapping("/chatbot/{userId}/history")
-    public List<ChatRequestDto> getMessageHistory(@PathVariable int userId) {
+    @GetMapping("/chatbot/history")
+    public List<ChatRequestDto> getMessageHistory(@RequestHeader("X-Member-ID") String userId) {
         String roomId = chatRoomService.getRoomIdByUserId(userId);
 
         if (roomId == null) {

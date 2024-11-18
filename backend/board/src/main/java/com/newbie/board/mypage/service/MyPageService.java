@@ -36,11 +36,12 @@ public class MyPageService {
 
     /**
      * 사용자 ID에 해당하는 게시글 목록을 조회하여 반환합니다.
-     * @param userId 사용자 ID
+     * @param memberId 사용자 ID
      * @return MyPageBoardResponseDto
      */
     @Transactional
-    public MyPageBoardResponseDto getMyPageBoardList(Long userId) {
+    public MyPageBoardResponseDto getMyPageBoardList(String memberId) {
+        Long userId = Long.valueOf(memberId);
         List<GeneralBoardResponseDto> generalBoards = generalBoardRepository.findActiveByUserId(userId).stream()
                 .map(this::toGeneralBoardResponseDto)
                 .collect(Collectors.toList());
