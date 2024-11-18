@@ -57,7 +57,7 @@ const TeamChatMessages = ({ messages, currentNickname, userImage }: TeamChatMess
                 <div
                   className="w-10 h-10 rounded-full bg-gray-200 flex-shrink-0 bg-cover bg-center"
                   style={{
-                    backgroundImage: `url(${msg.profileImageUrl || userImage || "/default-profile.png"})`,
+                    backgroundImage: `url(${msg.profileImageUrl || userImage || "/pwa-192x192.png"})`,
                   }}
                 />
                 <div

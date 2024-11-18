@@ -3,9 +3,11 @@ import { useParams } from "react-router-dom";
 import Stomp from "stompjs";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
+import { useNavigate } from "react-router-dom";
 
 import TeamChatInput from "../../components/teamchat/TeamChatInput";
 import TeamChatMessages from "../../components/teamchat/TeamChatMessages";
+import SectionBox from "../common/SectionBox";
 
 interface ChatMessage {
   id: string;
@@ -17,19 +19,19 @@ interface ChatMessage {
   profileImageUrl?: string;
 }
 
-interface TeamChatRoomContainerProps {
-  setParticipantCount: (count: number) => void;
-}
-
-const TeamChatRoomContainer: React.FC<TeamChatRoomContainerProps> = ({ setParticipantCount }) => {
+const TeamChatRoomContainer = () => {
+  const nav = useNavigate();
   const { id } = useParams<{ id: string }>();
+  const [participantCount, setParticipantCount] = useState(0);
   const [stompClient, setStompClient] = useState<Stomp.Client | null>(null);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [comment, setComment] = useState("");
   const [connected, setConnected] = useState(false);
 
-  const userProfileImage = useSelector((state: RootState) => state.myInfo.profileImage);
-  const nickname = useSelector((state: RootState) => state.myInfo.nickname) || "Anonymous";
+  const nickname = useSelector((state: RootState) => state.myInfo.nickname || "뉴비");
+  const userProfileImage = useSelector(
+    (state: RootState) => state.myInfo.profileImage || "/pwa-192x192.png",
+  );
 
   useEffect(() => {
     if (!id) return;
@@ -91,8 +93,41 @@ const TeamChatRoomContainer: React.FC<TeamChatRoomContainerProps> = ({ setPartic
     setComment("");
   };
 
+  const handleLeave = () => {
+    if (!id || !stompClient) {
+      nav(-1);
+      return;
+    }
+
+    const leaveMessage = {
+      sender: nickname,
+      type: "LEAVE" as const,
+      roomId: id,
+      message: `${nickname}님이 퇴장하셨습니다.`,
+      timestamp: new Date().toISOString(),
+      profileImageUrl: "/path/to/profile.jpg",
+    };
+
+    // LEAVE 메시지 전송
+    stompClient.send(`/app/chat/${id}/leave`, {}, JSON.stringify(leaveMessage));
+
+    // WebSocket 연결 종료
+    stompClient.disconnect(() => {
+      console.log("WebSocket 연결 종료");
+      nav(-1);
+      setConnected(false);
+      setStompClient(null);
+    });
+  };
+
   return (
     <div className="flex flex-col">
+      <div className="fixed top-0 font-kbogothicmedium">
+        <SectionBox
+          label={`${participantCount}명과 함께하는 ${id} 응원방`}
+          onBackClick={handleLeave}
+        />
+      </div>
       <div className="flex-1 overflow-y-auto">
         <TeamChatMessages
           messages={messages}
