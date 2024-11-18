@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import CommuFreeItem from "../../components/commu/CommuFreeItem";
 import { getGeneralBoard, GetGeneralBoardResponse } from "../../api/boardApi";
 
@@ -7,6 +8,12 @@ const CommuFree = ({ searchQuery }: { searchQuery: string }) => {
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const lastBoardRef = useRef<HTMLDivElement | null>(null);
+  const nav = useNavigate()
+
+  const goDetail = (id: number) => {
+    nav(`/commuhome/freedetail/${id}`)
+    console.log('이동하는 아이디', id)
+  }
 
   // 게시물 로드 함수
   const loadBoards = async () => {
@@ -22,6 +29,7 @@ const CommuFree = ({ searchQuery }: { searchQuery: string }) => {
       }
       setLoading(false);
       setFreeBoards(response.data);
+      console.log('전체 게시물', response.data)
     } catch (error) {
       console.error("Free boards loading error:", error);
     } finally {
@@ -69,7 +77,7 @@ const CommuFree = ({ searchQuery }: { searchQuery: string }) => {
     <>
       <div className="flex flex-col gap-4">
         {freeBoards.map((board, index) => (
-          <div key={board.id} ref={index === freeBoards.length - 1 ? lastBoardRef : null}>
+          <div className="hover:cursor-pointer" key={board.id} ref={index === freeBoards.length - 1 ? lastBoardRef : null} onClick={() => goDetail(board.id)}>
             <CommuFreeItem
               title={board.title}
               contents={board.content}

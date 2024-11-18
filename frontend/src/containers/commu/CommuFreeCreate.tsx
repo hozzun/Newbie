@@ -85,7 +85,7 @@ const CommuFreeCreate = () => {
 
   // api 호출 및 데이터 제출
   const handleSubmit = async () => {
-    const params = { userId: 5 };
+
     if (titleValue && text) {
       try {
         const formData = new FormData();
@@ -106,7 +106,7 @@ const CommuFreeCreate = () => {
           console.log(formData.get("generalBoardDto"));
         }
 
-        const response = await postGeneralBoard(formData, params);
+        const response = await postGeneralBoard(formData);
         console.log(response);
         if (response.data) {
           nav(`/commuhome/freedetail/${response.data.id}`);

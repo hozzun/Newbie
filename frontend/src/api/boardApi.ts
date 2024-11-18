@@ -47,12 +47,11 @@ export interface PostGeneralBoardResponse {
   viewCount: number;
 }
 
-export const postGeneralBoard = async (data: FormData, params: { userId: number }) => {
+export const postGeneralBoard = async (data: FormData) => {
   return axios.post<PostGeneralBoardResponse>(
     "/api-board/general-board/create",
     data,
     {
-      params,
       headers: {
         "Content-Type": "multipart/form-data",
       },
