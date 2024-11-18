@@ -20,27 +20,26 @@ const BaseballDict = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [comment, setComment] = useState("");
   const [roomId, setRoomId] = useState<string>("");
-  const [isLoading, setIsLoading] = useState(true);
 
   const userProfileImage = useSelector((state: RootState) => state.myInfo.profileImage);
-
-  const fetchRoomAndHistory = async () => {
-    try {
-      const { data: fetchedRoomId } = await axiosInstance.post("/api/v1/chatbot/create-room");
-      setRoomId(fetchedRoomId);
-
-      const { data: chatHistory } = await axiosInstance.get(`/api/v1/chatbot/history`);
-      setMessages(chatHistory);
-    } catch (error) {
-      console.error("Error fetching room and history:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   useEffect(() => {
     fetchRoomAndHistory();
   }, []);
+
+  const fetchRoomAndHistory = async () => {
+    try {
+      const { data: fetchedRoomId } = await axiosInstance.post("/api/v1/chatbot/create-room");
+
+      setRoomId(fetchedRoomId);
+      // 채팅 히스토리 가져오기
+      const { data: chatHistory } = await axiosInstance.get(`/api/v1/chatbot/history`);
+
+      setMessages(chatHistory);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handleWebSocketMessage = useCallback(
     (messageBody: string) => {
@@ -62,55 +61,38 @@ const BaseballDict = () => {
     [roomId],
   );
 
-  // Separate useEffect for WebSocket connection
   useEffect(() => {
-    // Only attempt to connect if we have a roomId and aren't already connected
-    if (roomId && !isLoading && !connected) {
-      console.log("Attempting to connect with roomId:", roomId);
-
+    if (roomId) {
       const socket = new WebSocket(`${import.meta.env.VITE_API_SOCKET_URL}/api-chatbot/chatbot/ws`);
       const client = Stomp.over(socket);
-
-      // Configure STOMP client
-      client.debug = () => {}; // Disable debug logs
-
-      const headers = {
-        // Add any necessary headers here
-      };
-
       client.connect(
-        headers,
         () => {
-          console.log("Successfully connected to WebSocket");
           setConnected(true);
 
           client.subscribe(`/topic/chatbot/${roomId}`, message => {
-            console.log("Received message:", message);
+            console.log(message);
             handleWebSocketMessage(message.body);
           });
         },
         error => {
           console.error("STOMP connection error:", error);
-          setConnected(false);
         },
       );
 
       setStompClient(client);
 
       return () => {
-        if (client.connected) {
-          client.disconnect(() => {
-            console.log("WebSocket connection closed");
-            setConnected(false);
-          });
-        }
+        client.disconnect(() => {
+          console.log("WebSocket 연결이 끊어졌습니다.");
+          setConnected(false);
+        });
         setStompClient(null);
       };
     }
-  }, [roomId, isLoading, connected, handleWebSocketMessage]);
+  }, [roomId, handleWebSocketMessage]);
 
   const handleSendMessage = useCallback(() => {
-    if (stompClient && connected && comment.trim() && roomId) {
+    if (stompClient && connected && comment.trim()) {
       const newMessage: Message = {
         message: comment.trim(),
         roomId,
@@ -130,21 +112,19 @@ const BaseballDict = () => {
     }
   }, [stompClient, connected, comment, roomId]);
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
   return (
-    <div className="h-full">
-      <ChatMessages messages={messages} userImage={userProfileImage} aiImage={AIBOT} />
-      <ChatInput
-        onSendMessage={handleSendMessage}
-        comment={comment}
-        setComment={setComment}
-        placeholder="메시지를 입력하세요..."
-        disabled={!connected}
-      />
-    </div>
+    <>
+      <div className="h-full">
+        <ChatMessages messages={messages} userImage={userProfileImage} aiImage={AIBOT} />
+        <ChatInput
+          onSendMessage={handleSendMessage}
+          comment={comment}
+          setComment={setComment}
+          placeholder="메시지를 입력하세요..."
+          disabled={!connected}
+        />
+      </div>
+    </>
   );
 };
 
