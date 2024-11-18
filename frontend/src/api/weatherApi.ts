@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const getWeatherApiUrl = import.meta.env.VITE_GET_WEATHER;
+const getWeatherApiUrl = import.meta.env.VITE_GET_WEATHER_URL;
 const weatherDataApiKey = import.meta.env.VITE_WEATHER_DATA_API_KEY;
 
 const RE = 6371.00877;
