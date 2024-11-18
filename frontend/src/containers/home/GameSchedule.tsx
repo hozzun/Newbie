@@ -95,7 +95,7 @@ const GameSchedule = () => {
         // 구장 기준 날씨 정보 가져오기
         for (const gameInfoData of gameInfoDatas) {
           const getWeatherRequest: GetWeatherRequest = {
-            nx: Stadiums[gameInfoData.place].logitude,
+            nx: Stadiums[gameInfoData.place].longitude,
             ny: Stadiums[gameInfoData.place].latitude,
           };
           const responseAboutWeather = await getWeather(getWeatherRequest);
