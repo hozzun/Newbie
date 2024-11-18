@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import SockJS from "sockjs-client";
 import { Client } from "@stomp/stompjs";
 import axiosInstance from "../../util/axiosInstance";
+import axiosSocketInstance from "../../util/axiosSocketInstance";
 import ChatMessages from "../../components/baseballdict/ChatMessages";
 import ChatInput from "../../components/baseballdict/ChatInput";
 import AIBOT from "../../assets/images/aibot.png";
@@ -12,7 +13,7 @@ import { RootState } from "../../redux/store";
 interface Message {
   userEmail: string;
   message: string;
-  roomId: string | null;
+  roomId: string;
   timestamp: number;
 }
 
@@ -21,7 +22,7 @@ const BaseballDict = () => {
   const [connected, setConnected] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [comment, setComment] = useState("");
-  const [roomId, setRoomId] = useState<string | null>(null);
+  const [roomId, setRoomId] = useState<string>("");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -40,17 +41,21 @@ const BaseballDict = () => {
 
       const authorization = window.sessionStorage.getItem("access_token");
 
-      const { data: fetchedRoomId } = await axiosInstance.post("/api-chatbot/create-room", null, {
-        params: { userEmail },
-        headers: {
-          Authorization: `Bearer ${authorization}`,
+      const { data: fetchedRoomId } = await axiosInstance.post(
+        "/api/v1/chatbot/create-room",
+        null,
+        {
+          params: { userEmail },
+          headers: {
+            Authorization: `Bearer ${authorization}`,
+          },
         },
-      });
+      );
 
       setRoomId(fetchedRoomId);
 
       const { data: chatHistory } = await axiosInstance.get(
-        `/api-chatbot/chatbot/${userEmail}/history`,
+        `/api/v1/chatbot/chatbot/${userEmail}/history`,
         {
           headers: {
             Authorization: `Bearer ${authorization}`,
@@ -95,9 +100,10 @@ const BaseballDict = () => {
   useEffect(() => {
     if (roomId) {
       const client = new Client({
-        webSocketFactory: () => new SockJS(`${axiosInstance.defaults.baseURL}/api-chatbot/ws`),
+        webSocketFactory: () =>
+          new SockJS(`${axiosSocketInstance.defaults.baseURL}/api/v1/chatbot/ws`),
         connectHeaders: {
-          Authorization: window.sessionStorage.getItem("authorization") || "",
+          Authorization: window.sessionStorage.getItem("access_token") || "",
         },
         onConnect: () => {
           setConnected(true);
@@ -123,6 +129,7 @@ const BaseballDict = () => {
 
       return () => {
         client.deactivate();
+        setStompClient(null);
       };
     }
   }, [roomId, handleWebSocketMessage]);
