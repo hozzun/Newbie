@@ -1,11 +1,15 @@
 import Container from "../../components/common/Container";
-import SectionBox from "../../containers/common/SectionBox";
+import SectionBox from "../../components/common/SectionBox";
 import CommuTradeDetailContainer from "../../containers/commu/CommuTradeDetail";
+import { useNavigate } from "react-router-dom";
 
 const CommuFreeDetail = () => {
+
+  const nav = useNavigate()
+  
   return (
     <>
-      <SectionBox />
+      <SectionBox onBackClick={() => nav('/commuhome')}/>
       <Container>
         <CommuTradeDetailContainer />
       </Container>
