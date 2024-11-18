@@ -29,12 +29,9 @@ const MyActive = () => {
   const [activities, setActivities] = useState<ActivityData[]>([]);
 
   const getActivity = async () => {
-    // TODO: userId 수정
-    const userId = 5;
-    const params = { userId: userId };
 
     try {
-      const response = await axiosInstance.get(`/api-board/user-activity/${userId}`, { params });
+      const response = await axiosInstance.get(`/api/v1/user-activity`);
       const likesData: LikeData[] = response.data
         .filter((item: { type: string }) => item.type === "like")
         .map((like: Omit<LikeData, "type">) => ({
@@ -62,12 +59,11 @@ const MyActive = () => {
   };
 
   const deleteActivity = async (activityId: number) => {
-    // TODO: userId 수정
-    const userId = 5;
-    const params = { userId: userId, activityId: activityId };
+
+    const params = { activityId: activityId };
 
     try {
-      const response = await axiosInstance.delete(`/api-board/user-activity/${activityId}`, {
+      const response = await axiosInstance.delete(`/api/v1/user-activity/${activityId}`, {
         params,
       });
       console.log(response.data);

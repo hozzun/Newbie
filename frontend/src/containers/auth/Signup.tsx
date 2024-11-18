@@ -65,10 +65,7 @@ const Signup = () => {
         };
 
         // 액세스 토큰을 Signup API에 보내서 memberData로 갈아끼우고 토큰 받기
-        const response = await axiosInstance.post<MemberData>(
-          "/api-auth/members/signup",
-          memberData,
-        );
+        const response = await axiosInstance.post<MemberData>("/api/v1/members/signup", memberData);
 
         // 액세스 토큰을 sessionStorage 저장
         const accessToken = response.data.data;
@@ -90,7 +87,6 @@ const Signup = () => {
       onNameChange={handleNameChange}
       onSelectionChange={handleSelectionChange}
       onButtonClick={handleButtonClick}
-      signUpPath="/login"
     />
   );
 };

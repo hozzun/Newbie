@@ -8,16 +8,9 @@ interface SignupProps {
   onNameChange: (name: string) => void;
   onSelectionChange: (si: string, gun: string) => void;
   onButtonClick: () => void;
-  signUpPath: string;
 }
 
-const Signup = ({
-  buttonVariant,
-  onNameChange,
-  onSelectionChange,
-  onButtonClick,
-  signUpPath,
-}: SignupProps) => {
+const Signup = ({ buttonVariant, onNameChange, onSelectionChange, onButtonClick }: SignupProps) => {
   return (
     <div>
       <div>
@@ -25,7 +18,12 @@ const Signup = ({
       </div>
 
       <div>
-        <SelectBox label="주소" onSelectionChange={onSelectionChange} placeholder1="시" placeholder2="구" />
+        <SelectBox
+          label="주소"
+          onSelectionChange={onSelectionChange}
+          placeholder1="시"
+          placeholder2="구"
+        />
       </div>
 
       <div className="mx-auto mt-8 w-full px-3">
@@ -37,14 +35,6 @@ const Signup = ({
         >
           회원가입
         </Button>
-        <div className="text-center mt-auto mb-4">
-          <p className="font-kbogothiclight mb-4">
-            이미 계정이 있으신가요?{" "}
-            <a href={signUpPath} className="text-green-900">
-              로그인
-            </a>
-          </p>
-        </div>
       </div>
     </div>
   );

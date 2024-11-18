@@ -1,4 +1,4 @@
-import AppBar from "../../components/common/AppBar";
+import AppBar from "../../containers/teamchat/AppBar";
 import Container from "../../components/common/Container";
 import HomeContainer from "../../containers/home/Home";
 import BaseballDictionaryFAB from "../../containers/home/BaseballDictionaryFAB";
