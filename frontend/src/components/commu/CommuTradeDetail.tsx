@@ -94,7 +94,9 @@ const CommuTradeDetail = () => {
         <section className="font-kbogothiclight">
           <div className="flex justify-between items-center">
             <div className="flex items-center">
-              <div className="mr-2">{post.profile}</div>
+              <div className="mr-2">
+                <img src={post.profile} alt="profile" />
+              </div>
               <div>
                 <div className="font-kbogothicmedium">{post.userName}</div>
                 <div className="text-sm text-gray-300">{post.createdAt.substring(0, 10)}</div>
@@ -139,9 +141,9 @@ const CommuTradeDetail = () => {
           <div className="flex justify-end gap-1 items-center mb-2">
             <div className="flex border border-gray-300 px-2 rounded-lg items-center gap-1 hover:cursor-pointer">
               {good ? (
-                <Like className="w-4 h-4 text-gray-200" onClick={() => postGood(numericId)} />
-              ) : (
                 <Like className="w-4 h-4 text-[#FF5168]" onClick={() => postGood(numericId)} />
+              ) : (
+                <Like className="w-4 h-4 text-gray-200" onClick={() => postGood(numericId)} />
               )}{" "}
               {goodCount}
             </div>
@@ -157,7 +159,9 @@ const CommuTradeDetail = () => {
           <section key={index} className="font-kbogothiclight">
             <div className="flex justify-between items-center">
               <div className="flex items-center">
-                <div className="mr-2">유저사진</div>
+                <div className="mr-2">
+                  <img src={comment.profile} alt="profile" />
+                </div>
                 <div>
                   <div className="font-kbogothicmedium">{comment.userName}</div>
                   <div className="text-sm text-gray-300">{comment.createdAt.substring(0, 10)}</div>

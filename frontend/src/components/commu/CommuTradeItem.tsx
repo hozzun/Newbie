@@ -10,7 +10,7 @@ interface CommuTradeItemProps {
   createTimeStamp: string;
   price: number;
   location: string;
-  viewCount: number;
+  likeCount: number;
   commentCount: number;
   imageUrl: string;
 }
@@ -22,7 +22,7 @@ const CommuTrade = ({
   createTimeStamp,
   price,
   location,
-  viewCount,
+  likeCount,
   commentCount,
   imageUrl,
 }: CommuTradeItemProps) => {
@@ -53,7 +53,7 @@ const CommuTrade = ({
           </div>
           <div className="flex justify-end items-center gap-2">
             <div className="flex gap-1 font-kbogothiclight text-xs">
-              <Like className="w-4 h-4" /> {viewCount}
+              <Like className="w-4 h-4 text-[#FF5168]" /> {likeCount}
             </div>
             <div className="flex gap-1 font-kbogothiclight text-xs">
               <Comment className="w-4 h-4 text-[#7FAAFF]" /> {commentCount}
