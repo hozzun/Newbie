@@ -12,8 +12,9 @@ import Calendar from "../../components/mypage/Calendar";
 import WatchGame from "./WatchGameInfo";
 import OutButton from "../../components/mypage/OutButton";
 import { getIdByNum } from "../../util/ClubId";
-import { useSelector } from "react-redux";
-import { RootState } from "../../redux/store";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchMyInfo } from "../../redux/myInfoSlice"
+import { AppDispatch, RootState } from "../../redux/store";
 
 interface Game {
   date: string;
@@ -35,10 +36,24 @@ type TeamName =
   | "ssg";
 
 const MyPage = () => {
+  const dispatch = useDispatch<AppDispatch>()
   const [games, setGames] = useState<Game[]>([]);
   const { cheeringClub } = useSelector((state: RootState) => state.team);
+  const [team, setTeam] = useState<number | null>(cheeringClub)
   const { nickname, email, profileImage } = useSelector((state: RootState) => state.myInfo);
   const imageUrl = `${profileImage}?cacheBust=${Date.now()}`;
+
+  useEffect(() => {
+    if (team === null) {
+      getFavoriteTeam()
+    }
+  }, [team]);
+
+  useEffect(() => {
+    if (nickname === null || email === null || profileImage === null) {
+      dispatch(fetchMyInfo());
+    }
+  }, [nickname, email, profileImage]);
 
   const nav = useNavigate();
 
@@ -73,10 +88,20 @@ const MyPage = () => {
     const params = { year: year.toString(), month: formattedMonth, teamId: cheeringClub };
 
     try {
-      const response = await axiosInstance.get("/api/v1/games", { params });
+      const response = await axiosInstance.get("/api/v1/baseball/games", { params });
       setGames(response.data);
     } catch (error) {
       console.error("경기 데이터를 불러오는 중 오류 발생:", error);
+    }
+  };
+
+  const getFavoriteTeam = async () => {
+
+    try {
+      const response = await axiosInstance.get("/api/v1/users/favorite-team");
+      setTeam(response.data)
+    } catch (error) {
+      console.error("나의 응원 구단 데이터를 불러오는 중 오류 발생", error);
     }
   };
 
@@ -84,12 +109,11 @@ const MyPage = () => {
     getGameInfo();
   }, [cheeringClub]);
 
-  if (imageUrl) {
-    const teamName = cheeringClub
-      ? cheeringClub > 0
-        ? (getIdByNum(cheeringClub) as TeamName)
-        : 0
-      : 0;
+  const teamName = team
+    ? team > 0
+      ? (getIdByNum(team) as TeamName)
+      : 0
+    : 0;
 
     return (
       <>
@@ -109,7 +133,7 @@ const MyPage = () => {
               />
             ) : (
               <div
-                className="flex justify-center items-center font-kbogothicmedium text-lg border-4 border-green-100 text-green-900 m-5 p-10 rounded-2xl hover:cursor-pointer"
+                className="flex justify-center items-center font-kbogothicmedium text-lg border-4 w-full h-40 border-green-100 text-green-900 p-10 rounded-2xl hover:cursor-pointer"
                 onClick={goRecommend}
               >
                 <p>응원할 팀을 선택해주세요!</p>
@@ -121,14 +145,13 @@ const MyPage = () => {
               activeClick={goActive}
               scrapClick={goScrap}
             />
-            <Calendar games={games} team={cheeringClub ? cheeringClub : 0} />
+            <Calendar games={games} team={team ? team : 0} />
             <WatchGame />
             <OutButton />
           </div>
         )}
       </>
     );
-  }
 };
 
 export default MyPage;

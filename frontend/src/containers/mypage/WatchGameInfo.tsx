@@ -41,7 +41,7 @@ const WatchGameInfo = () => {
   const getWatchList = async () => {
 
     try {
-      const response = await axiosInstance.get("/api/v1/ticket/list");
+      const response = await axiosInstance.get("/api/v1/mypage/ticket/list");
       setWatchGames(response.data);
     } catch (error) {
       console.error("Error fetching cheer song:", error);

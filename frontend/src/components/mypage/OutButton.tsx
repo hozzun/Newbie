@@ -3,8 +3,11 @@ import Button, {ButtonProps} from "../common/Button"
 import { BUTTON_VARIANTS } from "../common/variants"
 import Dialog from "../common/Dialog";
 import axiosInstance from "../../util/axiosInstance";
+import { useNavigate } from "react-router-dom";
 
 const OutButton = () => {
+
+  const nav = useNavigate();
   const [logoutDialog, setLogoutDialog] = useState(false);
   const [removeDialog, setRemoveDialog] = useState(false);
 
@@ -16,21 +19,25 @@ const OutButton = () => {
     setRemoveDialog(true)
   };
 
+  const handleLogout = () => {
+    sessionStorage.removeItem("access_token");
+    nav("/login");
+  }
+
   const patchDelete = async () => {
   
     try {
-      const response = await axiosInstance.patch("/api/v1/users/resign");
+      const response = await axiosInstance.patch("/api/v1/user/users/resign");
       console.log(response);
     } catch (error) {
       console.error("Error fetching cheer song:", error);
     }
   };
 
-  // TODO: 로그아웃 API 연결
   const yesLogout: ButtonProps = {
     variant: BUTTON_VARIANTS.primary,
     children: "네",
-    onClick: () => console.log("로그아웃"),
+    onClick: () => handleLogout(),
   };
 
   const yesRemove: ButtonProps = {
