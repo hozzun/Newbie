@@ -2,6 +2,9 @@ import axiosInstance from "../util/axiosInstance";
 
 const axios = axiosInstance;
 
+// 총 자산 마일리지 조회
+export const getTotalMileage = () => axios.get<number>("/api/v1/cardstore/cards/mileage");
+
 // 최신 카드 조회
 export interface GetLatestMyPhotoCardResponse {
   id: string;
