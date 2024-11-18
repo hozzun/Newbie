@@ -6,7 +6,7 @@ import playerReducer from "./playerSlice";
 import cardStoreReducer from "./cardStoreSlice";
 import teamReducer from './teamSlice';
 import MyPhotoCardSliceReducer from './myPhotoCardSlice';
-import myInfoSlice, { fetchMyInfo } from './myInfoSlice'
+import myInfoSlice from './myInfoSlice'
 
 const store = configureStore({
   reducer: {
@@ -21,7 +21,7 @@ const store = configureStore({
   },
 });
 
-store.dispatch(fetchMyInfo()) // 앱 실행 시 나의 정보 저장
+// store.dispatch(fetchMyInfo()) // 앱 실행 시 나의 정보 저장
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 
