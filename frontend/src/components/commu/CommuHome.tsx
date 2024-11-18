@@ -5,6 +5,8 @@ export interface CommuHomeProps {
   onTabClick: (tab: "free" | "trade") => void;
   selectedSearch: "title" | "writer" | "tags";
   onSearchClick: (search: "title" | "writer" | "tags") => void;
+  onSearchSubmit: () => void;
+  setSearchQuery: (query: string) => void;
 }
 
 const CommuHome = ({
@@ -14,7 +16,7 @@ const CommuHome = ({
   onSearchClick,
   onSearchSubmit,
   setSearchQuery,
-}: CommuHomeProps & { onSearchSubmit: () => void; setSearchQuery: (query: string) => void }) => {
+}: CommuHomeProps) => {
   return (
     <div className="mb-2">
       <div className="flex gap-4 font-kbogothicbold text-2xl mb-4">
@@ -62,11 +64,11 @@ const CommuHome = ({
           type="text"
           placeholder="검색어를 입력해 주세요"
           className="w-full px-4 py-4 border font-kbogothiclight border-gray-200 rounded-lg focus:outline-none focus:border-green-900"
-          onChange={e => setSearchQuery(e.target.value)}
+          onChange={(e) => setSearchQuery(e.target.value)}
         />
         <SearchIcon
-          className="absolute h-4 w-4 right-4 top-1/2 transform -translate-y-1/2 text-gray-400"
-          onClick={onSearchSubmit}
+          className="absolute h-4 w-4 right-4 top-1/2 transform -translate-y-1/2 text-gray-400 cursor-pointer"
+          onClick={onSearchSubmit} // 아이콘 클릭 시 검색
         />
       </div>
     </div>
