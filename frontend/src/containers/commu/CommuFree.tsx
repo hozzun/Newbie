@@ -28,6 +28,7 @@ const CommuFree = ({ searchQuery }: { searchQuery: string }) => {
       }
       setLoading(false);
       setFreeBoards(response.data);
+      console.log('자유 게시글', response.data)
     } catch (error) {
       console.error("Free boards loading error:", error);
     } finally {
