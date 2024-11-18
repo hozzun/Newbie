@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>채팅 테스트 페이지</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        #chat { width: 500px; margin: 0 auto; }
+        #messageArea { height: 300px; border: 1px solid #ccc; overflow-y: scroll; padding: 10px; }
+        #messageArea .message { margin-bottom: 10px; display: flex; align-items: center; }
+        #messageArea .message img { width: 30px; height: 30px; border-radius: 50%; margin-right: 10px; }
+        #messageArea .message .sender { font-weight: bold; }
+        #messageForm { margin-top: 10px; }
+        #messageForm input[type="text"] { width: 80%; padding: 5px; }
+        #messageForm button { padding: 5px 10px; }
+        #participantCount { margin-top: 10px; }
+        #username, #roomId { margin-bottom: 10px; }
+        .report-button { margin-left: 10px; padding: 2px 5px; font-size: 0.8em; }
+        .system-message { color: red; }
+    </style>
+</head>
+<body>
+<div id="chat">
+    <h2>채팅 테스트 페이지</h2>
+    <div>
+        <label for="username">사용자 이름:</label>
+        <input type="text" id="username" placeholder="사용자 이름 입력">
+    </div>
+    <div>
+        <label for="roomId">채팅방 선택:</label>
+        <select id="roomId">
+            <option value="hanwha">한화</option>
+            <option value="kia">KIA</option>
+            <option value="samsung">삼성</option>
+            <option value="lg">LG</option>
+            <option value="doosan">두산</option>
+            <option value="lotte">롯데</option>
+            <option value="kt">KT</option>
+            <option value="nc">NC</option>
+            <option value="ssg">SSG</option>
+            <option value="kiwoom">키움</option>
+        </select>
+        <button id="connect">채팅방 입장</button>
+        <button id="disconnect" disabled>채팅방 나가기</button>
+    </div>
+    <div id="participantCount">참여자 수: 0</div>
+    <div id="messageArea"></div>
+    <form id="messageForm">
+        <input type="text" id="messageInput" placeholder="메시지를 입력하세요." disabled>
+        <button type="submit" disabled>전송</button>
+    </form>
+</div>
+
+<!-- SockJS와 Stomp.js 라이브러리 로드 -->
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client/dist/sockjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/stompjs/lib/stomp.min.js"></script>
+
+<!-- 채팅 스크립트 -->
+<script>
+    let stompClient = null;
+    let subscription = null;
+    let participantSubscription = null;
+    let privateSubscription = null;
+    let username = '';
+    let roomId = '';
+
+    const connectButton = document.getElementById('connect');
+    const disconnectButton = document.getElementById('disconnect');
+    const messageForm = document.getElementById('messageForm');
+    const messageInput = document.getElementById('messageInput');
+    const messageArea = document.getElementById('messageArea');
+    const usernameInput = document.getElementById('username');
+    const roomIdSelect = document.getElementById('roomId');
+    const participantCountElement = document.getElementById('participantCount');
+
+    connectButton.addEventListener('click', function() {
+        username = usernameInput.value.trim();
+        roomId = roomIdSelect.value;
+
+        if (!username) {
+            alert('사용자 이름을 입력하세요.');
+            return;
+        }
+
+        connect(username, roomId);
+    });
+
+    disconnectButton.addEventListener('click', function() {
+        disconnect();
+    });
+
+    messageForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+        sendMessage();
+    });
+
+    function connect(user, room) {
+        const socket = new SockJS('/ws/chat');
+        stompClient = Stomp.over(socket);
+
+        stompClient.connect({}, function(frame) {
+            console.log('Connected: ' + frame);
+
+            // 개인 메시지 구독
+            const privateQueue = '/queue/private/' + user;
+            privateSubscription = stompClient.subscribe(privateQueue, function(messageOutput) {
+                const message = JSON.parse(messageOutput.body);
+                showSystemMessage(message.message); // 시스템 메시지 표시
+                if (message.type === 'SYSTEM') {
+                    disableChat(); // 채팅 비활성화
+                }
+            });
+
+            // 채팅방 구독
+            subscription = stompClient.subscribe('/topic/chatroom/' + room, function(messageOutput) {
+                const message = JSON.parse(messageOutput.body);
+                showMessage(message);
+            });
+
+            // 참여자 수 구독
+            participantSubscription = stompClient.subscribe('/topic/chatroom/' + room + '/participants', function(message) {
+                const participantCount = parseInt(message.body);
+                participantCountElement.innerText = '참여자 수: ' + participantCount;
+            });
+
+            // 'JOIN' 메시지 전송
+            const joinMessage = {
+                sender: user,
+                type: 'JOIN',
+                profileImageUrl: '/path/to/default/profile/image.jpg' // 기본 프로필 이미지 URL
+            };
+            stompClient.send('/app/chat/' + room + '/join', {}, JSON.stringify(joinMessage));
+
+            // 버튼 및 입력 필드 상태 변경
+            connectButton.disabled = true;
+            disconnectButton.disabled = false;
+            messageInput.disabled = false;
+            messageForm.querySelector('button').disabled = false;
+            usernameInput.disabled = true;
+            roomIdSelect.disabled = true;
+        }, function(error) {
+            console.error('STOMP error: ' + error);
+            alert('채팅 서버에 연결할 수 없습니다.');
+        });
+
+        // 페이지를 떠날 때 자동으로 나가도록 설정
+        window.addEventListener('beforeunload', function(event) {
+            disconnect();
+        });
+    }
+
+    function disconnect() {
+        if (stompClient !== null) {
+            // 퇴장 메시지 전송
+            const leaveMessage = {
+                sender: username,
+                type: 'LEAVE'
+            };
+            stompClient.send('/app/chat/' + roomId + '/leave', {}, JSON.stringify(leaveMessage));
+
+            // 구독 해지 및 연결 끊기
+            if (subscription) subscription.unsubscribe();
+            if (participantSubscription) participantSubscription.unsubscribe();
+            if (privateSubscription) privateSubscription.unsubscribe();
+            stompClient.disconnect();
+
+            // 버튼 및 입력 필드 상태 변경
+            connectButton.disabled = false;
+            disconnectButton.disabled = true;
+            messageInput.disabled = true;
+            messageForm.querySelector('button').disabled = true;
+            usernameInput.disabled = false;
+            roomIdSelect.disabled = false;
+
+            messageArea.innerHTML = '';
+            participantCountElement.innerText = '참여자 수: 0';
+            console.log('Disconnected');
+        }
+    }
+
+    function sendMessage() {
+        const messageContent = messageInput.value.trim();
+
+        if (messageContent && stompClient) {
+            const chatMessage = {
+                sender: username,
+                message: messageContent,
+                type: 'CHAT',
+                profileImageUrl: '/path/to/user/profile/image.jpg' // 사용자의 프로필 이미지 URL을 전송
+            };
+            stompClient.send('/app/chat/' + roomId + '/sendMessage', {}, JSON.stringify(chatMessage));
+            messageInput.value = '';
+        }
+    }
+
+    function showMessage(message) {
+        const messageElement = document.createElement('div');
+        messageElement.classList.add('message');
+
+        if (message.type === 'LEAVE') {
+            const textElement = document.createElement('span');
+            textElement.textContent = message.message;
+            messageElement.appendChild(textElement);
+        } else if (message.type === 'JOIN') {
+            if (message.sender !== username) {
+                const textElement = document.createElement('span');
+                textElement.textContent = message.message;
+                messageElement.appendChild(textElement);
+            }
+        } else if (message.type === 'CHAT') {
+            const profileImage = document.createElement('img');
+            profileImage.src = message.profileImageUrl || '/path/to/default/profile/image.jpg'; // 프로필 이미지 URL 설정
+            messageElement.appendChild(profileImage);
+
+            const senderElement = document.createElement('span');
+            senderElement.classList.add('sender');
+            senderElement.textContent = message.sender + ': ';
+            messageElement.appendChild(senderElement);
+
+            const timeElement = document.createElement('span');
+            timeElement.classList.add('timestamp');
+            timeElement.textContent = ' [' + formatTime(message.timestamp) + '] ';
+            messageElement.appendChild(timeElement);
+
+            const textElement = document.createElement('span');
+            textElement.textContent = message.message;
+            messageElement.appendChild(textElement);
+
+            if (message.sender !== username) {
+                const reportButton = document.createElement('button');
+                reportButton.textContent = '신고';
+                reportButton.classList.add('report-button');
+                reportButton.onclick = function() {
+                    reportUser(message.sender);
+                };
+                messageElement.appendChild(reportButton);
+            }
+        }
+
+        messageArea.appendChild(messageElement);
+        messageArea.scrollTop = messageArea.scrollHeight;
+    }
+
+    function showSystemMessage(message) {
+        const messageElement = document.createElement('div');
+        messageElement.classList.add('message', 'system-message');
+
+        const systemElement = document.createElement('span');
+        systemElement.textContent = message;
+
+        messageElement.appendChild(systemElement);
+        messageArea.appendChild(messageElement);
+        messageArea.scrollTop = messageArea.scrollHeight;
+    }
+
+    function formatTime(timestamp) {
+        const date = new Date(timestamp);
+        const hours = date.getHours();
+        const minutes = date.getMinutes();
+        const ampm = hours >= 12 ? '오후' : '오전';
+        const formattedHours = hours % 12 || 12;
+        const formattedMinutes = minutes < 10 ? '0' + minutes : minutes;
+        return ampm + ' ' + formattedHours + ':' + formattedMinutes;
+    }
+
+    function reportUser(userName) {
+        if (!username) {
+            alert('먼저 사용자 이름을 입력하고 채팅방에 입장하세요.');
+            return;
+        }
+
+        if (username === userName) {
+            alert('자기 자신을 신고할 수 없습니다.');
+            return;
+        }
+
+        if (!confirm(userName + '님을 정말로 신고하시겠습니까?')) {
+            return;
+        }
+
+        fetch('/api/report?reporterUserId=' + encodeURIComponent(username) + '&reportedUserId=' + encodeURIComponent(userName), {
+            method: 'POST'
+        }).then(response => {
+            if (response.ok) {
+                return response.text();
+            } else {
+                return response.text().then(text => { throw new Error(text) });
+            }
+        }).then(message => {
+            alert(message);
+        }).catch(error => {
+            alert(error.message);
+        });
+    }
+
+    function disableChat() {
+        messageInput.disabled = true;
+        messageForm.querySelector('button').disabled = true;
+    }
+</script>
+</body>
+</html>
