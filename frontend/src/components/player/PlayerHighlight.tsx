@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Video } from "../../containers/player/Player";
 import PlayerHightlightItem from "./PlayerHightlightItem";
 
@@ -6,6 +7,18 @@ interface PlayerHighlightProps {
 }
 
 const PlayerHighlight = (props: PlayerHighlightProps) => {
+  const [playingIndex, setPlayingIndex] = useState<number | null>(null);
+
+  const handlePlay = (index: number) => {
+    setPlayingIndex(index);
+  };
+
+  const handlePause = (index: number) => {
+    if (playingIndex === index) {
+      setPlayingIndex(null);
+    }
+  };
+
   return (
     <div className="flex flex-col justify-center items-center w-full mt-8">
       <div className="flex justify-start w-full mb-3">
@@ -13,9 +26,21 @@ const PlayerHighlight = (props: PlayerHighlightProps) => {
       </div>
       {props.playerHighlights && props.playerHighlights.length > 0 ? (
         <div className="grid grid-cols-2 gap-3 w-full">
-          {props.playerHighlights.map((playerHighlight, index) => (
-            <PlayerHightlightItem key={index} playerHighlight={playerHighlight} />
-          ))}
+          {props.playerHighlights.map((playerHighlight, index) => {
+            const isPlaying = playingIndex === index;
+            console.log(`${index}: ${isPlaying}`);
+
+            return (
+              <div key={index} className={`${isPlaying ? "col-span-2" : ""}`}>
+                <PlayerHightlightItem
+                  playerHighlight={playerHighlight}
+                  isPlaying={isPlaying}
+                  handlePlay={() => handlePlay(index)}
+                  handlePause={() => handlePause(index)}
+                />
+              </div>
+            );
+          })}
         </div>
       ) : (
         <p className="text-base font-kbogothicmedium text-gray-700">
