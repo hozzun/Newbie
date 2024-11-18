@@ -49,14 +49,15 @@ const CommuFreeDetail = () => {
         params,
       });
       setGood(!good);
-      console.log(response.data); // TODO: API 완성되면 테스트
+      loadBoards()
+      return response.data
     } catch (error) {
       console.error("에러 발생:", error);
     }
   };
 
   const postScrap = async (boardId: number) => {
-    const params = { boardId: boardId, boardType: "general" };
+    const params = { boardId : boardId, boardType: "general" };
 
     try {
       const response = await axiosInstance.post("/api/v1/board/scrap", {
@@ -107,14 +108,12 @@ const CommuFreeDetail = () => {
                 />
               )}
             </div>
-            <div className="flex items-center text-right gap-2">
-              <Pencil
-                className="w-4 h-4 text-success-200 cursor-pointer"
-                onClick={() =>
-                  nav(`/commuhome/freedetail/${numericId}/revise`, { state: { post } })
-                }
-              />
-            </div>
+            <Pencil
+              className="w-4 h-4 text-success-200 cursor-pointer"
+              onClick={() =>
+                nav(`/commuhome/freedetail/${numericId}/revise`, { state: { post } })
+              }
+            />
           </div>
           <div className="font-kbogothicmedium py-4">{post.title}</div>
           {post.imageUrl && <img src={post.imageUrl} alt="게시글 이미지" className="py-4" />}
