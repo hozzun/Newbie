@@ -30,9 +30,12 @@ const TeamChatRoom: React.FC = () => {
     // Create STOMP client
     const client = new StompJs.Client({
       brokerURL: `${import.meta.env.VITE_API_SOCKET_URL}/ws/chat`,
+      connectHeaders: {
+        Authorization: window.sessionStorage.getItem("access_token") || "",
+      },
       onConnect: () => {
         setConnected(true);
-        console.log("WebSocket Connected");
+        console.log("웹소켓 연결 완료!");
 
         // Subscribe to chat room messages
         client.subscribe(`/topic/chatroom/${roomId}`, message => {
