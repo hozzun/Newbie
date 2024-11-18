@@ -36,7 +36,7 @@ const TeamChatRoomContainer: React.FC<TeamChatRoomContainerProps> = ({ setPartic
   useEffect(() => {
     if (!id) return;
 
-    const socket = new SockJS(`${axiosInstance.defaults.baseURL}/api-chat/ws/chat`);
+    const socket = new SockJS(`${axiosInstance.defaults.baseURL}/api/v1/chat/ws/chat`);
     const stomp = Stomp.over(socket);
 
     stomp.connect({}, () => {
