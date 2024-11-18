@@ -16,7 +16,8 @@ public class ChatRoomService {
 
     private final RedisTemplate<String, Object> redisTemplate;
 
-    public String getOrCreateRoom(int userId) {
+    public String getOrCreateRoom(String memberId) {
+        Long userId = Long.valueOf(memberId);
         String roomId = (String) redisTemplate.opsForValue().get("user:room:" + userId);
 
         if (roomId == null) {
@@ -28,7 +29,7 @@ public class ChatRoomService {
         return roomId;
     }
 
-    // 채팅 메시지 저장
+    // 질문과 응답을 모두 저장
     public void saveMessage(String roomId, ChatRequestDto message) {
         if (message.getTimestamp() == 0) {
             message.setTimestamp(System.currentTimeMillis()); // 현재 시간 추가
@@ -47,7 +48,7 @@ public class ChatRoomService {
                 .toList();
     }
 
-    public String getRoomIdByUserId(int userId) {
+    public String getRoomIdByUserId(String userId) {
         return (String) redisTemplate.opsForValue().get("user:room:" + userId);
     }
 }

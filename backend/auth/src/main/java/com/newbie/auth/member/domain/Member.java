@@ -32,6 +32,9 @@ public class Member {
     @Column(name = "email", length = 60, unique = true)
     private String email;
 
+    @Column(name = "nickname", length = 60)
+    private String nickname;
+
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "platform")
@@ -42,6 +45,7 @@ public class Member {
 
     @Builder(builderMethodName = "signupBuilder")
     public Member(MemberSignUpRequestDto memberSignUpRequestDto) {
+        this.nickname = memberSignUpRequestDto.getNickname();
         this.email = memberSignUpRequestDto.getEmail();
         this.platform = memberSignUpRequestDto.getPlatform();
     }

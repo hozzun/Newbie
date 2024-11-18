@@ -19,7 +19,7 @@ public class BoardLikeController {
     @PostMapping("/{boardId}/like")
     public ResponseEntity<String> toggleLike(
             @PathVariable @Parameter(description = "게시글 ID") Long boardId,
-            @RequestParam @Parameter(description = "유저 ID") Long userId) {
+            @RequestHeader("X-Member-ID") String userId) {
         String result = likeService.toggleLike(userId, boardId);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }

@@ -38,7 +38,7 @@ public class TicketController {
      */
     @Operation(summary = "티켓 OCR 분석", description = "사용자가 티켓 이미지 등록 시 OCR 분석을 실시합니다.")
     @PostMapping(value = "/naverOcr", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> ocr(@RequestParam("image") MultipartFile image, @RequestParam int userId) {
+    public ResponseEntity<?> ocr(@RequestParam("image") MultipartFile image, @RequestHeader("X-Member-ID") String userId) {
         try {
             Map<String, Object> result = ocrService.processAndSaveTicket(image, userId);
             return ResponseEntity.ok(result);
@@ -57,7 +57,7 @@ public class TicketController {
      */
     @Operation(summary = "직관 경기 리스트 확인", description = "사용자가 직관간 경기의 리스트를 확인합니다.")
     @GetMapping("/list")
-    public ResponseEntity<List<TicketResponseDto>> getTicketList(@RequestParam int userId) {
+    public ResponseEntity<List<TicketResponseDto>> getTicketList(@RequestHeader("X-Member-ID") String userId) {
         List<TicketResponseDto> result = ticketService.getTicketList(userId);
         if (result.isEmpty()) {
             return ResponseEntity.noContent().build();
@@ -74,6 +74,16 @@ public class TicketController {
     @GetMapping()
     public ResponseEntity<TicketResponseDto> getTicket(@RequestParam @Parameter(description = "티켓 ID") String id) {
         TicketResponseDto result = ticketService.getTicket(id);
+        if (result == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(result);
+    }
+
+    @Operation(summary = "최근 직관 경기 확인", description = "사용자의 최근 직관 경기를 확인합니다.")
+    @GetMapping("/latest")
+    public ResponseEntity<TicketResponseDto> getLatestTicket(@RequestHeader("X-Member-ID") String userId) {
+        TicketResponseDto result = ticketService.getLatestTicket(userId);
         if (result == null) {
             return ResponseEntity.notFound().build();
         }

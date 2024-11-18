@@ -1,6 +1,7 @@
 package com.newbie.board.usedBoard.controller;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.newbie.board.generalBoard.dto.GeneralBoardResponseDto;
 import com.newbie.board.usedBoard.dto.UsedBoardCommentResponseDto;
 import com.newbie.board.usedBoard.dto.UsedBoardRequestDto;
@@ -13,6 +14,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,15 +33,24 @@ public class UsedBoardController {
     /**
      * 유저가 게시글을 생성합니다.
      *
-     * @param usedBoardDto 사용자가 입력한 게시글 정보
+     * @param usedBoardJson
      */
     @Operation(summary = "유저 게시글 생성", description = "유저가 게시글을 생성합니다.")
-    @PostMapping("/create")
+    @PostMapping(value = "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<UsedBoardResponseDto> createUsedBoard(
-            @ModelAttribute @Parameter(description = "userId, title, content, tagList, price, region") UsedBoardRequestDto usedBoardDto,
-            @RequestPart @Parameter(description = "imageFile") MultipartFile imageFile) throws IOException {
-        return ResponseEntity.status(HttpStatus.CREATED).body(usedBoardService.createUsedBoard(usedBoardDto, imageFile));
+            @RequestPart("usedBoard") String usedBoardJson,
+            @RequestPart(value = "imageFile", required = false) MultipartFile imageFile,
+            @RequestHeader("X-Member-ID") String userId,
+            @RequestHeader("X-Nickname") String nickname) throws IOException {
+
+        // JSON 문자열을 DTO로 변환
+        ObjectMapper objectMapper = new ObjectMapper();
+        UsedBoardRequestDto usedBoardDto = objectMapper.readValue(usedBoardJson, UsedBoardRequestDto.class);
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(usedBoardService.createUsedBoard(usedBoardDto, imageFile, userId, nickname));
     }
+
 
     /**
      * 게시판 모든 글을 조회합니다.

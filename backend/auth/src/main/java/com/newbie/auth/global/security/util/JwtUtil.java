@@ -74,6 +74,7 @@ public class JwtUtil {
 
         ZonedDateTime nowTime = ZonedDateTime.now();
         ZonedDateTime tokenValidityTime = nowTime.plusSeconds(expirationTime);
+        log.info(String.valueOf(claims));
 
         return Jwts.builder()
             .setClaims(claims) //Claim 설정

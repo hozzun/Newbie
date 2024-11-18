@@ -20,22 +20,28 @@ public class ChatController {
 
     private final ChatRoomService chatRoomService;
     private final OpenAIService aiService;
-    private final SimpMessagingTemplate messagingTemplate;
 
     @PostMapping("/create-room")
-    public String createRoom(@RequestParam int userId) {
+    public String createRoom(@RequestHeader("X-Member-ID") String userId) {
         return chatRoomService.getOrCreateRoom(userId);
     }
 
     @MessageMapping("/chatbot/{roomId}")
     public MessageDto handleMessage(ChatRequestDto chatRequestDto, @DestinationVariable String roomId) {
+        // 사용자의 메시지 저장
         chatRoomService.saveMessage(roomId, chatRequestDto);
 
-        return aiService.generateAnswer(chatRequestDto.getMessage(), roomId);
+        // AI 응답 생성
+        MessageDto aiResponse = aiService.generateAnswer(chatRequestDto.getMessage(), roomId);
+
+        // AI 응답 저장
+        chatRoomService.saveMessage(roomId, new ChatRequestDto(0, aiResponse.getContent(), aiResponse.getTimestamp()));
+
+        return aiResponse;
     }
 
-    @GetMapping("/chatbot/{userId}/history")
-    public List<ChatRequestDto> getMessageHistory(@PathVariable int userId) {
+    @GetMapping("/chatbot/history")
+    public List<ChatRequestDto> getMessageHistory(@RequestHeader("X-Member-ID") String userId) {
         String roomId = chatRoomService.getRoomIdByUserId(userId);
 
         if (roomId == null) {
@@ -46,5 +52,5 @@ public class ChatController {
         log.info("Get message history for userId: {} in room: {}", userId, roomId);
         return chatRoomService.getMessages(roomId);
     }
-
 }
+

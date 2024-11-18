@@ -43,14 +43,15 @@ public class OcrService {
     /**
      * 티켓을 받아 OCR 분석 후, 사용자 정보 저장 및 OCR 해석 결과 반환
      * @param image
-     * @param userId
+     * @param memberId
      * @return
      * @throws IOException
      * @throws java.text.ParseException
      * @throws ParseException
      */
     @Transactional
-    public Map<String, Object> processAndSaveTicket(MultipartFile image, int userId) throws IOException, java.text.ParseException, ParseException {
+    public Map<String, Object> processAndSaveTicket(MultipartFile image, String memberId) throws IOException, java.text.ParseException, ParseException {
+        int userId = Integer.parseInt(memberId);
         // OCR API 호출 및 결과 처리
         List<String> extractedTexts = callApi(image);
 

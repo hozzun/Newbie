@@ -11,6 +11,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
@@ -22,7 +23,8 @@ public class RecoController {
     private final RecoService recoService;
 
     @PostMapping("/recommend")
-    public RecoResponseDto recommendTeam(@RequestBody RecoRequestDto requestDto) {
-       return recoService.recommendTeam(requestDto).getBody();
+    public RecoResponseDto recommendTeam(@RequestBody RecoRequestDto requestDto,
+                                         @RequestHeader("X-Member-ID") String userId) {
+       return recoService.recommendTeam(requestDto, userId).getBody();
     }
 }

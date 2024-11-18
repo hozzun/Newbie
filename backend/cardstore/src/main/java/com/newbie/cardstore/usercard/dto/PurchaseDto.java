@@ -5,6 +5,5 @@ import lombok.Data;
 @Data
 public class PurchaseDto {
 
-    private Long userId;
     private String cardId;
 }

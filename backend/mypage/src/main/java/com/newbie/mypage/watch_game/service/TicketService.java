@@ -4,7 +4,9 @@ import com.newbie.mypage.watch_game.dto.TicketResponseDto;
 import com.newbie.mypage.watch_game.entity.Ticket;
 import com.newbie.mypage.watch_game.repository.TicketRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,10 +19,11 @@ public class TicketService {
 
     /**
      * 사용자의 경기 관람 리스트 반환
-     * @param userId
+     * @param memberId
      * @return
      */
-    public List<TicketResponseDto> getTicketList(int userId) {
+    public List<TicketResponseDto> getTicketList(String memberId) {
+        int userId = Integer.parseInt(memberId);
         List<Ticket> tickets = ticketRepository.findByUserId(userId);
         return tickets.stream()
                 .map(this::convertToDto)
@@ -28,8 +31,15 @@ public class TicketService {
     }
 
     public TicketResponseDto getTicket(String id) {
-        Ticket ticket = ticketRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Ticket not found"));
+        Ticket ticket = ticketRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Ticket not found"));
         return convertToDto(ticket);
+    }
+
+    public TicketResponseDto getLatestTicket(String userId) {
+        Ticket latestTicket = ticketRepository.findFirstByUserIdOrderByIdDesc(Integer.parseInt(userId))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Ticket not found"));
+        return convertToDto(latestTicket);
     }
 
     public void deleteTicket(String id) {

@@ -1,6 +1,7 @@
 package com.newbie.mypage.recommend.service;
 
 import com.newbie.mypage.recommend.dto.RecoRequestDto;
+import com.newbie.mypage.recommend.dto.RecoRequestFastApiDto;
 import com.newbie.mypage.recommend.dto.RecoResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,11 +31,19 @@ public class RecoService {
     @Value("${rabbitmq.routing.key}")
     private String routingKey;
 
-    public ResponseEntity<RecoResponseDto> recommendTeam(RecoRequestDto requestDto) {
+    public ResponseEntity<RecoResponseDto> recommendTeam(RecoRequestDto requestDto, String userId) {
+        // FastAPI 요청용 DTO 생성
+        RecoRequestFastApiDto fastApiDto = RecoRequestFastApiDto.builder()
+                .mbti(requestDto.getMbti())
+                .responses(requestDto.getResponses())
+                .region(requestDto.getRegion())
+                .userId(userId) // userId 추가
+                .build();
+
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Type", "application/json");
 
-        HttpEntity<RecoRequestDto> requestEntity = new HttpEntity<>(requestDto, headers);
+        HttpEntity<RecoRequestFastApiDto> requestEntity = new HttpEntity<>(fastApiDto, headers);
 
         try {
             return restTemplate.exchange(

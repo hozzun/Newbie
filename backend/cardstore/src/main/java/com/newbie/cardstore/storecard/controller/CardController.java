@@ -29,7 +29,7 @@ public class CardController {
             @RequestParam @Parameter(description = "포지션") String position,
             @RequestParam(defaultValue = "DEFAULT") @Parameter(description = "정렬 타입") SortType sortType,
             @RequestParam @Parameter(description = "구매된 카드 포함 여부") boolean includeCard,
-            @RequestParam Long userId) {
+            @RequestHeader("X-Member-ID") String userId) {
         List<PlayerCardDto> cards = cardService.getCards(team, sortType, position, includeCard, userId);
         return ResponseEntity.ok(cards);
     }
@@ -45,7 +45,7 @@ public class CardController {
 
     @Operation(summary = "내 최신 카드 조회", description = "사용자가 가지고 있는 카드 중 최근 카드 하나를 조회합니다.")
     @GetMapping("/mycard")
-    public ResponseEntity<PlayerCardDto> getMyLatestCard(@RequestParam Long userId) {
+    public ResponseEntity<PlayerCardDto> getMyLatestCard(@RequestHeader("X-Member-ID") String userId) {
         PlayerCardDto myLatestCard = cardService.getMyLatestCard(userId);
         return ResponseEntity.ok(myLatestCard);
     }
@@ -59,7 +59,7 @@ public class CardController {
 
     @Operation(summary = "카드 확인", description = "사용자가 구매한 카드 목록을 조회합니다.")
     @GetMapping("/users")
-    public ResponseEntity<List<PlayerCardDto>> getCardsByUserId(@RequestParam Long userId) {
+    public ResponseEntity<List<PlayerCardDto>> getCardsByUserId(@RequestHeader("X-Member-ID") String userId) {
         List<PlayerCardDto> cardsByUserId = cardService.getCardsByUserId(userId);
         return ResponseEntity.ok(cardsByUserId);
     }
@@ -68,7 +68,7 @@ public class CardController {
     @DeleteMapping("/delete")
     public ResponseEntity<Void> deleteCard(
             @RequestParam @Parameter(description = "카드 ID") String cardId,
-            @RequestParam Long userId) {
+            @RequestHeader("X-Member-ID") String userId) {
         cardService.deleteCard(cardId, userId);
         return ResponseEntity.noContent().build();
     }
