@@ -15,7 +15,7 @@ const BottomNavigation = () => {
   const location = useLocation();
   const nav = useNavigate();
 
-  const { team } = useSelector((state: RootState) => state.team);
+  const { cheeringClub } = useSelector((state: RootState) => state.team);
 
   const [clickedButtonIndex, setClickedButtonIndex] = useState<number>(2);
 
@@ -37,7 +37,7 @@ const BottomNavigation = () => {
 
   const handleBottomNavigationClick = (index: number) => {
     if (index === 0) {
-      const clubId: number = team !== 0 ? team : 1;
+      const clubId: number = cheeringClub ? (cheeringClub > 0 ? cheeringClub : 1) : 1;
       const clubName: string | undefined = getClubName(clubId);
 
       if (clubName === undefined) {

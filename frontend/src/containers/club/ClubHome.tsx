@@ -98,7 +98,7 @@ const ClubHome = () => {
 
   const { id } = useParams<{ id: string }>();
 
-  const { team } = useSelector((state: RootState) => state.team);
+  const { cheeringClub } = useSelector((state: RootState) => state.team);
 
   const today = new Date();
 
@@ -266,7 +266,6 @@ const ClubHome = () => {
       }
 
       const teamId = ClubId[id];
-      console.log(teamId);
       const response = await getUpcomingGame({ teamId: teamId });
       const upcomingGameDate = new Date(response.data.date);
       const opponentClubId =
@@ -349,11 +348,11 @@ const ClubHome = () => {
 
   useEffect(() => {
     if (id) {
-      setIsVisibleButton(team !== ClubId[id]);
+      setIsVisibleButton(cheeringClub !== ClubId[id]);
     } else {
       throw new CustomError("[ERROR] 구단 ID 없음 by club home");
     }
-  }, [team, id]);
+  }, [cheeringClub, id]);
 
   const handleRegisterCheerClub = async () => {
     // TODO: 응원 구단 등록 완료 시 stackbar 표시하기

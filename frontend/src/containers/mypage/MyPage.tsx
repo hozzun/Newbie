@@ -44,9 +44,9 @@ type TeamName =
 const MyPage = () => {
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
   const [games, setGames] = useState<Game[]>([]);
-  const { team } = useSelector((state: RootState) => state.team);
+  const { cheeringClub } = useSelector((state: RootState) => state.team);
   const nav = useNavigate();
-  
+
   const goRevise = () => {
     nav("/mypage/revise", { state: { userInfo } });
   };
@@ -73,7 +73,7 @@ const MyPage = () => {
 
   const getUserInfo = async () => {
     // TODO: userId 삭제 예정
-    const userId = 5
+    const userId = 5;
     setUserInfo(null);
 
     try {
@@ -95,7 +95,7 @@ const MyPage = () => {
     const year = new Date().getFullYear();
     const month = 8; // 9월로 고정
     const formattedMonth = month.toString().padStart(2, "0");
-    const params = { year: year.toString(), month: formattedMonth, teamId: team };
+    const params = { year: year.toString(), month: formattedMonth, teamId: cheeringClub };
 
     try {
       const response = await axiosInstance.get("/api-baseball/games", { params });
@@ -107,10 +107,10 @@ const MyPage = () => {
 
   useEffect(() => {
     getGameInfo();
-  }, [team])
+  }, [cheeringClub]);
 
   if (userInfo) {
-    const teamName = getIdByNum(team) as TeamName | 0;
+    const teamName = cheeringClub ? (getIdByNum(cheeringClub) as TeamName) : 0;
 
     return (
       <>
@@ -120,7 +120,11 @@ const MyPage = () => {
         </div>
         {userInfo && (
           <div>
-            <Profile img={`${userInfo.profileImage}?t${new Date().getTime()}`} name={userInfo.nickname} email={userInfo.email} />
+            <Profile
+              img={`${userInfo.profileImage}?t${new Date().getTime()}`}
+              name={userInfo.nickname}
+              email={userInfo.email}
+            />
             {teamName ? (
               <ClubChangeButton
                 logo={ClubLogos[teamName]}
@@ -142,7 +146,7 @@ const MyPage = () => {
               activeClick={goActive}
               scrapClick={goScrap}
             />
-            <Calendar games={games} team={team} />
+            <Calendar games={games} team={cheeringClub ? cheeringClub : 0} />
             <WatchGame />
             <OutButton />
           </div>
