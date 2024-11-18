@@ -16,7 +16,8 @@ public class ChatRoomService {
 
     private final RedisTemplate<String, Object> redisTemplate;
 
-    public String getOrCreateRoom(int userId) {
+    public String getOrCreateRoom(String memberId) {
+        Long userId = Long.valueOf(memberId);
         String roomId = (String) redisTemplate.opsForValue().get("user:room:" + userId);
 
         if (roomId == null) {
@@ -47,7 +48,7 @@ public class ChatRoomService {
                 .toList();
     }
 
-    public String getRoomIdByUserId(int userId) {
+    public String getRoomIdByUserId(String userId) {
         return (String) redisTemplate.opsForValue().get("user:room:" + userId);
     }
 }
