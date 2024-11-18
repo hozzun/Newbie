@@ -85,15 +85,15 @@ const CommuFreeCreate = () => {
 
   // api 호출 및 데이터 제출
   const handleSubmit = async () => {
-    const params = { userId: 5 };
+
     if (titleValue && text) {
       try {
         const formData = new FormData();
         formData.append(
           "generalBoardDto",
           JSON.stringify({
-            userId: 1, // 실제로는 로그인된 사용자 ID를 사용
-            userName: "사용자", // 실제로는 로그인된 사용자 이름을 사용
+            userId: 5, // 실제로는 로그인된 사용자 ID를 사용
+            userName: "김진우", // 실제로는 로그인된 사용자 이름을 사용
             title: titleValue,
             content: text,
             tags: tags,
@@ -106,7 +106,7 @@ const CommuFreeCreate = () => {
           console.log(formData.get("generalBoardDto"));
         }
 
-        const response = await postGeneralBoard(formData, params);
+        const response = await postGeneralBoard(formData);
         console.log(response);
         if (response.data) {
           nav(`/commuhome/freedetail/${response.data.id}`);
