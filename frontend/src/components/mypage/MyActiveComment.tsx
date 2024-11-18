@@ -12,7 +12,7 @@ const MyActiveComment = ({ time, comment, onClick }: CommentProps) => {
     <div className="flex flex-col m-3">
       <p className="font-kbogothicmedium text-gray-600 text-sm">{time}</p>
       <div className="flex flex-row justify-between justify-center items-center">
-        <div className="flex flex-row justify-center items-center">
+        <div className="flex flex-row justify-center items-center hover:cursor-pointer">
           <div className="my-3">
             <Comment className="w-6 h-6 text-[#7FAAFF]" />
             <p className="font-kbogothicmedium text-gray-600 text-sm">댓글</p>

@@ -6,10 +6,13 @@ import { useState } from 'react';
 
 interface ChatInputProps {
   boardId?: number;
+  onPostComment?: (isSuccess: boolean) => void;
 }
 
-const ChatInput = ({ boardId }: ChatInputProps) => {
+const ChatInput = ({ boardId, onPostComment }: ChatInputProps) => {
   const [comment, setComment] = useState<string>("")
+  // 기본값을 빈 함수로 설정
+  const handlePostComment = onPostComment ?? (() => {});
 
   const buttonItem: CircleButtonItem = {
     img: ArrowSmallUp,
@@ -28,11 +31,18 @@ const ChatInput = ({ boardId }: ChatInputProps) => {
 
     try {
       const response = await axiosInstance.post(`/api/v1/board/general-comment/${boardId}`, commentBody);
+      handlePostComment(true);
       return response.data
     } catch (error) {
+      handlePostComment(false);
       console.error("에러 발생:", error);
     }
   };
+
+  const sendClick = () => {
+    postComment()
+    setComment("")
+  }
 
   return (
     <div
@@ -53,7 +63,7 @@ const ChatInput = ({ boardId }: ChatInputProps) => {
           className="ml-3 w-10 h-10"
           variant={CIRCLE_BUTTON_VARIANTS.primarySolid}
           item={buttonItem}
-          onClick={() => postComment()}
+          onClick={sendClick}
         />
       </div>
     </div>

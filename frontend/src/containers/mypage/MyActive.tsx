@@ -89,10 +89,9 @@ const MyActive = () => {
             <div
               key={activity.boardId}
               onClick={() => nav(`/commuhome/freedetail/${activity.boardId}`)}
-              className="hover:cursor-pointer"
             >
               <MyActiveLike
-                time={activity.createdAt}
+                time={activity.createdAt.substring(0, 10)}
                 title={(activity as LikeData).title}
                 onClick={() => deleteAct(activity.activityId)}
               />
@@ -101,10 +100,9 @@ const MyActive = () => {
             <div
               key={activity.boardId}
               onClick={() => nav(`/commuhome/freedetail/${activity.boardId}`)}
-              className="hover:cursor-pointer"
             >
               <MyActiveComment
-                time={activity.createdAt}
+                time={activity.createdAt.substring(0, 10)}
                 comment={(activity as CommentData).content}
                 onClick={() => deleteAct(activity.activityId)}
               />

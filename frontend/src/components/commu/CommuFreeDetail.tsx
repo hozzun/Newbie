@@ -58,6 +58,14 @@ const CommuFreeDetail = () => {
     loadComments();
   }, []);
 
+  const handlePostComment = (isSuccess: boolean) => {
+    if (isSuccess) {
+      // 댓글 전송이 성공하면 새 댓글 목록을 불러옴
+      loadComments();
+    }
+    // 실패 시에는 아무 것도 하지 않음
+  };
+
   return (
     <>
       {post && (
@@ -117,7 +125,7 @@ const CommuFreeDetail = () => {
                 <div className="mr-2">유저사진</div>
                 <div>
                   <div className="font-kbogothicmedium">{comment.userName}</div>
-                  <div className="text-sm text-gray-300">{comment.createdAt}</div>
+                  <div className="text-sm text-gray-300">{comment.createdAt.substring(0, 10)}</div>
                 </div>
               </div>
             </div>
@@ -125,13 +133,12 @@ const CommuFreeDetail = () => {
             <div className="flex justify-between items-center ml-16">
               <div className="flex items-center">
                 <Comment className="w-4 h-4 text-[#7FAAFF] mr-2" />
-                <div>답글 쓰기</div>
+                <div className="mb-3 hover:cursor-pointer">답글 쓰기</div>
               </div>
-              <div className="text-right text-gray-300 cursor-pointer">신고하기</div>
             </div>
           </section>
         ))}
-        <ChatInput boardId={numericId} />
+        <ChatInput boardId={numericId} onPostComment={handlePostComment} />
     </>
   );
 };
