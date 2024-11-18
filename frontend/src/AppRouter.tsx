@@ -45,11 +45,11 @@ function ProtectedRoute({ children }: { children: JSX.Element }) {
   const navigate = useNavigate();
   const token = sessionStorage.getItem("access_token");
 
-  useEffect(() => {
-    if (!token) {
-      navigate("/login");
-    }
-  }, [token, navigate]);
+  // useEffect(() => {
+  //   if (!token) {
+  //     navigate("/login");
+  //   }
+  // }, [token, navigate]);
 
   return children;
 }
