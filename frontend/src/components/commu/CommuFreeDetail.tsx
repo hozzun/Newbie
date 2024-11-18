@@ -7,6 +7,8 @@ import Scrap from "../../assets/icons/bookmark-solid.svg?react";
 import { getGeneralBoardDetail, GetGeneralBoardResponse } from "../../api/boardApi";
 import { getGeneralComment, GetGeneralComment } from "../../api/boardApi";
 import axiosInstance from "../../util/axiosInstance";
+import ChatInput from "../../components/commu/ChatInput";
+
 interface PostDetail extends GetGeneralBoardResponse {
   userImage?: string;
 }
@@ -129,6 +131,7 @@ const CommuFreeDetail = () => {
             </div>
           </section>
         ))}
+        <ChatInput boardId={numericId} />
     </>
   );
 };

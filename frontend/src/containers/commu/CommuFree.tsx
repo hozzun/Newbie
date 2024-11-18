@@ -28,7 +28,6 @@ const CommuFree = ({ searchQuery }: { searchQuery: string }) => {
       }
       setLoading(false);
       setFreeBoards(response.data);
-      console.log(response.data)
     } catch (error) {
       console.error("Free boards loading error:", error);
     } finally {
