@@ -107,15 +107,16 @@ const CommuTradeCreate = () => {
       const formData = new FormData();
 
       // 게시글 정보를 JSON으로 변환하여 추가
-      const boardData = {
-        title: titleValue,
-        content: text,
-        tags: tags,
-        price: priceValue || 0,
-        region: region || "기본 지역",
-      };
-
-      formData.append("usedBoardDto", new Blob([JSON.stringify(boardData)], {}));
+      formData.append(
+        "usedBoard",
+        JSON.stringify({
+          title: titleValue,
+          content: text,
+          tags: tags,
+          price: priceValue || 0,
+          region: region || null,
+        }),
+      );
 
       // 이미지 처리: 단일 키로 추가
       if (images.length > 0) {
