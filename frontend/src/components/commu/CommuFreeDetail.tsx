@@ -95,10 +95,11 @@ const CommuFreeDetail = () => {
                 <div className="text-sm text-gray-300">{post.createdAt.substring(0, 10)}</div>
               </div>
             </div>
-            <div className="flex justify-end gap-2">
+            <div>
+            <div className="flex justify-end gap-1">
               {scrap ? (
                 <Scrap
-                  className="flex w-4 h-4 justify-end gap-1 cursor-pointer text-[#FFA600]"
+                  className="w-4 h-4 gap-1 cursor-pointer text-[#FFA600]"
                   onClick={() => postScrap()}
                 />
               ) : (
@@ -109,11 +110,12 @@ const CommuFreeDetail = () => {
               )}
             </div>
             <Pencil
-              className="flex w-4 h-4 text-success-200 cursor-pointer"
+              className="w-4 h-4 gap-1 text-success-200 cursor-pointer"
               onClick={() =>
                 nav(`/commuhome/freedetail/${numericId}/revise`, { state: { post } })
               }
             />
+            </div>
           </div>
           <div className="font-kbogothicmedium py-4">{post.title}</div>
           {post.imageUrl && <img src={post.imageUrl} alt="게시글 이미지" className="py-4" />}
