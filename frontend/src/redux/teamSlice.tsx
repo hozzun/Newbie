@@ -14,7 +14,7 @@ const initialState: TeamState = {
 export const fetchTeam = createAsyncThunk(
   'team/fetchTeam',
   async () => {
-    const response = await axiosInstance.get('/api-user/users/favorite-team');
+    const response = await axiosInstance.get('/api/v1/users/favorite-team');
     return response.data;
   }
 );
