@@ -65,7 +65,7 @@ export interface GetBuyPhotoCardRequest {
   cardId: string;
 }
 
-export const getBuyPhotoCard = (request: GetBuyPhotoCardRequest) => axios.get("api/v1/cardstore/purchase", {
+export const getBuyPhotoCard = (request: GetBuyPhotoCardRequest) => axios.post("api/v1/cardstore/purchase", {
   params: {
     cardId: request.cardId
   }
