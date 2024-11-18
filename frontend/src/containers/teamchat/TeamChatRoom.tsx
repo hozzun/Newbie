@@ -6,6 +6,7 @@ import { RootState } from "../../redux/store";
 
 import TeamChatInput from "../../components/teamchat/TeamChatInput";
 import TeamChatMessages from "../../components/teamchat/TeamChatMessages";
+import SectionBox from "../common/SectionBox";
 
 interface ChatMessage {
   id: string;
@@ -17,12 +18,9 @@ interface ChatMessage {
   profileImageUrl?: string;
 }
 
-interface TeamChatRoomContainerProps {
-  setParticipantCount: (count: number) => void;
-}
-
-const TeamChatRoomContainer: React.FC<TeamChatRoomContainerProps> = ({ setParticipantCount }) => {
+const TeamChatRoomContainer = () => {
   const { id } = useParams<{ id: string }>();
+  const [participantCount, setParticipantCount] = useState(0);
   const [stompClient, setStompClient] = useState<Stomp.Client | null>(null);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [comment, setComment] = useState("");
@@ -93,6 +91,9 @@ const TeamChatRoomContainer: React.FC<TeamChatRoomContainerProps> = ({ setPartic
 
   return (
     <div className="flex flex-col">
+      <div className="fixed top-0 font-kbogothicmedium">
+        <SectionBox label={`${participantCount}명과 함께하는 ${id} 응원방`} />
+      </div>
       <div className="flex-1 overflow-y-auto">
         <TeamChatMessages
           messages={messages}
