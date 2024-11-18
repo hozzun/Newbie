@@ -16,4 +16,7 @@ public interface GeneralBoardLikeRepository extends JpaRepository<GeneralBoardLi
 
     @Query("SELECT l.generalBoard FROM GeneralBoardLike l WHERE l.userId = :userId")
     List<GeneralBoard> findBoardsLikedByUser(@Param("userId") Long userId);
+
+    boolean existsByGeneralBoardIdAndUserId(Long generalBoardId, Long userId);
 }
+

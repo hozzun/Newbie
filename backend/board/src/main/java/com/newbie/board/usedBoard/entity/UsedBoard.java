@@ -27,6 +27,8 @@ public class UsedBoard {
     @NotNull
     private String title;
 
+    private String profile;
+
     @NotNull
     private String content;
 

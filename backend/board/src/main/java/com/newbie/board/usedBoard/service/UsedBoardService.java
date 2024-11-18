@@ -1,5 +1,7 @@
 package com.newbie.board.usedBoard.service;
 
+import com.newbie.board.mypage.dto.UserResponseDto;
+import com.newbie.board.scrap.repository.ScrapRepository;
 import com.newbie.board.usedBoard.dto.UsedBoardRequestDto;
 import com.newbie.board.usedBoard.dto.UsedBoardResponseDto;
 import com.newbie.board.usedBoard.dto.UsedBoardUpdateRequestDto;
@@ -13,7 +15,10 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -30,19 +35,27 @@ public class UsedBoardService {
     private final UsedBoardTagRepository usedBoardTagRepository;
     private final UsedBoardCommentRepository commentRepository;
     private final UsedBoardLikeRepository likeRepository;
+    private final ScrapRepository scrapRepository;
     private final S3Service s3Service;
+    private final RestTemplate restTemplate = new RestTemplate();
+
+    @Value("${user.server.domain}")
+    private String userServerDomain;
+
+    @Value("${user.server.port}")
+    private String userPort;
 
     @PersistenceContext
     private EntityManager entityManager;
 
     public List<UsedBoardResponseDto> getUsedBoardList() {
         return usedBoardRepository.findAllByOrderByCreatedAtDesc().stream()
-                .map(this::toUsedBoardResponseDto)
+                .map(this::toUsedBoardListResponseDto)
                 .collect(Collectors.toList());
     }
 
     @Transactional
-    public Optional<UsedBoardResponseDto> getUsedBoardById(Long id) {
+    public Optional<UsedBoardResponseDto> getUsedBoardById(Long id, String userId) {
         return usedBoardRepository.findById(id)
                 .map(usedBoard -> {
                     // viewCount 증가
@@ -50,7 +63,7 @@ public class UsedBoardService {
                     usedBoardRepository.save(usedBoard); // 변경 사항 저장
 
                     // DTO로 변환하여 반환
-                    return toUsedBoardResponseDto(usedBoard);
+                    return toUsedBoardResponseDto(usedBoard, Long.valueOf(userId));
                 });
     }
 
@@ -73,17 +86,19 @@ public class UsedBoardService {
         }
 
         return boards.stream()
-                .map(this::toUsedBoardResponseDto)
+                .map(this::toUsedBoardListResponseDto)
                 .collect(Collectors.toList());
     }
 
     @Transactional
-    public UsedBoardResponseDto createUsedBoard(UsedBoardRequestDto requestDto, MultipartFile imageFile, String memberId, String username) throws IOException {
+    public UsedBoardResponseDto createUsedBoard(UsedBoardRequestDto requestDto, MultipartFile imageFile, String memberId) throws IOException {
         Long userId = Long.valueOf(memberId);
         List<UsedBoardTag> usedBoardTags = requestDto.getTags().stream()
                 .map(tagName -> usedBoardTagRepository.findByName(tagName)
                         .orElseGet(() -> usedBoardTagRepository.save(new UsedBoardTag(tagName))))
                 .collect(Collectors.toList());
+
+        ResponseEntity<UserResponseDto> responseDto = getUserProfile(userId);
 
         String imageUrl = s3Service.uploadFile(imageFile);
 
@@ -95,14 +110,15 @@ public class UsedBoardService {
                 .createdAt(LocalDateTime.now())
                 .region(requestDto.getRegion())
                 .userId(userId)
-                .userName(username)
+                .userName(responseDto.getBody().getNickname())
+                .profile(responseDto.getBody().getProfileImage())
                 .isDeleted("N")
                 .build();
 
         usedBoardTags.forEach(usedBoard::addTag);
         usedBoardRepository.save(usedBoard);
 
-        return toUsedBoardResponseDto(usedBoard);
+        return toUsedBoardResponseDto(usedBoard, userId);
     }
 
     @Transactional
@@ -139,20 +155,58 @@ public class UsedBoardService {
         usedBoardRepository.updatePostsAsDeletedByUserId(userId);
     }
 
-    private UsedBoardResponseDto toUsedBoardResponseDto(UsedBoard usedBoard) {
+    private UsedBoardResponseDto toUsedBoardResponseDto(UsedBoard usedBoard, Long userId) {
         int commentCount = commentRepository.countByUsedBoardIdAndIsDeleted(usedBoard.getId(), "N");
         int likeCount = likeRepository.countByUsedBoardId(usedBoard.getId());
+        int scrapCount = scrapRepository.countByUsedBoardId(usedBoard.getId());
+
+        boolean isLikedByUser = likeRepository.existsByUsedBoardIdAndUserId(usedBoard.getId(), userId);
+        boolean isScrapedByUser = scrapRepository.existsByUsedBoardIdAndUserId(usedBoard.getId(), userId);
+
 
         return UsedBoardResponseDto.builder()
                 .id(usedBoard.getId())
                 .title(usedBoard.getTitle())
+                .userId(usedBoard.getUserId())
+                .userName(usedBoard.getUserName())
                 .content(usedBoard.getContent())
                 .price(usedBoard.getPrice())
+                .region(usedBoard.getRegion())
+                .profile(usedBoard.getProfile())
+                .createdAt(usedBoard.getCreatedAt())
+                .likeCount(likeCount)
+                .commentCount(commentCount)
+                .viewCount(usedBoard.getViewCount())
+                .isLikedByUser(isLikedByUser)
+                .isScrapedByUser(isScrapedByUser)
+                .scrapCount(scrapCount)
+                .build();
+    }
+
+    private UsedBoardResponseDto toUsedBoardListResponseDto(UsedBoard usedBoard) {
+        int commentCount = commentRepository.countByUsedBoardIdAndIsDeleted(usedBoard.getId(), "N");
+        int likeCount = likeRepository.countByUsedBoardId(usedBoard.getId());
+        int scrapCount = scrapRepository.countByUsedBoardId(usedBoard.getId());
+
+        return UsedBoardResponseDto.builder()
+                .id(usedBoard.getId())
+                .title(usedBoard.getTitle())
+                .userId(usedBoard.getUserId())
+                .content(usedBoard.getContent())
+                .price(usedBoard.getPrice())
+                .userName(usedBoard.getUserName())
+                .profile(usedBoard.getProfile())
+                .scrapCount(scrapCount)
                 .region(usedBoard.getRegion())
                 .createdAt(usedBoard.getCreatedAt())
                 .likeCount(likeCount)
                 .commentCount(commentCount)
                 .viewCount(usedBoard.getViewCount())
                 .build();
+    }
+
+    private ResponseEntity<UserResponseDto> getUserProfile(Long userId) {
+        String url = userServerDomain + ":" + userPort + "/api/v1/user/users/" + userId;
+        return restTemplate.getForEntity(url, UserResponseDto.class);
     }
 }

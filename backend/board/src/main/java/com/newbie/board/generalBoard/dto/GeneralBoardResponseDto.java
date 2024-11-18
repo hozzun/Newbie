@@ -27,4 +27,9 @@ public class GeneralBoardResponseDto {
     private int likeCount;
     private int scrapCount;
     private int viewCount;
+
+    private String profile;
+    private boolean isLikedByUser;
+    private boolean isScrapedByUser;
+
 }

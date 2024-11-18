@@ -16,5 +16,8 @@ public interface ScrapRepository extends JpaRepository<Scrap, Long> {
     Optional<Scrap> findByUserIdAndUsedBoard(Long userId, UsedBoard usedBoard);
     int countByGeneralBoardId(Long boardId);
     int countByUsedBoardId(Long boardId);
+    boolean existsByGeneralBoardIdAndUserId(Long generalBoardId, Long userId);
+    boolean existsByUsedBoardIdAndUserId(Long usedBoardId, Long userId);
+
 }
 
