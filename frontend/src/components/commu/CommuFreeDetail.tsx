@@ -16,6 +16,7 @@ const CommuFreeDetail = () => {
   const [post, setPost] = useState<GetGeneralBoardResponse | null>(null);
   const [comments, setComments] = useState<GetGeneralComment[] | null>(null);
   const [good, setGood] = useState<boolean | null>(null);
+  const [goodCount, setGoodCount] = useState<number>(0);
   const [scrap, setScrap] = useState<boolean | null>(null);
 
   // 게시물 상세 로드 함수
@@ -26,6 +27,7 @@ const CommuFreeDetail = () => {
         ...response.data,
       });
       setGood(response.data.likedByUser);
+      setGoodCount(response.data.likeCount)
       setScrap(response.data.scrapedByUser);
     } catch (error) {
       console.error("Free boards loading error:", error);
@@ -49,8 +51,11 @@ const CommuFreeDetail = () => {
         params,
       });
       setGood(!good);
-      loadBoards()
-      return response.data
+      if (response.data == 'liked') {
+        setGoodCount(goodCount + 1)
+      } else {
+        setGoodCount(goodCount - 1)
+      }
     } catch (error) {
       console.error("에러 발생:", error);
     }
@@ -95,25 +100,29 @@ const CommuFreeDetail = () => {
                 <div className="text-sm text-gray-300">{post.createdAt.substring(0, 10)}</div>
               </div>
             </div>
+            <div className="flex flex-row">
             <div className="flex justify-end gap-2">
               {scrap ? (
                 <Scrap
-                  className="flex w-4 h-4 justify-end gap-1 cursor-pointer text-[#FFA600]"
+                  className="w-4 h-4 gap-1 cursor-pointer text-[#FFA600] mr-2"
                   onClick={() => postScrap()}
                 />
               ) : (
                 <Scrap
-                  className="w-4 h-4 cursor-pointer text-gray-200"
+                  className="w-4 h-4 cursor-pointer text-gray-200 mr-2"
                   onClick={() => postScrap()}
                 />
               )}
             </div>
             <Pencil
-              className="flex w-4 h-4 text-success-200 cursor-pointer"
-              onClick={() =>
+              className="w-4 h-4 gap-1 text-success-200 cursor-pointer"
+              onClick={() => {
                 nav(`/commuhome/freedetail/${numericId}/revise`, { state: { post } })
+                console.log('전달하는 정보', post)
+                }
               }
             />
+            </div>
           </div>
           <div className="font-kbogothicmedium py-4">{post.title}</div>
           {post.imageUrl && <img src={post.imageUrl} alt="게시글 이미지" className="py-4" />}
@@ -129,7 +138,7 @@ const CommuFreeDetail = () => {
               ) : (
                 <Like className="w-4 h-4 text-gray-200" onClick={() => postGood(numericId)} />
               )}{" "}
-              {post.likeCount}
+              {goodCount}
             </div>
           </div>
           {post.tags.map((tag, index) => (

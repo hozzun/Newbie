@@ -2,7 +2,7 @@ import Coin from "../../assets/icons/copyright-solid.svg?react";
 import Location from "../../assets/icons/marker-solid.svg?react";
 import Like from "../../assets/icons/heart-solid.svg?react";
 import View from "../../assets/icons/eye-solid.svg?react";
-import Pencil from "../../assets/icons/pencil-solid.svg?react"
+import Pencil from "../../assets/icons/pencil-solid.svg?react";
 // import EmblaCarousel from "../../components/common/EmblaCarousel";
 import ChatInput from "./ChatInput";
 import Scrap from "../../assets/icons/bookmark-solid.svg?react";
@@ -17,8 +17,9 @@ const CommuTradeDetail = () => {
   const numericId = Number(id);
   const [post, setPost] = useState<GetUsedBoardResponse | null>(null);
   const [comments, setComments] = useState<GetUsedComment[] | null>(null);
-  const [good, setGood] = useState<boolean>(false)
-  const [scrap, setScrap] = useState<boolean>(false)
+  const [good, setGood] = useState<boolean>(false);
+  const [goodCount, setGoodCount] = useState<number>(0);
+  const [scrap, setScrap] = useState<boolean>(false);
 
   const loadBoards = async () => {
     try {
@@ -26,8 +27,9 @@ const CommuTradeDetail = () => {
       setPost({
         ...response.data,
       });
-      setGood(response.data.likedByUser)
-      setScrap(response.data.scrapedByUser)
+      setGood(response.data.likedByUser);
+      setGoodCount(response.data.likeCount)
+      setScrap(response.data.scrapedByUser);
     } catch (error) {
       console.error("Free boards loading error:", error);
     }
@@ -46,25 +48,29 @@ const CommuTradeDetail = () => {
     const params = { boardId: boardId };
 
     try {
-      const response = await axiosInstance.post(`/api/v1/board/used-board/${boardId}/like`, {
+      const response = await axiosInstance.post(`/api/v1/board/general-board/${boardId}/like`, {
         params,
       });
-      console.log(response.data);
-      setGood(!good)
+      setGood(!good);
+      if (response.data == 'liked') {
+        setGoodCount(goodCount + 1)
+      } else {
+        setGoodCount(goodCount - 1)
+      }
     } catch (error) {
       console.error("에러 발생:", error);
     }
   };
 
-  const postScrap = async (boardId: number) => {
-    const params = { boardId: boardId, boardType: "used" };
+  const postScrap = async () => {
+    const params = { boardId: numericId, boardType: "used" };
 
     try {
-      const response = await axiosInstance.post("/api/v1/board/scrap", {
+      const response = await axiosInstance.post("/api/v1/board/scrap", null, {
         params,
       });
       console.log(response.data);
-      setScrap(!scrap)
+      setScrap(!scrap);
     } catch (error) {
       console.error("에러 발생:", error);
     }
@@ -95,12 +101,25 @@ const CommuTradeDetail = () => {
                 <div className="text-sm text-gray-300">{post.createdAt.substring(0, 10)}</div>
               </div>
             </div>
-            <div className="flex items-center text-right gap-2">
-              {scrap? (<Scrap className="w-4 h-4 cursor-pointer text-[#FFA600]" onClick={() => postScrap(numericId)} />) :
-              (<Scrap className="w-4 h-4 cursor-pointer text-gray-200" onClick={() => postScrap(numericId)} />)}
+            <div className="flex flex-row">
+            <div className="flex justify-end gap-2">
+              {scrap ? (
+                <Scrap
+                  className="w-4 h-4 gap-1 cursor-pointer text-[#FFA600] mr-2"
+                  onClick={() => postScrap()}
+                />
+              ) : (
+                <Scrap
+                  className="w-4 h-4 cursor-pointer text-gray-200 mr-2"
+                  onClick={() => postScrap()}
+                />
+              )}
             </div>
-            <div className="flex items-center text-right gap-2">
-              <Pencil className="w-4 h-4 cursor-pointer text-success-200" onClick={() => console.log('중고 게시글 수정 페이지로 이동')} />
+            <Pencil
+              className="w-4 h-4 gap-1 text-success-200 cursor-pointer"
+              onClick={() =>
+                console.log('중고 수정 페이지로 이동')}
+            />
             </div>
           </div>
           <div className="font-kbogothicmedium py-4">{post.title}</div>
@@ -118,21 +137,19 @@ const CommuTradeDetail = () => {
             {/* <EmblaCarousel slides={slides} /> */}
             <img src={post.imageUrl} alt="게시글 이미지" className="py-4" />
           </div>
-          <div className="py-4">
-            {post.content}
-          </div>
+          <div className="py-4">{post.content}</div>
           <div className="flex justify-end gap-1 items-center mb-2">
             <View className="w-4 h-4" />
             <div className="text-xs">{post.viewCount}명이 봤어요.</div>
           </div>
           <div className="flex justify-end gap-1 items-center mb-2">
             <div className="flex border border-gray-300 px-2 rounded-lg items-center gap-1 hover:cursor-pointer">
-              {good? (<Like className="w-4 h-4 text-gray-200" onClick={() => postGood(numericId)} />) :
-              (<Like
-                className="w-4 h-4 text-[#FF5168]"
-                onClick={() => postGood(numericId)}
-              />)}{" "}
-              {post.likeCount}
+              {good ? (
+                <Like className="w-4 h-4 text-gray-200" onClick={() => postGood(numericId)} />
+              ) : (
+                <Like className="w-4 h-4 text-[#FF5168]" onClick={() => postGood(numericId)} />
+              )}{" "}
+              {goodCount}
             </div>
           </div>
           <div className="border-b-2 text-gray-100 mb-2"></div>
@@ -140,22 +157,22 @@ const CommuTradeDetail = () => {
         </section>
       )}
 
-      {comments && comments.length > 0 && comments.map((comment, index) => (
-        <section key={index} className="font-kbogothiclight">
-          <div className="flex justify-between items-center">
-            <div className="flex items-center">
-              <div className="mr-2">유저사진</div>
-              <div>
-                <div className="font-kbogothicmedium">{comment.userName}</div>
-                <div className="text-sm text-gray-300">{comment.createdAt.substring(0, 10)}</div>
+      {comments &&
+        comments.length > 0 &&
+        comments.map((comment, index) => (
+          <section key={index} className="font-kbogothiclight">
+            <div className="flex justify-between items-center">
+              <div className="flex items-center">
+                <div className="mr-2">유저사진</div>
+                <div>
+                  <div className="font-kbogothicmedium">{comment.userName}</div>
+                  <div className="text-sm text-gray-300">{comment.createdAt.substring(0, 10)}</div>
+                </div>
               </div>
             </div>
-          </div>
-          <div className="py-2 ml-16">
-            {comment.content}
-          </div>
-        </section>
-      ))}
+            <div className="py-2 ml-16">{comment.content}</div>
+          </section>
+        ))}
       <ChatInput boardId={numericId} onPostComment={handlePostComment} />
     </>
   );

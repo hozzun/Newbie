@@ -10,12 +10,13 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { decrementDate, incrementDate } from "../../redux/gameSlice";
 import { RootState } from "../../redux/store";
+import { getKoreanDate } from "../../util/getKoreanDate";
 
 const GameSchedule = () => {
   const dispatch = useDispatch();
 
-  const currentDateISOString = useSelector((state: RootState) => state.game.currentDate);
-  const currentDate = new Date(currentDateISOString);
+  const currentDateWithoutTime = useSelector((state: RootState) => state.game.currentDate);
+  const currentDate = new Date(currentDateWithoutTime);
 
   const prevDateRef = useRef<Date | null>(null);
 
@@ -23,8 +24,7 @@ const GameSchedule = () => {
   const [games, setGames] = useState<Array<GameProps> | null>(null);
 
   const fetchGames = async () => {
-    const todayWithoutTime = today.toISOString().split("T")[0];
-    const currentDateWithoutTime = currentDateISOString.split("T")[0];
+    const todayWithoutTime = getKoreanDate(today);
 
     try {
       // 경기 정보 가져오기
@@ -181,7 +181,7 @@ const GameSchedule = () => {
 
   return (
     <GameScheduleComponent
-      day={currentDate.toISOString().split("T")[0]}
+      day={getKoreanDate(currentDate)}
       games={games}
       goPreviousDay={goPreviousDay}
       goNextDay={goNextDay}
