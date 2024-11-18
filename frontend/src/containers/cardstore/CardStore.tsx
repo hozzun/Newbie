@@ -28,10 +28,12 @@ const CardStore = () => {
   const dispatch = useDispatch();
 
   const cardStoreListItem = useSelector((state: RootState) => state.cardStore.cardStoreListItem);
-  const { team } = useSelector((state: RootState) => state.team);
+  const { cheeringClub } = useSelector((state: RootState) => state.team);
 
   const [selectedClubOption, setSelectedClubOption] = useState<string>(
-    cardStoreListItem.club === "" ? getClubIdByNum(team !== 0 ? team : 1) : cardStoreListItem.club,
+    cardStoreListItem.club === ""
+      ? getClubIdByNum(cheeringClub ? (cheeringClub > 0 ? cheeringClub : 1) : 1)
+      : cardStoreListItem.club,
   );
   const [selectedPositionOption, setSelectedPositionOption] = useState<string>(
     cardStoreListItem.position,
