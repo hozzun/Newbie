@@ -24,7 +24,7 @@ public class PlayerLikeController {
     @PostMapping("/{playerId}")
     public ResponseEntity<String> likePlayer(
             @Parameter(description = "선수 ID", example = "1") @PathVariable Integer playerId,
-            @RequestHeader(value = "X-Member-ID", required = false) String userId) {
+            @RequestHeader("X-Member-ID") String userId) {
         if (userId == null) {
             throw new MissingHeaderException();
         }
@@ -36,7 +36,7 @@ public class PlayerLikeController {
     @Operation(summary = "자신이 해당 선수 좋아요하고 있는지 여부")
     @GetMapping("/{playerId}")
     public ResponseEntity<LikePlayerResponseDto> getLikedPlayer(@PathVariable Integer playerId,
-                                                                @RequestHeader(value = "X-Member-ID", required = false) String userId) {
+                                                                @RequestHeader("X-Member-ID") String userId) {
         if (userId == null) {
             throw new MissingHeaderException();
         }
@@ -46,7 +46,7 @@ public class PlayerLikeController {
 
     @Operation(summary = "현재 자신이 좋아요 중인 선수들 목록")
     @GetMapping
-    public ResponseEntity<List<LikePlayerResponseDto>> getLikedPlayersByMember(@Parameter(hidden = true) @RequestHeader(value = "X-Member-ID", required = false) String userId) {
+    public ResponseEntity<List<LikePlayerResponseDto>> getLikedPlayersByMember(@RequestHeader("X-Member-ID") String userId) {
         if (userId == null) {
             throw new MissingHeaderException();
         }
