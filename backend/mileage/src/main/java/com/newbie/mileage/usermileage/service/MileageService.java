@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 
 import javax.management.Query;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Optional;
 
@@ -51,11 +53,13 @@ public class MileageService {
 
         log.info("Received mileage addition request: userId={}, amount={}, reason={}", userId, amount, reason);
 
+        String createdAt = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
         UserMileage latestMileage = userMileageRepository.findFirstByUserIdOrderByIdDesc(userId)
                 .orElse(UserMileage.builder()
                         .userId(userId)
                         .mileage(0)
-                        .createdAt(String.valueOf(System.currentTimeMillis()))
+                        .createdAt(createdAt)
                         .build());
 
         UserMileage updatedMileage = UserMileage.builder()
@@ -63,7 +67,7 @@ public class MileageService {
                 .mileage(latestMileage.getMileage() + amount)
                 .change(amount)
                 .reason(reason)
-                .createdAt(String.valueOf(System.currentTimeMillis()))
+                .createdAt(createdAt)
                 .build();
 
         userMileageRepository.save(updatedMileage);
@@ -85,12 +89,12 @@ public class MileageService {
             throw new CustomException(ErrorCode.INSUFFICIENT_MILEAGE);
         }
 
-        String formattedDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+        String createdAt = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
         UserMileage updatedMileage = UserMileage.builder()
                 .userId(userId)
                 .mileage(latestMileage.getMileage() - amount)
-                .createdAt(formattedDate)
+                .createdAt(createdAt)
                 .change(-amount)
                 .reason(mileageDeductionDto.getReason())
                 .build();
