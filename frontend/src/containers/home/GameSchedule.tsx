@@ -70,11 +70,11 @@ const GameSchedule = () => {
         setGames(gameDatas);
       } else if (currentDateWithoutTime == todayWithoutTime) {
         // 오늘 경기 정보
-        const gameInfoDatas: Array<GameInfo> = response.data.map(d => {
+        const gameDatas: Array<GameProps> = response.data.map(d => {
           const homeClubId = getClubIdByNum(d.homeTeamId);
           const awayClubId = getClubIdByNum(d.awayTeamId);
 
-          return {
+          const gameInfo: GameInfo = {
             id: d.id,
             day: d.date,
             time: d.time,
@@ -90,37 +90,30 @@ const GameSchedule = () => {
               },
             ],
           };
+          const gameSituation: GameSituation = {
+            isPlaying: true,
+            scores: {
+              [homeClubId]: d.homeScore,
+              [awayClubId]: d.awayScore,
+            },
+          };
+
+          return {
+            gameInfo,
+            gameSituation,
+          };
         });
 
         // 구장 기준 날씨 정보 가져오기
-        for (const gameInfoData of gameInfoDatas) {
+        for (const gameInfoData of gameDatas) {
           const getWeatherRequest: GetWeatherRequest = {
-            nx: Stadiums[gameInfoData.place].longitude,
-            ny: Stadiums[gameInfoData.place].latitude,
+            nx: Stadiums[gameInfoData.gameInfo.place].longitude,
+            ny: Stadiums[gameInfoData.gameInfo.place].latitude,
           };
           const responseAboutWeather = await getWeather(getWeatherRequest);
           const items = responseAboutWeather.data.response.body.items.item;
-          gameInfoData.weather = calculateWeather(items);
+          gameInfoData.gameInfo.weather = calculateWeather(items);
         }
-
-        // TODO: GET - 경기 진행 상황
-        const gameSituationDatas: Array<GameSituation> = gameInfoDatas.map(gameInfoData => {
-          const homeClubId = gameInfoData.clubs[0].id;
-          const awayClubId = gameInfoData.clubs[1].id;
-
-          return {
-            isPlaying: true,
-            scores: {
-              [homeClubId]: 2,
-              [awayClubId]: 1,
-            },
-          };
-        });
-
-        const gameDatas = gameInfoDatas.map((gameInfoData, index) => ({
-          gameInfo: gameInfoData,
-          gameSituation: gameSituationDatas[index],
-        }));
 
         setGames(gameDatas);
       } else {
