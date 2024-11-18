@@ -39,7 +39,7 @@ const TeamChatRoomContainer: React.FC<TeamChatRoomContainerProps> = ({ setPartic
     const socket = new SockJS(`${axiosInstance.defaults.baseURL}/api/v1/chat/ws/chat`);
     const stomp = Stomp.over(socket);
 
-    const authorization = sessionStorage.getItem("authorization") || "";
+    const authorization = sessionStorage.getItem("access_token") || "";
 
     stomp.connect(
       { Authorization: `Bearer ${authorization}` },
