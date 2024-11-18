@@ -33,14 +33,18 @@ const BaseballDict = () => {
       setIsLoading(true);
       setError(null);
 
-      const { data: fetchedRoomId } = await axiosInstance.post("/api-chatbot/create-room", null, {
-        params: { userId },
-      });
+      const { data: fetchedRoomId } = await axiosInstance.post(
+        "/api/v1/chatbot/create-room",
+        null,
+        {
+          params: { userId },
+        },
+      );
 
       setRoomId(fetchedRoomId);
 
       const { data: chatHistory } = await axiosInstance.get(
-        `/api-chatbot/chatbot/${userId}/history`,
+        `/api/v1/chatbot/chatbot/${userId}/history`,
       );
       setMessages(chatHistory);
     } catch (error) {
@@ -79,7 +83,7 @@ const BaseballDict = () => {
   useEffect(() => {
     if (roomId) {
       const client = new Client({
-        webSocketFactory: () => new SockJS(`${axiosInstance.defaults.baseURL}/api-chatbot/ws`),
+        webSocketFactory: () => new SockJS(`${axiosInstance.defaults.baseURL}/api/v1/chatbot/ws`),
         onConnect: () => {
           setConnected(true);
           setError(null);
