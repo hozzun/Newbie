@@ -1,5 +1,6 @@
 package com.newbie.board.generalBoard.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.newbie.board.generalBoard.dto.GeneralBoardRequestDto;
 import com.newbie.board.generalBoard.dto.GeneralBoardResponseDto;
 import com.newbie.board.generalBoard.dto.GeneralBoardUpdateRequestDto;
@@ -8,6 +9,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,13 +26,18 @@ public class GeneralBoardController {
     private final GeneralBoardService generalBoardService;
 
     @Operation(summary = "유저 게시글 생성", description = "유저가 게시글을 생성합니다.")
-    @PostMapping("/create")
+    @PostMapping(value = "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<GeneralBoardResponseDto> createGeneralBoard(
-            @ModelAttribute @Parameter(description = "title, content, tags") GeneralBoardRequestDto generalBoardDto,
+            @RequestPart("generalBoard") @Parameter(description = "title, content, tags") String generalBoardJson,
             @RequestPart(value = "imageFile", required = false) MultipartFile imageFile,
             @RequestHeader("X-Member-ID") String userId,
             @RequestHeader("X-Nickname") String nickName) throws IOException {
-        return ResponseEntity.status(HttpStatus.CREATED).body(generalBoardService.createGeneralBoard(generalBoardDto, imageFile, userId, nickName));
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        GeneralBoardRequestDto generalBoardDto = objectMapper.readValue(generalBoardJson, GeneralBoardRequestDto.class);
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(generalBoardService.createGeneralBoard(generalBoardDto, imageFile, userId, nickName));
     }
 
     @Operation(summary = "유저 게시글 전체 조회", description = "유저가 모든 게시글을 조회합니다.")
