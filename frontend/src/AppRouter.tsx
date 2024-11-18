@@ -38,7 +38,6 @@ import CommuTradeDetail from "./pages/commu/CommuTradeDetail";
 import CommuFreeDetail from "./pages/commu/CommuFreeDetail";
 import TeamChat from "./pages/teamchat/TeamChat";
 import TeamChatRoom from "./pages/teamchat/TeamChatRoom";
-import CommuFreeRevise from "./pages/commu/CommuFreeRevise";
 
 // 로그인 하지 않은 사용자는 로그인으로
 function ProtectedRoute({ children }: { children: JSX.Element }) {
@@ -311,14 +310,6 @@ const AppRouter = () => {
           element={
             <ProtectedRoute>
               <CommuTradeDetail />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/commuhome/freedetail/:id/revise"
-          element={
-            <ProtectedRoute>
-              <CommuFreeRevise />
             </ProtectedRoute>
           }
         />
