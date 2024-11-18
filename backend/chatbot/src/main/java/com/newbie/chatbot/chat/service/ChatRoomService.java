@@ -29,7 +29,7 @@ public class ChatRoomService {
         return roomId;
     }
 
-    // 채팅 메시지 저장
+    // 질문과 응답을 모두 저장
     public void saveMessage(String roomId, ChatRequestDto message) {
         if (message.getTimestamp() == 0) {
             message.setTimestamp(System.currentTimeMillis()); // 현재 시간 추가
