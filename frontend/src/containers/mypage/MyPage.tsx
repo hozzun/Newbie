@@ -98,7 +98,7 @@ const MyPage = () => {
   const getFavoriteTeam = async () => {
 
     try {
-      const response = await axiosInstance.get("/api/v1/users/favorite-team");
+      const response = await axiosInstance.get("/api/v1/user/users/favorite-team");
       setTeam(response.data)
     } catch (error) {
       console.error("나의 응원 구단 데이터를 불러오는 중 오류 발생", error);
