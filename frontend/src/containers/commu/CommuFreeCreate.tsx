@@ -85,38 +85,45 @@ const CommuFreeCreate = () => {
 
   // api 호출 및 데이터 제출
   const handleSubmit = async () => {
-    const params = { userId: 5 };
     if (titleValue && text) {
       try {
         const formData = new FormData();
+        // generalBoardDto 데이터 추가
         formData.append(
-          "generalBoardDto",
+          "generalBoard",
           JSON.stringify({
-            userId: 1, // 실제로는 로그인된 사용자 ID를 사용
-            userName: "사용자", // 실제로는 로그인된 사용자 이름을 사용
             title: titleValue,
             content: text,
             tags: tags,
           }),
         );
 
+        // 이미지 파일 추가
         if (image) {
           formData.append("imageFile", image);
-          console.log(formData.get("imageFile"));
-          console.log(formData.get("generalBoardDto"));
+          console.log('이미지 파일', image)
+          console.log("Uploaded Image File:", formData.get("imageFile"));
         }
+  
+        console.log("Form Data to Send:", formData.get("generalBoardDto"));
 
-        const response = await postGeneralBoard(formData, params);
-        console.log(response);
+  
+        // 서버 요청
+        const response = await postGeneralBoard(formData);
+        console.log("Server Response:", response);
+  
         if (response.data) {
           nav(`/commuhome/freedetail/${response.data.id}`);
         }
       } catch (error) {
         setErrorMessage("게시글 작성에 실패했어요");
-        console.error(error);
+        console.error("Request Error:", error);
       }
+    } else {
+      setErrorMessage("제목과 내용을 모두 입력해주세요.");
     }
   };
+  
 
   return (
     <div>

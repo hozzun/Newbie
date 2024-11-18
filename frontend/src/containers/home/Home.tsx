@@ -18,11 +18,12 @@ import { GetWeatherRequest, getWeather } from "../../api/weatherApi";
 import Stadiums from "../../util/Stadiums";
 import { calculateWeather } from "../../util/Weather";
 import axios from "axios";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { clearCardStoreListItem, setPhotoCardInfo } from "../../redux/cardStoreSlice";
 import { getLatestMyPhotoCard, getTopSellingCards } from "../../api/cardStoreApi";
 import { PhotoCardInfo } from "../cardstore/CardStore";
 import { getLatestAttendedGame } from "../../api/userApi";
+import { RootState } from "../../redux/store";
 
 export interface ClubProps {
   id: string;
@@ -59,6 +60,7 @@ export interface ClubRankItemProps {
   loseCount: number;
   gameDifference: number;
   rankDifference: number;
+  goDetail: () => void;
 }
 
 const getRamdomItems = <T,>(arr: Array<T>, count: number): Array<T> => {
@@ -78,6 +80,8 @@ const Home = () => {
 
   const today = new Date();
 
+  const { team } = useSelector((state: RootState) => state.team);
+
   const [hasCheeringClub, setHasCheeringClub] = useState<boolean>(false);
   const [todayGame, setTodayGame] = useState<GameProps | null>(null);
   const [photoCardImage, setPhotoCardImage] = useState<string | null>(null);
@@ -88,17 +92,15 @@ const Home = () => {
 
   const fetchTodayGame = async () => {
     try {
-      // TODO: GET - 응원 구단 여부
-      const hasCheeringClubData: boolean = true;
+      const hasCheeringClubData: boolean = team !== 0;
       setHasCheeringClub(hasCheeringClubData);
 
       if (hasCheeringClubData) {
-        // TODO: GET - 응원 구단에 맞는 오늘의 경기
         const getGamesRequest: GetGamesRequest = {
           year: today.getFullYear().toString(),
           month: (today.getMonth() + 1).toString().padStart(2, "0"),
           day: today.getDate().toString().padStart(2, "0"),
-          teamId: 1, // TODO: 나의 응원 구단 ID 구하기
+          teamId: team,
         };
         const responseAbotGetGames = await getGames(getGamesRequest);
         const homeClubId = getClubIdByNum(responseAbotGetGames.data[0].homeTeamId);
@@ -186,6 +188,7 @@ const Home = () => {
         loseCount: d.loseCount,
         gameDifference: Number(d.gameDiff),
         rankDifference: d.rankChange,
+        goDetail: () => nav(`/club/${getClubIdByNum(d.teamId)}`),
       }));
 
       setClubRanks(clubRanksData);

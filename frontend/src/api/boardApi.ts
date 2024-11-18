@@ -19,13 +19,32 @@ export interface GetGeneralBoardResponse {
   viewCount: number;
 }
 
+export interface GetGeneralComment {
+  id: number;
+  userName: string;
+  content: string;
+  imageUrl: string;
+  createdAt: string;
+  replies: string[];
+}
+
 export const getGeneralBoard = () => {
-  return axios.get<GetGeneralBoardResponse[]>("/api-board/general-board");
+  return axios.get<GetGeneralBoardResponse[]>("/api/v1/general-board");
+};
+
+export const getGeneralBoardDetail = async (id: number) => {
+  return axios.get<GetGeneralBoardResponse>(`/api/v1/general-board/${id}`, {
+    params: { id: id },
+  });
+};
+
+export const getGeneralComment = async (boardId: number) => {
+  return axios.get<GetGeneralComment[]>(`/api/v1/general-comment/${boardId}`, {
+    params: { boardId: boardId },
+  });
 };
 
 export interface PostGeneralBoardRequest {
-  userId: number;
-  userName: string;
   title: string;
   content: string;
   tags: string[];
@@ -47,12 +66,21 @@ export interface PostGeneralBoardResponse {
   viewCount: number;
 }
 
-export const postGeneralBoard = async (data: FormData, params: { userId: number }) => {
-  return axios.post<PostGeneralBoardResponse>("/api-board/general-board/create", data, { params });
+export const postGeneralBoard = async (data: FormData) => {
+  return axios.post<PostGeneralBoardResponse>(
+    "/api/v1/general-board/create",
+    data,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }
+  );
 };
 
+
 export const getUserProfile = () => {
-  return axios.get("/api-user/users/userId"); // userId 수정필요
+  return axios.get("/api/v1/users"); // userId 수정필요
 };
 //---------------------------------------------------------------------
 
@@ -74,7 +102,7 @@ export interface GetUsedBoardResponse {
 }
 
 export const getUsedBoard = () => {
-  return axios.get<GetUsedBoardResponse[]>("/api-board/used-board");
+  return axios.get<GetUsedBoardResponse[]>("/api/v1/used-board");
 };
 
 export interface UsedBoardDto {
@@ -105,7 +133,7 @@ export interface UsedBoardResponse {
 
 export const createUsedBoard = async (formData: FormData): Promise<UsedBoardResponse> => {
   try {
-    const response = await axios.post<UsedBoardResponse>("/used-board/create", formData, {
+    const response = await axios.post<UsedBoardResponse>("/api/v1/used-board/create", formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
