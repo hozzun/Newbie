@@ -47,7 +47,7 @@ const MyScrap = () => {
     <>
       {scraps.length > 0 ? (
         scraps.map((scrap, index) => (
-          <div key={scrap.id} onClick={() => goScrap(scrap)}>
+          <div key={scrap.id} onClick={() => goScrap(scrap)} className="hover:cursor-pointer">
             <CommuFreeItem
               title={scrap.boardTitle}
               contents={scrap.content}

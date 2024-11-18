@@ -56,7 +56,7 @@ const MyBoard = () => {
     <>
       {posts.length > 0 ? (
         posts.map((post, index) => (
-          <div key={post.id} onClick={() => goPost(post)}>
+          <div key={post.id} onClick={() => goPost(post)} className="hover:cursor-pointer">
             <CommuFreeItem
               title={post.title}
               contents={post.content}

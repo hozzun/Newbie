@@ -89,6 +89,7 @@ const MyActive = () => {
             <div
               key={activity.boardId}
               onClick={() => nav(`/commuhome/freedetail/${activity.boardId}`)}
+              className="hover:cursor-pointer"
             >
               <MyActiveLike
                 time={activity.createdAt}
@@ -100,6 +101,7 @@ const MyActive = () => {
             <div
               key={activity.boardId}
               onClick={() => nav(`/commuhome/freedetail/${activity.boardId}`)}
+              className="hover:cursor-pointer"
             >
               <MyActiveComment
                 time={activity.createdAt}
