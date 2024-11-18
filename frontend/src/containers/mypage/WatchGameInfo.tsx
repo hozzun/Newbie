@@ -59,7 +59,7 @@ const WatchGameInfo = () => {
         <p className="font-kbogothicbold text-gray-600 mb-3"> 나의 직관 경기</p>
       </div>
       <div className="grid grid-cols-2 justify-center items-center gap-7">
-        {watchGames.map(game => (
+        {watchGames.length > 0 && watchGames.map(game => (
           <WatchCard
             key={game.id}
             date={game.date}
