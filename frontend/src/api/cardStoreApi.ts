@@ -59,3 +59,14 @@ export interface GetTopSellingCardsResponse {
 }
 
 export const getTopSellingCards = () => axios.get<Array<GetTopSellingCardsResponse>>("/api/v1/cardstore/cards/top-sales");
+
+// 카드 구매
+export interface GetBuyPhotoCardRequest {
+  cardId: string;
+}
+
+export const getBuyPhotoCard = (request: GetBuyPhotoCardRequest) => axios.get("api/v1/cardstore/purchase", {
+  params: {
+    cardId: request.cardId
+  }
+})
