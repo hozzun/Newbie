@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Like from "../../assets/icons/heart-solid.svg?react";
-import Comment from "../../assets/icons/comment-solid.svg?react";
 import View from "../../assets/icons/eye-solid.svg?react";
 import Scrap from "../../assets/icons/bookmark-solid.svg?react";
 import { getGeneralBoardDetail, GetGeneralBoardResponse } from "../../api/boardApi";
@@ -130,12 +129,6 @@ const CommuFreeDetail = () => {
               </div>
             </div>
             <div className="py-2 ml-16">{comment.content}</div>
-            <div className="flex justify-between items-center ml-16">
-              <div className="flex items-center">
-                <Comment className="w-4 h-4 text-[#7FAAFF] mr-2" />
-                <div className="mb-3 hover:cursor-pointer">답글 쓰기</div>
-              </div>
-            </div>
           </section>
         ))}
         <ChatInput boardId={numericId} onPostComment={handlePostComment} />

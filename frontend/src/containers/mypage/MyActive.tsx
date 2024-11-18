@@ -2,14 +2,13 @@ import { useState, useEffect } from "react";
 import axiosInstance from "../../util/axiosInstance";
 import MyActiveLike from "../../components/mypage/MyActiveLike";
 import MyActiveComment from "../../components/mypage/MyActiveComment";
-import { useNavigate } from "react-router-dom";
 
 interface LikeData {
   type: "like";
   boardId: number;
   activityId: number;
   createdAt: string;
-  title: string;
+  content: string;
   onClick: () => void;
 }
 
@@ -25,7 +24,6 @@ interface CommentData {
 type ActivityData = LikeData | CommentData;
 
 const MyActive = () => {
-  const nav = useNavigate();
   const [activities, setActivities] = useState<ActivityData[]>([]);
 
   const getActivity = async () => {
@@ -58,25 +56,6 @@ const MyActive = () => {
     }
   };
 
-  const deleteActivity = async (activityId: number) => {
-
-    const params = { activityId: activityId };
-
-    try {
-      const response = await axiosInstance.delete(`/api/v1/board/user-activity/${activityId}`, {
-        params,
-      });
-      console.log(response.data);
-    } catch (error) {
-      console.error("에러 발생:", error);
-      alert("삭제 중 문제가 발생했습니다. 다시 시도해주세요.");
-    }
-  };
-
-  const deleteAct = async (activityId: number) => {
-    await deleteActivity(activityId);
-  };
-
   useEffect(() => {
     getActivity();
   }, []);
@@ -88,23 +67,23 @@ const MyActive = () => {
           activity.type === "like" ? (
             <div
               key={activity.boardId}
-              onClick={() => nav(`/commuhome/freedetail/${activity.boardId}`)}
             >
               <MyActiveLike
                 time={activity.createdAt.substring(0, 10)}
-                title={(activity as LikeData).title}
-                onClick={() => deleteAct(activity.activityId)}
+                content={(activity as LikeData).content}
+                activityId={activity.activityId}
+                boardId={activity.boardId}
               />
             </div>
           ) : (
             <div
               key={activity.boardId}
-              onClick={() => nav(`/commuhome/freedetail/${activity.boardId}`)}
             >
               <MyActiveComment
                 time={activity.createdAt.substring(0, 10)}
                 comment={(activity as CommentData).content}
-                onClick={() => deleteAct(activity.activityId)}
+                activityId={activity.activityId}
+                boardId={activity.boardId}
               />
             </div>
           ),
