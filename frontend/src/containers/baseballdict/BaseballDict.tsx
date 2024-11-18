@@ -32,9 +32,8 @@ const BaseballDict = () => {
       const { data: fetchedRoomId } = await axiosInstance.post("/api/v1/chatbot/create-room");
 
       setRoomId(fetchedRoomId);
-
       // 채팅 히스토리 가져오기
-      const { data: chatHistory } = await axiosInstance.get(`/api/v1/chatbot/chatbot/history`);
+      const { data: chatHistory } = await axiosInstance.get(`/api/v1/chatbot/history`);
 
       setMessages(chatHistory);
     } catch (error) {
@@ -66,12 +65,12 @@ const BaseballDict = () => {
     if (roomId) {
       const socket = new WebSocket(`${import.meta.env.VITE_API_SOCKET_URL}/api-chatbot/chatbot/ws`);
       const client = Stomp.over(socket);
-
       client.connect(
         () => {
           setConnected(true);
 
           client.subscribe(`/topic/chatbot/${roomId}`, message => {
+            console.log(message);
             handleWebSocketMessage(message.body);
           });
         },
