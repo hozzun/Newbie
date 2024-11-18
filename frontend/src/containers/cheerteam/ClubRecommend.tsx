@@ -28,7 +28,7 @@ const ClubRecommend = () => {
     };
   
     try {
-      const response = await axiosInstance.post("/api/v1/recommend", UserData);
+      const response = await axiosInstance.post("/api/v1/mypage/recommend", UserData);
   
       if (response.status === 200) {
         const data = response.data;

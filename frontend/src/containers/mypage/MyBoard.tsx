@@ -22,7 +22,7 @@ const MyBoard = () => {
   const getBoard = async () => {
 
     try {
-      const response = await axiosInstance.get("/api/v1/mypage/board");
+      const response = await axiosInstance.get("/api/v1/board/mypage/board");
 
       const allPosts = [
         ...response.data.generalBoards.map((post: Post) => ({ ...post, type: "general" })),
