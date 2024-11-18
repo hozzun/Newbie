@@ -88,8 +88,8 @@ const CommuFree = ({ searchQuery }: { searchQuery: string }) => {
             {index < freeBoards.length - 1 && <hr className="my-4 border-gray-200" />}
           </div>
         ))}
-        {loading && <div className="text-center py-4">로딩 중...</div>}
-        {!hasMore && <div className="text-center py-4">더 이상 게시물이 없습니다.</div>}
+        {loading && <div className="text-center py-4 font-kbogothicmedium">로딩 중...</div>}
+        {!hasMore && <div className="text-center py-4 font-kbogothicmedium">더 이상 게시물이 없습니다.</div>}
       </div>
     </>
   );
