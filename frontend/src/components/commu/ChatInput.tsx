@@ -4,7 +4,7 @@ import ArrowSmallUp from "../../assets/icons/arrow-small-up.svg?react";
 import axiosInstance from "../../util/axiosInstance";
 
 interface ChatInputProps {
-  boardId: number;
+  boardId?: number;
 }
 
 const ChatInput = ({ boardId }: ChatInputProps) => {
