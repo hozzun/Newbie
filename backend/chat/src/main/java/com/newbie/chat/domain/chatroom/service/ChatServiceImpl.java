@@ -9,10 +9,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -33,7 +30,18 @@ public class ChatServiceImpl implements ChatService {
         try {
             String key = CHAT_KEY_PREFIX + roomId;
             ListOperations<String, Object> listOps = redisTemplate.opsForList();
+
+            // 메시지 저장 (리스트에 오른쪽에 추가)
             listOps.rightPush(key, message);
+
+            // Redis에서 메시지 개수 확인
+            Long listSize = listOps.size(key);
+
+            // 100개 초과시 가장 오래된 메시지 삭제
+            if (listSize != null && listSize > 100) {
+                listOps.leftPop(key); // 왼쪽에서 가장 오래된 메시지 삭제
+            }
+
             // TTL 설정
             redisTemplate.expire(key, MESSAGE_TTL);
 
@@ -67,23 +75,19 @@ public class ChatServiceImpl implements ChatService {
 //    public List<ChatMessage> getMessages(String roomId) {
 //        String key = CHAT_KEY_PREFIX + roomId;
 //        ListOperations<String, Object> listOps = redisTemplate.opsForList();
-//        List<Object> rawMessages = listOps.range(key, 0, -1);
 //
-//        if (rawMessages == null) {
+//        // Redis에서 메시지 가져오기
+//        List<Object> rawMessages = listOps.range(key, -100, -1);
+//
+//        if (rawMessages == null || rawMessages.isEmpty()) {
 //            return Collections.emptyList();
 //        }
 //
-//        // ObjectMapper를 사용하여 Object를 ChatMessage로 변환
+//        // 메시지를 ChatMessage로 변환하고, timestamp 기준으로 정렬
 //        return rawMessages.stream()
-//                .map(obj -> {
-//                    try {
-//                        return objectMapper.convertValue(obj, ChatMessage.class);
-//                    } catch (IllegalArgumentException e) {
-//                        log.error("Failed to convert message: {}", obj, e);
-//                        return null; // 또는 원하는 기본값으로 대체
-//                    }
-//                })
+//                .map(obj -> objectMapper.convertValue(obj, ChatMessage.class))
 //                .filter(Objects::nonNull)
+//                .sorted(Comparator.comparing(ChatMessage::getTimestamp)) // 메시지 시간 순으로 정렬
 //                .collect(Collectors.toList());
 //    }
 

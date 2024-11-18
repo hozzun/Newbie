@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -123,6 +124,63 @@ public class ChatController {
         int participantCount = chatService.getParticipantCount(roomId);
         messagingTemplate.convertAndSend("/topic/chatroom/" + roomId + "/participants", participantCount);
     }
+
+    // 이전 채팅 보이는 ver
+//    @MessageMapping("/chat/{roomId}/join")
+//    public void joinRoom(@DestinationVariable String roomId, ChatMessage message, SimpMessageHeaderAccessor headerAccessor) {
+//        String sender = message.getSender();
+//
+//        // 사용자 차단 여부 확인
+//        if (reportService.isUserBanned(sender)) {
+//            log.warn("Banned user {} attempted to join the chat room.", sender);
+//
+//            // 차단 만료 시간 조회
+//            LocalDateTime banExpiry = reportService.getBanExpiry(sender);
+//
+//            // 차단 알림 메시지 생성
+//            ChatMessage banMessage = ChatMessage.builder()
+//                    .type(ChatMessage.MessageType.SYSTEM)
+//                    .sender("System")
+//                    .roomId(roomId)
+//                    .message("신고누적으로 인해 3일 동안 모든 채팅방에서 채팅이 금지되었습니다. 차단 만료 시간: " +
+//                            banExpiry.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+//                    .timestamp(LocalDateTime.now())
+//                    .build();
+//
+//            // 사용자에게 차단 메시지 전송 (개인 메시지)
+//            messagingTemplate.convertAndSend("/queue/private/" + sender, banMessage);
+//
+//            return; // 입장 거부
+//        }
+//
+//        // 사용자 참여자 목록에 추가
+//        chatService.addParticipant(roomId, sender);
+//
+//        // 세션에 사용자 정보 저장
+//        headerAccessor.getSessionAttributes().put("username", sender);
+//        headerAccessor.getSessionAttributes().put("roomId", roomId);
+//
+//        // 'JOIN' 메시지 생성
+//        ChatMessage joinMessage = ChatMessage.builder()
+//                .type(ChatMessage.MessageType.JOIN)
+//                .sender(sender)
+//                .roomId(roomId)
+//                .timestamp(LocalDateTime.now())
+//                .build();
+//
+//        // 'JOIN' 메시지를 채팅방에 전송
+//        messagingTemplate.convertAndSend("/topic/chatroom/" + roomId, joinMessage);
+//
+//        // 참여자 수 전송
+//        int participantCount = chatService.getParticipantCount(roomId);
+//        messagingTemplate.convertAndSend("/topic/chatroom/" + roomId + "/participants", participantCount);
+//
+//        // 채팅방에 입장 시 이전 메시지 로드
+//        List<ChatMessage> previousMessages = chatService.getMessages(roomId);
+//        previousMessages.forEach(msg -> {
+//            messagingTemplate.convertAndSend("/topic/chatroom/" + roomId, msg); // 이전 메시지 전송
+//        });
+//    }
 }
 //    @MessageMapping("/chat/{roomId}/leave")
 //    public void leaveRoom(@DestinationVariable String roomId, ChatMessage message, SimpMessageHeaderAccessor headerAccessor) {
