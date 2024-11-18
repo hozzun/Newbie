@@ -105,6 +105,7 @@ export interface GetUsedComment {
   userName: string;
   content: string;
   imageUrl: string;
+  profile: string;
   createdAt: string;
   replies: string[];
 }

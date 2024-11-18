@@ -94,7 +94,9 @@ const CommuTradeDetail = () => {
         <section className="font-kbogothiclight">
           <div className="flex justify-between items-center">
             <div className="flex items-center">
-              <div className="mr-2">{post.profile}</div>
+              <div className="mr-2">
+                <img src={post.profile} alt="profile" />
+              </div>
               <div>
                 <div className="font-kbogothicmedium">{post.userName}</div>
                 <div className="text-sm text-gray-300">{post.createdAt.substring(0, 10)}</div>
@@ -157,7 +159,9 @@ const CommuTradeDetail = () => {
           <section key={index} className="font-kbogothiclight">
             <div className="flex justify-between items-center">
               <div className="flex items-center">
-                <div className="mr-2">유저사진</div>
+                <div className="mr-2">
+                  <img src={comment.profile} alt="profile" />
+                </div>
                 <div>
                   <div className="font-kbogothicmedium">{comment.userName}</div>
                   <div className="text-sm text-gray-300">{comment.createdAt.substring(0, 10)}</div>

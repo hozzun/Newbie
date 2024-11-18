@@ -84,7 +84,7 @@ const CommuTrade = ({ searchQuery }: { searchQuery: string }) => {
               createTimeStamp={new Date(board.createdAt).toLocaleDateString()}
               price={board.price}
               location={board.region}
-              viewCount={board.likeCount}
+              likeCount={board.likeCount}
               commentCount={board.commentCount}
               imageUrl={board.imageUrl}
             />
