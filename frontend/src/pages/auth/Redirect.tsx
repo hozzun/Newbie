@@ -36,21 +36,12 @@ const Redirect = () => {
         let response: AxiosResponse<AuthResponse>;
 
         if (platform === "kakao" && code) {
-          response = await axiosInstance.post(`/api/v1/login/kakao/${code}`);
+          response = await axiosInstance.post(`/api/v1/auth/login/kakao/${code}`);
           // Redux store에 사용자 정보 저장
           dispatch(
             setUserInfo({
               email: response.data.email,
               platform: "kakao",
-              isAuthenticated: true,
-            }),
-          );
-        } else if (platform === "google" && accessToken) {
-          response = await axiosInstance.post<AuthResponse>(`/api/v1/login/google/${accessToken}`);
-          dispatch(
-            setUserInfo({
-              email: response.data.email,
-              platform: "google",
               isAuthenticated: true,
             }),
           );
