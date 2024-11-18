@@ -38,6 +38,7 @@ const CommuFreeDetail = () => {
     try {
       const response = await getGeneralComment(numericId);
       setComments(response.data);
+      console.log('댓글 조회', response.data)
     } catch (error) {
       console.error("Free boards loading error:", error);
     }
@@ -118,7 +119,6 @@ const CommuFreeDetail = () => {
               className="w-4 h-4 gap-1 text-success-200 cursor-pointer"
               onClick={() => {
                 nav(`/commuhome/freedetail/${numericId}/revise`, { state: { post } })
-                console.log('전달하는 정보', post)
                 }
               }
             />

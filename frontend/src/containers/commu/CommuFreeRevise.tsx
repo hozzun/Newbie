@@ -9,7 +9,6 @@ const CommuFreeRevise = () => {
   const nav = useNavigate();
   const location = useLocation();
   
-  // useLocation에서 state가 없으면 기본값을 설정
   const { id, title, imageUrl, content, tags } = location.state || { 
     id: null, 
     title: "", 
@@ -17,6 +16,8 @@ const CommuFreeRevise = () => {
     content: "", 
     tags: [] 
   };
+  const { post } = location.state || {}
+  console.log('전달받은 객체', post)
 
   const [titleValue, setTitleValue] = useState(title);
   const [tagValue, setTagValue] = useState("");
