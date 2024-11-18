@@ -104,12 +104,12 @@ const CommuFreeDetail = () => {
             <div className="flex justify-end gap-2">
               {scrap ? (
                 <Scrap
-                  className="w-4 h-4 gap-1 cursor-pointer text-[#FFA600]"
+                  className="w-4 h-4 gap-1 cursor-pointer text-[#FFA600] mr-2"
                   onClick={() => postScrap()}
                 />
               ) : (
                 <Scrap
-                  className="w-4 h-4 cursor-pointer text-gray-200"
+                  className="w-4 h-4 cursor-pointer text-gray-200 mr-2"
                   onClick={() => postScrap()}
                 />
               )}
