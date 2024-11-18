@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-// import axiosSocketInstance from "../../util/axiosSocketInstance";
-// import axiosInstance from "../../util/axiosInstance";
+import axiosInstance from "../../util/axiosInstance";
 import SockJS from "sockjs-client";
 import Stomp from "stompjs";
 import { useSelector } from "react-redux";
@@ -34,47 +33,39 @@ const TeamChatRoomContainer: React.FC<TeamChatRoomContainerProps> = ({ setPartic
   const userProfileImage = useSelector((state: RootState) => state.myInfo.profileImage);
   const nickname = useSelector((state: RootState) => state.myInfo.nickname) || "Anonymous";
 
-  const SOCKET_URL = import.meta.env.VITE_API_SOCKET_URL;
   useEffect(() => {
     if (!id) return;
-    const socket = new SockJS(`${SOCKET_URL}/api/v1/chat/ws/chat`);
+
+    const socket = new SockJS(`${axiosInstance.defaults.baseURL}/api-chat/ws/chat`);
     const stomp = Stomp.over(socket);
 
-    const authorization = sessionStorage.getItem("access_token") || "";
+    stomp.connect({}, () => {
+      setConnected(true);
+      console.log("WebSocket 연결 성공");
 
-    stomp.connect(
-      { Authorization: `Bearer ${authorization}` },
-      () => {
-        setConnected(true);
-        console.log("WebSocket 연결 성공");
+      const joinMessage = {
+        sender: nickname,
+        type: "JOIN",
+        roomId: id,
+        message: `${nickname}님이 입장하셨습니다.`,
+        timestamp: new Date().toISOString(),
+        profileImageUrl: "/path/to/profile.jpg",
+      };
 
-        const joinMessage = {
-          sender: nickname,
-          type: "JOIN",
-          roomId: id,
-          message: `${nickname}님이 입장하셨습니다.`,
-          timestamp: new Date().toISOString(),
-          profileImageUrl: "/path/to/profile.jpg",
-        };
+      stomp.send(`/app/chat/${id}/join`, {}, JSON.stringify(joinMessage));
 
-        stomp.send(`/app/chat/${id}/join`, {}, JSON.stringify(joinMessage));
+      stomp.subscribe(`/topic/chatroom/${id}`, message => {
+        const newMessage = JSON.parse(message.body);
+        setMessages(prev => [...prev, newMessage]);
+      });
 
-        stomp.subscribe(`/topic/chatroom/${id}`, message => {
-          const newMessage = JSON.parse(message.body);
-          setMessages(prev => [...prev, newMessage]);
-        });
+      stomp.subscribe(`/topic/chatroom/${id}/participants`, message => {
+        const count = parseInt(message.body, 10);
+        setParticipantCount(count);
+      });
 
-        stomp.subscribe(`/topic/chatroom/${id}/participants`, message => {
-          const count = parseInt(message.body, 10);
-          setParticipantCount(count);
-        });
-
-        setStompClient(stomp);
-      },
-      error => {
-        console.error("WebSocket 연결 실패:", error);
-      },
-    );
+      setStompClient(stomp);
+    });
 
     return () => {
       if (stompClient) {
