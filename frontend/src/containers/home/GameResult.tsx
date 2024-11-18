@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import GameResultComponent from "../../components/home/GameResult";
-import { GetGameResultRequest, getGameResult } from "../../api/baseballApi";
+import { GetGameResultRequest, getGameById, getGameResult } from "../../api/baseballApi";
 import { useParams } from "react-router-dom";
 import CustomError from "../../util/CustomError";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { getClubIdByNum } from "../../util/ClubId";
+import { GameProps } from "./Home";
 
 export enum SCORE_INITIAL {
   run = "R",
@@ -69,6 +70,7 @@ const GameResult = () => {
 
   const { id } = useParams<{ id: string }>();
 
+  const [newGame, setNewGame] = useState<GameProps | null>(null);
   const [gameResult, setGameResult] = useState<GameResultData | null>(null);
 
   const fetchGameResult = async () => {
@@ -114,11 +116,56 @@ const GameResult = () => {
     }
   };
 
+  const fetchGame = async () => {
+    try {
+      if (!id) {
+        throw new CustomError("[ERROR] 경기 ID 없음 by game result");
+      }
+
+      const response = await getGameById(parseInt(id));
+      const homeClubId = getClubIdByNum(response.data.homeTeamId);
+      const awayClubId = getClubIdByNum(response.data.awayTeamId);
+      const gameData: GameProps = {
+        gameInfo: {
+          id: response.data.id,
+          day: response.data.date,
+          time: response.data.time,
+          place: response.data.stadium,
+          clubs: [
+            {
+              id: homeClubId,
+              player: response.data.homeStartingPitcher,
+            },
+            {
+              id: awayClubId,
+              player: response.data.awayStartingPitcher,
+            },
+          ],
+        },
+        gameSituation: {
+          isPlaying: false,
+          scores: {
+            [homeClubId]: response.data.homeScore,
+            [awayClubId]: response.data.awayScore,
+          },
+        },
+      };
+
+      setNewGame(gameData);
+    } catch (e) {}
+  };
+
   useEffect(() => {
     fetchGameResult();
   }, []);
 
-  return <GameResultComponent game={game} gameResult={gameResult} />;
+  useEffect(() => {
+    if (!game) {
+      fetchGame();
+    }
+  }, [game]);
+
+  return <GameResultComponent game={game ? game : newGame} gameResult={gameResult} />;
 };
 
 export default GameResult;
