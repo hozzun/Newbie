@@ -1,10 +1,25 @@
 import CircleButton, { CircleButtonItem } from "../common/CircleButton";
 import { CIRCLE_BUTTON_VARIANTS } from "../common/variants";
 import ArrowSmallUp from "../../assets/icons/arrow-small-up.svg?react";
+import axiosInstance from "../../util/axiosInstance";
 
-const ChatInput = () => {
+interface ChatInputProps {
+  boardId: number;
+}
+
+const ChatInput = ({ boardId }: ChatInputProps) => {
   const buttonItem: CircleButtonItem = {
     img: ArrowSmallUp,
+  };
+
+  const postComment = async () => {
+
+    try {
+      const response = await axiosInstance.post(`/api/v1/board/general-comment/${boardId}`);
+      console.log('댓글', response.data)
+    } catch (error) {
+      console.error("에러 발생:", error);
+    }
   };
 
   return (
@@ -23,6 +38,7 @@ const ChatInput = () => {
           className="ml-3 w-10 h-10"
           variant={CIRCLE_BUTTON_VARIANTS.primarySolid}
           item={buttonItem}
+          onClick={() => postComment()}
         />
       </div>
     </div>
