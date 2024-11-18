@@ -20,7 +20,7 @@ const initialState: MyInfoState = {
 export const fetchMyInfo = createAsyncThunk(
   'myInfo/fetchMyInfo',
   async () => {
-    const response = await axiosInstance.get('/api/v1/users');
+    const response = await axiosInstance.get('/api/v1/user/users');
     return response.data;
   }
 );
