@@ -34,7 +34,7 @@ public class GeneralBoardCommentService {
     @Value("${user.server.domain}")
     private String userServerDomain;
 
-    @Value("${server.port}")
+    @Value("${server.path}")
     private String userPort;
 
     /**
