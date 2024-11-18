@@ -65,7 +65,7 @@ const PhotoCard = () => {
 
   return (
     <>
-      <ClubEmblaCarousel selectedItem={clubName || getIdByNum(cheeringClub) || ""} handleClickItem={handleClubChange} />
+      {cheeringClub && <ClubEmblaCarousel selectedItem={clubName ?? getIdByNum(cheeringClub) ?? ""} handleClickItem={handleClubChange} />}
       <div className="m-5">
         <TabBar
           options={tabBarOptions}
