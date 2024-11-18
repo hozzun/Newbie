@@ -110,7 +110,7 @@ const BaseballDict = () => {
 
   useEffect(() => {
     if (roomId && userEmail) {
-      const socket = new SockJS(`${axiosInstance.defaults.baseURL}/api/v1/chatbot/ws`);
+      const socket = new SockJS(`${import.meta.env.VITE_API_SOCKET_URL}/api-chatbot/chatbot/ws`);
       const client = Stomp.over(socket);
 
       client.connect(
