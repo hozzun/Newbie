@@ -46,7 +46,9 @@ const MyPage = () => {
   useEffect(() => {
     dispatch(fetchMyInfo());
     getFavoriteTeam()
-    getGameInfo();
+    setTimeout(() => {
+      getGameInfo();
+    }, 1000)
   }, []);
 
   const nav = useNavigate();
