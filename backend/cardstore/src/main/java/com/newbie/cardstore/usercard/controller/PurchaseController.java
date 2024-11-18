@@ -23,7 +23,7 @@ public class PurchaseController {
      * @return 구입 완료 시 ok, 마일리지가 부족 시 mileage 부족, 그 외 500
      */
     @PostMapping
-    public ResponseEntity<?> purchaseCard(@RequestBody String cardId, @RequestHeader("X-Member-ID") String userId) {
+    public ResponseEntity<?> purchaseCard(@RequestParam String cardId, @RequestHeader("X-Member-ID") String userId) {
         try {
             purchaseService.purchaseCard(cardId, userId);
             return ResponseEntity.ok(HttpStatus.OK);
