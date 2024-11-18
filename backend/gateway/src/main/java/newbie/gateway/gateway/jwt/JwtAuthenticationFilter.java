@@ -142,7 +142,7 @@ public class JwtAuthenticationFilter implements WebFilter {
     private boolean isAllowedPath(String path) {
         // 인증이 필요 없는 경로 정의
         return path.startsWith("/api/v1/auth/login") ||
-                path.startsWith("/api/v1/auth/signup");
+                path.startsWith("/api/v1/auth/members/signup");
     }
 
     private Mono<Void> onError(ServerWebExchange exchange, CustomException exception) {
