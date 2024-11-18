@@ -58,7 +58,7 @@ const CameraCapture = () => {
     formData.append("image", file);
 
     try {
-      const response = await axiosInstance.post("/api/v1/ticket/naverOcr", formData, {
+      const response = await axiosInstance.post("/api/v1/mypage/ticket/naverOcr", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

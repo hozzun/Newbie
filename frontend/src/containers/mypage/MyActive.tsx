@@ -63,7 +63,7 @@ const MyActive = () => {
     const params = { activityId: activityId };
 
     try {
-      const response = await axiosInstance.delete(`/api/v1/user-activity/${activityId}`, {
+      const response = await axiosInstance.delete(`/api/v1/board/user-activity/${activityId}`, {
         params,
       });
       console.log(response.data);

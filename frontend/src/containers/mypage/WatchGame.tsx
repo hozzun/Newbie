@@ -71,7 +71,7 @@ const WatchGame = () => {
     };
 
     try {
-      const response = await axiosInstance.get<GameData[]>("/api/v1/games", { params });
+      const response = await axiosInstance.get<GameData[]>("/api/v1/baseball/games", { params });
       if (response.data && response.data.length > 0) {
         setGameData(response.data[0]);
       }
@@ -84,7 +84,7 @@ const WatchGame = () => {
   const getInfoAPI = async () => {
     const params = { id: id };
     try {
-      const response = await axiosInstance.get<TicketInfoData>("/api/v1/ticket", { params });
+      const response = await axiosInstance.get<TicketInfoData>("/api/v1/mypage/ticket", { params });
       setTicketInfo(response.data);
       setWrite(response.data.text);
     } catch (error) {
@@ -96,7 +96,7 @@ const WatchGame = () => {
   const deleteGameAPI = async () => {
     const params = { id: id };
     try {
-      const response = await axiosInstance.delete("/api/v1/ticket/delete", { params });
+      const response = await axiosInstance.delete("/api/v1/mypage/ticket/delete", { params });
       console.log(response.data);
       return response.data;
     } catch (error) {
