@@ -3,8 +3,8 @@ import SearchIcon from "../../assets/icons/search.svg?react";
 export interface CommuHomeProps {
   selectedTab: "free" | "trade";
   onTabClick: (tab: "free" | "trade") => void;
-  selectedSearch: "title" | "writer" | "tag";
-  onSearchClick: (search: "title" | "writer" | "tag") => void;
+  selectedSearch: "title" | "writer" | "tags";
+  onSearchClick: (search: "title" | "writer" | "tags") => void;
 }
 
 const CommuHome = ({
@@ -49,9 +49,9 @@ const CommuHome = ({
           작성자
         </button>
         <button
-          onClick={() => onSearchClick("tag")}
+          onClick={() => onSearchClick("tags")}
           className={`inline-block px-2 py-1 text-sm font-kbogothiclight border border-green-900 rounded-lg ${
-            selectedSearch === "tag" ? "bg-green-900 text-white" : "text-green-900"
+            selectedSearch === "tags" ? "bg-green-900 text-white" : "text-green-900"
           }`}
         >
           태그
