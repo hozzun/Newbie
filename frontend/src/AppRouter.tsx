@@ -306,7 +306,7 @@ const AppRouter = () => {
           }
         />
         <Route
-          path="/commuhome/tradedetail"
+          path="/commuhome/tradedetail/:id"
           element={
             <ProtectedRoute>
               <CommuTradeDetail />

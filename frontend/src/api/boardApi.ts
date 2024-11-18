@@ -79,7 +79,6 @@ export const postGeneralBoard = async (data: FormData) => {
 // 중고거래 게시글 전체 조회
 export interface GetUsedBoardResponse {
   id: number;
-  userId: number;
   userName: string;
   title: string;
   content: string;
@@ -91,6 +90,16 @@ export interface GetUsedBoardResponse {
   likeCount: number;
   commentCount: number;
   scrapCount: number;
+  viewCount: number;
+}
+
+export interface GetUsedComment {
+  id: number;
+  userName: string;
+  content: string;
+  imageUrl: string;
+  createdAt: string;
+  replies: string[];
 }
 
 export const getUsedBoard = () => {
@@ -139,4 +148,16 @@ export const createUsedBoard = async (formData: FormData): Promise<UsedBoardResp
     console.error("Failed to create used board:", error);
     throw error;
   }
+};
+
+export const getUsedBoardDetail = async (id: number) => {
+  return axios.get<GetUsedBoardResponse>(`/api/v1/board/used-board/${id}`, {
+    params: { id: id },
+  });
+};
+
+export const getUsedComment = async (boardId: number) => {
+  return axios.get<GetGeneralComment[]>(`/api/v1/board/used-comment/${boardId}`, {
+    params: { boardId: boardId },
+  });
 };

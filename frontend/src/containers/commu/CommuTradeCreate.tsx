@@ -108,7 +108,6 @@ const CommuTradeCreate = () => {
 
       // 게시글 정보를 JSON으로 변환하여 추가
       const boardData = {
-        userId: 5, // 실제 사용자 ID로 교체 필요
         title: titleValue,
         content: text,
         tags: tags,
