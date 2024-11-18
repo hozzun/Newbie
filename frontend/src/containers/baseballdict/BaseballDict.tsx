@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import SockJS from "sockjs-client";
 import { Client } from "@stomp/stompjs";
 import axiosInstance from "../../util/axiosInstance";
+import axiosSocketInstance from "../../util/axiosSocketInstance";
 import ChatMessages from "../../components/baseballdict/ChatMessages";
 import ChatInput from "../../components/baseballdict/ChatInput";
 import AIBOT from "../../assets/images/aibot.png";
@@ -10,9 +11,9 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 
 interface Message {
-  userId: number;
+  userEmail: string;
   message: string;
-  roomId: string | null;
+  roomId: string;
   timestamp: number;
 }
 
@@ -21,12 +22,17 @@ const BaseballDict = () => {
   const [connected, setConnected] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [comment, setComment] = useState("");
-  const [roomId, setRoomId] = useState<string | null>(null);
+  const [roomId, setRoomId] = useState<string>("");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const userId = 1;
 
   const userProfileImage = useSelector((state: RootState) => state.myInfo.profileImage);
+  const email = useSelector((state: RootState) => state.myInfo.email);
+  const [userEmail, setUserEmail] = useState<string>("");
+
+  useEffect(() => {
+    if (email) setUserEmail(email);
+  }, [email]);
 
   const fetchRoomAndHistory = useCallback(async () => {
     try {
@@ -35,17 +41,21 @@ const BaseballDict = () => {
 
       const authorization = window.sessionStorage.getItem("access_token");
 
-      const { data: fetchedRoomId } = await axiosInstance.post("/api-chatbot/create-room", null, {
-        params: { userId },
-        headers: {
-          Authorization: `Bearer ${authorization}`,
+      const { data: fetchedRoomId } = await axiosInstance.post(
+        "/api/v1/chatbot/create-room",
+        null,
+        {
+          params: { userEmail },
+          headers: {
+            Authorization: `Bearer ${authorization}`,
+          },
         },
-      });
+      );
 
       setRoomId(fetchedRoomId);
 
       const { data: chatHistory } = await axiosInstance.get(
-        `/api-chatbot/chatbot/${userId}/history`,
+        `/api/v1/chatbot/chatbot/${userEmail}/history`,
         {
           headers: {
             Authorization: `Bearer ${authorization}`,
@@ -60,7 +70,7 @@ const BaseballDict = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [userId]);
+  }, [userEmail]);
 
   useEffect(() => {
     fetchRoomAndHistory();
@@ -71,8 +81,8 @@ const BaseballDict = () => {
       try {
         const receivedMessage = JSON.parse(messageBody);
         if (receivedMessage.content) {
-          const formattedMessage = {
-            userId: receivedMessage.userId || 0,
+          const formattedMessage: Message = {
+            userEmail: receivedMessage.userEmail || "",
             message: receivedMessage.content,
             roomId,
             timestamp: Date.now(),
@@ -90,9 +100,10 @@ const BaseballDict = () => {
   useEffect(() => {
     if (roomId) {
       const client = new Client({
-        webSocketFactory: () => new SockJS(`${axiosInstance.defaults.baseURL}/api-chatbot/ws`),
+        webSocketFactory: () =>
+          new SockJS(`${axiosSocketInstance.defaults.baseURL}/api/v1/chatbot/ws`),
         connectHeaders: {
-          Authorization: window.sessionStorage.getItem("authorization") || "",
+          Authorization: window.sessionStorage.getItem("access_token") || "",
         },
         onConnect: () => {
           setConnected(true);
@@ -118,14 +129,15 @@ const BaseballDict = () => {
 
       return () => {
         client.deactivate();
+        setStompClient(null);
       };
     }
   }, [roomId, handleWebSocketMessage]);
 
   const handleSendMessage = useCallback(() => {
     if (stompClient && connected && comment.trim()) {
-      const newMessage = {
-        userId,
+      const newMessage: Message = {
+        userEmail,
         message: comment.trim(),
         roomId,
         timestamp: Date.now(),
@@ -144,10 +156,10 @@ const BaseballDict = () => {
         console.error("Error sending message:", error);
         setError("Failed to send message. Please try again.");
 
-        setMessages(prevMessages => prevMessages.slice(0, -1)); // 에러발생시 마지막메세지제거
+        setMessages(prevMessages => prevMessages.slice(0, -1));
       }
     }
-  }, [stompClient, connected, comment, roomId, userId]);
+  }, [stompClient, connected, comment, roomId, userEmail]);
 
   return (
     <>
@@ -157,7 +169,7 @@ const BaseballDict = () => {
         <>
           <ChatMessages
             messages={messages}
-            currentUserId={userId}
+            currentUserEmail={userEmail}
             userImage={userProfileImage}
             aiImage={AIBOT}
           />
