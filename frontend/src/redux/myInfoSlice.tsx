@@ -21,7 +21,7 @@ export const fetchMyInfo = createAsyncThunk(
   'myInfo/fetchMyInfo',
   async () => {
     const response = await axiosInstance.get('/api/v1/users');
-    console.log(response.data)
+    console.log('내 정보 불러오기', response.data)
     return response.data;
   }
 );
