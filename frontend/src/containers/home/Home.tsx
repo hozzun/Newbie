@@ -60,6 +60,7 @@ export interface ClubRankItemProps {
   loseCount: number;
   gameDifference: number;
   rankDifference: number;
+  goDetail: () => void;
 }
 
 const getRamdomItems = <T,>(arr: Array<T>, count: number): Array<T> => {
@@ -187,6 +188,7 @@ const Home = () => {
         loseCount: d.loseCount,
         gameDifference: Number(d.gameDiff),
         rankDifference: d.rankChange,
+        goDetail: () => nav(`/club/${getClubIdByNum(d.teamId)}`),
       }));
 
       setClubRanks(clubRanksData);
