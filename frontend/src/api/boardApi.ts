@@ -26,6 +26,7 @@ export interface GetGeneralComment {
   id: number;
   userName: string;
   content: string;
+  profile: string;
   imageUrl: string;
   createdAt: string;
   replies: string[];

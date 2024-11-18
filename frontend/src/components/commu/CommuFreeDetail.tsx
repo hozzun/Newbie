@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import Like from "../../assets/icons/heart-solid.svg?react";
 import View from "../../assets/icons/eye-solid.svg?react";
 import Scrap from "../../assets/icons/bookmark-solid.svg?react";
-import Pencil from "../../assets/icons/pencil-solid.svg?react";
 import { getGeneralBoardDetail, GetGeneralBoardResponse } from "../../api/boardApi";
 import { getGeneralComment, GetGeneralComment } from "../../api/boardApi";
 import axiosInstance from "../../util/axiosInstance";
@@ -12,7 +11,6 @@ import ChatInput from "../../components/commu/ChatInput";
 const CommuFreeDetail = () => {
   const { id } = useParams();
   const numericId = Number(id);
-  const nav = useNavigate();
   const [post, setPost] = useState<GetGeneralBoardResponse | null>(null);
   const [comments, setComments] = useState<GetGeneralComment[] | null>(null);
   const [good, setGood] = useState<boolean | null>(null);
@@ -38,7 +36,6 @@ const CommuFreeDetail = () => {
     try {
       const response = await getGeneralComment(numericId);
       setComments(response.data);
-      console.log('댓글 조회', response.data)
     } catch (error) {
       console.error("Free boards loading error:", error);
     }
@@ -115,13 +112,6 @@ const CommuFreeDetail = () => {
                 />
               )}
             </div>
-            <Pencil
-              className="w-4 h-4 gap-1 text-success-200 cursor-pointer"
-              onClick={() => {
-                nav(`/commuhome/freedetail/${numericId}/revise`, { state: { post } })
-                }
-              }
-            />
             </div>
           </div>
           <div className="font-kbogothicmedium py-4">{post.title}</div>
@@ -160,7 +150,7 @@ const CommuFreeDetail = () => {
           <section key={index} className="font-kbogothiclight">
             <div className="flex justify-between items-center">
               <div className="flex items-center">
-                <div className="mr-2">유저사진</div>
+                <div className="mr-2">{comment.profile}</div>
                 <div>
                   <div className="font-kbogothicmedium">{comment.userName}</div>
                   <div className="text-sm text-gray-300">{comment.createdAt.substring(0, 10)}</div>

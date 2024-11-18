@@ -2,7 +2,6 @@ import Coin from "../../assets/icons/copyright-solid.svg?react";
 import Location from "../../assets/icons/marker-solid.svg?react";
 import Like from "../../assets/icons/heart-solid.svg?react";
 import View from "../../assets/icons/eye-solid.svg?react";
-import Pencil from "../../assets/icons/pencil-solid.svg?react";
 // import EmblaCarousel from "../../components/common/EmblaCarousel";
 import ChatInput from "./ChatInput";
 import Scrap from "../../assets/icons/bookmark-solid.svg?react";
@@ -115,11 +114,6 @@ const CommuTradeDetail = () => {
                 />
               )}
             </div>
-            <Pencil
-              className="w-4 h-4 gap-1 text-success-200 cursor-pointer"
-              onClick={() =>
-                console.log('중고 수정 페이지로 이동')}
-            />
             </div>
           </div>
           <div className="font-kbogothicmedium py-4">{post.title}</div>
