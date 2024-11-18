@@ -139,9 +139,9 @@ const CommuTradeDetail = () => {
           <div className="flex justify-end gap-1 items-center mb-2">
             <div className="flex border border-gray-300 px-2 rounded-lg items-center gap-1 hover:cursor-pointer">
               {good ? (
-                <Like className="w-4 h-4 text-gray-200" onClick={() => postGood(numericId)} />
-              ) : (
                 <Like className="w-4 h-4 text-[#FF5168]" onClick={() => postGood(numericId)} />
+              ) : (
+                <Like className="w-4 h-4 text-gray-200" onClick={() => postGood(numericId)} />
               )}{" "}
               {goodCount}
             </div>
