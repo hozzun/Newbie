@@ -2,7 +2,6 @@ import { useState, useEffect, useCallback } from "react";
 import SockJS from "sockjs-client";
 import { Client } from "@stomp/stompjs";
 import axiosInstance from "../../util/axiosInstance";
-import axiosSocketInstance from "../../util/axiosSocketInstance";
 import ChatMessages from "../../components/baseballdict/ChatMessages";
 import ChatInput from "../../components/baseballdict/ChatInput";
 import AIBOT from "../../assets/images/aibot.png";
@@ -16,14 +15,6 @@ interface Message {
   roomId: string | null;
   timestamp: number;
 }
-
-const getAuthHeader = () => {
-  const token = window.sessionStorage.getItem("authorization");
-  if (!token) {
-    throw new Error("인증 토큰을 찾을 수 없습니다.");
-  }
-  return `Bearer ${token}`;
-};
 
 const BaseballDict = () => {
   const [stompClient, setStompClient] = useState<Client | null>(null);
@@ -42,35 +33,30 @@ const BaseballDict = () => {
       setIsLoading(true);
       setError(null);
 
-      const authHeader = getAuthHeader();
+      const authorization = window.sessionStorage.getItem("access_token");
 
-      const { data: fetchedRoomId } = await axiosInstance.post(
-        "/api/v1/chatbot/create-room",
-        null,
+      const { data: fetchedRoomId } = await axiosInstance.post("/api-chatbot/create-room", null, {
+        params: { userId },
+        headers: {
+          Authorization: `Bearer ${authorization}`,
+        },
+      });
+
+      setRoomId(fetchedRoomId);
+
+      const { data: chatHistory } = await axiosInstance.get(
+        `/api-chatbot/chatbot/${userId}/history`,
         {
-          params: { userId },
           headers: {
-            Authorization: authHeader,
+            Authorization: `Bearer ${authorization}`,
           },
         },
       );
 
-      setRoomId(fetchedRoomId);
-
-      const { data: chatHistory } = await axiosInstance.get(`/api/v1/chatbot/${userId}/history`, {
-        headers: {
-          Authorization: authHeader,
-        },
-      });
-
       setMessages(chatHistory);
     } catch (error) {
       console.error("Error fetching room or chat history:", error);
-      if (error instanceof Error && error.message === "인증 토큰을 찾을 수 없습니다.") {
-        setError("로그인이 필요합니다.");
-      } else {
-        setError("채팅방을 불러오는데 실패했습니다. 다시 시도해주세요.");
-      }
+      setError("Failed to load chat room. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -96,7 +82,6 @@ const BaseballDict = () => {
         }
       } catch (error) {
         console.error("Error parsing message:", error);
-        setError("메시지 처리 중 오류가 발생했습니다.");
       }
     },
     [roomId],
@@ -104,62 +89,41 @@ const BaseballDict = () => {
 
   useEffect(() => {
     if (roomId) {
-      try {
-        const authHeader = getAuthHeader();
+      const client = new Client({
+        webSocketFactory: () => new SockJS(`${axiosInstance.defaults.baseURL}/api-chatbot/ws`),
+        connectHeaders: {
+          Authorization: window.sessionStorage.getItem("authorization") || "",
+        },
+        onConnect: () => {
+          setConnected(true);
+          setError(null);
 
-        const client = new Client({
-          webSocketFactory: () =>
-            new SockJS(`${axiosSocketInstance.defaults.baseURL}/api/v1/chatbot/ws`),
-          connectHeaders: {
-            Authorization: authHeader,
-          },
-          onConnect: () => {
-            setConnected(true);
-            setError(null);
+          client.subscribe(`/topic/chatbot/${roomId}`, message => {
+            handleWebSocketMessage(message.body);
+          });
+        },
+        onDisconnect: () => {
+          setConnected(false);
+          console.log("Disconnected from WebSocket");
+        },
+        onStompError: frame => {
+          console.error("STOMP error:", frame);
+          setError("Connection error. Please refresh the page.");
+        },
+        reconnectDelay: 5000,
+      });
 
-            client.subscribe(`/topic/chatbot/${roomId}`, message => {
-              handleWebSocketMessage(message.body);
-            });
-          },
-          onDisconnect: () => {
-            setConnected(false);
-            console.log("WebSocket 연결이 끊어졌습니다.");
-            setError("연결이 끊어졌습니다. 페이지를 새로고침해주세요.");
-          },
-          onStompError: frame => {
-            console.error("STOMP error:", frame);
-            setError("연결 오류가 발생했습니다. 페이지를 새로고침해주세요.");
-          },
-          reconnectDelay: 5000,
-        });
+      client.activate();
+      setStompClient(client);
 
-        client.activate();
-        setStompClient(client);
-
-        return () => {
-          client.deactivate();
-        };
-      } catch (error) {
-        if (error instanceof Error && error.message === "인증 토큰을 찾을 수 없습니다.") {
-          setError("로그인이 필요합니다.");
-        } else {
-          setError("연결 설정 중 오류가 발생했습니다.");
-        }
-      }
+      return () => {
+        client.deactivate();
+      };
     }
   }, [roomId, handleWebSocketMessage]);
 
   const handleSendMessage = useCallback(() => {
-    if (!connected) {
-      setError("연결이 끊어져 있습니다. 페이지를 새로고침해주세요.");
-      return;
-    }
-
-    if (!comment.trim()) {
-      return;
-    }
-
-    if (stompClient && connected) {
+    if (stompClient && connected && comment.trim()) {
       const newMessage = {
         userId,
         message: comment.trim(),
@@ -178,31 +142,17 @@ const BaseballDict = () => {
         setComment("");
       } catch (error) {
         console.error("Error sending message:", error);
-        setError("메시지 전송에 실패했습니다. 다시 시도해주세요.");
+        setError("Failed to send message. Please try again.");
+
         setMessages(prevMessages => prevMessages.slice(0, -1)); // 에러발생시 마지막메세지제거
       }
     }
   }, [stompClient, connected, comment, roomId, userId]);
 
-  const handleRetry = useCallback(() => {
-    setError(null);
-    fetchRoomAndHistory();
-  }, [fetchRoomAndHistory]);
-
   return (
     <>
-      {isLoading && <div className="flex justify-center items-center h-full">로딩중...</div>}
-      {error && (
-        <div className="flex flex-col justify-center items-center h-full">
-          <div className="text-red-500 mb-4">{error}</div>
-          <button
-            onClick={handleRetry}
-            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-          >
-            다시 시도
-          </button>
-        </div>
-      )}
+      {isLoading && <div className="flex justify-center items-center h-full">Loading...</div>}
+      {error && <div className="flex justify-center items-center h-full text-red-500">{error}</div>}
       {!isLoading && !error && (
         <>
           <ChatMessages
