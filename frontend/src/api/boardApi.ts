@@ -45,8 +45,6 @@ export const getGeneralComment = async (boardId: number) => {
 };
 
 export interface PostGeneralBoardRequest {
-  userId: number;
-  userName: string;
   title: string;
   content: string;
   tags: string[];

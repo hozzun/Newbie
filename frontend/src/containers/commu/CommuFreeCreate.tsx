@@ -92,7 +92,6 @@ const CommuFreeCreate = () => {
         formData.append(
           "generalBoard",
           JSON.stringify({
-            userName: "김진우",
             title: titleValue,
             content: text,
             tags: tags,
