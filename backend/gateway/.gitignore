@@ -237,3 +237,5 @@ $RECYCLE.BIN/
 **/application-key.properties
 
 /**/.env
+
+application.properties
