@@ -1,31 +1,27 @@
 import React, { ChangeEvent } from "react";
 import CrossCircle from "../../assets/icons/cross-circle.svg?react";
-import Picture from "../../assets/icons/picture-solid.svg?react";
-// import { useLocation } from 'react-router-dom';
 
 interface CommuFreeReviseProps {
   titleValue: string;
   tagValue: string;
-  tags: string[];
   text: string;
-  image: File | null;
+  tags: string[]
+  image: string;
   errorMessage: string | null;
   onTitleChange: (e: ChangeEvent<HTMLInputElement>) => void;
   onTagChange: (e: ChangeEvent<HTMLInputElement>) => void;
   onTagKeyPress: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   onTagRemove: (tag: string) => void;
   onTextChange: (e: ChangeEvent<HTMLTextAreaElement>) => void;
-  onImageChange: (e: ChangeEvent<HTMLInputElement>) => void;
   onClearTitle: () => void;
   onClearTag: () => void;
-  onClearImage: () => void;
 }
 
 const CommuFreeRevise: React.FC<CommuFreeReviseProps> = ({
   titleValue,
   tagValue,
-  tags,
   text,
+  tags,
   image,
   errorMessage,
   onTitleChange,
@@ -33,21 +29,16 @@ const CommuFreeRevise: React.FC<CommuFreeReviseProps> = ({
   onTagKeyPress,
   onTagRemove,
   onTextChange,
-  onImageChange,
   onClearTitle,
   onClearTag,
-  onClearImage,
 }) => {
 
-  // const location = useLocation();
-  // const { title, imageUrl, content, tags } = location.state || {};
-  
   return (
     <>
+      {/* 제목 입력 */}
       <div className="relative w-full mx-auto">
         <input
           type="text"
-          placeholder="제목을 입력해주세요"
           value={titleValue}
           onChange={onTitleChange}
           className="w-full pl-2 pr-12 py-4 border-b-2 font-kbogothiclight border-gray-100 focus:outline-none focus:border-green-900"
@@ -60,15 +51,17 @@ const CommuFreeRevise: React.FC<CommuFreeReviseProps> = ({
         />
       </div>
 
+      {/* 태그 입력 및 보여주기 */}
       <div className="relative w-full mx-auto mb-4">
         <div className="flex flex-wrap gap-2 mt-2">
-          {tags.map((tag, index) => (
+          {tags && tags.map((tag: string, index: number) => (
             <span
               key={index}
               onClick={() => onTagRemove(tag)}
               className="inline-block px-2 py-1 text-sm font-kbogothiclight bg-gray-500 text-white rounded-lg cursor-pointer"
             >
-              {tag}<span onClick={() => console.log('태그 삭제')}>x</span>
+              {tag}
+              <CrossCircle className="ml-2 w-4 h-4 inline cursor-pointer" />
             </span>
           ))}
         </div>
@@ -96,36 +89,23 @@ const CommuFreeRevise: React.FC<CommuFreeReviseProps> = ({
         </span>
       </div>
 
+      {/* 이미지 */}
       <div className="relative w-full p-4 border-b-2 border-gray-100 flex items-center justify-center mb-4">
-        <input
-          type="file"
-          accept="image/*"
-          onChange={onImageChange}
-          className="absolute inset-0 opacity-0 cursor-pointer"
-        />
         <div className="text-gray-500 font-kbogothiclight flex items-center border border-dashed rounded-lg justify-center w-20 h-20">
-          {image ? (
-            <>
-              <img
-                src={URL.createObjectURL(image)}
-                alt="Preview"
-                className="w-20 h-20 object-cover rounded-lg"
-              />
-              <CrossCircle
-                onClick={onClearImage}
-                className="absolute top-0 right-0 m-2 h-4 w-4 text-gray-600 cursor-pointer"
-              />
-            </>
-          ) : (
-            <Picture className="w-20 h-20 p-2 text-gray-500" />
+          {image && (
+            <img
+              src={image}
+              alt="Preview"
+              className="w-20 h-20 object-cover rounded-lg"
+            />
           )}
         </div>
       </div>
 
+      {/* 본문 입력 */}
       <div className="relative w-full mx-auto">
         <textarea
           name="본문"
-          placeholder="본문을 입력해주세요."
           value={text}
           onChange={onTextChange}
           className="w-full p-2 pb-14 border border-none font-kbogothiclight focus:outline-none focus:border-green-900 resize-none"
