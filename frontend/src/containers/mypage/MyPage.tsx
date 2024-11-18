@@ -36,7 +36,7 @@ type TeamName =
 
 const MyPage = () => {
   const [games, setGames] = useState<Game[]>([]);
-  const { team } = useSelector((state: RootState) => state.team);
+  const { cheeringClub } = useSelector((state: RootState) => state.team);
   const { nickname, email, profileImage } = useSelector((state: RootState) => state.myInfo);
   const imageUrl = `${profileImage}?cacheBust=${Date.now()}`;
 
@@ -70,7 +70,7 @@ const MyPage = () => {
     const year = new Date().getFullYear();
     const month = 8; // 9월로 고정
     const formattedMonth = month.toString().padStart(2, "0");
-    const params = { year: year.toString(), month: formattedMonth, teamId: team };
+    const params = { year: year.toString(), month: formattedMonth, teamId: cheeringClub };
 
     try {
       const response = await axiosInstance.get("/api/v1/games", { params });
@@ -82,11 +82,14 @@ const MyPage = () => {
 
   useEffect(() => {
     getGameInfo();
-  }, [team])
-  
+  }, [cheeringClub]);
 
   if (imageUrl) {
-    const teamName = getIdByNum(team) as TeamName | 0;
+    const teamName = cheeringClub
+      ? cheeringClub > 0
+        ? (getIdByNum(cheeringClub) as TeamName)
+        : 0
+      : 0;
 
     return (
       <>
@@ -118,7 +121,7 @@ const MyPage = () => {
               activeClick={goActive}
               scrapClick={goScrap}
             />
-            <Calendar games={games} team={team} />
+            <Calendar games={games} team={cheeringClub ? cheeringClub : 0} />
             <WatchGame />
             <OutButton />
           </div>

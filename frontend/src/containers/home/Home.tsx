@@ -80,7 +80,7 @@ const Home = () => {
 
   const today = new Date();
 
-  const { team } = useSelector((state: RootState) => state.team);
+  const { cheeringClub } = useSelector((state: RootState) => state.team);
 
   const [hasCheeringClub, setHasCheeringClub] = useState<boolean>(false);
   const [todayGame, setTodayGame] = useState<GameProps | null>(null);
@@ -92,7 +92,7 @@ const Home = () => {
 
   const fetchTodayGame = async () => {
     try {
-      const hasCheeringClubData: boolean = team !== 0;
+      const hasCheeringClubData: boolean = cheeringClub !== 0;
       setHasCheeringClub(hasCheeringClubData);
 
       if (hasCheeringClubData) {
@@ -100,7 +100,7 @@ const Home = () => {
           year: today.getFullYear().toString(),
           month: (today.getMonth() + 1).toString().padStart(2, "0"),
           day: today.getDate().toString().padStart(2, "0"),
-          teamId: team,
+          teamId: cheeringClub ? cheeringClub : 1,
         };
         const responseAbotGetGames = await getGames(getGamesRequest);
         const homeClubId = getClubIdByNum(responseAbotGetGames.data[0].homeTeamId);

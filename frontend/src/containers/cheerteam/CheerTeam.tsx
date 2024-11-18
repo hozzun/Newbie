@@ -1,22 +1,20 @@
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../util/axiosInstance";
-import { useState } from 'react'
+import { useState } from "react";
 import CheerTeamComponents from "../../components/cheerteam/CheerTeam";
 import ClubSelectItemComponents from "../../components/cheerteam/ClubSelectItem";
 import ClubId from "../../util/ClubId";
-import { useDispatch } from 'react-redux';
-import { fetchTeam } from '../../redux/teamSlice';
-import { AppDispatch } from "../../redux/store";
+import { useDispatch } from "react-redux";
+import { setCheeringClub } from "../../redux/teamSlice";
 
 const CheerTeam = () => {
   const [selectedClub, setSelectedClub] = useState<number>(0);
-  console.log(selectedClub)
+  console.log(selectedClub);
 
-  const nav = useNavigate()
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useDispatch();
+  const nav = useNavigate();
 
   const updateFavoriteTeam = async (favoriteTeamId: number) => {
-
     const params = { teamId: favoriteTeamId };
 
     try {
@@ -26,13 +24,13 @@ const CheerTeam = () => {
         {
           params,
           headers: {
-            "Content-Type": "application/json"
-          }
-        }
+            "Content-Type": "application/json",
+          },
+        },
       );
 
       console.log("응답 결과:", response.data);
-      dispatch(fetchTeam());
+      dispatch(setCheeringClub(favoriteTeamId));
     } catch (error) {
       console.error("에러 발생:", error);
       throw error;
@@ -41,10 +39,9 @@ const CheerTeam = () => {
 
   const handleClubSelect = (club: string) => {
     setSelectedClub(ClubId[club]);
-    updateFavoriteTeam(ClubId[club])
-    nav(-1)
+    updateFavoriteTeam(ClubId[club]);
+    nav(-1);
   };
-
 
   return (
     <>
