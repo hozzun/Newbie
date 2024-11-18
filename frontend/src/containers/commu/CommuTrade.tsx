@@ -11,7 +11,7 @@ const CommuTrade = ({ searchQuery }: { searchQuery: string }) => {
   const nav = useNavigate()
 
   const goDetail = (id: number) => {
-    nav(`/commuhome/useddetail/${id}`)
+    nav(`/commuhome/tradedetail/${id}`)
   }
 
   // 게시물 로드 함수
