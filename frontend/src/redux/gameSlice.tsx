@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { GameProps } from "../containers/home/Home";
+import { getKoreanDate } from "../util/getKoreanDate";
 
 interface GameState {
   currentDate: string;
@@ -7,7 +8,7 @@ interface GameState {
 }
 
 const initialState: GameState = {
-  currentDate: new Date().toISOString(),
+  currentDate: getKoreanDate(new Date()),
   game: null,
 };
 
@@ -18,12 +19,12 @@ const gameSlice = createSlice({
     incrementDate: state => {
       const newDate = new Date(state.currentDate);
       newDate.setDate(newDate.getDate() + 1);
-      state.currentDate = newDate.toISOString();
+      state.currentDate = getKoreanDate(newDate);
     },
     decrementDate: state => {
       const newDate = new Date(state.currentDate);
       newDate.setDate(newDate.getDate() - 1);
-      state.currentDate = newDate.toISOString();
+      state.currentDate = getKoreanDate(newDate);
     },
     setGame: (state, action: PayloadAction<GameProps>) => {
       state.game = action.payload;
