@@ -1,7 +1,6 @@
 import React, { useRef, useEffect } from "react";
 
 interface Message {
-  userEmail: string;
   message: string;
   roomId: string | null;
   timestamp: number;
@@ -9,17 +8,11 @@ interface Message {
 
 interface ChatMessagesProps {
   messages: Message[];
-  currentUserEmail: string;
   userImage?: string;
   aiImage?: string;
 }
 
-const ChatMessages: React.FC<ChatMessagesProps> = ({
-  messages,
-  currentUserEmail,
-  userImage,
-  aiImage,
-}) => {
+const ChatMessages: React.FC<ChatMessagesProps> = ({ messages, userImage, aiImage }) => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
