@@ -10,6 +10,8 @@ const CommuFreeRevise = () => {
   const nav = useNavigate();
   const location = useLocation();
   const { id, title, imageUrl, content, tags } = location.state || {};
+  console.log('id', 'title', 'imageUrl', 'content', 'tags')
+  console.log(id, title, imageUrl, content, tags)
 
   const [titleValue, setTitleValue] = useState(title);
   const [tagValue, setTagValue] = useState("");
