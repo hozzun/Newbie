@@ -27,8 +27,11 @@ type TeamName =
 const CheerSong = () => {
   const navigate = useNavigate();
   // 나의 응원팀
-  const { team } = useSelector((state: RootState) => state.team);
-  const [club, setClub] = useState<TeamName | null>(getIdByNum(team) as TeamName | null);
+  const { cheeringClub } = useSelector((state: RootState) => state.team);
+  const teamName = cheeringClub && cheeringClub > 0 
+  ? getIdByNum(cheeringClub) as TeamName 
+  : null;
+  const [club, setClub] = useState<TeamName | null>(teamName);
   const [count, setCount] = useState<number>(0);
   const [cheerSongs, setCheerSongs] = useState<{ title: string; url: string; lyrics: string; }[]>([]);
   const [currentIndex, setCurrentIndex] = useState<number | null>(null);
