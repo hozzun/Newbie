@@ -23,10 +23,10 @@ public class ActivityController {
      * @return 사용자 활동 목록
      */
     @Operation(summary = "사용자 활동 조회", description = "사용자가 작성한 댓글과 좋아요 누른 게시글을 조회합니다.")
-    @GetMapping("/{userId}")
+    @GetMapping()
     public ResponseEntity<List<ActivityResponseDto>> getUserActivities(
-            @PathVariable @Parameter(description = "사용자 ID") Long userId) {
-        List<ActivityResponseDto> userActivities = userActivityService.getUserActivities(userId);
+            @RequestHeader("X-Member-ID") String userId) {
+        List<ActivityResponseDto> userActivities = userActivityService.getUserActivities(Long.valueOf(userId));
         return ResponseEntity.ok(userActivities);
     }
 
@@ -34,9 +34,9 @@ public class ActivityController {
     @DeleteMapping("{activityId}")
     public ResponseEntity<Void> deleteActivity(
             @PathVariable @Parameter(description = "활동 ID") Long activityId,
-            Long userId) {
+            @RequestHeader("X-Member-ID") String userId) {
 
-        userActivityService.deleteActivity(activityId, userId);
+        userActivityService.deleteActivity(activityId, Long.valueOf(userId));
         return ResponseEntity.noContent().build();
     }
 }
