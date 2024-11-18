@@ -18,7 +18,7 @@ interface CardStoreProps {
 }
 
 const tabBarOptions: Array<string> = ["투수", "내야수", "외야수", "포수"];
-const sortOptions: Array<string> = ["가나다순", "최신순", "판매순", "가격낮은순", "가격높은순"];
+const sortOptions: Array<string> = ["가나다순", "최신순", "판매순"];
 
 const CardStore = (props: CardStoreProps) => {
   return (

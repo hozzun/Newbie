@@ -3,6 +3,9 @@ import { Video } from "../../containers/player/Player";
 
 interface PlayerHighlightItemProps {
   playerHighlight: Video;
+  isPlaying: boolean;
+  handlePlay: () => void;
+  handlePause: () => void;
 }
 
 const PlayerHightlightItem = (props: PlayerHighlightItemProps) => {
@@ -15,6 +18,10 @@ const PlayerHightlightItem = (props: PlayerHighlightItemProps) => {
           controls
           width={"100%"}
           height={"100%"}
+          // isPlaying={props.isPlaying}
+          playing={props.isPlaying}
+          onPlay={props.handlePlay}
+          onPause={props.handlePause}
         />
       </div>
       <p
