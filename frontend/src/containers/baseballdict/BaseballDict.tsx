@@ -2,7 +2,6 @@ import { useState, useEffect, useCallback } from "react";
 import SockJS from "sockjs-client";
 import { Client } from "@stomp/stompjs";
 import axiosInstance from "../../util/axiosInstance";
-import axiosSocketInstance from "../../util/axiosSocketInstance";
 import ChatMessages from "../../components/baseballdict/ChatMessages";
 import ChatInput from "../../components/baseballdict/ChatInput";
 import AIBOT from "../../assets/images/aibot.png";
@@ -114,8 +113,7 @@ const BaseballDict = () => {
   useEffect(() => {
     if (roomId && userEmail) {
       const client = new Client({
-        webSocketFactory: () =>
-          new SockJS(`${axiosSocketInstance.defaults.baseURL}/api/v1/chatbot/ws`),
+        webSocketFactory: () => new SockJS(`${axiosInstance.defaults.baseURL}/api/v1/chatbot/ws`),
         connectHeaders: {
           Authorization: `Bearer ${window.sessionStorage.getItem("access_token") || ""}`,
         },
