@@ -19,7 +19,7 @@ const CheerTeam = () => {
 
     try {
       const response = await axiosInstance.patch(
-        `/api/v1/users/favorite-team`,
+        `/api/v1/user/users/favorite-team`,
         {},
         {
           params,

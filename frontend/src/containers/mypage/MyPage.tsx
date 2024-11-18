@@ -88,7 +88,7 @@ const MyPage = () => {
     const params = { year: year.toString(), month: formattedMonth, teamId: cheeringClub };
 
     try {
-      const response = await axiosInstance.get("/api/v1/games", { params });
+      const response = await axiosInstance.get("/api/v1/baseball/games", { params });
       setGames(response.data);
     } catch (error) {
       console.error("경기 데이터를 불러오는 중 오류 발생:", error);
@@ -133,7 +133,7 @@ const MyPage = () => {
               />
             ) : (
               <div
-                className="flex justify-center items-center font-kbogothicmedium text-lg border-4 w-full border-green-100 text-green-900 p-10 rounded-2xl hover:cursor-pointer"
+                className="flex justify-center items-center font-kbogothicmedium text-lg border-4 w-full h-40 border-green-100 text-green-900 p-10 rounded-2xl hover:cursor-pointer"
                 onClick={goRecommend}
               >
                 <p>응원할 팀을 선택해주세요!</p>

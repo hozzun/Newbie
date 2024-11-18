@@ -80,7 +80,7 @@ const ReviseInfo = () => {
   }
   
     try {
-      const response = await axiosInstance.patch("/api/v1/users", formData, {
+      const response = await axiosInstance.patch("/api/v1/user/users", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

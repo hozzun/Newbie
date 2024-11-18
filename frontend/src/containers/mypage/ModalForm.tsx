@@ -37,8 +37,7 @@ const ModalForm = (props: ModalFormProps) => {
     };
 
     try {
-      const response = await axiosInstance.put("/api/v1/ticket/text", TextData);
-      console.log(response.data);
+      const response = await axiosInstance.put("/api/v1/mypage/ticket/text", TextData);
       return response.data;
     } catch (error) {
       console.error("Error sending data to API:", error);
@@ -49,9 +48,8 @@ const ModalForm = (props: ModalFormProps) => {
   // 저장 버튼 클릭 시 처리
   const onSaveClick = async () => {
     try {
-      // API 요청 완료 후 이동
       await TextSaveAPI();
-      nav("/mypage"); // 저장 후 '/mypage'로 이동
+      nav("/mypage");
     } catch (error) {
       console.error("저장 실패:", error);
     }

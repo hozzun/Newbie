@@ -32,7 +32,7 @@ const WatchButton = (props: WatchButtonProps) => {
     };
   
     try {
-      const response = await axiosInstance.put("/api/v1/ticket/text", Text);
+      const response = await axiosInstance.put("/api/v1/mypage/ticket/text", Text);
       console.log(response);
     } catch (error) {
       console.error("Error fetching cheer song:", error);

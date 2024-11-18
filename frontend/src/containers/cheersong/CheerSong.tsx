@@ -50,7 +50,7 @@ const CheerSong = () => {
     const teamName = club;
 
     try {
-      const response = await axiosInstance.get("/api/v1/songs/teams", {
+      const response = await axiosInstance.get("/api/v1/baseball/songs/teams", {
         params: { teamName: teamName },
       });
       setCheerSongs(response.data);
