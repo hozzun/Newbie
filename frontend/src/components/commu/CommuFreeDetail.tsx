@@ -100,8 +100,8 @@ const CommuFreeDetail = () => {
                 <div className="text-sm text-gray-300">{post.createdAt.substring(0, 10)}</div>
               </div>
             </div>
-            <div>
-            <div className="flex justify-end gap-1">
+            <div className="flex flex-row">
+            <div className="flex justify-end gap-2">
               {scrap ? (
                 <Scrap
                   className="w-4 h-4 gap-1 cursor-pointer text-[#FFA600]"
