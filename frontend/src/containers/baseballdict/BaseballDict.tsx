@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import SockJS from "sockjs-client";
 import { Client } from "@stomp/stompjs";
-// import axiosInstance from "../../util/axiosInstance";
+import axiosInstance from "../../util/axiosInstance";
 import axiosSocketInstance from "../../util/axiosSocketInstance";
 import ChatMessages from "../../components/baseballdict/ChatMessages";
 import ChatInput from "../../components/baseballdict/ChatInput";
@@ -44,7 +44,7 @@ const BaseballDict = () => {
 
       const authHeader = getAuthHeader();
 
-      const { data: fetchedRoomId } = await axiosSocketInstance.post(
+      const { data: fetchedRoomId } = await axiosInstance.post(
         "/api/v1/chatbot/create-room",
         null,
         {
@@ -57,14 +57,11 @@ const BaseballDict = () => {
 
       setRoomId(fetchedRoomId);
 
-      const { data: chatHistory } = await axiosSocketInstance.get(
-        `/api/v1/chatbot/${userId}/history`,
-        {
-          headers: {
-            Authorization: authHeader,
-          },
+      const { data: chatHistory } = await axiosInstance.get(`/api/v1/chatbot/${userId}/history`, {
+        headers: {
+          Authorization: authHeader,
         },
-      );
+      });
 
       setMessages(chatHistory);
     } catch (error) {
