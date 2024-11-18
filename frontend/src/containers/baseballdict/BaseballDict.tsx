@@ -1,5 +1,4 @@
 import { useState, useEffect, useCallback } from "react";
-import SockJS from "sockjs-client";
 import Stomp from "stompjs";
 import axiosInstance from "../../util/axiosInstance";
 import ChatMessages from "../../components/baseballdict/ChatMessages";
@@ -10,7 +9,6 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 
 interface Message {
-  userEmail: string;
   message: string;
   roomId: string;
   timestamp: number;
@@ -24,46 +22,25 @@ const BaseballDict = () => {
   const [roomId, setRoomId] = useState<string>("");
 
   const userProfileImage = useSelector((state: RootState) => state.myInfo.profileImage);
-  const email = useSelector((state: RootState) => state.myInfo.email);
-  const [userEmail, setUserEmail] = useState<string>("");
 
-  // email을 userEmail state에 설정
   useEffect(() => {
-    if (email) {
-      setUserEmail(email);
-    }
-  }, [email]);
+    fetchRoomAndHistory();
+  }, []);
 
-  const fetchRoomAndHistory = useCallback(async () => {
-    if (!userEmail) return;
-
+  const fetchRoomAndHistory = async () => {
     try {
-      const { data: fetchedRoomId } = await axiosInstance.post(
-        "/api/v1/chatbot/chatbot/create-room",
-        null,
-        {
-          params: { userEmail },
-        },
-      );
+      const { data: fetchedRoomId } = await axiosInstance.post("/api/v1/chatbot/create-room");
 
       setRoomId(fetchedRoomId);
 
       // 채팅 히스토리 가져오기
-      const { data: chatHistory } = await axiosInstance.get(
-        `/api/v1/chatbot/chatbot/${userEmail}/history`,
-      );
+      const { data: chatHistory } = await axiosInstance.get(`/api/v1/chatbot/chatbot/history`);
 
       setMessages(chatHistory);
     } catch (error) {
-      console.error("Error fetching room or chat history:", error);
+      console.log(error);
     }
-  }, [userEmail]);
-
-  useEffect(() => {
-    if (userEmail) {
-      fetchRoomAndHistory();
-    }
-  }, [userEmail, fetchRoomAndHistory]);
+  };
 
   const handleWebSocketMessage = useCallback(
     (messageBody: string) => {
@@ -71,7 +48,6 @@ const BaseballDict = () => {
         const receivedMessage = JSON.parse(messageBody);
         if (receivedMessage.content) {
           const formattedMessage: Message = {
-            userEmail: receivedMessage.userEmail || "",
             message: receivedMessage.content,
             roomId,
             timestamp: Date.now(),
@@ -87,14 +63,11 @@ const BaseballDict = () => {
   );
 
   useEffect(() => {
-    if (roomId && userEmail) {
-      const socket = new SockJS(`${import.meta.env.VITE_API_SOCKET_URL}/api-chatbot/chatbot/ws`);
+    if (roomId) {
+      const socket = new WebSocket(`${import.meta.env.VITE_API_SOCKET_URL}/api-chatbot/chatbot/ws`);
       const client = Stomp.over(socket);
 
       client.connect(
-        {
-          Authorization: `Bearer ${window.sessionStorage.getItem("access_token") || ""}`,
-        },
         () => {
           setConnected(true);
 
@@ -117,12 +90,11 @@ const BaseballDict = () => {
         setStompClient(null);
       };
     }
-  }, [roomId, userEmail, handleWebSocketMessage]);
+  }, [roomId, handleWebSocketMessage]);
 
   const handleSendMessage = useCallback(() => {
     if (stompClient && connected && comment.trim()) {
       const newMessage: Message = {
-        userEmail,
         message: comment.trim(),
         roomId,
         timestamp: Date.now(),
@@ -139,17 +111,12 @@ const BaseballDict = () => {
         setMessages(prevMessages => prevMessages.slice(0, -1));
       }
     }
-  }, [stompClient, connected, comment, roomId, userEmail]);
+  }, [stompClient, connected, comment, roomId]);
 
   return (
     <>
       <div className="h-full">
-        <ChatMessages
-          messages={messages}
-          currentUserEmail={userEmail}
-          userImage={userProfileImage}
-          aiImage={AIBOT}
-        />
+        <ChatMessages messages={messages} userImage={userProfileImage} aiImage={AIBOT} />
         <ChatInput
           onSendMessage={handleSendMessage}
           comment={comment}
