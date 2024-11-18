@@ -8,7 +8,7 @@ import Trash from "../../assets/icons/trash.svg?react"
 const CommuFreeRevise = () => {
 
   const rightButtonProps: CircleButtonProps = {
-    className: "w-6 h-6",
+    className: "w-9 h-9",
     variant: CIRCLE_BUTTON_VARIANTS.errorLine,
     item: { img: Trash },
     onClick: () => console.log('자유 게시글 삭제'),

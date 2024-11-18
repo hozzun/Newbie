@@ -116,8 +116,10 @@ const CommuFreeDetail = () => {
             </div>
             <Pencil
               className="w-4 h-4 gap-1 text-success-200 cursor-pointer"
-              onClick={() =>
+              onClick={() => {
                 nav(`/commuhome/freedetail/${numericId}/revise`, { state: { post } })
+                console.log('전달하는 정보', post)
+                }
               }
             />
             </div>
