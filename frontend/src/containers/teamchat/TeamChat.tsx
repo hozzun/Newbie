@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import TeamChatComponent from "../../components/teamchat/TeamChat";
 import ClubLogos from "../../util/ClubLogos";
