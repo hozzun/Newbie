@@ -56,11 +56,11 @@ const CommuFreeDetail = () => {
     }
   };
 
-  const postScrap = async (boardId: number) => {
-    const params = { boardId : boardId, boardType: "general" };
+  const postScrap = async () => {
+    const params = { boardId: numericId, boardType: "general" };
 
     try {
-      const response = await axiosInstance.post("/api/v1/board/scrap", {
+      const response = await axiosInstance.post("/api/v1/board/scrap", null, {
         params,
       });
       setScrap(!scrap);
@@ -95,21 +95,21 @@ const CommuFreeDetail = () => {
                 <div className="text-sm text-gray-300">{post.createdAt.substring(0, 10)}</div>
               </div>
             </div>
-            <div className="flex items-center text-right gap-2">
+            <div className="flex justify-end gap-2">
               {scrap ? (
                 <Scrap
-                  className="w-4 h-4 cursor-pointer text-[#FFA600]"
-                  onClick={() => postScrap(numericId)}
+                  className="flex w-4 h-4 justify-end gap-1 cursor-pointer text-[#FFA600]"
+                  onClick={() => postScrap()}
                 />
               ) : (
                 <Scrap
                   className="w-4 h-4 cursor-pointer text-gray-200"
-                  onClick={() => postScrap(numericId)}
+                  onClick={() => postScrap()}
                 />
               )}
             </div>
             <Pencil
-              className="w-4 h-4 text-success-200 cursor-pointer"
+              className="flex w-4 h-4 text-success-200 cursor-pointer"
               onClick={() =>
                 nav(`/commuhome/freedetail/${numericId}/revise`, { state: { post } })
               }
@@ -125,9 +125,9 @@ const CommuFreeDetail = () => {
           <div className="flex justify-end gap-1 items-center mb-2">
             <div className="flex border border-gray-300 px-2 rounded-lg items-center gap-1 hover:cursor-pointer">
               {good ? (
-                <Like className="w-4 h-4 text-gray-200" onClick={() => postGood(numericId)} />
-              ) : (
                 <Like className="w-4 h-4 text-[#FF5168]" onClick={() => postGood(numericId)} />
+              ) : (
+                <Like className="w-4 h-4 text-gray-200" onClick={() => postGood(numericId)} />
               )}{" "}
               {post.likeCount}
             </div>
