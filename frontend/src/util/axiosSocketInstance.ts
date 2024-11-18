@@ -2,7 +2,10 @@ import axios, { AxiosInstance } from "axios";
 
 const createAxiosSocketInstance = (config = {}): AxiosInstance => {
   const defaultConfig = {
-    baseURL: import.meta.env.VITE_API_SOCKET_URL, // WebSocket용 URL
+    baseURL: import.meta.env.VITE_API_SOCKET_URL.replace("wss://", "https://").replace(
+      "ws://",
+      "http://",
+    ),
     timeout: 10000,
     withCredentials: true,
   };
