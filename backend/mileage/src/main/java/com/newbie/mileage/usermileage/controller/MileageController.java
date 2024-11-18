@@ -2,6 +2,7 @@ package com.newbie.mileage.usermileage.controller;
 
 
 import com.newbie.mileage.usermileage.service.MileageService;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.webmvc.core.service.RequestService;
 import org.springframework.http.HttpStatus;
@@ -25,5 +26,12 @@ public class MileageController {
         } else {
             return ResponseEntity.status(HttpStatus.INSUFFICIENT_STORAGE).build();
         }
+    }
+
+    @GetMapping("/mileage")
+    public ResponseEntity<Double> getMileage(@RequestParam String userId) {
+        Double mileage = mileageService.getMileageByUserId(userId);
+
+        return ResponseEntity.ok(mileage);
     }
 }

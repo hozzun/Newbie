@@ -73,4 +73,11 @@ public class CardController {
         return ResponseEntity.noContent().build();
     }
 
+    @Operation(summary = "유저 마일리지 조회", description = "유저 마일리지를 조회합니다.")
+    @GetMapping("/mileage")
+    public ResponseEntity<Double> getMileage(@RequestHeader("X-Member-ID") String userId) {
+        Double mileage = cardService.getMileage(userId);
+        return ResponseEntity.ok(mileage);
+    }
+
 }
