@@ -33,7 +33,7 @@ const BaseballDict = () => {
 
       setRoomId(fetchedRoomId);
       // 채팅 히스토리 가져오기
-      const { data: chatHistory } = await axiosInstance.get(`/api/v1/chatbot/history`);
+      const { data: chatHistory } = await axiosInstance.get(`/api/v1/chatbot/chatbot/history`);
 
       setMessages(chatHistory);
     } catch (error) {
