@@ -44,16 +44,10 @@ const MyPage = () => {
   const imageUrl = `${profileImage}?cacheBust=${Date.now()}`;
 
   useEffect(() => {
-    if (team === null) {
-      getFavoriteTeam()
-    }
-  }, [team]);
-
-  useEffect(() => {
-    if (nickname === null || email === null || profileImage === null) {
-      dispatch(fetchMyInfo());
-    }
-  }, [nickname, email, profileImage]);
+    dispatch(fetchMyInfo());
+    getFavoriteTeam()
+    getGameInfo();
+  }, []);
 
   const nav = useNavigate();
 
@@ -104,10 +98,6 @@ const MyPage = () => {
       console.error("나의 응원 구단 데이터를 불러오는 중 오류 발생", error);
     }
   };
-
-  useEffect(() => {
-    getGameInfo();
-  }, [cheeringClub]);
 
   const teamName = team
     ? team > 0
