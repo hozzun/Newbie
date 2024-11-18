@@ -80,7 +80,7 @@ export const postGeneralBoard = async (data: FormData) => {
 
 
 export const getUserProfile = () => {
-  return axios.get("/api/v1/users"); // userId 수정필요
+  return axios.get("/api/v1/user/users"); // userId 수정필요
 };
 //---------------------------------------------------------------------
 
