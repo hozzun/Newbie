@@ -3,13 +3,14 @@ import { useParams } from "react-router-dom";
 import axiosInstance from "../../util/axiosInstance";
 import SockJS from "sockjs-client";
 import Stomp from "stompjs";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 
 import TeamChatInput from "../../components/teamchat/TeamChatInput";
 import TeamChatMessages from "../../components/teamchat/TeamChatMessages";
 
 interface ChatMessage {
   id: string;
-  userId: number;
   sender: string;
   message: string;
   roomId: string;
@@ -28,7 +29,9 @@ const TeamChatRoomContainer: React.FC<TeamChatRoomContainerProps> = ({ setPartic
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [comment, setComment] = useState("");
   const [connected, setConnected] = useState(false);
-  const currentUserId = 123; // 실제 구현시에는 로그인한 사용자의 ID를 사용
+
+  const userProfileImage = useSelector((state: RootState) => state.myInfo.profileImage);
+  const nickname = useSelector((state: RootState) => state.myInfo.nickname) || "Anonymous";
 
   useEffect(() => {
     if (!id) return;
@@ -40,29 +43,25 @@ const TeamChatRoomContainer: React.FC<TeamChatRoomContainerProps> = ({ setPartic
       setConnected(true);
       console.log("WebSocket 연결 성공");
 
-      // 입장 메시지 전송
       const joinMessage = {
-        userId: currentUserId,
-        sender: "User123",
+        sender: nickname,
         type: "JOIN",
         roomId: id,
-        message: "님이 입장하셨습니다.",
+        message: `${nickname}님이 입장하셨습니다.`,
         timestamp: new Date().toISOString(),
         profileImageUrl: "/path/to/profile.jpg",
       };
 
       stomp.send(`/app/chat/${id}/join`, {}, JSON.stringify(joinMessage));
 
-      // 채팅방 메시지 구독
       stomp.subscribe(`/topic/chatroom/${id}`, message => {
         const newMessage = JSON.parse(message.body);
         setMessages(prev => [...prev, newMessage]);
       });
 
-      // 참여자 수 구독
       stomp.subscribe(`/topic/chatroom/${id}/participants`, message => {
         const count = parseInt(message.body, 10);
-        setParticipantCount(count); // 참여자 수 업데이트
+        setParticipantCount(count);
       });
 
       setStompClient(stomp);
@@ -71,11 +70,10 @@ const TeamChatRoomContainer: React.FC<TeamChatRoomContainerProps> = ({ setPartic
     return () => {
       if (stompClient) {
         const leaveMessage = {
-          userId: currentUserId,
-          sender: "User123",
+          sender: nickname,
           type: "LEAVE",
           roomId: id,
-          message: "님이 퇴장하셨습니다.",
+          message: `${nickname}님이 퇴장하셨습니다.`,
           timestamp: new Date().toISOString(),
         };
 
@@ -86,14 +84,13 @@ const TeamChatRoomContainer: React.FC<TeamChatRoomContainerProps> = ({ setPartic
         });
       }
     };
-  }, [id]);
+  }, [id, nickname]);
 
   const handleSendMessage = () => {
     if (!id || !stompClient || !comment.trim()) return;
 
     const chatMessage = {
-      userId: currentUserId,
-      sender: "User123",
+      sender: nickname,
       message: comment,
       roomId: id,
       type: "CHAT" as const,
@@ -110,8 +107,8 @@ const TeamChatRoomContainer: React.FC<TeamChatRoomContainerProps> = ({ setPartic
       <div className="flex-1 overflow-y-auto">
         <TeamChatMessages
           messages={messages}
-          currentUserId={currentUserId}
-          userImage="/path/to/profile.jpg"
+          currentNickname={nickname}
+          userImage={userProfileImage}
         />
       </div>
       <TeamChatInput

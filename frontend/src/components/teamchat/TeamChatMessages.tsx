@@ -2,7 +2,6 @@ import React, { useRef, useEffect } from "react";
 
 interface ChatMessage {
   id: string;
-  userId: number;
   sender: string;
   message: string;
   roomId: string;
@@ -13,83 +12,85 @@ interface ChatMessage {
 
 interface TeamChatMessagesProps {
   messages: ChatMessage[];
-  currentUserId: number;
+  currentNickname: string;
   userImage?: string;
 }
 
-const TeamChatMessages: React.FC<TeamChatMessagesProps> = ({
-  messages,
-  currentUserId,
-  userImage,
-}) => {
+const TeamChatMessages = ({ messages, currentNickname, userImage }: TeamChatMessagesProps) => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
+  const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
   }, [messages]);
 
   const formatTimestamp = (timestamp: string) => {
-    const date = new Date(timestamp);
-    const hours = date.getHours();
-    const minutes = date.getMinutes().toString().padStart(2, "0");
-    const ampm = hours >= 12 ? "오후" : "오전";
-    const formattedHours = hours % 12 || 12;
-
-    return `${ampm} ${formattedHours}:${minutes}`;
+    return new Date(timestamp).toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
   };
 
   return (
-    <div className="flex flex-col space-y-4">
+    <div className="flex-1 overflow-y-auto space-y-4">
       {messages.map((msg, index) => {
         if (msg.type === "JOIN" || msg.type === "LEAVE") {
           return (
-            <div key={index} className="text-center text-gray-500 text-sm">
-              <span>
-                {msg.sender}
-                {msg.message}
-              </span>
+            <div key={msg.id || index} className="text-center text-gray-500 text-sm">
+              {msg.message}
             </div>
           );
         }
 
-        const isCurrentUser = msg.userId === currentUserId;
+        const isCurrentUser = msg.sender === currentNickname;
 
         return (
           <div
-            key={index}
-            className={`flex items-end space-x-2 ${
-              isCurrentUser ? "flex-row-reverse space-x-reverse" : "flex-row"
-            }`}
+            key={msg.id || index}
+            className={`flex items-center gap-2 ${isCurrentUser ? "flex-row-reverse" : "flex-row"}`}
           >
-            {!isCurrentUser && (
-              <div className="flex flex-col items-center justify-center">
-                <img
-                  src={userImage || "/default-profile.png"}
-                  alt={msg.sender}
-                  className="w-8 h-8 rounded-full"
+            {isCurrentUser ? (
+              <>
+                <div
+                  className="w-10 h-10 rounded-full bg-gray-200 flex-shrink-0 bg-cover bg-center"
+                  style={{
+                    backgroundImage: `url(${msg.profileImageUrl || userImage || "/default-profile.png"})`,
+                  }}
                 />
-                <span className="text-xs text-gray-500">{msg.sender}</span>
-              </div>
+                <div
+                  className={`max-w-[70%] px-4 py-3 rounded-2xl font-kbogothiclight break-words ${
+                    isCurrentUser ? "bg-green-900 text-white" : "bg-gray-100 text-black"
+                  }`}
+                >
+                  {msg.message}
+                </div>
+                <div className="text-xs font-kbogothiclight text-gray-300 self-center">
+                  {formatTimestamp(msg.timestamp)}
+                </div>
+              </>
+            ) : (
+              <>
+                <div
+                  className="w-10 h-10 rounded-full bg-gray-200 flex-shrink-0 bg-cover bg-center"
+                  style={{
+                    backgroundImage: `url(${msg.profileImageUrl || userImage || "/default-profile.png"})`,
+                  }}
+                />
+                <div
+                  className={`max-w-[70%] px-4 py-3 rounded-2xl break-words ${
+                    isCurrentUser ? "bg-green-900 text-white" : "bg-gray-100 text-black"
+                  }`}
+                >
+                  {msg.message}
+                </div>
+                <div className="text-xs text-gray-300 self-center">
+                  {formatTimestamp(msg.timestamp)}
+                </div>
+              </>
             )}
-
-            <div className="flex items-center">
-              <div
-                className={`font-kbogothiclight px-4 py-2 mx-1 rounded-2xl max-w-xs lg:max-w-md break-words ${
-                  isCurrentUser
-                    ? "bg-blue-500 text-white rounded-br-none"
-                    : "bg-gray-200 text-black rounded-bl-none"
-                }`}
-              >
-                {msg.message}
-              </div>
-              <span
-                className={`text-xs font-kbogothiclight text-gray-400 ${
-                  isCurrentUser ? "text-right" : "text-left"
-                }`}
-              >
-                {formatTimestamp(msg.timestamp)}
-              </span>
-            </div>
           </div>
         );
       })}
