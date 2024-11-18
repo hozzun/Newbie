@@ -74,16 +74,6 @@ export const postGeneralBoard = async (data: FormData) => {
   });
 };
 
-export interface PostGeneralBoardScrapRequest {
-  userId: number; // 사용자 ID
-  boardId: number; // 게시글 ID
-  boardType: string; // 게시판 유형 ("general" | "used")
-}
-
-export const getUserProfile = () => {
-  return axios.get("/api/v1/user/users"); // userId 수정필요
-};
-
 //---------------------------------------------------------------------
 
 // 중고거래 게시글 전체 조회

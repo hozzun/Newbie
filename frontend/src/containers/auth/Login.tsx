@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import LoginComponent from "../../components/auth/Login";
-import { KAKAO_AUTH_URL, GOOGLE_AUTH_URL } from "../../api/Oauth";
+import { KAKAO_AUTH_URL } from "../../api/Oauth";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -18,16 +18,9 @@ const Login = () => {
     window.location.href = KAKAO_AUTH_URL;
   };
 
-  const handleGoogleLoginClick = () => {
-    window.location.href = GOOGLE_AUTH_URL;
-  };
-
   return (
     <div>
-      <LoginComponent
-        onKakaoLoginClick={handleKakaoLoginClick}
-        onGoogleLoginClick={handleGoogleLoginClick}
-      />
+      <LoginComponent onKakaoLoginClick={handleKakaoLoginClick} />
     </div>
   );
 };

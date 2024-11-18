@@ -1,13 +1,11 @@
 import karina from "../../../src/assets/images/LOGO.png";
 import kakao from "../.././assets/images/auth/kakao_login.png";
-import google from "../../assets/images/auth/google_login.png";
 
 type LoginProps = {
   onKakaoLoginClick: () => void;
-  onGoogleLoginClick: () => void;
 };
 
-const Login = ({ onKakaoLoginClick, onGoogleLoginClick }: LoginProps) => {
+const Login = ({ onKakaoLoginClick }: LoginProps) => {
   return (
     <div className="flex flex-col items-center justify-center h-full">
       <img src={karina} alt="Karina" className="w-70 h-80 rounded-xl object-cover" />
@@ -21,14 +19,8 @@ const Login = ({ onKakaoLoginClick, onGoogleLoginClick }: LoginProps) => {
       <img
         src={kakao}
         alt="카카오 로그인 버튼"
-        className="w-full cursor-pointer mb-2"
+        className="w-full cursor-pointer my-2"
         onClick={onKakaoLoginClick}
-      />
-      <img
-        src={google}
-        alt="구글 로그인 버튼"
-        className="w-full cursor-pointer"
-        onClick={onGoogleLoginClick}
       />
     </div>
   );
