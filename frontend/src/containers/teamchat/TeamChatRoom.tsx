@@ -27,6 +27,7 @@ const TeamChatRoomContainer = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [comment, setComment] = useState("");
   const [connected, setConnected] = useState(false);
+  console.log(participantCount);
 
   const nickname = useSelector((state: RootState) => state.myInfo.nickname || "뉴비");
   const userProfileImage = useSelector(
@@ -122,13 +123,10 @@ const TeamChatRoomContainer = () => {
 
   return (
     <div className="flex flex-col">
-      <div className="fixed top-0 font-kbogothicmedium">
-        <SectionBox
-          label={`${participantCount}명과 함께하는 ${id} 응원방`}
-          onBackClick={handleLeave}
-        />
+      <div className="fixed top-0 left-0 w-full h-14 flex items-center justify-center bg-white font-kbogothicmedium z-50">
+        <SectionBox label={`${id} 응원방`} onBackClick={handleLeave} />
       </div>
-      <div className="flex-1 overflow-y-auto">
+      <div className="flex-1 pt-16">
         <TeamChatMessages
           messages={messages}
           currentNickname={nickname}

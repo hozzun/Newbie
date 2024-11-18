@@ -22,8 +22,6 @@ const BaseballDict = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [comment, setComment] = useState("");
   const [roomId, setRoomId] = useState<string>("");
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
   const userProfileImage = useSelector((state: RootState) => state.myInfo.profileImage);
   const email = useSelector((state: RootState) => state.myInfo.email);
@@ -40,13 +38,7 @@ const BaseballDict = () => {
     if (!userEmail) return;
 
     try {
-      setIsLoading(true);
-      setError(null);
-
-      const authorization = window.sessionStorage.getItem("access_token");
-      if (!authorization) {
-        throw new Error("인증 토큰이 없습니다.");
-      }
+      // const authorization = window.sessionStorage.getItem("access_token");
 
       // 채팅방 생성
       const { data: fetchedRoomId } = await axiosInstance.post(
@@ -54,9 +46,9 @@ const BaseballDict = () => {
         null,
         {
           params: { userEmail },
-          headers: {
-            Authorization: `Bearer ${authorization}`,
-          },
+          // headers: {
+          //   Authorization: `Bearer ${authorization}`,
+          // },
         },
       );
 
@@ -66,18 +58,15 @@ const BaseballDict = () => {
       const { data: chatHistory } = await axiosInstance.get(
         `/api/v1/chatbot/chatbot/${userEmail}/history`,
         {
-          headers: {
-            Authorization: `Bearer ${authorization}`,
-          },
+          // headers: {
+          //   Authorization: `Bearer ${authorization}`,
+          // },
         },
       );
 
       setMessages(chatHistory);
     } catch (error) {
       console.error("Error fetching room or chat history:", error);
-      setError(error instanceof Error ? error.message : "채팅방을 불러오는데 실패했습니다.");
-    } finally {
-      setIsLoading(false);
     }
   }, [userEmail]);
 
@@ -119,7 +108,6 @@ const BaseballDict = () => {
         },
         () => {
           setConnected(true);
-          setError(null);
 
           client.subscribe(`/topic/chatbot/${roomId}`, message => {
             handleWebSocketMessage(message.body);
@@ -127,7 +115,6 @@ const BaseballDict = () => {
         },
         error => {
           console.error("STOMP connection error:", error);
-          setError("연결 오류가 발생했습니다. 페이지를 새로고침해주세요.");
         },
       );
 
@@ -160,51 +147,29 @@ const BaseballDict = () => {
         setComment("");
       } catch (error) {
         console.error("Error sending message:", error);
-        setError("메시지 전송에 실패했습니다. 다시 시도해주세요.");
         setMessages(prevMessages => prevMessages.slice(0, -1));
       }
     }
   }, [stompClient, connected, comment, roomId, userEmail]);
 
   return (
-    <div className="h-full">
-      {isLoading && (
-        <div className="flex justify-center items-center h-full">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
-        </div>
-      )}
-      {error && (
-        <div className="flex justify-center items-center h-full">
-          <div className="text-red-500 text-center">
-            <p className="font-kbogothicmedium">연결이 실패했어요</p>
-            <p>{error}</p>
-            <button
-              onClick={() => userEmail && fetchRoomAndHistory()}
-              className="font-kbogothicmedium mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-            >
-              다시 시도해보세요
-            </button>
-          </div>
-        </div>
-      )}
-      {!isLoading && !error && (
-        <>
-          <ChatMessages
-            messages={messages}
-            currentUserEmail={userEmail}
-            userImage={userProfileImage}
-            aiImage={AIBOT}
-          />
-          <ChatInput
-            onSendMessage={handleSendMessage}
-            comment={comment}
-            setComment={setComment}
-            placeholder="메시지를 입력하세요..."
-            disabled={!connected}
-          />
-        </>
-      )}
-    </div>
+    <>
+      <div className="h-full">
+        <ChatMessages
+          messages={messages}
+          currentUserEmail={userEmail}
+          userImage={userProfileImage}
+          aiImage={AIBOT}
+        />
+        <ChatInput
+          onSendMessage={handleSendMessage}
+          comment={comment}
+          setComment={setComment}
+          placeholder="메시지를 입력하세요..."
+          disabled={!connected}
+        />
+      </div>
+    </>
   );
 };
 
