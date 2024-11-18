@@ -39,7 +39,7 @@ const TeamChatRoomContainer: React.FC<TeamChatRoomContainerProps> = ({ setPartic
     const socket = new SockJS(`${axiosInstance.defaults.baseURL}/api/v1/chat/ws/chat`);
     const stomp = Stomp.over(socket);
 
-    stomp.connect({}, () => {
+    stomp.connect({ Authorization: sessionStorage.getItem("authorization") }, () => {
       setConnected(true);
       console.log("WebSocket 연결 성공");
 
