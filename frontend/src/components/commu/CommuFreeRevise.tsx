@@ -112,7 +112,7 @@ const CommuFreeRevise: React.FC<CommuFreeReviseProps> = ({
           rows={10}
         />
         <div className="absolute bottom-4 font-kbogothiclight right-6 text-xs text-gray-400">
-          ( {text.length} / 1000 )
+          ( {text ? text.length : 0} / 1000 )
         </div>
       </div>
     </>
