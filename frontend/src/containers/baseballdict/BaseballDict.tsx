@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import SockJS from "sockjs-client";
-import { Client } from "@stomp/stompjs";
+import Stomp from "stompjs";
 import axiosInstance from "../../util/axiosInstance";
 import ChatMessages from "../../components/baseballdict/ChatMessages";
 import ChatInput from "../../components/baseballdict/ChatInput";
@@ -17,7 +17,7 @@ interface Message {
 }
 
 const BaseballDict = () => {
-  const [stompClient, setStompClient] = useState<Client | null>(null);
+  const [stompClient, setStompClient] = useState<Stomp.Client | null>(null);
   const [connected, setConnected] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [comment, setComment] = useState("");
@@ -37,7 +37,7 @@ const BaseballDict = () => {
   }, [email]);
 
   const fetchRoomAndHistory = useCallback(async () => {
-    if (!userEmail) return; // userEmail이 없으면 실행하지 않음
+    if (!userEmail) return;
 
     try {
       setIsLoading(true);
@@ -81,7 +81,6 @@ const BaseballDict = () => {
     }
   }, [userEmail]);
 
-  // userEmail이 설정되었을 때만 fetchRoomAndHistory 실행
   useEffect(() => {
     if (userEmail) {
       fetchRoomAndHistory();
@@ -109,15 +108,16 @@ const BaseballDict = () => {
     [roomId],
   );
 
-  // WebSocket 연결 설정
   useEffect(() => {
     if (roomId && userEmail) {
-      const client = new Client({
-        webSocketFactory: () => new SockJS(`${axiosInstance.defaults.baseURL}/api/v1/chatbot/ws`),
-        connectHeaders: {
+      const socket = new SockJS(`${axiosInstance.defaults.baseURL}/api/v1/chatbot/ws`);
+      const client = Stomp.over(socket);
+
+      client.connect(
+        {
           Authorization: `Bearer ${window.sessionStorage.getItem("access_token") || ""}`,
         },
-        onConnect: () => {
+        () => {
           setConnected(true);
           setError(null);
 
@@ -125,22 +125,19 @@ const BaseballDict = () => {
             handleWebSocketMessage(message.body);
           });
         },
-        onDisconnect: () => {
-          setConnected(false);
-          console.log("WebSocket 연결이 끊어졌습니다.");
-        },
-        onStompError: frame => {
-          console.error("STOMP error:", frame);
+        error => {
+          console.error("STOMP connection error:", error);
           setError("연결 오류가 발생했습니다. 페이지를 새로고침해주세요.");
         },
-        reconnectDelay: 5000,
-      });
+      );
 
-      client.activate();
       setStompClient(client);
 
       return () => {
-        client.deactivate();
+        client.disconnect(() => {
+          console.log("WebSocket 연결이 끊어졌습니다.");
+          setConnected(false);
+        });
         setStompClient(null);
       };
     }
@@ -158,10 +155,7 @@ const BaseballDict = () => {
       try {
         setMessages(prevMessages => [...prevMessages, newMessage]);
 
-        stompClient.publish({
-          destination: `/app/chatbot/${roomId}`,
-          body: JSON.stringify(newMessage),
-        });
+        stompClient.send(`/app/chatbot/${roomId}`, {}, JSON.stringify(newMessage));
 
         setComment("");
       } catch (error) {
