@@ -31,6 +31,8 @@ export const getGames = (request: GetGamesRequest) => axios.get<Array<GetGamesRe
     params: {...request}
 })
 
+export const getGameById = (id: number) => axios.get<GetGamesResponse>(`/api/v1/baseball/games/${id}`);
+
 // 예정된 경기 조회
 export interface GetUpcomingGameRequest {
     teamId: number;
