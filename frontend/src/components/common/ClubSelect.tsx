@@ -4,10 +4,7 @@ import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 
 import ClubLogos from "../../util/ClubLogos";
-import { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
-import { RootState } from "../../redux/store";
-import { getIdByNum } from "../../util/ClubId";
+import { useState } from "react";
 
 const clubs: {
   color: "doosan" | "hanwha" | "kia" | "kiwoom" | "kt" | "lg" | "lotte" | "nc" | "samsung" | "ssg";
@@ -24,27 +21,11 @@ const clubs: {
   { color: "ssg" },
 ];
 
-interface ClubSelectProps {
-  page?: string;
-  onSelectClub?: (clubColor: string) => void;
-}
-
-const ClubSelect = ({ page, onSelectClub }: ClubSelectProps) => {
+const ClubSelect = () => {
   const [selectedClub, setSelectedClub] = useState<string | null>(null);
-  const { team } = useSelector((state: RootState) => state.team);
-
-  useEffect(() => {
-    if (page === "photocard") {
-      const teamEnglish = getIdByNum(team);
-      setSelectedClub(teamEnglish);
-    }
-  }, []);
 
   const handleSelect = (clubColor: string) => {
     setSelectedClub(clubColor);
-    if (onSelectClub) {
-      onSelectClub(clubColor);
-    }
   };
 
   const settings = {

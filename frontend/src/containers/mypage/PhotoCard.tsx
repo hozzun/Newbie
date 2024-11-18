@@ -23,7 +23,7 @@ const PhotoCard = () => {
   const [photos, setPhotos] = useState<PhotoCard[]>([]);
   const selectedClub = useSelector((state: RootState) => state.myPhotoCard.team)
   const selectedPosition = useSelector((state: RootState) => state.myPhotoCard.selectedPosition);
-  const { team } = useSelector((state: RootState) => state.team);
+  const { cheeringClub } = useSelector((state: RootState) => state.team);
 
   const clubName = getIdByNum(selectedClub);
 
@@ -65,7 +65,7 @@ const PhotoCard = () => {
 
   return (
     <>
-      <ClubEmblaCarousel selectedItem={clubName || getIdByNum(team) || ""} handleClickItem={handleClubChange} />
+      <ClubEmblaCarousel selectedItem={clubName || getIdByNum(cheeringClub) || ""} handleClickItem={handleClubChange} />
       <div className="m-5">
         <TabBar
           options={tabBarOptions}
