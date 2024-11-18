@@ -16,6 +16,7 @@ const CommuFreeDetail = () => {
   const [post, setPost] = useState<GetGeneralBoardResponse | null>(null);
   const [comments, setComments] = useState<GetGeneralComment[] | null>(null);
   const [good, setGood] = useState<boolean | null>(null);
+  const [goodCount, setGoodCount] = useState<number>(0);
   const [scrap, setScrap] = useState<boolean | null>(null);
 
   // 게시물 상세 로드 함수
@@ -26,6 +27,7 @@ const CommuFreeDetail = () => {
         ...response.data,
       });
       setGood(response.data.likedByUser);
+      setGoodCount(response.data.likeCount)
       setScrap(response.data.scrapedByUser);
     } catch (error) {
       console.error("Free boards loading error:", error);
@@ -49,8 +51,11 @@ const CommuFreeDetail = () => {
         params,
       });
       setGood(!good);
-      loadBoards()
-      return response.data
+      if (response.data == 'liked') {
+        setGoodCount(goodCount + 1)
+      } else {
+        setGoodCount(goodCount - 1)
+      }
     } catch (error) {
       console.error("에러 발생:", error);
     }
@@ -131,7 +136,7 @@ const CommuFreeDetail = () => {
               ) : (
                 <Like className="w-4 h-4 text-gray-200" onClick={() => postGood(numericId)} />
               )}{" "}
-              {post.likeCount}
+              {goodCount}
             </div>
           </div>
           {post.tags.map((tag, index) => (
