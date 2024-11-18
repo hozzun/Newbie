@@ -11,11 +11,11 @@ export interface getUserProfileResponse {
 }
 
 export const getUserProfile = () => {
-  return axios.get<getUserProfileResponse[]>("/api-user/users/:id");
+  return axios.get<getUserProfileResponse[]>("/api/v1/user/users/:id");
 };
 
 // 응원 구단 조회
-export const getCheeringClub = () => axios.get<number>("/api/v1/users/favorite-team");
+export const getCheeringClub = () => axios.get<number>("/api/v1/user/users/favorite-team");
 
 // 최신 직관 경기 조회
 export interface GetLatestAttendedGameResponse {
@@ -31,4 +31,4 @@ export interface GetLatestAttendedGameResponse {
   text: string;
 }
 
-export const getLatestAttendedGame = () => axios.get<GetLatestAttendedGameResponse>("/api-mypage/ticket/latest");
+export const getLatestAttendedGame = () => axios.get<GetLatestAttendedGameResponse>("/api/v1/mypage/ticket/latest");
