@@ -38,17 +38,11 @@ const BaseballDict = () => {
     if (!userEmail) return;
 
     try {
-      // const authorization = window.sessionStorage.getItem("access_token");
-
-      // 채팅방 생성
       const { data: fetchedRoomId } = await axiosInstance.post(
-        "/api/v1/chatbot/create-room",
+        "/api/v1/chatbot/chatbot/create-room",
         null,
         {
           params: { userEmail },
-          // headers: {
-          //   Authorization: `Bearer ${authorization}`,
-          // },
         },
       );
 
@@ -57,11 +51,6 @@ const BaseballDict = () => {
       // 채팅 히스토리 가져오기
       const { data: chatHistory } = await axiosInstance.get(
         `/api/v1/chatbot/chatbot/${userEmail}/history`,
-        {
-          // headers: {
-          //   Authorization: `Bearer ${authorization}`,
-          // },
-        },
       );
 
       setMessages(chatHistory);
