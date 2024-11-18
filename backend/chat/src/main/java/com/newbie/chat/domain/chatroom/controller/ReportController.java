@@ -15,7 +15,7 @@ public class ReportController {
 
     @PostMapping
     public ResponseEntity<String> reportUser(@RequestBody ReportRequest reportRequest,
-                                             @RequestHeader("X-User-EMAIL") String reporterUserEmail) {
+                                             @RequestHeader("X-Email") String reporterUserEmail) {
         if (reporterUserEmail.equals(reportRequest.getReportedUserEmail())) {
             return ResponseEntity.badRequest().body("자기 자신을 신고할 수 없습니다.");
         }

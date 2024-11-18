@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
 @RestController
@@ -30,35 +29,55 @@ public class UserController {
     }
 
     @Operation(summary = "유저 프로필 조회")
-    @GetMapping("/{userId}")
-    public ResponseEntity<UserResponseDto> getUserProfile(@PathVariable("userId") Long userId) {
+    @GetMapping
+    public ResponseEntity<UserResponseDto> getUserProfile(@RequestHeader(value = "X-Member-ID", required = false) String memberId) {
+        if (memberId == null || memberId.isEmpty()) {
+            return ResponseEntity.badRequest().body(null);
+        }
+        Long userId = Long.valueOf(memberId);
         UserResponseDto userProfile = userService.getUserProfile(userId);
         return new ResponseEntity<>(userProfile, HttpStatus.OK);
     }
 
     @Operation(summary = "유저 프로필 업데이트")
-    @PatchMapping("/{userId}")
-    public ResponseEntity<Void> updateUserProfile(@PathVariable Long userId, @ModelAttribute UserProfileRequestDto requestDto) {
+    @PatchMapping
+    public ResponseEntity<Void> updateUserProfile(@RequestHeader(value = "X-Member-ID", required = false) String memberId, @ModelAttribute UserProfileRequestDto requestDto) {
+        if (memberId == null || memberId.isEmpty()) {
+            return ResponseEntity.badRequest().body(null);
+        }
+        Long userId = Long.valueOf(memberId);
         userService.updateUserProfile(userId, requestDto);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @Operation(summary = "응원 팀 업데이트")
-    @PatchMapping("/{userId}/favorite-team")
-    public ResponseEntity<Void> updateFavoriteTeam(@PathVariable Long userId, @RequestParam Integer teamId) {
+    @PatchMapping("/favorite-team")
+    public ResponseEntity<Void> updateFavoriteTeam(@RequestHeader(value = "X-Member-ID", required = false) String memberId, @RequestParam Integer teamId) {
+        if (memberId == null || memberId.isEmpty()) {
+            return ResponseEntity.badRequest().body(null);
+        }
+        Long userId = Long.valueOf(memberId);
         userService.updateFavoriteTeam(userId, teamId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @Operation(summary = "응원 팀 조회")
-    @GetMapping("/{userId}/favorite-team")
-    public ResponseEntity<Integer> getFavoriteTeam(@PathVariable Long userId) {
+    @GetMapping("/favorite-team")
+    public ResponseEntity<Integer> getFavoriteTeam(@RequestHeader(value = "X-Member-ID", required = false) String memberId) {
+        if (memberId == null || memberId.isEmpty()) {
+            return ResponseEntity.badRequest().body(null);
+        }
+        Long userId = Long.valueOf(memberId);
         return new ResponseEntity<>(userService.getFavoriteTeam(userId), HttpStatus.OK);
     }
 
     @Operation(summary = "회원 탈퇴 처리")
     @PatchMapping("/resign")
-    public ResponseEntity<Void> resignUser(@RequestBody Long userId) {
+    public ResponseEntity<Void> resignUser(@RequestHeader(value = "X-Member-ID", required = false) String memberId) {
+        if (memberId == null || memberId.isEmpty()) {
+            return ResponseEntity.badRequest().body(null);
+        }
+        Long userId = Long.valueOf(memberId);
         userService.updateIsResigned(userId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
