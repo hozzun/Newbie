@@ -7,10 +7,7 @@ import com.newbie.cardstore.usercard.service.PurchaseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/purchase")
@@ -22,13 +19,13 @@ public class PurchaseController {
 
     /**
      * 사용자가 카드를 구입
-     * @param purchaseDto userId, cardId, price
+     * @param userId, cardId, price
      * @return 구입 완료 시 ok, 마일리지가 부족 시 mileage 부족, 그 외 500
      */
     @PostMapping
-    public ResponseEntity<?> purchaseCard(@RequestBody PurchaseDto purchaseDto) {
+    public ResponseEntity<?> purchaseCard(@RequestParam String cardId, @RequestHeader("X-Member-ID") String userId) {
         try {
-            purchaseService.purchaseCard(purchaseDto);
+            purchaseService.purchaseCard(cardId, userId);
             return ResponseEntity.ok(HttpStatus.OK);
         } catch (CustomException e) {
             return ResponseEntity

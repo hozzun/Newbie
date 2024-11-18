@@ -60,40 +60,40 @@ public class PurchaseService {
         }
     }
 
-    public void purchaseCard(PurchaseDto purchaseDto) {
-        log.info("Starting purchaseCard with PurchaseDto: {}", purchaseDto);
+    public void purchaseCard(String cardId, String memberId) {
+        Long userId = Long.valueOf(memberId);
 
         ObjectId cardObjectId;
         try {
-            cardObjectId = new ObjectId(purchaseDto.getCardId());
+            cardObjectId = new ObjectId(cardId);
             log.info("Converted cardId to ObjectId: {}", cardObjectId);
         } catch (IllegalArgumentException e) {
-            log.error("Invalid cardId format: {}", purchaseDto.getCardId(), e);
+            log.error("Invalid cardId format: {}", cardId, e);
             throw new CustomException(ErrorCode.INVALID_CARD_ID);
         }
 
         // 사용자가 이미 해당 카드를 보유하고 있는지 체크
-        boolean isCardAlreadyPurchased = userCardRepository.existsByUserIdAndCardIdsContains(purchaseDto.getUserId(), cardObjectId);
+        boolean isCardAlreadyPurchased = userCardRepository.existsByUserIdAndCardIdsContains(userId, cardObjectId);
         if (isCardAlreadyPurchased) {
-            log.error("User {} has already purchased the card {}", purchaseDto.getUserId(), cardObjectId);
+            log.error("User {} has already purchased the card {}", userId, cardObjectId);
             throw new CustomException(ErrorCode.CARD_ALREADY_PURCHASED);
         }
 
-        PlayerCard playerCard = playerCardRepository.findById(purchaseDto.getCardId())
+        PlayerCard playerCard = playerCardRepository.findById(cardId)
                 .orElseThrow(() -> new IllegalArgumentException("Card not found"));
 
         double price = playerCard.getPrice();
         // 마일리지 확인 후 구매 처리
-        if (checkMileage(purchaseDto.getUserId(), price)) {
-            if (sendMileageDeductionRequest(purchaseDto.getUserId(), price)) {
+        if (checkMileage(userId, price)) {
+            if (sendMileageDeductionRequest(userId, price)) {
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 String createdAt = dateFormat.format(new Date());
 
                 // UserCard 가져오기 또는 새로 생성
-                UserCard userCard = userCardRepository.findByUserId(purchaseDto.getUserId()).stream()
+                UserCard userCard = userCardRepository.findByUserId(userId).stream()
                         .findFirst()
                         .orElse(UserCard.builder()
-                                .userId(purchaseDto.getUserId())
+                                .userId(userId)
                                 .cardIds(new HashSet<>())
                                 .createdAt(createdAt)
                                 .build());
@@ -105,11 +105,11 @@ public class PurchaseService {
                 log.info("UserCard saved successfully: {}", savedUserCard);
 
             } else {
-                log.error("Failed to send mileage deduction request for userId: {}", purchaseDto.getUserId());
+                log.error("Failed to send mileage deduction request for userId: {}", userId);
                 throw new CustomException(ErrorCode.MILEAGE_CHECK_FAILED);
             }
         } else {
-            log.error("Insufficient mileage for userId: {}, purchase price: {}", purchaseDto.getUserId(), price);
+            log.error("Insufficient mileage for userId: {}, purchase price: {}", userId, price);
             throw new CustomException(ErrorCode.INSUFFICIENT_MILEAGE);
         }
     }

@@ -35,10 +35,11 @@ public class CardService {
     /**
      * 사용자 ID로 사용자가 구매한 카드 목록 조회
      *
-     * @param userId
+     * @param memberId
      * @return List<PlayerCardDto>
      */
-    public List<PlayerCardDto> getCardsByUserId(Long userId) {
+    public List<PlayerCardDto> getCardsByUserId(String memberId) {
+        Long userId = Long.valueOf(memberId);
         Optional<UserCard> userCard = userCardRepository.findByUserId(userId);
 
         if (userCard.isEmpty() || userCard.get().getCardIds().isEmpty()) {
@@ -67,8 +68,9 @@ public class CardService {
      * @param teamId, sortType, includeCard, userId
      * @return List<PlayerCardDto>
      */
-    public List<PlayerCardDto> getCards(int teamId, SortType sortType, String position, boolean includeCard, Long userId) {
+    public List<PlayerCardDto> getCards(int teamId, SortType sortType, String position, boolean includeCard, String memberId) {
         List<PlayerCard> cards;
+        Long userId = Long.valueOf(memberId);
 
         // 정렬 타입에 따라 카드를 조회
         if (position != null && !position.isEmpty()) {
@@ -113,10 +115,11 @@ public class CardService {
 
     /**
      * 유저의 최신 선수 카드 한 개 조회
-     * @param userId
+     * @param memberId
      * @return
      */
-    public PlayerCardDto getMyLatestCard(Long userId) {
+    public PlayerCardDto getMyLatestCard(String memberId) {
+        Long userId = Long.valueOf(memberId);
         Set<ObjectId> cardIds = findUserCardIds(userId);
 
         if (cardIds.isEmpty()) {
@@ -139,8 +142,9 @@ public class CardService {
                 .collect(Collectors.toList());
     }
 
-    public void deleteCard(String cardId, Long userId) {
+    public void deleteCard(String cardId, String memberId) {
         ObjectId objectId;
+        Long userId = Long.valueOf(memberId);
         try {
             objectId = new ObjectId(cardId);
         } catch (IllegalArgumentException e) {

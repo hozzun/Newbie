@@ -46,14 +46,15 @@ public class GeneralBoardCommentService {
      * @return
      */
     @Transactional
-    public GeneralBoardCommentResponseDto createComment(GeneralBoardCommentRequestDto requestDto, int userId) {
+    public GeneralBoardCommentResponseDto createComment(GeneralBoardCommentRequestDto requestDto, String userId, String username) {
         GeneralBoard generalBoard = generalBoardRepository.findById(requestDto.getBoardId())
                 .orElseThrow(() -> new RuntimeException("Board not found"));
 
         GeneralBoardComment comment = GeneralBoardComment.builder()
                 .content(requestDto.getContent())
                 .createdAt(LocalDateTime.now())
-                .userId((long) userId)
+                .userId(Long.valueOf(userId))
+                .userName(username)
                 .generalBoard(generalBoard)
                 .isDeleted("N")
                 .build();
@@ -65,10 +66,10 @@ public class GeneralBoardCommentService {
         }
 
         GeneralBoardComment savedComment = commentRepository.save(comment);
-        mileageProducer.sendMileageUpdate(userId, 100, "댓글 작성");
+        mileageProducer.sendMileageUpdate(Integer.parseInt(userId), 100, "댓글 작성");
 
         Activity activity = Activity.builder()
-                .userId((long) userId)
+                .userId(Long.valueOf(userId))
                 .boardId(requestDto.getBoardId())
                 .boardType("GENERAL_BOARD")
                 .type("comment")
@@ -82,10 +83,11 @@ public class GeneralBoardCommentService {
     /**
      * 댓글을 삭제합니다.
      * @param commentId
-     * @param userId
+     * @param memberId
      */
     @Transactional
-    public void deleteComment(Long commentId, Long userId) {
+    public void deleteComment(Long commentId, String memberId) {
+        Long userId = Long.valueOf(memberId);
         GeneralBoardComment generalBoardComment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new RuntimeException("Comment not found"));
 

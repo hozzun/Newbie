@@ -36,9 +36,11 @@ public class UsedBoardController {
     @Operation(summary = "유저 게시글 생성", description = "유저가 게시글을 생성합니다.")
     @PostMapping("/create")
     public ResponseEntity<UsedBoardResponseDto> createUsedBoard(
-            @ModelAttribute @Parameter(description = "userId, title, content, tagList, price, region") UsedBoardRequestDto usedBoardDto,
-            @RequestPart @Parameter(description = "imageFile") MultipartFile imageFile) throws IOException {
-        return ResponseEntity.status(HttpStatus.CREATED).body(usedBoardService.createUsedBoard(usedBoardDto, imageFile));
+            @ModelAttribute @Parameter(description = "title, content, tagList, price, region") UsedBoardRequestDto usedBoardDto,
+            @RequestPart @Parameter(description = "imageFile") MultipartFile imageFile,
+            @RequestHeader("X-Member-ID") String userId,
+            @RequestHeader("X-Nickname") String nickname) throws IOException {
+        return ResponseEntity.status(HttpStatus.CREATED).body(usedBoardService.createUsedBoard(usedBoardDto, imageFile, userId, nickname));
     }
 
     /**
