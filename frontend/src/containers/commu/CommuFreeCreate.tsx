@@ -90,7 +90,7 @@ const CommuFreeCreate = () => {
         const formData = new FormData();
         // generalBoardDto 데이터 추가
         formData.append(
-          "generalBoardDto",
+          "generalBoard",
           JSON.stringify({
             userName: "김진우",
             title: titleValue,
