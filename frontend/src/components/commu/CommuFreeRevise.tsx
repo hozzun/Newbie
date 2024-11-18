@@ -5,7 +5,7 @@ interface CommuFreeReviseProps {
   titleValue: string;
   tagValue: string;
   text: string;
-  tags: string[]
+  tags: string[];
   image: string;
   errorMessage: string | null;
   onTitleChange: (e: ChangeEvent<HTMLInputElement>) => void;
@@ -32,7 +32,6 @@ const CommuFreeRevise: React.FC<CommuFreeReviseProps> = ({
   onClearTitle,
   onClearTag,
 }) => {
-
   return (
     <>
       {/* 제목 입력 */}
@@ -89,16 +88,15 @@ const CommuFreeRevise: React.FC<CommuFreeReviseProps> = ({
         </span>
       </div>
 
-      {/* 이미지 */}
+      {/* 이미지 미리보기 */}
       <div className="relative w-full p-4 border-b-2 border-gray-100 flex items-center justify-center mb-4">
         <div className="text-gray-500 font-kbogothiclight flex items-center border border-dashed rounded-lg justify-center w-20 h-20">
-          {image && (
+          {image &&
             <img
               src={image}
               alt="Preview"
               className="w-20 h-20 object-cover rounded-lg"
-            />
-          )}
+            />}
         </div>
       </div>
 

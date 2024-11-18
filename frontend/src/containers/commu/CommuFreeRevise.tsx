@@ -1,21 +1,26 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import Button from "../../components/common/Button";
 import CommuFreeReviseComponent from "../../components/commu/CommuFreeRevise";
 import { BUTTON_VARIANTS } from "../../components/common/variants";
 import axiosInstance from "../../util/axiosInstance";
-import { useLocation } from 'react-router-dom';
 
 const CommuFreeRevise = () => {
   const nav = useNavigate();
   const location = useLocation();
-  const { id, title, imageUrl, content, tags } = location.state || {};
-  console.log('id', 'title', 'imageUrl', 'content', 'tags')
-  console.log(id, title, imageUrl, content, tags)
+  
+  // useLocation에서 state가 없으면 기본값을 설정
+  const { id, title, imageUrl, content, tags } = location.state || { 
+    id: null, 
+    title: "", 
+    imageUrl: "", 
+    content: "", 
+    tags: [] 
+  };
 
   const [titleValue, setTitleValue] = useState(title);
   const [tagValue, setTagValue] = useState("");
-  const [Tags, setTags] = useState<string[]>(tags);
+  const [Tags, setTags] = useState<string[]>(tags);  // 기존 태그들
   const [text, setText] = useState(content);
   const [buttonVariant, setButtonVariant] = useState(BUTTON_VARIANTS.second);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -34,21 +39,25 @@ const CommuFreeRevise = () => {
   const handleTagKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       e.preventDefault();
-      if (tags.length >= 5) {
+
+      if (Tags.length >= 5) {
         setErrorMessage("최대 5개의 태그만 추가할 수 있습니다.");
         return;
       }
-      if (tags.includes(tagValue.trim())) {
+
+      if (Tags.includes(tagValue.trim())) {
         setErrorMessage("이미 추가된 태그입니다.");
         return;
       }
+
       if (tagValue.trim().length > 5) {
         setErrorMessage("태그는 최대 5글자까지 입력 가능합니다.");
         return;
       }
+
       if (tagValue.trim()) {
         setTags(prevTags => [...prevTags, tagValue.trim()]);
-        setTagValue("");
+        setTagValue("");  // 태그 추가 후 입력란 비우기
       }
     }
   };
@@ -71,7 +80,7 @@ const CommuFreeRevise = () => {
     }
   };
 
-  // 모든 필드가 채워졌는지 확인
+  // 버튼 활성화 여부 체크
   useEffect(() => {
     if (titleValue !== null && text) {
       setButtonVariant(BUTTON_VARIANTS.primary);
@@ -80,24 +89,22 @@ const CommuFreeRevise = () => {
     }
   }, [titleValue, text]);
 
-  // api 호출 및 데이터 제출
+  // 게시글 수정 API 호출
   const handleSubmit = async () => {
-
     const reviseBody = {
       title: titleValue,
       content: text,
-      tags: tags
+      tags: Tags
     };
 
     try {
       const response = await axiosInstance.put(`/api/v1/board/general-board/${id}`, reviseBody);
-      nav(`/commuhome/freedetail/${id}`)
-      return response.data
+      nav(`/commuhome/freedetail/${id}`);
+      return response.data;
     } catch (error) {
       console.error("에러 발생:", error);
     }
   };
-  
 
   return (
     <div>
