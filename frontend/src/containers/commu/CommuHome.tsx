@@ -18,7 +18,7 @@ const CommuHome = () => {
     setSelectedSearch(search);
   };
 
-  const getSearch = async () => {
+  const getFreeSearch = async () => {
     const params = {
       keyword: searchQuery,
       type: selectedSearch,
@@ -33,11 +33,26 @@ const CommuHome = () => {
     }
   };
 
+  const getUsedSearch = async () => {
+    const params = {
+      keyword: searchQuery,
+      type: selectedSearch,
+    };
+
+    try {
+      const response = await axiosInstance.get("/api/v1/board/used-board/search", { params });
+      console.log("검색 결과:", response.data);
+      return response.data;
+    } catch (error) {
+      console.error("검색 중 에러 발생:", error);
+    }
+  };
+
   const handleSearch = () => {
     if (selectedTab === "free") {
-      getSearch(); // 자유 게시글 검색
+      getFreeSearch(); // 자유 게시글 검색
     } else if (selectedTab === "trade") {
-      getSearch();
+      getUsedSearch();
     }
   };
 
