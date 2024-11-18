@@ -37,51 +37,42 @@ const TeamChatRoomContainer: React.FC<TeamChatRoomContainerProps> = ({ setPartic
     const socket = new WebSocket(`${import.meta.env.VITE_API_SOCKET_URL}/api-chat/chat/ws/chat`);
     const stomp = Stomp.over(socket);
 
-    stomp.connect({}, () => {
-      setConnected(true);
-      console.log("WebSocket 연결 성공");
+    const authToken = window.localStorage.getItem("authorization");
 
-      const joinMessage = {
-        sender: nickname,
-        type: "JOIN",
-        roomId: id,
-        message: `${nickname}님이 입장하셨습니다.`,
-        timestamp: new Date().toISOString(),
-        profileImageUrl: "/path/to/profile.jpg",
-      };
+    stomp.connect(
+      { Authorization: authToken },
+      () => {
+        setConnected(true);
+        console.log("WebSocket 연결 성공");
 
-      stomp.send(`/app/chat/${id}/join`, {}, JSON.stringify(joinMessage));
-
-      stomp.subscribe(`/topic/chatroom/${id}`, message => {
-        const newMessage = JSON.parse(message.body);
-        setMessages(prev => [...prev, newMessage]);
-      });
-
-      stomp.subscribe(`/topic/chatroom/${id}/participants`, message => {
-        const count = parseInt(message.body, 10);
-        setParticipantCount(count);
-      });
-
-      setStompClient(stomp);
-    });
-
-    return () => {
-      if (stompClient) {
-        const leaveMessage = {
+        const joinMessage = {
           sender: nickname,
-          type: "LEAVE",
+          type: "JOIN",
           roomId: id,
-          message: `${nickname}님이 퇴장하셨습니다.`,
+          message: `${nickname}님이 입장하셨습니다.`,
           timestamp: new Date().toISOString(),
+          profileImageUrl: "/path/to/profile.jpg",
         };
 
-        stompClient.send(`/app/chat/${id}/leave`, {}, JSON.stringify(leaveMessage));
-        stompClient.disconnect(() => {
-          console.log("WebSocket 연결 해제");
-          setConnected(false);
+        stomp.send(`/app/chat/${id}/join`, {}, JSON.stringify(joinMessage));
+
+        stomp.subscribe(`/topic/chatroom/${id}`, message => {
+          const newMessage = JSON.parse(message.body);
+          setMessages(prev => [...prev, newMessage]);
         });
-      }
-    };
+
+        stomp.subscribe(`/topic/chatroom/${id}/participants`, message => {
+          const count = parseInt(message.body, 10);
+          setParticipantCount(count);
+        });
+
+        setStompClient(stomp);
+      },
+      error => {
+        console.error("WebSocket 연결 실패", error);
+        setConnected(false);
+      },
+    );
   }, [id, nickname]);
 
   const handleSendMessage = () => {
