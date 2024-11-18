@@ -12,7 +12,6 @@ const CommuFree = ({ searchQuery }: { searchQuery: string }) => {
 
   const goDetail = (id: number) => {
     nav(`/commuhome/freedetail/${id}`)
-    console.log('이동하는 아이디', id)
   }
 
   // 게시물 로드 함수
@@ -29,7 +28,6 @@ const CommuFree = ({ searchQuery }: { searchQuery: string }) => {
       }
       setLoading(false);
       setFreeBoards(response.data);
-      console.log('전체 게시물', response.data)
     } catch (error) {
       console.error("Free boards loading error:", error);
     } finally {
