@@ -7,14 +7,14 @@ import axiosInstance from "../../util/axiosInstance";
 
 const CommuHome = () => {
   const [selectedTab, setSelectedTab] = useState<"free" | "trade">("free");
-  const [selectedSearch, setSelectedSearch] = useState<"title" | "writer" | "tags">("title");
+  const [selectedSearch, setSelectedSearch] = useState<"title" | "username" | "tags">("title");
   const [searchQuery, setSearchQuery] = useState("");
 
   const handleTabClick = (tab: "free" | "trade") => {
     setSelectedTab(tab);
   };
 
-  const handleSearchClick = (search: "title" | "writer" | "tags") => {
+  const handleSearchClick = (search: "title" | "username" | "tags") => {
     setSelectedSearch(search);
   };
 
@@ -37,8 +37,7 @@ const CommuHome = () => {
     if (selectedTab === "free") {
       getSearch(); // 자유 게시글 검색
     } else if (selectedTab === "trade") {
-      // 중고거래 게시글 검색 로직을 여기에 추가할 수 있습니다.
-      console.log("중고거래 게시글 검색 로직 구현 필요");
+      getSearch();
     }
   };
 
