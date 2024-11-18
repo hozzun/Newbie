@@ -74,23 +74,6 @@ export const postGeneralBoard = async (data: FormData) => {
   });
 };
 
-export interface PostGeneralBoardScrapRequest {
-  userId: number; // 사용자 ID
-  boardId: number; // 게시글 ID
-  boardType: string; // 게시판 유형 ("general" | "used")
-}
-
-// 스크랩 API 함수 정의
-export const postGeneralBoardScrap = async (data: PostGeneralBoardScrapRequest) => {
-  try {
-    const response = await axios.post("/api/vi/board/scrap", data);
-    return response.data; // 성공 시 응답 데이터 반환
-  } catch (error) {
-    console.error("Error posting board scrap:", error);
-    throw error; // 에러를 호출한 곳으로 전달
-  }
-};
-
 //---------------------------------------------------------------------
 
 // 중고거래 게시글 전체 조회
