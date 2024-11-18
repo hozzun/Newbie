@@ -29,9 +29,8 @@ public class UsedBoardCommentController {
     @PostMapping("/{boardId}")
     public ResponseEntity<UsedBoardCommentResponseDto> createComment(
             @RequestBody @Parameter(description = "boardId, content") UsedBoardCommentRequestDto requestDto,
-            @RequestHeader("X-Member-ID") String userId,
-            @RequestHeader("X-Nickname") String nickname) {
-        UsedBoardCommentResponseDto createdComment = commentService.createComment(requestDto, userId, nickname);
+            @RequestHeader("X-Member-ID") String userId) {
+        UsedBoardCommentResponseDto createdComment = commentService.createComment(requestDto, userId);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdComment);
     }
 

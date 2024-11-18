@@ -50,6 +50,9 @@ public class GeneralBoard {
     @Builder.Default
     private Integer viewCount = 0;
 
+    @Column(name = "profile")
+    private String profile;
+
     @Builder.Default
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
     @JoinTable(

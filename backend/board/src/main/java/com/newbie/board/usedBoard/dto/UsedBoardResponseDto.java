@@ -20,10 +20,14 @@ public class UsedBoardResponseDto {
     private Integer price;
     private String region;
     private String imageUrl;
+    private String profile;
     private LocalDateTime createdAt;
     private List<String> tags;
     private int likeCount;
     private int commentCount;
     private int scrapCount;
     private int viewCount;
+
+    private boolean isLikedByUser;
+    private boolean isScrapedByUser;
 }

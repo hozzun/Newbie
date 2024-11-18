@@ -28,6 +28,8 @@ public class UsedBoardComment {
 
     private String userName;
 
+    private String profile;
+
     @NotNull
     private String content;
 

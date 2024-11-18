@@ -8,6 +8,7 @@ import com.newbie.board.generalBoard.service.GeneralBoardService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -15,11 +16,13 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 @RequestMapping("/general-board")
 public class GeneralBoardController {
 
@@ -30,14 +33,13 @@ public class GeneralBoardController {
     public ResponseEntity<GeneralBoardResponseDto> createGeneralBoard(
             @RequestPart("generalBoard") @Parameter(description = "title, content, tags") String generalBoardJson,
             @RequestPart(value = "imageFile", required = false) MultipartFile imageFile,
-            @RequestHeader("X-Member-ID") String userId,
-            @RequestHeader("X-Nickname") String nickName) throws IOException {
+            @RequestHeader("X-Member-ID") String userId) throws IOException {
 
         ObjectMapper objectMapper = new ObjectMapper();
         GeneralBoardRequestDto generalBoardDto = objectMapper.readValue(generalBoardJson, GeneralBoardRequestDto.class);
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(generalBoardService.createGeneralBoard(generalBoardDto, imageFile, userId, nickName));
+                .body(generalBoardService.createGeneralBoard(generalBoardDto, imageFile, userId));
     }
 
     @Operation(summary = "유저 게시글 전체 조회", description = "유저가 모든 게시글을 조회합니다.")
@@ -56,8 +58,9 @@ public class GeneralBoardController {
 
     @Operation(summary = "유저 게시글 조회", description = "유저가 특정 게시글을 조회합니다.")
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<GeneralBoardResponseDto>> getGeneralBoard(@PathVariable @Parameter(description = "boardId") Long id) {
-        return ResponseEntity.status(HttpStatus.OK).body(generalBoardService.getGeneralBoardById(id));
+    public ResponseEntity<Optional<GeneralBoardResponseDto>> getGeneralBoard(@PathVariable @Parameter(description = "boardId") Long id,
+                                                                             @RequestHeader("X-Member-Id") String userId) {
+        return ResponseEntity.status(HttpStatus.OK).body(generalBoardService.getGeneralBoardById(id, Long.valueOf(userId)));
     }
 
     @Operation(summary = "유저 게시글 업데이트", description = "유저가 게시글을 업데이트합니다.")
