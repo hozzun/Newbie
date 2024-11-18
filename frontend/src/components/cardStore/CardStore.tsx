@@ -7,6 +7,7 @@ import TabBar from "./TabBar";
 import ClubCarousel, { ClubCarouselProps } from "../common/ClubCarousel";
 
 interface CardStoreProps {
+  totalMileage: number;
   clubCarouselProps: ClubCarouselProps;
   selectedPositionOption: string;
   handleSelectPositionOption: (value: string) => void;
@@ -26,7 +27,9 @@ const CardStore = (props: CardStoreProps) => {
       <div className="flex flex-row justify-end items-center w-full">
         <div className="flex flex-row items-center mb-8">
           <Coin className="text-warning w-4 h-4 mr-2" />
-          <p className="text-base font-kbogothicmedium text-gray-700">3,000</p>
+          <p className="text-base font-kbogothicmedium text-gray-700">
+            {props.totalMileage.toLocaleString("ko-KR")}
+          </p>
         </div>
       </div>
       <ClubCarousel {...props.clubCarouselProps} />

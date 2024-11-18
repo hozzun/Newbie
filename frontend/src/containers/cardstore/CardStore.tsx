@@ -1,7 +1,7 @@
 import axios from "axios";
 import CardStoreComponent from "../../components/cardStore/CardStore";
 import { useEffect, useRef, useState } from "react";
-import { GetPhotoCardsRequest, getPhotoCards } from "../../api/cardStoreApi";
+import { GetPhotoCardsRequest, getPhotoCards, getTotalMileage } from "../../api/cardStoreApi";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import ClubId, { getClubIdByNum } from "../../util/ClubId";
@@ -30,6 +30,7 @@ const CardStore = () => {
   const cardStoreListItem = useSelector((state: RootState) => state.cardStore.cardStoreListItem);
   const { cheeringClub } = useSelector((state: RootState) => state.team);
 
+  const [totalMileage, setTotalMileage] = useState<number>(0);
   const [selectedClubOption, setSelectedClubOption] = useState<string>(
     cardStoreListItem.club === ""
       ? getClubIdByNum(cheeringClub ? (cheeringClub > 0 ? cheeringClub : 1) : 1)
@@ -45,6 +46,14 @@ const CardStore = () => {
   const [photoCardInfos, setPhotoCardInfos] = useState<Array<PhotoCardInfo> | null>(null);
 
   const isFirstRender = useRef<boolean>(true);
+
+  const fetchTotalMileage = async () => {
+    try {
+      const response = await getTotalMileage();
+      const totalMileageData = response.data;
+      setTotalMileage(totalMileageData);
+    } catch (e) {}
+  };
 
   const fetchPhotoCardInfos = async () => {
     try {
@@ -79,6 +88,7 @@ const CardStore = () => {
   };
 
   useEffect(() => {
+    fetchTotalMileage();
     fetchPhotoCardInfos();
   }, []);
 
@@ -133,6 +143,7 @@ const CardStore = () => {
 
   return (
     <CardStoreComponent
+      totalMileage={totalMileage}
       clubCarouselProps={clubCarouselProps}
       selectedPositionOption={selectedPositionOption}
       handleSelectPositionOption={handleSelectPositionOption}
