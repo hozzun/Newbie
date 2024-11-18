@@ -15,6 +15,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UsedBoardService {
 
     private final UsedBoardRepository usedBoardRepository;
@@ -42,7 +44,7 @@ public class UsedBoardService {
     @Value("${user.server.domain}")
     private String userServerDomain;
 
-    @Value("${server.port}")
+    @Value("${server.path}")
     private String userPort;
 
     @PersistenceContext
@@ -207,6 +209,7 @@ public class UsedBoardService {
 
     private ResponseEntity<UserResponseDto> getUserProfile(Long userId) {
         String url = userServerDomain + ":" + userPort + "/user/users/" + userId;
+        log.info(url);
         return restTemplate.getForEntity(url, UserResponseDto.class);
     }
 }
