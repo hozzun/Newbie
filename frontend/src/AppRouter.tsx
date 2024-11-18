@@ -37,6 +37,7 @@ import ScrollToTop from "./components/common/ScrollToTop";
 import CommuTradeDetail from "./pages/commu/CommuTradeDetail";
 import CommuFreeDetail from "./pages/commu/CommuFreeDetail";
 import TeamChat from "./pages/teamchat/TeamChat";
+import TeamChatRoom from "./pages/teamchat/TeamChatRoom";
 
 // 로그인 하지 않은 사용자는 로그인으로
 function ProtectedRoute({ children }: { children: JSX.Element }) {
@@ -317,6 +318,14 @@ const AppRouter = () => {
           element={
             <ProtectedRoute>
               <TeamChat />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/teamchat/:id"
+          element={
+            <ProtectedRoute>
+              <TeamChatRoom />
             </ProtectedRoute>
           }
         />
