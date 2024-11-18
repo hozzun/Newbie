@@ -33,7 +33,10 @@ const RankDifference = (props: RankDifferenceProps) => {
 
 const ClubRankItem = (props: ClubRankItemProps) => {
   return (
-    <div className="flex flex-row w-full h-8 px-2 py-7 rounded-lg bg-gray-100 items-center justify-between">
+    <div
+      className="flex flex-row w-full h-8 px-2 py-7 rounded-lg bg-gray-100 items-center justify-between hover:cursor-pointer hover:bg-gray-200/50"
+      onClick={props.goDetail}
+    >
       <p className="text-base font-kbogothicbold text-gray-700 min-w-[20px] text-center">
         {props.rank}
       </p>

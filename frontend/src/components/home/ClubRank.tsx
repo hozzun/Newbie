@@ -11,22 +11,22 @@ export interface ClubRankProps {
 }
 
 const ClubRank = (props: ClubRankProps) => {
-  const [visibleCount, setVisibleCount] = useState<number>(1);
+  const [visibleCount, setVisibleCount] = useState<number>(3);
 
   const handleToggle = () => {
     if (!props.clubRankItems) {
       setVisibleCount(0);
     } else {
-      if (visibleCount === 1) {
+      if (visibleCount === 3) {
         setVisibleCount(props.clubRankItems.length);
       } else {
-        setVisibleCount(1);
+        setVisibleCount(3);
       }
     }
   };
 
   const circleButtonItem = {
-    img: visibleCount > 1 ? AngleSmallUp : AngleSmallDown,
+    img: visibleCount > 3 ? AngleSmallUp : AngleSmallDown,
   };
 
   return (

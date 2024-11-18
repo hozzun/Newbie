@@ -27,7 +27,7 @@ const clubColors: Record<string, string> = {
 };
 
 const ClubCarouselItem = (props: ClubCarouselItemProps) => {
-  const clubCarouselItemClass = `flex box-border hover:box-content py-2 m-0.5 content-center justify-center rounded-lg transition-colors duration-300 shadow-sm ${props.isSelected ? clubColors[props.clubId] : "bg-gray-100"}`;
+  const clubCarouselItemClass = `flex box-border hover:box-content py-2 m-0.5 content-center justify-center rounded-lg transition-colors duration-300 shadow-sm ${props.isSelected ? clubColors[props.clubId] : "bg-gray-100"} hover:cursor-pointer`;
 
   return (
     <div className={clubCarouselItemClass} onClick={props.onClick}>

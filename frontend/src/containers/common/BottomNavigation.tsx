@@ -2,6 +2,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import BottomNavigationComponent from "../../components/common/BottomNavigation";
 import ClubId from "../../util/ClubId";
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 
 const routes = ["/club", "/cheersong", "/", "/commuhome", "/mypage"];
 
@@ -12,6 +14,8 @@ const getClubName = (value: number): string | undefined => {
 const BottomNavigation = () => {
   const location = useLocation();
   const nav = useNavigate();
+
+  const { team } = useSelector((state: RootState) => state.team);
 
   const [clickedButtonIndex, setClickedButtonIndex] = useState<number>(2);
 
@@ -33,8 +37,7 @@ const BottomNavigation = () => {
 
   const handleBottomNavigationClick = (index: number) => {
     if (index === 0) {
-      // TODO: GET - 나의 구단 ID
-      const clubId: number = 1;
+      const clubId: number = team !== 0 ? team : 1;
       const clubName: string | undefined = getClubName(clubId);
 
       if (clubName === undefined) {
