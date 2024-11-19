@@ -30,12 +30,10 @@ const BaseballDict = () => {
 
   const fetchRoomAndHistory = async () => {
     try {
-      const { data: fetchedRoomId } = await axiosInstance.post("/api/v1/chatbot/create-room");
+      await axiosInstance.post("/api/v1/chatbot/create-room");
 
-      // setRoomId(fetchedRoomId);
       // 채팅 히스토리 가져오기
       const { data: chatHistory } = await axiosInstance.get(`/api/v1/chatbot/chatbot/history`);
-
       setMessages(chatHistory);
     } catch (error) {
       console.log(error);
