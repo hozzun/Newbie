@@ -45,7 +45,7 @@ public class JwtAuthenticationFilter implements WebFilter {
         }
 
         String path = request.getURI().getPath();
-
+        log.info("Incoming request: {}", path);
         // 인증이 필요 없는 경로
         if (isAllowedPath(path)) {
             return chain.filter(exchange);
