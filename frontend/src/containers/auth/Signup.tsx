@@ -66,7 +66,7 @@ const Signup = () => {
 
         // 액세스 토큰을 Signup API에 보내서 memberData로 갈아끼우고 토큰 받기
         const response = await axiosInstance.post<MemberData>(
-          "/api/v1/auth/members/signup",
+          "/api-auth/auth/members/signup",
           memberData,
         );
 
